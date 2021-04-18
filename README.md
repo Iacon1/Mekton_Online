@@ -1,4 +1,4 @@
-# Mekton_Online
+# Mekton Online
 An idea I had for a Mekton Zeta/ Zeta Plus MMO engine.
 
 This document, as well as all others in this repository, is subject to change.
@@ -32,5 +32,12 @@ There would be three executables:
     And allow exporting and importing "setting files".
   Additonally, it probably should:
   
-  ## Setting files
-    A setting file should contain things like player roles, maps, NPCs, graphics, audio, etc.
+## Setting files
+  A setting file should contain things like player roles, maps, NPCs, graphics, audio, etc.
+
+## Implementation
+  Probably Java, Maybe C++ w/ QT and stuff.
+  ### Setting files:
+    Perhaps as a .zip with XMLs, or maybe a JAR?
+  ### Graphics / Audio:
+    Probably .PNG spritesheets with .WAV audio
