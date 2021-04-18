@@ -32,5 +32,5 @@ There would be three executables:
     And allow exporting and importing "setting files".
   Additonally, it probably should:
   
-  ##Setting files
+  ## Setting files
     A setting file should contain things like player roles, maps, NPCs, graphics, audio, etc.
