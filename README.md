@@ -37,6 +37,7 @@ There would be three executables:
 
 ## Implementation
   Probably Java, Maybe C++ w/ QT and stuff.
+  Python might actually be nice if I can find the right libs.
   ### Setting files:
     Perhaps as a .zip with XMLs, or maybe a JAR?
   ### Graphics / Audio:
