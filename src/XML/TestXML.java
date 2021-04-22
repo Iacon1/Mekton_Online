@@ -6,7 +6,8 @@ package XML;
 
 public class TestXML {
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 		XMLObj obj = new XMLObj();
 		obj.loadFromFile("amogus.xml");
 		System.out.println(obj.getAttr("susVal"));

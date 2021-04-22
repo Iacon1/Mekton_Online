@@ -4,7 +4,10 @@
 
 package XML;
 
+import Utils.*;
+
 import org.w3c.dom.*;
+
 import javax.xml.parsers.*;
 
 import javax.xml.transform.*;
@@ -22,10 +25,9 @@ public class XMLObj
 	static private DocumentBuilderFactory dFactory_ = DocumentBuilderFactory.newInstance();
 	static private TransformerFactory tFactory_ = TransformerFactory.newInstance();
 	
-	public XMLObj()
+	public XMLObj() // Instantiates with null doc_ & element_; Don't leave these null!
 	{
 	}
-	
 	public XMLObj(Document doc, String tag) // Instantiates as an element of doc w/ the specified tag
 	{
 		doc_ = doc;
@@ -42,24 +44,13 @@ public class XMLObj
 			
 			element_ = doc_.getDocumentElement();
 		}
-		catch (Exception e)
-		{
-			Utils.Logging.logError("XMLObj.loadFromFile", e);
-		}
-		
+		catch (Exception e) {Logging.logException(e);}
 	}
 	public void saveToFile(String path) // Saves to rel. path
 	{
 		try
 		{
-			if (doc_ == null) // If the document was never set make a new one
-			{
-				//TODO
-			}
-			else // If it was, just reuse the old one
-			{
-				doc_.replaceChild(element_, doc_.getDocumentElement());
-			}
+			doc_.replaceChild(element_, doc_.getDocumentElement());
 			
 			DOMSource source = new DOMSource(doc_);
 			FileWriter writer = new FileWriter(new File(path));
@@ -68,10 +59,7 @@ public class XMLObj
 			Transformer transformer = tFactory_.newTransformer();
 			transformer.transform(source, result);
 		}
-		catch (Exception e)
-		{
-			Utils.Logging.logError("XMLObj.saveToFile", e);
-		}
+		catch (Exception e) {Logging.logException(e);}
 	}
 	
 	public XMLObj getChild(String tag) // Gets child by tag. Assumes only one element per tag
@@ -87,10 +75,7 @@ public class XMLObj
 	public void setChild(String tag, XMLObj obj) // Adds a child with the tag
 	{
 		NodeList list = element_.getElementsByTagName(tag);
-		if (list.getLength() != 0) // Already here
-		{
-			element_.removeChild(list.item(0)); // Remove it
-		}
+		if (list.getLength() != 0) {element_.removeChild(list.item(0));} // If something already has that tag, remove it
 		
 		Node newNode = doc_.adoptNode(obj.element_);
 		doc_.renameNode(newNode, null, tag);
