@@ -12,20 +12,24 @@ public final class Logging
 	{
 		logger_ = logger;
 	}
-	
-	public static void logRaw(String text)
+	public static final Logger getLogger()
 	{
-		if (logger_ == null)
-			return;
-		else
-			logger_.logRaw(text);
+		return logger_;
 	}
-	public static void logMessage(String message)
+	
+	public static void logRaw(String reason, String text)
 	{
 		if (logger_ == null)
 			return;
 		else
-			logger_.logMessage(message);
+			logger_.logRaw(reason, text);
+	}
+	public static void logNotice(String text)
+	{
+		if (logger_ == null)
+			return;
+		else
+			logger_.logNotice(text);
 	}
 	public static void logError(String error)
 	{

@@ -18,7 +18,7 @@ public abstract class ConnectionPairThread extends Thread
 	private DataInputStream inStream_;
 	private DataOutputStream outStream_;
 	
-	private Socket socket_; // Socket for communicating
+	protected Socket socket_; // Socket for communicating
 	
 	protected volatile boolean running_;
 

@@ -31,14 +31,13 @@ public class ServerThread<P extends ConnectionPairThread> extends Thread
 		{
 			serverSocket_ = new ServerSocket(port_);
 			running_ = true;
-			Logging.logMessage("Server socket open.");
 		}
 		catch (Exception e) {Logging.logException(e);}
 	}
 	public void close()
 	{
 		running_ = false;
-		try {serverSocket_.close(); Logging.logMessage("Server socket closed.");}
+		try {serverSocket_.close();}
 		catch (Exception e) {Logging.logException(e);}
 	}
 
@@ -51,7 +50,6 @@ public class ServerThread<P extends ConnectionPairThread> extends Thread
 			try
 			{
 				clientSocket = serverSocket_.accept();
-				Logging.logMessage("Client connected");
 				
 				P pair = (P) pairTemplate_.getClass().getConstructor().newInstance();
 				pair.setSocket(clientSocket);

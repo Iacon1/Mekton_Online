@@ -15,13 +15,12 @@ public class Client<P extends ConnectionPairThread>
 	
 	public Client(String address, int port, P pair)
 	{
-		try
-		{
-			Socket socket = new Socket(address, port);
-			pair_ = pair;
-			pair_.setSocket(socket);
-		}
+		Socket socket = null;
+		try {socket = new Socket(address, port);}
 		catch (Exception e) {Logging.logException(e);}
+		
+		pair_ = pair;
+		pair_.setSocket(socket);
 	}
 	
 	public void run()
