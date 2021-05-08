@@ -6,7 +6,7 @@ package Utils;
 
 public final class Logging
 {
-	private static Logger logger_;
+	private static volatile Logger logger_;
 	
 	public static void setLogger(Logger logger)
 	{

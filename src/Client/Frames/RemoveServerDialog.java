@@ -89,13 +89,14 @@ public class RemoveServerDialog extends JDialog
 		getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			
 		JButton okButton = new JButton("Remove");
-		okButton.setActionCommand("OK");
+		okButton.setActionCommand("Remove");
 		okButton.addActionListener(e -> {onClickOK();});
 		buttonPane.add(okButton);
 		getRootPane().setDefaultButton(okButton);
 
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.setActionCommand("Cancel");
+		cancelButton.addActionListener(e -> {this.setVisible(false); this.dispose();});
 		buttonPane.add(cancelButton);
 	}
 }

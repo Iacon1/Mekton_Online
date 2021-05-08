@@ -5,6 +5,9 @@
 package Utils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import Serializers.GiveBuilder;
 
 public final class JSONManager
 {
@@ -15,7 +18,8 @@ public final class JSONManager
 	{
 		if (!setup_)
 		{
-			gson_ = new Gson();
+			GsonBuilder builder = GiveBuilder.giveBuilder();
+			gson_ = builder.create();
 			setup_ = true;
 		}
 	}

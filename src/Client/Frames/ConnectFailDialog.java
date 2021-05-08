@@ -80,14 +80,10 @@ public class ConnectFailDialog extends JDialog
 		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			
-		JButton okButton = new JButton("Remove");
+		JButton okButton = new JButton("OK");
 		okButton.setActionCommand("OK");
 		okButton.addActionListener(e -> {onClickOK();});
 		buttonPane.add(okButton);
 		getRootPane().setDefaultButton(okButton);
-
-		JButton cancelButton = new JButton("Cancel");
-		cancelButton.setActionCommand("Cancel");
-		buttonPane.add(cancelButton);
 	}
 }

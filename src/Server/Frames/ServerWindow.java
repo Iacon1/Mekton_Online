@@ -8,12 +8,13 @@ import Server.Server;
 
 public class ServerWindow
 {
-	private Server server_;
+	private static Server server_;
 	private JFrame frame;
 
 
 	public static void main(Server server)
 	{
+		server_ = server;
 		EventQueue.invokeLater(new Runnable()
 		{
 			public void run()
@@ -21,7 +22,6 @@ public class ServerWindow
 				try
 				{
 					ServerWindow window = new ServerWindow();
-					window.server_ = server;
 					window.frame.setVisible(true);
 				} catch (Exception e)
 				{

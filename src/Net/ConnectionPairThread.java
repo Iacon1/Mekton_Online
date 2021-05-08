@@ -20,11 +20,15 @@ public abstract class ConnectionPairThread extends Thread
 	
 	protected Socket socket_; // Socket for communicating
 	
-	protected volatile boolean running_;
-
+	protected volatile boolean running_; // Main
+	protected volatile boolean runningI_; // Input
+	protected volatile boolean runningO_; // Output
+	
 	private String getInput() // Get the input
 	{
 		try {return inStream_.readUTF();}
+		catch (EOFException e) {close(); return null;}
+		catch (IOException e) {close(); return null;}
 		catch (Exception e) {Logging.logException(e); return null;}
 	}
 	private void sendOutput(String output)
@@ -34,24 +38,31 @@ public abstract class ConnectionPairThread extends Thread
 			if (output == null) return;
 			outStream_.writeUTF(output);
 		}
+		catch (IOException e) {close();}
 		catch (Exception e) {Logging.logException(e);}
 	}
 	
-	public abstract void processInput(String input); // Handle the input
-	public abstract String processOutput(); // Handle the output
+	public abstract void processInput(String input) throws Exception; // Handle the input
+	public abstract String processOutput() throws Exception; // Handle the output
+	public abstract void onClose(); // When closed
 	
 	private void inputRun() // Run by inThread_
 	{
-		while (running_)
-		{String input = getInput();
-			processInput(input);
+		while (running_ & runningI_)
+		{
+			String input = getInput();
+			try {processInput(input);}
+			catch (Exception e) {Logging.logException(e);}
 		}
 	}
 	private void outputRun() // Run by outThread_
 	{
-		while (running_)
+		while (running_ & runningO_)
 		{
-			String output = processOutput();
+			String output = null;
+			try {output = processOutput();}
+			catch (Exception e) {Logging.logException(e);}
+			
 			sendOutput(output);
 		}
 	}
@@ -60,7 +71,7 @@ public abstract class ConnectionPairThread extends Thread
 	{
 		try
 		{
-			close();
+			if (running_) close();
 			socket_ = socket;
 			
 			inStream_ = new DataInputStream(socket_.getInputStream());
@@ -82,16 +93,36 @@ public abstract class ConnectionPairThread extends Thread
 	public void run() // Opens two threads temporarily
 	{
 		running_ = true;
-		inThread_ = new Thread(() ->  {inputRun();});
-		inThread_.setName("MtO Connection Pair Input Thread (" + getId() + ")");
-		inThread_.start();
-		
-		outThread_ = new Thread(() ->  {outputRun();});
-		outThread_.setName("MtO Connection Pair Output Thread (" + getId() + ")");
-		outThread_.start();
+		runningI_ = true;
+		runningO_ = true;
+		while (running_)
+		{
+			if (socket_ == null || socket_.isClosed()) close(); // SHUT IT DOWN!
+			
+			if ((inThread_ == null || !inThread_.isAlive()) && runningI_)
+			{
+				inThread_ = new Thread(() ->  {inputRun();});
+				inThread_.setName("MtO Connection Pair Input Thread (" + getId() + ")");
+				inThread_.start();
+			}
+			if ((outThread_ == null || !outThread_.isAlive()) && runningO_)
+			{
+				outThread_ = new Thread(() ->  {outputRun();});
+				outThread_.setName("MtO Connection Pair Output Thread (" + getId() + ")");
+				outThread_.start();
+			}
+		}
 	}
+	
 	public void close()
 	{
 		running_ = false;
+		runningI_ = false;
+		runningO_ = false;
+		
+		try {if (socket_ == null || socket_.isClosed()) socket_.close();}
+		catch (Exception e) {Logging.logException(e);}
+		
+		onClose();
 	}
 }

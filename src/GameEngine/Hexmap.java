@@ -14,7 +14,7 @@ public class Hexmap extends GameInstance
 	private static class HexData // Stores data for the hexes
 	{
 		public boolean solid_; // Is this a wall?
-		public String imagePath_ = "Resources/Server Packs/Default/Tileset.PNG"; // Image path
+		public String imagePath_ = "Resources/Server Packs/Default/Tilesets/DummyTileset.PNG"; // Image path
 		public int tX_ = 0; // Tileset X offset in hexes
 		public int tY_ = 0; // Tileset Y offset in hexes
 	}
@@ -25,12 +25,6 @@ public class Hexmap extends GameInstance
 	{
 		super();
 		hexes_ = new ArrayList<ArrayList<ArrayList<HexData>>>();
-		addChild(new DummyInstance());
-		GameInstance dummy = children_.get(0);
-		dummy.x_ = 9;
-		dummy.y_ = 4;
-		dummy.z_ = 0;
-		children_.set(0, dummy);
 	}
 
 	public void setDimensions(int x, int y, int z) // Sets new dimensions for map
@@ -38,25 +32,22 @@ public class Hexmap extends GameInstance
 		hexes_ = MiscUtils.resizeArrayList(hexes_, x);
 		for (int i = 0; i < x; ++i)
 		{
-			if (hexes_.get(i) == null)
-				hexes_.set(i, new ArrayList<ArrayList<HexData>>());
+			if (hexes_.get(i) == null) hexes_.set(i, new ArrayList<ArrayList<HexData>>());
 			ArrayList<ArrayList<HexData>> xSlice = hexes_.get(i); // A slice along the x axis; Only has y & z axes
 			xSlice = MiscUtils.resizeArrayList(xSlice, y);
 			
 			for (int j = 0; j < y; ++j)
 			{
-				if (xSlice.get(j) == null)
-					xSlice.set(j, new ArrayList<HexData>());
+				if (xSlice.get(j) == null) xSlice.set(j, new ArrayList<HexData>());
 				ArrayList<HexData> ySlice = xSlice.get(j); // A slice along the y axis; Only has z axis
 				ySlice = MiscUtils.resizeArrayList(ySlice, z);
 				
-				for (int k = 0; k < z; ++k)
-					ySlice.set(k, new HexData());
+				for (int k = 0; k < z; ++k) ySlice.set(k, new HexData());
 				
-				xSlice.set(j, ySlice);
+				xSlice.set(j,  ySlice);
 			}
 			
-			hexes_.set(i, xSlice);
+			hexes_.set(i,  xSlice);
 		}
 	}
 	public int getMapWidth() // Get map size in x-direction
@@ -91,12 +82,12 @@ public class Hexmap extends GameInstance
 		
 		return zSlice;
 	}
-	public GameInstance findEntity(int x, int y, int z) // returns a game instance at that position if available
+	public PhysicalObject findEntity(int x, int y, int z) // returns a game instance at that position if available
 	{
-		for (int i = 0; i < children_.size(); ++i)
+		for (int i = 0; i < childrenIds_.size(); ++i)
 		{
-			GameInstance obj = children_.get(i);
-			if (obj.x_ == x && obj.y_ == y && obj.z_ == z)
+			PhysicalObject obj = (PhysicalObject) getChild(i); // Please only put physical objects in here
+			if (obj.getX() == x && obj.getY() == y && obj.getZ() == z)
 				return obj;
 		}
 		
@@ -104,24 +95,32 @@ public class Hexmap extends GameInstance
 	}
 	private int GX2SX(int gX, int hexSize) // gX relative to corner-of-screen
 	{
-		return (int) Math.round(gX * 0.5 * hexSize);
+		return (int) Math.round(gX * 0.75 * hexSize);
 	}
 	private int GY2SY(int gY, int hexSize, boolean shift) // gY relative to corner-of-screen
 	{
 		if (shift)
-			return (int) Math.round(gY * 1.5 * hexSize + 0.75 * hexSize);
+			return (int) Math.round(gY * hexSize + 0.5 * hexSize);
 		else
-			return (int) Math.round(gY * 1.5 * hexSize);
+			return (int) Math.round(gY * hexSize);
 	}
 	
+	@Override
+	public String getName()
+	{
+		return "Hexmap"; // TODO
+	}
+	
+	@Override
 	public void render(int pX, int pY, Graphics2D g) // Draws starting @ x, y as a left corner @ z to g
 	{
 		int x = 0;
 		int y = 0;
 		int z = 1;
-		int hexSize = ConfigManager.getHexSize(); // Hex width & height
-		int w = ConfigManager.getScreenWidth() / hexSize;
-		int h = ConfigManager.getScreenHeight() / hexSize;
+		int hexWidth = ConfigManager.getHexWidth(); // Hex width
+		int hexHeight = ConfigManager.getHexHeight(); // Hex height
+		int w = ConfigManager.getScreenWidth() / hexWidth;
+		int h = ConfigManager.getScreenHeight() / hexHeight;
 		
 		boolean shift = false; // Shift down on y-axis by half-column?
 		
@@ -132,13 +131,13 @@ public class Hexmap extends GameInstance
 				for (int k = 0; k < z; ++k)
 				{
 					HexData hex = getHex(i, j, k);
-					int cX = GX2SX(i - x, hexSize);
-					int cY = GY2SY(j - y, hexSize, shift);
-					int cTX = hex.tX_ * hexSize;
-					int cTY = hex.tY_ * hexSize;
+					int cX = GX2SX(i - x, hexWidth);
+					int cY = GY2SY(j - y, hexHeight, shift);
+					int cTX = hex.tX_ * hexWidth;
+					int cTY = hex.tY_ * hexHeight;
 					
-					g.drawImage(GraphicsManager.getImage(hex.imagePath_), pX + cX, pY + cY, pX + cX + hexSize, pY + cY + hexSize, cTX, cTY, cTX + hexSize, cTY + hexSize, null);
-					GameInstance instance = findEntity(i, j, k);
+					g.drawImage(GraphicsManager.getImage(hex.imagePath_), pX + cX, pY + cY, pX + cX + hexWidth, pY + cY + hexHeight, cTX, cTY, cTX + hexWidth, cTY + hexHeight, null);
+					PhysicalObject instance = findEntity(i, j, k);
 					if (instance != null)
 						instance.render(pX + cX, pY + cY, g);
 				}

@@ -6,12 +6,14 @@ package GameEngine;
 
 public final class ConfigManager
 {
-	private class Config // TODO: Loading of this from XML
+	private static class Config // TODO: Loading of this from XML
 	{
-		protected int ScreenWidth_;
-		protected int ScreenHeight_;
-		protected int hexSize_;
+		protected int screenWidth_ = 640;
+		protected int screenHeight_ = 480;
+		protected int hexWidth_ = 38;
+		protected int hexHeight_ = 32;
 	}
+	private static Config config_ = new Config();
 	
 	public static int getFramerate() // In FPS
 	{
@@ -19,17 +21,21 @@ public final class ConfigManager
 	}
 	public static int getScreenWidth() // Width of screen in pixels
 	{
-		return 640;
+		return config_.screenWidth_;
 	}
 
 	public static int getScreenHeight() // Height of screen in pixels
 	{
-		return 480;
+		return config_.screenHeight_;
 	}
 
-	public static int getHexSize() // Hex width / height in pixels
+	public static int getHexWidth() // Hex width in pixels
 	{
-		return 32;
+		return config_.hexWidth_;
+	}
+	public static int getHexHeight() // Hex height in pixels; Should be 85% of getHexLength()
+	{
+		return config_.hexHeight_;
 	}
 
 }

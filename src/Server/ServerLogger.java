@@ -19,6 +19,11 @@ public class ServerLogger implements Logger
 	}
 	private ArrayList<LogEntry> log_;
 	
+	private static String getCaller() // Returns calling function & line
+	{
+		StackTraceElement element = Thread.currentThread().getStackTrace()[4];
+		return element.getClassName() + "." + element.getMethodName() + ":" + element.getLineNumber();
+	}
 	public ServerLogger()
 	{
 		log_ = new ArrayList<LogEntry>();
@@ -44,13 +49,13 @@ public class ServerLogger implements Logger
 	@Override
 	public void logError(String error)
 	{
-		logRaw("error", error);
+		logRaw("error", error + "<br>  " + getCaller());
 	}
 
 	@Override
 	public void logException(Exception exception)
 	{
-		logRaw("exception", exception.toString());
+		logRaw("exception", exception.toString() + "<br>  " + getCaller());
 	}
 
 	public final String buildLabelText(String category) // Builds a string holding a category of log; If category is null then shows all

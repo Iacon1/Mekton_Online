@@ -43,7 +43,6 @@ public class ServerThread<P extends ConnectionPairThread> extends Thread
 
 	public void run()
 	{
-		open();
 		while (running_)
 		{
 			Socket clientSocket;
@@ -57,6 +56,11 @@ public class ServerThread<P extends ConnectionPairThread> extends Thread
 			}
 			catch (Exception e) {Logging.logException(e);}
 		}
+	}
+	
+	public String getAddress()
+	{
+		return serverSocket_.getInetAddress().toString();
 	}
 	
 }
