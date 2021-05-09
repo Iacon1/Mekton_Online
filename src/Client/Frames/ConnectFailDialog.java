@@ -42,13 +42,9 @@ public class ConnectFailDialog extends JDialog
 
 	private void onClickOK() // When OK is pressed
 	{
-		String serverName = errorLabel.getText();
-		if (serverName != null)
-		{
-			this.setVisible(false);
-			this.dispose();
-			GetServerFrame.main(null);
-		}
+		this.setVisible(false);
+		this.dispose();
+		GetServerFrame.main(null);
 	}
 	
 	// Creates the dialog

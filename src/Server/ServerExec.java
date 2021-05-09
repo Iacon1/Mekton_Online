@@ -7,6 +7,7 @@ package Server;
 import javax.swing.UIManager;
 
 import GameEngine.DebugLogger;
+import Server.Frames.ServerStartDialog;
 import Server.Frames.ServerWindow;
 import Utils.Logging;
 
@@ -21,9 +22,7 @@ public class ServerExec
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			Server server = new Server();
-			server.start(6666); // TODO changeable
-			ServerWindow.main(server);
+			ServerStartDialog.main(null);
 		}
 		catch (Exception e) {Logging.logException(e);}
 	}
