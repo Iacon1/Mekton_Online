@@ -1,5 +1,5 @@
 // By Iacon1
-// Created 05/06/2021
+// Created 05/09/2021
 //
 
 package Serializers;
@@ -8,12 +8,10 @@ import java.lang.reflect.Type;
 
 import com.google.gson.*;
 
-import GameEngine.GameInstance;
-
-public class GameInstanceAdapter implements JsonSerializer<GameInstance>, JsonDeserializer<GameInstance>
+public class AbsAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T>
 {
 	@Override
-	public JsonElement serialize(GameInstance src, Type typeOfSrc, JsonSerializationContext context)
+	public JsonElement serialize(T src, Type typeOfSrc, JsonSerializationContext context)
 	{
 		JsonObject result = new JsonObject();
 		result.add("type", new JsonPrimitive(src.getClass().getSimpleName()));
@@ -23,7 +21,7 @@ public class GameInstanceAdapter implements JsonSerializer<GameInstance>, JsonDe
 	}
 	
 	@Override
-	public GameInstance deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
+	public T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
 	{
 	    JsonObject jsonObject = json.getAsJsonObject();
 	    String type = jsonObject.get("type").getAsString();

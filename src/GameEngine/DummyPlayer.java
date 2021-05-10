@@ -10,6 +10,7 @@ public class DummyPlayer extends PhysicalObject
 {
 	public DummyPlayer()
 	{
+		super();
 		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, ConfigManager.getHexWidth(), ConfigManager.getHexHeight());
 	}
 	

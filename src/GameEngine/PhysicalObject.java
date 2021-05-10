@@ -6,6 +6,8 @@ package GameEngine;
 
 import java.awt.Graphics2D;
 
+import GameEngine.CommandListeners.MoveCommandListener;
+
 public abstract class PhysicalObject extends GameInstance
 {
 	private String imagePath_; // Image path
@@ -30,6 +32,11 @@ public abstract class PhysicalObject extends GameInstance
 		south, // +y
 		southWest, // -x, +y
 		southEast; // +x, +y
+	}
+	
+	public PhysicalObject()
+	{
+		addCommandListener(new MoveCommandListener());
 	}
 	
 	public int getX()
@@ -58,7 +65,6 @@ public abstract class PhysicalObject extends GameInstance
 		if (width != null) width_ = width;
 		if (height != null) height_ = height;
 	}
-	
 	public void move(Direction direction, int distance)
 	{
 		switch (direction)
