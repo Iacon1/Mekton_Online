@@ -4,14 +4,14 @@
 
 package GameEngine.CommandListeners;
 
-import GameEngine.GameInstance;
+import GameEngine.GameEntity;
 import GameEngine.PhysicalObject;
 
 public class MoveCommandListener extends CommandListener
 {
 	public MoveCommandListener() {super();}
 	@Override
-	public boolean runCommand(GameInstance source, String[] params)
+	public boolean runCommand(GameEntity source, String[] params)
 	{
 		PhysicalObject sourceP = (PhysicalObject) source;
 		if (params[0].equals("move")) switch (params[1])

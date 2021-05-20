@@ -13,8 +13,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import GameEngine.ConfigManager;
-import GameEngine.GameInstance;
+import GameEngine.GameEntity;
 import GameEngine.GameWorld;
+import Server.Account;
 import Server.Server;
 import Server.ServerLogger;
 import Utils.Logging;
@@ -54,13 +55,14 @@ public class ServerMainFrame extends JFrame
 	private final JLabel exceptionLabel = new JLabel("New label");
 	private final JSplitPane splitPane = new JSplitPane();
 	private final JTree objectTree = new JTree();
+	private final JPanel playersPanel = new JPanel();
 	private final JLabel playersLabel = new JLabel("New label");
 	
 	private class InstanceNode extends DefaultMutableTreeNode
 	{
-		private GameInstance instance_;
+		private GameEntity instance_;
 		
-		public InstanceNode(GameInstance instance)
+		public InstanceNode(GameEntity instance)
 		{
 			super(instance.getName());
 			instance_ = instance;
@@ -81,11 +83,11 @@ public class ServerMainFrame extends JFrame
 		model = new DefaultTreeModel(node);
 		objectTree.setModel(model);
 	}	
-	private void updateRecursively(GameInstance rootInstance, InstanceNode rootNode)
+	private void updateRecursively(GameEntity rootInstance, InstanceNode rootNode)
 	{
 		for (int i = 0; i < Math.max(rootNode.getChildCount(), rootInstance.getChildren().size()); ++i)
 		{
-			GameInstance instance;
+			GameEntity instance;
 			InstanceNode node;
 			
 			try {instance = rootInstance.getChildren().get(i);}
@@ -122,12 +124,12 @@ public class ServerMainFrame extends JFrame
 	private void updateObjectsTree() // Updates objectTree
 	{
 		DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) model.getRoot();
-		for (int i = 0; i < Math.max(rootNode.getChildCount(), GameWorld.getWorld().getRootInstances().size()); ++i)
+		for (int i = 0; i < Math.max(rootNode.getChildCount(), GameWorld.getWorld().getRootEntities().size()); ++i)
 		{
-			GameInstance instance;
+			GameEntity instance;
 			InstanceNode node;
 			
-			try {instance = GameWorld.getWorld().getRootInstances().get(i);}
+			try {instance = GameWorld.getWorld().getRootEntities().get(i);}
 			catch (Exception e) {instance = null;}
 			try {node = (InstanceNode) rootNode.getChildAt(i);}
 			catch (Exception e) {node = null;}
@@ -158,13 +160,25 @@ public class ServerMainFrame extends JFrame
 			}
 		}
 	}
-
+	private void updatePlayersList()
+	{
+		String text = "<html>";
+		ArrayList<Account> accounts = server_.getAccounts();
+		
+		for (int i = 0; i < accounts.size(); ++i)
+		{
+			text = text + accounts.get(i).username + "<br><br>";
+		}
+		
+		playersLabel.setText(text);
+	}
 	private class UpdateTask extends TimerTask
 	{
 		public void run() // Updates the display
 		{
 			updateLogs();
 			updateObjectsTree();
+			updatePlayersList();
 		}
 	}
 	
@@ -238,14 +252,17 @@ public class ServerMainFrame extends JFrame
 		
 		splitPane.setLeftComponent(objectTree);
 		
+		tabbedPane.addTab("Players", null, playersPanel, null);
+		SpringLayout sl_playersPanel = new SpringLayout();
+		sl_playersPanel.putConstraint(SpringLayout.NORTH, playersLabel, 10, SpringLayout.NORTH, playersPanel);
+		sl_playersPanel.putConstraint(SpringLayout.WEST, playersLabel, 10, SpringLayout.WEST, playersPanel);
+		playersPanel.setLayout(sl_playersPanel);
+		
+		playersPanel.add(playersLabel);
+		
 		tabbedPane.addTab("Overview", null, overviewPanel, null);
 		SpringLayout sl_overviewPanel = new SpringLayout();
-		sl_overviewPanel.putConstraint(SpringLayout.NORTH, playersLabel, 10, SpringLayout.NORTH, overviewPanel);
-		sl_overviewPanel.putConstraint(SpringLayout.WEST, playersLabel, 10, SpringLayout.WEST, overviewPanel);
 		overviewPanel.setLayout(sl_overviewPanel);
-		playersLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		
-		overviewPanel.add(playersLabel);
 		initObjectsTree();
 		
 		timer.schedule(new UpdateTask(), ConfigManager.getFramerate(), ConfigManager.getFramerate());

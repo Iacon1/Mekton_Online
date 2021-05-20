@@ -5,8 +5,10 @@
 package Server;
 
 import Utils.*;
+import Client.GameClientThread;
+import Client.Frames.LoginDialog;
 import GameEngine.DummyPlayer;
-import GameEngine.GameInstance;
+import GameEngine.GameEntity;
 import GameEngine.GameWorld;
 import GameEngine.PhysicalObject;
 import GameEngine.PacketTypes.*;
@@ -14,7 +16,11 @@ import Net.ConnectionPairThread;
 
 public class ClientHandlerThread extends ConnectionPairThread
 {
-	protected volatile GameInstance userEntity_; // Object the user is "possessing"
+	protected volatile String username_ = null; // Client's account name
+	protected GameEntity getUserEntity()
+	{
+		return GameEntity.getEntity(parent_.getAccount(username_).possessee);
+	}
 	protected static volatile Server parent_;
 	
 	private enum CurrentState
@@ -22,6 +28,9 @@ public class ClientHandlerThread extends ConnectionPairThread
 		checkClient
 		{
 			private boolean sent_ = false; // Only send once!
+			@Override
+			public void onEnter(ClientHandlerThread parentThread) {}
+			
 			@Override
 			public void processInput(String input, ClientHandlerThread parentThread)
 			{
@@ -38,7 +47,7 @@ public class ClientHandlerThread extends ConnectionPairThread
 					else
 					{
 						Logging.logNotice("Client " + parentThread.socket_.getInetAddress() + " has connected.");
-						parentThread.stateChange(login); // They're good, let's login
+						parentThread.stateChange(login); // They're good, let's login	
 					}
 				}
 			}
@@ -70,31 +79,79 @@ public class ClientHandlerThread extends ConnectionPairThread
 		
 		login // Logging in
 		{
+			private LoginFeedbackPacket feedbackPacket_;
+			private boolean send_;
+			
+			@Override
+			public void onEnter(ClientHandlerThread parentThread)
+			{
+				feedbackPacket_ = new LoginFeedbackPacket();
+			}
+			
 			@Override
 			public void processInput(String input, ClientHandlerThread parentThread)
 			{
+				if (send_) return; // Don't take more packets while still giving feedback on one
+			
+				LoginPacket packet = new LoginPacket();
+				packet = (LoginPacket) packet.fromJSON(input);
+				
+				Account account = new Account();
+				account.username = packet.username; 
+				account.setHash(packet.password);
+				
+				if (packet.newUser)
+				{
+					if (ClientHandlerThread.parent_.getAccount(packet.username) != null) return; // Don't overwrite an old account!
+					feedbackPacket_.successful = ClientHandlerThread.parent_.addAccount(account);
+					if (feedbackPacket_.successful)
+					{
+						parentThread.username_ = account.username;
+						Logging.logNotice("Client " + parentThread.socket_.getInetAddress() + " has made account \"" + parentThread.username_ + "\".");
+						new DummyPlayer();
+						ClientHandlerThread.parent_.getAccount(account.username).possessee = GameWorld.getWorld().getEntities().size() - 1;
+						GameWorld.getWorld().getRootEntities().get(0).addChild(parentThread.getUserEntity()); // Adds a guy to the map
+						((PhysicalObject) parentThread.getUserEntity()).setPos(2, 2, 0);
+					}
+				}
+				else
+				{
+					feedbackPacket_.successful = ClientHandlerThread.parent_.login(packet.username, packet.password);
+					if (feedbackPacket_.successful)
+					{
+						parentThread.username_ = account.username;
+						Logging.logNotice("Client " + parentThread.socket_.getInetAddress() + " has logged in as account \"" + parentThread.username_ + "\".");
+					}
+				}
+				
+				send_ = true;
 			}
 			
 			@Override
 			public String processOutput(ClientHandlerThread parentThread)
 			{
-				parentThread.stateChange(mapScreen);
-				parentThread.userEntity_ = new DummyPlayer();
-				GameWorld.getWorld().getRootInstances().get(0).addChild(parentThread.userEntity_); // Adds a guy to the map
-				((PhysicalObject) parentThread.userEntity_).setPos(2, 2, 0);
-				return null; // TODO implement login
+				if (send_)
+					{
+						send_ = false;
+						if (feedbackPacket_.successful) parentThread.stateChange(mapScreen);
+						return feedbackPacket_.toJSON();
+					}
+				else return null;
 			}
 		},
 		
 		mapScreen // Game play on map
 		{
 			@Override
+			public void onEnter(ClientHandlerThread parentThread) {}
+			
+			@Override
 			public void processInput(String input, ClientHandlerThread parentThread)
 			{
 				if (input != null)
 				{
 					Logging.logNotice("Client " + parentThread.socket_.getInetAddress() + " used command: \"" + input + "\"");
-					GameWorld.getWorld().processCommand(parentThread.userEntity_, input);
+					GameWorld.getWorld().processCommand(parentThread.getUserEntity(), input);
 				}
 			}
 			
@@ -107,6 +164,7 @@ public class ClientHandlerThread extends ConnectionPairThread
 			}		
 		};
 		
+		public abstract void onEnter(ClientHandlerThread parentThread);
 		public abstract void processInput(String input, ClientHandlerThread parentThread);
 		public abstract String processOutput(ClientHandlerThread parentThread);
 	}
@@ -129,6 +187,7 @@ public class ClientHandlerThread extends ConnectionPairThread
 		runningO_ = false;
 		try {Thread.sleep(100);}
 		catch (Exception e) {Logging.logException(e);}
+		currentState_.onEnter(this);
 		runningI_ = true;
 		runningO_ = true;
 	}

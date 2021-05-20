@@ -10,7 +10,7 @@ import GameEngine.CommandListeners.CommandListener;
 
 import java.awt.Graphics2D;
 
-public abstract class GameInstance
+public abstract class GameEntity
 {
 	private int parentId_; // Parent object index; -1 means none
 	protected ArrayList<Integer> childrenIds_; // Children object indices
@@ -21,16 +21,12 @@ public abstract class GameInstance
 		listeners_.add(listener);
 	}
 	
-	protected static GameInstance getInstance(int id)
-	{
-		return GameWorld.getWorld().instances_.get(id);
-	}
 	private int getId()
 	{
 		return GameWorld.getWorld().instances_.indexOf(this);
 	}
 	
-	public GameInstance()
+	public GameEntity()
 	{
 		GameWorld.getWorld().instances_.add(this);
 		this.parentId_ = -1;
@@ -38,34 +34,39 @@ public abstract class GameInstance
 		listeners_ = new ArrayList<CommandListener>();
 	}
 	
-	public GameInstance getParent() // Gets parent object; Returns null if none
+	public static GameEntity getEntity(int id)
 	{
-		if (parentId_ == -1) return null;
-		else return getInstance(parentId_);
+		return GameWorld.getWorld().instances_.get(id);
 	}
 	
-	public void removeChild(GameInstance child) // Removes a child without destroying it
+	public GameEntity getParent() // Gets parent object; Returns null if none
+	{
+		if (parentId_ == -1) return null;
+		else return getEntity(parentId_);
+	}
+	
+	public void removeChild(GameEntity child) // Removes a child without destroying it
 	{
 		child.parentId_ = -1;
 		this.childrenIds_.remove(child.getId());
 	}
-	public void addChild(GameInstance child) // Adds a new child, replacing its old parent if needed
+	public void addChild(GameEntity child) // Adds a new child, replacing its old parent if needed
 	{
 		if (child.parentId_ != -1)
 			child.getParent().removeChild(child);
 		child.parentId_ = this.getId();
 		childrenIds_.add(child.getId());
 	}
-	public GameInstance getChild(int i) // Gets child #i
+	public GameEntity getChild(int i) // Gets child #i
 	{
-		return getInstance(childrenIds_.get(i));
+		return getEntity(childrenIds_.get(i));
 	}
-	public ArrayList<GameInstance> getChildren()
+	public ArrayList<GameEntity> getChildren()
 	{
-		ArrayList<GameInstance> children = new ArrayList<GameInstance>();
+		ArrayList<GameEntity> children = new ArrayList<GameEntity>();
 		for (int i = 0; i < childrenIds_.size(); ++i)
 		{
-			children.add(getInstance(childrenIds_.get(i)));
+			children.add(getEntity(childrenIds_.get(i)));
 		}
 		
 		return children;

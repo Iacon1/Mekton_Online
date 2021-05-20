@@ -63,7 +63,7 @@ public class ClientGameWindow
 	public ClientGameWindow()
 	{
 		frame = new ClientGameFrame();
-		thread_.setWindow(this);
+		thread_.setContainer(frame);
 		frame.setVisible(true);
 	}
 }

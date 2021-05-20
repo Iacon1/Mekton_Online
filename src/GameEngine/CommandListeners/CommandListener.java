@@ -4,11 +4,11 @@
 
 package GameEngine.CommandListeners;
 
-import GameEngine.GameInstance;
+import GameEngine.GameEntity;
 
 public abstract class CommandListener
 {
 	public CommandListener() {}
 	
-	public abstract boolean runCommand(GameInstance source, String[] params);
+	public abstract boolean runCommand(GameEntity source, String[] params);
 }

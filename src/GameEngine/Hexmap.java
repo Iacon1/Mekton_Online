@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import Utils.MiscUtils;
 
-public class Hexmap extends GameInstance
+public class Hexmap extends GameEntity
 {
 	private static class HexData // Stores data for the hexes
 	{

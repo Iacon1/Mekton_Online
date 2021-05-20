@@ -4,14 +4,18 @@
 
 package Client;
 
+import java.awt.Container;
 import java.net.Socket;
 
 import Client.Frames.ClientGameFrame;
 import Client.Frames.ClientGameWindow;
 import Client.Frames.ConnectFailDialog;
+import Client.Frames.LoginDialog;
 import GameEngine.GameWorld;
 import GameEngine.PacketTypes.ClientInfoPacket;
 import GameEngine.PacketTypes.GameDataPacket;
+import GameEngine.PacketTypes.LoginFeedbackPacket;
+import GameEngine.PacketTypes.LoginPacket;
 import GameEngine.PacketTypes.ServerInfoPacket;
 import Net.ConnectionPairThread;
 import Utils.JSONManager;
@@ -24,6 +28,9 @@ public class GameClientThread extends ConnectionPairThread
 	{
 		checkServer // Check the server; Make sure it's a compatible MtO server
 		{
+			@Override
+			public void onEnter(GameClientThread parentThread) {}
+			
 			@Override
 			public void processInput(String input, GameClientThread parentThread)
 			{
@@ -55,6 +62,9 @@ public class GameClientThread extends ConnectionPairThread
 		badServer // Server wasn't online, wasn't an MtO server, or was the wrong version
 		{
 			@Override
+			public void onEnter(GameClientThread parentThread) {}
+			
+			@Override
 			public void processInput(String input, GameClientThread parentThread)
 			{
 				if (parentThread.socket_ == null)
@@ -76,55 +86,73 @@ public class GameClientThread extends ConnectionPairThread
 		login // Logging in
 		{
 			@Override
+			public void onEnter(GameClientThread parentThread)
+			{
+				LoginDialog.main(parentThread);
+			}
+
+			@Override
 			public void processInput(String input, GameClientThread parentThread)
 			{
-				while (parentThread.window_ == null); // Wait for screen allocation
+				LoginFeedbackPacket packet = new LoginFeedbackPacket();
+				packet = (LoginFeedbackPacket) packet.fromJSON(input);
+				
+				if (packet.successful) parentThread.stateChange(mapScreen);
+				else
+				{
+					LoginDialog dialog = (LoginDialog) parentThread.container_;
+					dialog.onFail("Login failed.");
+				}
 			}
 			
 			@Override
 			public String processOutput(GameClientThread parentThread)
 			{
-				parentThread.stateChange(mapScreen);
-				ClientGameWindow.main(parentThread);
-				return null; // TODO implement login
+				LoginDialog dialog = (LoginDialog) parentThread.container_;
+				LoginPacket packet = dialog.getPacket();
+				if (packet != null)
+					return packet.toJSON();
+				else return null;
 			}
 		},
 		
 		mapScreen // Game play on map
 		{
 			@Override
+			public void onEnter(GameClientThread parentThread)
+			{
+				ClientGameWindow.main(parentThread);
+			}
+			
+			@Override
 			public void processInput(String input, GameClientThread parentThread)
 			{
-				if (parentThread.window_ == null) return; // Give it a second
 				GameDataPacket packet = new GameDataPacket();
 				packet = (GameDataPacket) packet.fromJSON(input);
 				GameWorld.setWorld(packet.ourView);
-				ClientGameFrame frame = (ClientGameFrame) parentThread.window_.getFrame();
+				ClientGameFrame frame = (ClientGameFrame) parentThread.container_;
 				frame.updateUIStuff(packet);
 			}
 			
 			@Override
 			public String processOutput(GameClientThread parentThread)
 			{
-				if (parentThread.window_ == null) return null; // Give it a second
-				ClientGameFrame frame = (ClientGameFrame) parentThread.window_.getFrame();
+				ClientGameFrame frame = (ClientGameFrame) parentThread.container_;
 				String input = frame.getCommand();
 				if (input != null) // We got input
-				{
 					return input;
-				}
 				return null;
 			}		
 		};
-		
-		
+	
+		public abstract void onEnter(GameClientThread parentThread); // When entering this state
 		public abstract void processInput(String input, GameClientThread parentThread);
 		public abstract String processOutput(GameClientThread parentThread);
 	}
 	
 	private volatile CurrentState currentState_; // Change this to change the state of the client
 	private ServerInfoPacket serverInfo_; // The server info we received
-	private ClientGameWindow window_; // The game window we update
+	private Container container_; // The currently-open GUI
 	
 	public GameClientThread()
 	{
@@ -137,8 +165,9 @@ public class GameClientThread extends ConnectionPairThread
 		currentState_ = newState;
 		runningI_ = false;
 		runningO_ = false;
-		try {Thread.sleep(100);}
+		try {Thread.sleep(10);}
 		catch (Exception e) {Logging.logException(e);}
+		currentState_.onEnter(this);
 		runningI_ = true;
 		runningO_ = true;
 	}
@@ -156,16 +185,16 @@ public class GameClientThread extends ConnectionPairThread
 	@Override
 	public void onClose()
 	{
-		if (this.window_ != null)
+		if (this.container_ != null)
 		{
-			this.window_.getFrame().setVisible(false);
-			this.window_.getFrame().dispose();
+			this.container_.setVisible(false);
+			//this.container_.dispose();
 		}
 	}
 	
-	public void setWindow(ClientGameWindow window)
+	public void setContainer(Container container)
 	{
-		this.window_ = window;
+		this.container_ = container;
 	}
 
 }

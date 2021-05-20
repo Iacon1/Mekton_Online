@@ -46,7 +46,7 @@ public class ClientGameFrame extends JFrame
 	
 	public void updateUIStuff(GameDataPacket packet) // Updates UI stuff
 	{
-		Hexmap map = (Hexmap) GameWorld.getWorld().getInstances().get(packet.currentLocationId);
+		Hexmap map = (Hexmap) GameWorld.getWorld().getEntities().get(packet.currentLocationId);
 		hexmapCanvas.setRenderer(map);
 		hexmapCanvas.setLayout(null);
 		hexmapCanvas.repaint();

@@ -36,8 +36,8 @@ public final class JSONManager
 		try {return gson_.fromJson(serialized, classTo);}
 		catch (Exception e) {Logging.logException(e); return null;}
 	}
-	
-	public static <C> C deserializeJSON(String serialized, java.lang.reflect.Type typeTo) // Unserializes
+
+	public static <C> C deserializeArrayJSON(String serialized, java.lang.reflect.Type typeTo) // Unserializes
 	{
 		setupIfNot();
 		try {return gson_.fromJson(serialized, typeTo);}

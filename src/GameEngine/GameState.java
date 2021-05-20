@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public abstract class GameState
 {
-	protected static ArrayList<GameInstance> instances_;
+	protected static ArrayList<GameEntity> instances_;
 	
 	public void addInstance()
 	{}

@@ -12,9 +12,9 @@ import java.awt.*;
 
 public class GraphicsCanvas extends JPanel
 {
-	GameInstance renderer_; // Draws to us
+	GameEntity renderer_; // Draws to us
 	
-	public void setRenderer(GameInstance renderer)
+	public void setRenderer(GameEntity renderer)
 	{
 		renderer_ = renderer;
 	}

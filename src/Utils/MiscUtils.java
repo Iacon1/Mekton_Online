@@ -69,7 +69,7 @@ public final class MiscUtils
 	{
 		try
 		{
-			FileWriter writer = new FileWriter(getAbsolute(path));
+			FileWriter writer = new FileWriter(getAbsolute(path), false);
 			writer.write(text);
 			writer.close();
 		}

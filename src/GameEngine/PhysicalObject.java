@@ -8,7 +8,7 @@ import java.awt.Graphics2D;
 
 import GameEngine.CommandListeners.MoveCommandListener;
 
-public abstract class PhysicalObject extends GameInstance
+public abstract class PhysicalObject extends GameEntity
 {
 	private String imagePath_; // Image path
 	private int cTX_; // Offset on image sheet

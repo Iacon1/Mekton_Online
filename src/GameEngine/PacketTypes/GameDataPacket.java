@@ -4,7 +4,7 @@
 
 package GameEngine.PacketTypes;
 
-import GameEngine.GameInstance;
+import GameEngine.GameEntity;
 import GameEngine.GameWorld;
 import GameEngine.Hexmap;
 
@@ -15,7 +15,7 @@ public class GameDataPacket extends Packet
 	
 	public GameWorld ourView; // Game world, but only contains the data we need
 	
-	private boolean isNeccessary(GameInstance instance) // Do we need to record this?
+	private boolean isNeccessary(GameEntity instance) // Do we need to record this?
 	{
 		return true; // TODO how to determine
 	}
@@ -24,11 +24,11 @@ public class GameDataPacket extends Packet
 	{
 		ourView = GameWorld.getWorld().copy();
 		
-		for (int i = 0; i < ourView.getInstances().size(); ++i)
+		for (int i = 0; i < ourView.getEntities().size(); ++i)
 		{
-			if (!isNeccessary(ourView.getInstances().get(i)))
+			if (!isNeccessary(ourView.getEntities().get(i)))
 			{
-				ourView.getInstances().set(i, null); // Doesn't delete, just hides
+				ourView.getEntities().set(i, null); // Doesn't delete, just hides
 			}
 		}
 		
@@ -37,6 +37,6 @@ public class GameDataPacket extends Packet
 	
 	public Hexmap getMap()
 	{
-		return (Hexmap) ourView.getInstances().get(currentLocationId);
+		return (Hexmap) ourView.getEntities().get(currentLocationId);
 	}
 }
