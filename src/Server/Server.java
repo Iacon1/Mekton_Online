@@ -60,7 +60,7 @@ public class Server
 	public boolean addAccount(Account account) // Returns true if successful
 	{
 		accounts_.put(account.username, account);
-		MiscUtils.saveText("LocalData/Server/Accounts.json", JSONManager.serializeJSON(accounts_));
+		MiscUtils.saveText("Local Data/Server/Accounts.json", JSONManager.serializeJSON(accounts_));
 		return true; // TODO whitelist / blacklist
 	}
 	

@@ -64,7 +64,7 @@ public class GetServerFrame extends JFrame
 	private void populateList() // Populates savedServerList from file
 	{
 		java.lang.reflect.Type listType = new TypeToken<ArrayList<SavedServer>>(){}.getType();
-		savedServerArray_ = (ArrayList<SavedServer>) JSONManager.deserializeArrayJSON(MiscUtils.readText("LocalData/SavedServers.JSON"), listType);
+		savedServerArray_ = (ArrayList<SavedServer>) JSONManager.deserializeArrayJSON(MiscUtils.readText("Local Data/Client/SavedServers.JSON"), listType);
 		if (savedServerArray_ == null)
 		{
 			savedServerArray_ = new ArrayList<SavedServer>();
@@ -100,7 +100,7 @@ public class GetServerFrame extends JFrame
 		if (!foundServer) savedServerArray_.add(server);
 		
 		String serialized = JSONManager.serializeJSON(savedServerArray_);
-		MiscUtils.saveText("LocalData/SavedServers.JSON", serialized);
+		MiscUtils.saveText("Local Data/Client/SavedServers.JSON", serialized);
 		populateList();
 	}
 	public void removeServer(String name) // Removes selected server
@@ -110,7 +110,7 @@ public class GetServerFrame extends JFrame
 			if (savedServerArray_.get(i).name_.equals(name))
 			{
 				savedServerArray_.remove(i);
-				MiscUtils.saveText("LocalData/SavedServers.JSON", JSONManager.serializeJSON(savedServerArray_));
+				MiscUtils.saveText("Local Data/Client/SavedServers.JSON", JSONManager.serializeJSON(savedServerArray_));
 				populateList();
 				return;
 			}
