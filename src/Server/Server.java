@@ -89,4 +89,9 @@ public class Server
 	{
 		return 10;
 	}
+	
+	public void runCommand(String username, String command)
+	{
+		accounts_.get(username).runCommand(command.split(" "));
+	}
 }

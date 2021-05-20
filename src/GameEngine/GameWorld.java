@@ -48,13 +48,6 @@ public class GameWorld
 		return instances_;
 	}
 	
-	public void processCommand(GameEntity source, String command) // Process instance executing a command
-	{
-		String[] parsedCommand = command.split(" ");
-		
-		source.runCommand(parsedCommand);
-	}
-	
 	public static GameWorld getWorld()
 	{
 		return world_;

@@ -6,20 +6,12 @@ package GameEngine;
 
 import java.util.ArrayList;
 
-import GameEngine.CommandListeners.CommandListener;
-
 import java.awt.Graphics2D;
 
 public abstract class GameEntity
 {
 	private int parentId_; // Parent object index; -1 means none
 	protected ArrayList<Integer> childrenIds_; // Children object indices
-	protected ArrayList<CommandListener> listeners_;
-	
-	protected void addCommandListener(CommandListener listener)
-	{
-		listeners_.add(listener);
-	}
 	
 	private int getId()
 	{
@@ -31,7 +23,6 @@ public abstract class GameEntity
 		GameWorld.getWorld().instances_.add(this);
 		this.parentId_ = -1;
 		childrenIds_ = new ArrayList<Integer>();
-		listeners_ = new ArrayList<CommandListener>();
 	}
 	
 	public static GameEntity getEntity(int id)
@@ -70,11 +61,6 @@ public abstract class GameEntity
 		}
 		
 		return children;
-	}
-	public void runCommand(String[] params)
-	{
-		for (int i = 0; i < listeners_.size(); ++i)
-			if (listeners_.get(i).runCommand(this, params)) return;
 	}
 	
 	public abstract String getName(); // Gets object name

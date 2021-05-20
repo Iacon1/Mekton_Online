@@ -7,6 +7,7 @@ package Server;
 import Utils.*;
 import Client.GameClientThread;
 import Client.Frames.LoginDialog;
+import GameEngine.CommandRunner;
 import GameEngine.DummyPlayer;
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
@@ -17,6 +18,11 @@ import Net.ConnectionPairThread;
 public class ClientHandlerThread extends ConnectionPairThread
 {
 	protected volatile String username_ = null; // Client's account name
+	
+	protected Account getAccount()
+	{
+		return parent_.getAccount(username_);
+	}
 	protected GameEntity getUserEntity()
 	{
 		return GameEntity.getEntity(parent_.getAccount(username_).possessee);
@@ -150,8 +156,8 @@ public class ClientHandlerThread extends ConnectionPairThread
 			{
 				if (input != null)
 				{
-					Logging.logNotice("Client " + parentThread.socket_.getInetAddress() + " used command: \"" + input + "\"");
-					GameWorld.getWorld().processCommand(parentThread.getUserEntity(), input);
+					Logging.logNotice("Client " + parentThread.getConnectedIP() + " used command: \"" + input + "\"");
+					ClientHandlerThread.parent_.runCommand(parentThread.username_, input);
 				}
 			}
 			

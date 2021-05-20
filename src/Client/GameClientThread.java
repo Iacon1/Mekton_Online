@@ -97,7 +97,13 @@ public class GameClientThread extends ConnectionPairThread
 				LoginFeedbackPacket packet = new LoginFeedbackPacket();
 				packet = (LoginFeedbackPacket) packet.fromJSON(input);
 				
-				if (packet.successful) parentThread.stateChange(mapScreen);
+				if (packet.successful)
+				{
+					LoginDialog dialog = (LoginDialog) parentThread.container_;
+					dialog.setVisible(false);
+					dialog.dispose();
+					parentThread.stateChange(mapScreen);
+				}
 				else
 				{
 					LoginDialog dialog = (LoginDialog) parentThread.container_;

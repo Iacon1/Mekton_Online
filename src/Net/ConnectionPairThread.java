@@ -24,6 +24,12 @@ public abstract class ConnectionPairThread extends Thread
 	protected volatile boolean runningI_; // Input
 	protected volatile boolean runningO_; // Output
 	
+	protected String getConnectedIP()
+	{
+		if (socket_ != null) return socket_.getInetAddress().toString();
+		else return null;
+	}
+	
 	private String getInput() // Get the input
 	{
 		try {return inStream_.readUTF();}

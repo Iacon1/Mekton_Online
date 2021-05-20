@@ -6,8 +6,6 @@ package GameEngine;
 
 import java.awt.Graphics2D;
 
-import GameEngine.CommandListeners.MoveCommandListener;
-
 public abstract class PhysicalObject extends GameEntity
 {
 	private String imagePath_; // Image path
@@ -36,7 +34,6 @@ public abstract class PhysicalObject extends GameEntity
 	
 	public PhysicalObject()
 	{
-		addCommandListener(new MoveCommandListener());
 	}
 	
 	public int getX()

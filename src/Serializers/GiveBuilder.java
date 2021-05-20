@@ -7,7 +7,6 @@ package Serializers;
 import com.google.gson.GsonBuilder;
 
 import GameEngine.GameEntity;
-import GameEngine.CommandListeners.CommandListener;
 
 public final class GiveBuilder
 {
@@ -15,7 +14,6 @@ public final class GiveBuilder
 	{
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(GameEntity.class, new AbsAdapter<GameEntity>());
-		builder.registerTypeAdapter(CommandListener.class, new AbsAdapter<CommandListener>());
 		return builder;
 	}
 }
