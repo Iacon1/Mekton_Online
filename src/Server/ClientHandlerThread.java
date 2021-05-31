@@ -25,7 +25,7 @@ public class ClientHandlerThread extends ConnectionPairThread
 	}
 	protected GameEntity getUserEntity()
 	{
-		return GameEntity.getEntity(parent_.getAccount(username_).possessee);
+		return GameEntity.getEntity(parent_.gameWorld_, parent_.getAccount(username_).possessee);
 	}
 	protected static volatile Server parent_;
 	
@@ -114,9 +114,9 @@ public class ClientHandlerThread extends ConnectionPairThread
 					{
 						parentThread.username_ = account.username;
 						Logging.logNotice("Client " + parentThread.socket_.getInetAddress() + " has made account \"" + parentThread.username_ + "\".");
-						new DummyPlayer();
-						ClientHandlerThread.parent_.getAccount(account.username).possessee = GameWorld.getWorld().getEntities().size() - 1;
-						GameWorld.getWorld().getRootEntities().get(0).addChild(parentThread.getUserEntity()); // Adds a guy to the map
+						DummyPlayer player = new DummyPlayer(ClientHandlerThread.parent_.gameWorld_);
+						ClientHandlerThread.parent_.getAccount(account.username).possessee = player.getId();
+						ClientHandlerThread.parent_.gameWorld_.getRootEntities().get(0).addChild(parentThread.getUserEntity()); // Adds a guy to the map
 						((PhysicalObject) parentThread.getUserEntity()).setPos(2, 2, 0);
 					}
 				}
@@ -165,7 +165,7 @@ public class ClientHandlerThread extends ConnectionPairThread
 			public String processOutput(ClientHandlerThread parentThread)
 			{
 				GameDataPacket packet = new GameDataPacket();
-				packet.viewWorld();
+				packet.viewWorld(parentThread.parent_.gameWorld_);
 				return packet.toJSON();
 			}		
 		};

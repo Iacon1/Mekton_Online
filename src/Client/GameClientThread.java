@@ -135,7 +135,7 @@ public class GameClientThread extends ConnectionPairThread
 			{
 				GameDataPacket packet = new GameDataPacket();
 				packet = (GameDataPacket) packet.fromJSON(input);
-				GameWorld.setWorld(packet.ourView);
+				parentThread.gameWorld_ = packet.ourView;
 				ClientGameFrame frame = (ClientGameFrame) parentThread.container_;
 				frame.updateUIStuff(packet);
 			}
@@ -159,6 +159,8 @@ public class GameClientThread extends ConnectionPairThread
 	private volatile CurrentState currentState_; // Change this to change the state of the client
 	private ServerInfoPacket serverInfo_; // The server info we received
 	private Container container_; // The currently-open GUI
+	
+	public GameWorld gameWorld_;
 	
 	public GameClientThread()
 	{

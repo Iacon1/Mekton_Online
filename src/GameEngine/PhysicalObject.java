@@ -32,8 +32,9 @@ public abstract class PhysicalObject extends GameEntity
 		southEast; // +x, +y
 	}
 	
-	public PhysicalObject()
+	public PhysicalObject(GameWorld world)
 	{
+		super(world);
 	}
 	
 	public int getX()

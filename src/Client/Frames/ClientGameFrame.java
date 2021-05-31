@@ -11,10 +11,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.SpringLayout;
 import javax.swing.border.EmptyBorder;
 
-import GameEngine.ConfigManager;
 import GameEngine.GameWorld;
 import GameEngine.GraphicsCanvas;
 import GameEngine.Hexmap;
+import GameEngine.Configurables.ConfigManager;
 import GameEngine.PacketTypes.GameDataPacket;
 import Utils.JSONManager;
 import Utils.Logging;
@@ -46,7 +46,7 @@ public class ClientGameFrame extends JFrame
 	
 	public void updateUIStuff(GameDataPacket packet) // Updates UI stuff
 	{
-		Hexmap map = (Hexmap) GameWorld.getWorld().getEntities().get(packet.currentLocationId);
+		Hexmap map = (Hexmap) packet.ourView.getEntities().get(packet.currentLocationId);
 		hexmapCanvas.setRenderer(map);
 		hexmapCanvas.setLayout(null);
 		hexmapCanvas.repaint();

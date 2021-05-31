@@ -15,12 +15,12 @@ import Utils.MiscUtils;
 
 import javax.swing.JTabbedPane;
 
-import GameEngine.ConfigManager;
 import GameEngine.DebugLogger;
 import GameEngine.GameWorld;
 import GameEngine.GraphicsCanvas;
 import GameEngine.GraphicsManager;
 import GameEngine.Hexmap;
+import GameEngine.Configurables.ConfigManager;
 
 import javax.swing.JPanel;
 import javax.swing.JLayeredPane;
@@ -52,7 +52,6 @@ public class ClientGameWindow
 				try
 				{
 					GraphicsManager.init();
-					GameWorld.init();
 					ClientGameWindow window = new ClientGameWindow();
 				}
 				catch (Exception e) {Logging.logException(e);}

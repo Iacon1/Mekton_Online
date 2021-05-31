@@ -7,6 +7,8 @@ package Client;
 import Utils.*;
 import GameEngine.DebugLogger;
 import GameEngine.GameWorld;
+import GameEngine.Configurables.ConfigManager;
+import GameEngine.Configurables.ModuleManager;
 import Client.Frames.ClientGameWindow;
 import Client.Frames.GetServerFrame;
 
@@ -21,9 +23,10 @@ public class ClientExec
 		
 		try
 		{
+			ConfigManager.init("default");
+			ModuleManager.init("default");
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			GetServerFrame.main(null);
-			GameWorld.init();
 			
 			//ClientGameWindow.main(null);
 		}

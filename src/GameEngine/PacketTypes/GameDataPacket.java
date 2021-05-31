@@ -20,11 +20,11 @@ public class GameDataPacket extends Packet
 		return true; // TODO how to determine
 	}
 	
-	public void viewWorld() // Converts the global game world into the client data
+	public void viewWorld(GameWorld world) // Converts the global game world into the client data
 	{
-		ourView = GameWorld.getWorld().copy();
-		
-		for (int i = 0; i < ourView.getEntities().size(); ++i)
+		ourView = world;
+	
+		/*for (int i = 0; i < ourView.getEntities().size(); ++i)
 		{
 			if (!isNeccessary(ourView.getEntities().get(i)))
 			{
@@ -33,6 +33,7 @@ public class GameDataPacket extends Packet
 		}
 		
 		currentLocationId = 0; // TODO determine location
+		*/ // TODO figure out copying the world again
 	}
 	
 	public Hexmap getMap()

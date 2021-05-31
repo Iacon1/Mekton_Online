@@ -12,28 +12,30 @@ public abstract class GameEntity
 {
 	private int parentId_; // Parent object index; -1 means none
 	protected ArrayList<Integer> childrenIds_; // Children object indices
+	private GameWorld world_; // Our world that we occupy
 	
-	private int getId()
+	public int getId()
 	{
-		return GameWorld.getWorld().instances_.indexOf(this);
+		return world_.instances_.indexOf(this);
 	}
 	
-	public GameEntity()
+	public GameEntity(GameWorld world)
 	{
-		GameWorld.getWorld().instances_.add(this);
+		world_ = world;
+		world_.instances_.add(this);
 		this.parentId_ = -1;
 		childrenIds_ = new ArrayList<Integer>();
 	}
 	
-	public static GameEntity getEntity(int id)
+	public static GameEntity getEntity(GameWorld world, int id)
 	{
-		return GameWorld.getWorld().instances_.get(id);
+		return world.instances_.get(id);
 	}
 	
 	public GameEntity getParent() // Gets parent object; Returns null if none
 	{
 		if (parentId_ == -1) return null;
-		else return getEntity(parentId_);
+		else return getEntity(world_, parentId_);
 	}
 	
 	public void removeChild(GameEntity child) // Removes a child without destroying it
@@ -50,14 +52,14 @@ public abstract class GameEntity
 	}
 	public GameEntity getChild(int i) // Gets child #i
 	{
-		return getEntity(childrenIds_.get(i));
+		return getEntity(world_, childrenIds_.get(i));
 	}
 	public ArrayList<GameEntity> getChildren()
 	{
 		ArrayList<GameEntity> children = new ArrayList<GameEntity>();
 		for (int i = 0; i < childrenIds_.size(); ++i)
 		{
-			children.add(getEntity(childrenIds_.get(i)));
+			children.add(getEntity(world_, childrenIds_.get(i)));
 		}
 		
 		return children;

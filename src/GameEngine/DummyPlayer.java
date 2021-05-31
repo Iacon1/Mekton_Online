@@ -6,11 +6,13 @@ package GameEngine;
 
 import java.awt.Graphics2D;
 
+import GameEngine.Configurables.ConfigManager;
+
 public class DummyPlayer extends PhysicalObject
 {
-	public DummyPlayer()
+	public DummyPlayer(GameWorld world)
 	{
-		super();
+		super(world);
 		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, ConfigManager.getHexWidth(), ConfigManager.getHexHeight());
 	}
 	

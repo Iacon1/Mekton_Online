@@ -7,6 +7,7 @@ package GameEngine;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+import GameEngine.Configurables.ConfigManager;
 import Utils.MiscUtils;
 
 public class Hexmap extends GameEntity
@@ -21,9 +22,9 @@ public class Hexmap extends GameEntity
 	
 	ArrayList<ArrayList<ArrayList<HexData>>> hexes_; // A set of rows (x/width) of columns (y/length) of pillars (z/height)
 	
-	public Hexmap()
+	public Hexmap(GameWorld world)
 	{
-		super();
+		super(world);
 		hexes_ = new ArrayList<ArrayList<ArrayList<HexData>>>();
 	}
 

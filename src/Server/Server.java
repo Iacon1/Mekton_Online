@@ -22,16 +22,18 @@ public class Server
 	private static ClientHandlerThread template_;
 	private HashMap<String, Account> accounts_;
 	
+	public GameWorld gameWorld_;
+	
 	public Server()
 	{
-		GameWorld.init();
-		Hexmap map = new Hexmap();
+		
+		Hexmap map = new Hexmap(gameWorld_);
 		map.setDimensions(18, 9, 1);
 		template_ = new ClientHandlerThread();
 		template_.setParent(this);
 
 		java.lang.reflect.Type accountsType = new TypeToken<HashMap<String, Account>>(){}.getType();
-		try {accounts_ = JSONManager.deserializeArrayJSON(MiscUtils.readText("LocalData/Server/Accounts.json"), accountsType);}
+		try {accounts_ = JSONManager.deserializeArrayJSON(MiscUtils.readText("Local Data/Server/Accounts.json"), accountsType);}
 		catch (Exception e) {Logging.logException(e);}
 		
 		if (accounts_ == null) accounts_ = new HashMap<String, Account>();
@@ -92,6 +94,6 @@ public class Server
 	
 	public void runCommand(String username, String command)
 	{
-		accounts_.get(username).runCommand(command.split(" "));
+		accounts_.get(username).runCommand(gameWorld_, command.split(" "));
 	}
 }

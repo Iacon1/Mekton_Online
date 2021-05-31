@@ -7,5 +7,5 @@ package GameEngine;
 public interface CommandRunner
 {
 
-	public void runCommand(String[] params);
+	public void runCommand(GameWorld world, String[] params);
 }

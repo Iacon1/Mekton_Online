@@ -32,12 +32,12 @@ public class Account implements CommandRunner
 	}
 	
 	@Override
-	public void runCommand(String[] params) // Commands that a player can type
+	public void runCommand(GameWorld world, String[] params) // Commands that a player can type
 	{
 		switch (params[0])
 		{
 		case "move": // TODO objects with MA
-			PhysicalObject physObject = (PhysicalObject) GameWorld.getWorld().getEntities().get(possessee);
+			PhysicalObject physObject = (PhysicalObject) world.getEntities().get(possessee);
 			switch (params[1])
 			{
 			case "north": case "no": case "n":

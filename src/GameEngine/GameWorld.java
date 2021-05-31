@@ -11,25 +11,10 @@ import Utils.JSONManager;
 public class GameWorld
 {
 	protected ArrayList<GameEntity> instances_; // List of game instances
-	private transient static GameWorld world_;
-	
-	public static void init()
+
+	public GameWorld()
 	{
-		world_ = new GameWorld();
-		world_.instances_ = new ArrayList<GameEntity>();
-	}
-	
-	public static void setWorld(GameWorld world)
-	{
-		world_ = world;
-	}
-	
-	public GameWorld copy() // Returns a copy of self. Warning: Copy's instance list refers to our instances!
-	{
-		GameWorld world = new GameWorld();
-		world.instances_ = new ArrayList<GameEntity>(instances_);
-		
-		return world;
+		instances_ = new ArrayList<GameEntity>();
 	}
 	
 	public ArrayList<GameEntity> getRootEntities() // Returns every instance with no parent
@@ -43,13 +28,9 @@ public class GameWorld
 		
 		return array;
 	}
+	
 	public ArrayList<GameEntity> getEntities() // Shows every instance instead of just our children; GameWorld.children_ ought be empty
 	{
 		return instances_;
-	}
-	
-	public static GameWorld getWorld()
-	{
-		return world_;
 	}
 }
