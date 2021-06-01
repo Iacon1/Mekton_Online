@@ -4,6 +4,9 @@
 
 package Server;
 
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.Instant;
 import java.util.*;
 
@@ -55,7 +58,11 @@ public class ServerLogger implements Logger
 	@Override
 	public void logException(Exception exception)
 	{
-		logRaw("exception", exception.toString() + "<br>  " + getCaller());
+		StringWriter stringWriter = new StringWriter();
+		PrintWriter printWriter = new PrintWriter(stringWriter);
+		exception.printStackTrace(printWriter);
+		String trace = stringWriter.toString();
+		logRaw("exception", exception.toString() + "<br>  " + trace);
 	}
 
 	public final String buildLabelText(String category) // Builds a string holding a category of log; If category is null then shows all
