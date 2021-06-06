@@ -23,8 +23,8 @@ public class ClientExec
 		
 		try
 		{
-			ConfigManager.init("default");
-			ModuleManager.init("default");
+			ConfigManager.init("Default");
+			ModuleManager.init("Default");
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			GetServerFrame.main(null);
 			

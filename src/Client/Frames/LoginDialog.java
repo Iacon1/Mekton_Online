@@ -41,6 +41,8 @@ public class LoginDialog extends JDialog
 		packet.password = passwordBox.getText();
 		packet.newUser = newUserBox.isSelected();
 		
+		send_ = false;
+		
 		return packet;
 	}
 	public void onFail(String reason)
@@ -49,7 +51,6 @@ public class LoginDialog extends JDialog
 		passwordBox.setText(null);
 		
 		errorLabel.setText(reason);
-		send_ = false;
 	}
 	private void onClickOK() // When OK is pressed
 	{

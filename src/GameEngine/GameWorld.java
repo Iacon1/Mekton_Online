@@ -6,8 +6,6 @@ package GameEngine;
 
 import java.util.ArrayList;
 
-import Utils.JSONManager;
-
 public class GameWorld
 {
 	protected ArrayList<GameEntity> instances_; // List of game instances

@@ -1,12 +1,15 @@
 // By Iacon1
 // Created 05/09/2021
-//
+// For abstract classes that may be in lists
+// https://stackoverflow.com/questions/16872492/gson-and-abstract-superclasses-deserialization-issue
 
-package Serializers;
+package Utils.Serializers;
 
 import java.lang.reflect.Type;
 
 import com.google.gson.*;
+
+import Utils.Logging;
 
 public class AbsAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T>
 {
@@ -14,9 +17,9 @@ public class AbsAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T>
 	public JsonElement serialize(T src, Type typeOfSrc, JsonSerializationContext context)
 	{
 		JsonObject result = new JsonObject();
-		result.add("type", new JsonPrimitive(src.getClass().getSimpleName()));
+		result.add("type", new JsonPrimitive(src.getClass().getCanonicalName()));
 		result.add("properties", context.serialize(src, src.getClass()));
-		
+
 		return result;
 	}
 	
@@ -32,11 +35,9 @@ public class AbsAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T>
 	    	String fullName = typeOfT.getTypeName();
 	        String packageText = fullName.substring(0, fullName.lastIndexOf(".") + 1);
 
-	        return context.deserialize(element, Class.forName(packageText + type));
+	        return context.deserialize(element, Class.forName(type));
 	    }
-	    catch (ClassNotFoundException cnfe)
-	    {
-	        throw new JsonParseException("Unknown element type: " + type, cnfe);
-	    }
+	    catch (JsonParseException e) {throw e;}
+	    catch (Exception e) {Logging.logException(e); return null;}
 	  }
 }

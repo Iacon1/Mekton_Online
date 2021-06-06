@@ -6,7 +6,10 @@ package GameEngine.Configurables;
 
 import java.util.HashMap;
 
+import GameEngine.GameEntity;
 import GameEngine.GameWorld;
+import Server.Account;
+import Server.Server;
 
 public interface Module
 {
@@ -18,6 +21,10 @@ public interface Module
 		// Functions:
 		// setup
 		// loadWorld
+		// makePlayer
+		// wakePlayer
+		// sleepPlayer
+		// deletePlayer
 		// TODO keep this updated
 		
 		public transient int priority_; // 0 is highest, 1 is second-highest, etc.
@@ -31,5 +38,9 @@ public interface Module
 	public ModuleConfig getConfig();
 	
 	public GameWorld setup(); // Sets up a new world; Only used the first time the server is run
-	public GameWorld loadWorld(String server);
+	public GameWorld loadWorld(String server); // Loads a saved world
+	public GameEntity makePlayer(Server server, Account account); // Makes a new player entity for a new account
+	public GameEntity wakePlayer(Server server, Account account); // Wakes up a returning account's current possessee when they login
+	public GameEntity sleepPlayer(Server server, Account account); // Wakes up a returning account's current possessee when they logout
+	public GameEntity deletePlayer(Server server, Account account); // Deletes or detaches a deleted account's current possessee
 }

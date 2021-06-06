@@ -8,10 +8,10 @@ import Utils.*;
 import Client.GameClientThread;
 import Client.Frames.LoginDialog;
 import GameEngine.CommandRunner;
-import GameEngine.DummyPlayer;
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
 import GameEngine.PhysicalObject;
+import GameEngine.Configurables.ModuleManager;
 import GameEngine.PacketTypes.*;
 import Net.ConnectionPairThread;
 
@@ -114,10 +114,8 @@ public class ClientHandlerThread extends ConnectionPairThread
 					{
 						parentThread.username_ = account.username;
 						Logging.logNotice("Client " + parentThread.socket_.getInetAddress() + " has made account \"" + parentThread.username_ + "\".");
-						DummyPlayer player = new DummyPlayer(ClientHandlerThread.parent_.gameWorld_);
-						ClientHandlerThread.parent_.getAccount(account.username).possessee = player.getId();
-						ClientHandlerThread.parent_.gameWorld_.getRootEntities().get(0).addChild(parentThread.getUserEntity()); // Adds a guy to the map
-						((PhysicalObject) parentThread.getUserEntity()).setPos(2, 2, 0);
+						
+						ModuleManager.makePlayer(ClientHandlerThread.parent_, parentThread.getAccount());
 					}
 				}
 				else
@@ -127,6 +125,8 @@ public class ClientHandlerThread extends ConnectionPairThread
 					{
 						parentThread.username_ = account.username;
 						Logging.logNotice("Client " + parentThread.socket_.getInetAddress() + " has logged in as account \"" + parentThread.username_ + "\".");
+						
+						ModuleManager.wakePlayer(ClientHandlerThread.parent_, parentThread.getAccount());
 					}
 				}
 				
@@ -156,8 +156,8 @@ public class ClientHandlerThread extends ConnectionPairThread
 			{
 				if (input != null)
 				{
-					Logging.logNotice("Client " + parentThread.getConnectedIP() + " used command: \"" + input + "\"");
-					ClientHandlerThread.parent_.runCommand(parentThread.username_, input);
+					Logging.logNotice("Client " + parentThread.getAccount().username + " used command: \"" + input + "\"");
+					ClientHandlerThread.parent_.runCommand(parentThread.getAccount().username, input);
 				}
 			}
 			

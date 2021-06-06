@@ -11,7 +11,8 @@ import java.util.Map;
 import com.google.gson.reflect.TypeToken;
 
 import GameEngine.GameWorld;
-import GameEngine.Hexmap;
+import GameEngine.Configurables.ConfigManager;
+import GameEngine.Configurables.ModuleManager;
 import Net.Server.ServerThread;
 import Utils.*;
 
@@ -25,10 +26,9 @@ public class Server
 	public GameWorld gameWorld_;
 	
 	public Server()
-	{
+	{	
+		gameWorld_ = ModuleManager.setup();
 		
-		Hexmap map = new Hexmap(gameWorld_);
-		map.setDimensions(18, 9, 1);
 		template_ = new ClientHandlerThread();
 		template_.setParent(this);
 

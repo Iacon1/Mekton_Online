@@ -14,7 +14,7 @@ public class GameDataPacket extends Packet
 	public int playerObjId; // Player's index
 	
 	public GameWorld ourView; // Game world, but only contains the data we need
-	
+
 	private boolean isNeccessary(GameEntity instance) // Do we need to record this?
 	{
 		return true; // TODO how to determine
