@@ -7,7 +7,7 @@ package Utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import Serializers.GiveBuilder;
+import Utils.Serializers.GiveBuilder;
 
 public final class JSONManager
 {
@@ -28,6 +28,12 @@ public final class JSONManager
 	{
 		setupIfNot();
 		try {return gson_.toJson(unserialized);}
+		catch (Exception e) {Logging.logException(e); return null;}
+	}
+	public static <C> String serializeJSON(C unserialized, Class<C> classFrom) // Serializes
+	{
+		setupIfNot();
+		try {return gson_.toJson(unserialized, classFrom);}
 		catch (Exception e) {Logging.logException(e); return null;}
 	}
 	public static <C> C deserializeJSON(String serialized, Class<C> classTo) // Unserializes

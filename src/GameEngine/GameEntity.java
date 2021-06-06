@@ -12,19 +12,30 @@ public abstract class GameEntity
 {
 	private int parentId_; // Parent object index; -1 means none
 	protected ArrayList<Integer> childrenIds_; // Children object indices
-	private GameWorld world_; // Our world that we occupy
+	private transient GameWorld world_; // Our world that we occupy
 	
 	public int getId()
 	{
 		return world_.instances_.indexOf(this);
 	}
 	
+	public GameEntity()
+	{
+		this.world_ = null;
+		this.parentId_ = -1;
+		childrenIds_ = new ArrayList<Integer>();
+	}
 	public GameEntity(GameWorld world)
 	{
 		world_ = world;
 		world_.instances_.add(this);
 		this.parentId_ = -1;
 		childrenIds_ = new ArrayList<Integer>();
+	}
+	
+	public void setWorld(GameWorld world)
+	{
+		world_ = world;
 	}
 	
 	public static GameEntity getEntity(GameWorld world, int id)

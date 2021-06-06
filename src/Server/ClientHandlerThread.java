@@ -115,7 +115,7 @@ public class ClientHandlerThread extends ConnectionPairThread
 						parentThread.username_ = account.username;
 						Logging.logNotice("Client " + parentThread.socket_.getInetAddress() + " has made account \"" + parentThread.username_ + "\".");
 						
-						ModuleManager.makePlayer(ClientHandlerThread.parent_, account);
+						ModuleManager.makePlayer(ClientHandlerThread.parent_, parentThread.getAccount());
 					}
 				}
 				else
@@ -125,6 +125,8 @@ public class ClientHandlerThread extends ConnectionPairThread
 					{
 						parentThread.username_ = account.username;
 						Logging.logNotice("Client " + parentThread.socket_.getInetAddress() + " has logged in as account \"" + parentThread.username_ + "\".");
+						
+						ModuleManager.wakePlayer(ClientHandlerThread.parent_, parentThread.getAccount());
 					}
 				}
 				
@@ -154,8 +156,8 @@ public class ClientHandlerThread extends ConnectionPairThread
 			{
 				if (input != null)
 				{
-					Logging.logNotice("Client " + parentThread.getConnectedIP() + " used command: \"" + input + "\"");
-					ClientHandlerThread.parent_.runCommand(parentThread.username_, input);
+					Logging.logNotice("Client " + parentThread.getAccount().username + " used command: \"" + input + "\"");
+					ClientHandlerThread.parent_.runCommand(parentThread.getAccount().username, input);
 				}
 			}
 			

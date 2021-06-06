@@ -22,7 +22,7 @@ public class TestModule implements Module
 		config_.doesImplement_.put("setup", true);
 		config_.doesImplement_.put("loadWorld", true);
 		config_.doesImplement_.put("makePlayer", true);
-		config_.doesImplement_.put("wakePlayer", false);
+		config_.doesImplement_.put("wakePlayer", true);
 		config_.doesImplement_.put("sleepPlayer", false);
 		config_.doesImplement_.put("deletePlayer", false);
 	}
@@ -40,7 +40,7 @@ public class TestModule implements Module
 		Hexmap map = new Hexmap(gameWorld);
 		map.setDimensions(18, 9, 1);
 		
-		return null;
+		return gameWorld;
 	}
 
 	@Override
@@ -63,7 +63,12 @@ public class TestModule implements Module
 	@Override
 	public GameEntity wakePlayer(Server server, Account account)
 	{
-		return null;
+		DummyPlayer player = new DummyPlayer(server.gameWorld_); // Adds a guy to the map
+		account.possessee = player.getId();
+		server.gameWorld_.getRootEntities().get(0).addChild(player);
+		player.setPos(2, 2, 0);
+		
+		return player;
 	}
 	
 	@Override

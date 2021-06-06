@@ -27,6 +27,8 @@ public class Server
 	
 	public Server()
 	{	
+		gameWorld_ = ModuleManager.setup();
+		
 		template_ = new ClientHandlerThread();
 		template_.setParent(this);
 
