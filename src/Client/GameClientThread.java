@@ -128,6 +128,7 @@ public class GameClientThread extends ConnectionPairThread
 			public void onEnter(GameClientThread parentThread)
 			{
 				ClientGameWindow.main(parentThread);
+				Logging.logNotice("MapScreen");
 			}
 			
 			@Override

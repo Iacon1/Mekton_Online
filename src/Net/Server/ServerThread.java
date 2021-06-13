@@ -46,11 +46,10 @@ public class ServerThread<P extends ConnectionPairThread> extends Thread
 	{
 		while (running_)
 		{
-			Socket clientSocket;
 			try
-			{
-				clientSocket = serverSocket_.accept();
-				
+			{;
+				Socket clientSocket = serverSocket_.accept();
+				Logging.logNotice("Caught a connection!");
 				P pair = instancer_.getInstance();
 				pair.setSocket(clientSocket);
 				pair.start();

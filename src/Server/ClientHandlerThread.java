@@ -27,20 +27,26 @@ public class ClientHandlerThread extends ConnectionPairThread
 	{
 		return GameEntity.getEntity(parent_.gameWorld_, parent_.getAccount(username_).possessee);
 	}
+	
 	protected static volatile Server parent_;
+	private volatile CurrentState currentState_; // Change this to change the state of the client
+	private volatile int subState_; // For states to keep track of their progress
+	private LoginFeedbackPacket loginFeedback_;
 	
 	private enum CurrentState
 	{
 		checkClient
 		{
-			private boolean sent_ = false; // Only send once!
 			@Override
-			public void onEnter(ClientHandlerThread parentThread) {}
+			public void onEnter(ClientHandlerThread parentThread)
+			{
+				parentThread.subState_ = 0; // 0 - Not sent; 1 - Sent 
+			}
 			
 			@Override
 			public void processInput(String input, ClientHandlerThread parentThread)
 			{
-				if (sent_)
+				if (parentThread.subState_ == 1)
 				{
 					ClientInfoPacket packet = new ClientInfoPacket();
 					packet = (ClientInfoPacket) packet.fromJSON(input);
@@ -61,7 +67,7 @@ public class ClientHandlerThread extends ConnectionPairThread
 			@Override
 			public String processOutput(ClientHandlerThread parentThread)
 			{
-				if (!sent_)
+				if (parentThread.subState_ == 0)
 				{
 					ServerInfoPacket packet = new ServerInfoPacket();
 					packet.serverName = parentThread.parent_.getName();
@@ -74,7 +80,7 @@ public class ClientHandlerThread extends ConnectionPairThread
 						parentThread.close(); // We don't need this connection any more
 					}
 					else packet.note = ServerInfoPacket.Note.good;
-					sent_ = true;
+					parentThread.subState_ = 1;
 					
 					Logging.logNotice("Sent info to " + parentThread.socket_.getInetAddress());
 					return packet.toJSON();
@@ -84,20 +90,18 @@ public class ClientHandlerThread extends ConnectionPairThread
 		},
 		
 		login // Logging in
-		{
-			private LoginFeedbackPacket feedbackPacket_;
-			private boolean send_;
-			
+		{	
 			@Override
 			public void onEnter(ClientHandlerThread parentThread)
 			{
-				feedbackPacket_ = new LoginFeedbackPacket();
+				parentThread.loginFeedback_ = new LoginFeedbackPacket();
+				parentThread.subState_ = 0; // 0 - Don't send; 1 - Do send
 			}
 			
 			@Override
 			public void processInput(String input, ClientHandlerThread parentThread)
 			{
-				if (send_) return; // Don't take more packets while still giving feedback on one
+				if (parentThread.subState_ == 1) return; // Don't take more packets while still giving feedback on one
 			
 				LoginPacket packet = new LoginPacket();
 				packet = (LoginPacket) packet.fromJSON(input);
@@ -109,8 +113,8 @@ public class ClientHandlerThread extends ConnectionPairThread
 				if (packet.newUser)
 				{
 					if (ClientHandlerThread.parent_.getAccount(packet.username) != null) return; // Don't overwrite an old account!
-					feedbackPacket_.successful = ClientHandlerThread.parent_.addAccount(account);
-					if (feedbackPacket_.successful)
+					parentThread.loginFeedback_.successful = ClientHandlerThread.parent_.addAccount(account);
+					if (parentThread.loginFeedback_.successful)
 					{
 						parentThread.username_ = account.username;
 						Logging.logNotice("Client " + parentThread.socket_.getInetAddress() + " has made account \"" + parentThread.username_ + "\".");
@@ -120,8 +124,8 @@ public class ClientHandlerThread extends ConnectionPairThread
 				}
 				else
 				{
-					feedbackPacket_.successful = ClientHandlerThread.parent_.login(packet.username, packet.password);
-					if (feedbackPacket_.successful)
+					parentThread.loginFeedback_.successful = ClientHandlerThread.parent_.login(packet.username, packet.password);
+					if (parentThread.loginFeedback_.successful)
 					{
 						parentThread.username_ = account.username;
 						Logging.logNotice("Client " + parentThread.socket_.getInetAddress() + " has logged in as account \"" + parentThread.username_ + "\".");
@@ -130,17 +134,17 @@ public class ClientHandlerThread extends ConnectionPairThread
 					}
 				}
 				
-				send_ = true;
+				parentThread.subState_ = 1;
 			}
 			
 			@Override
 			public String processOutput(ClientHandlerThread parentThread)
 			{
-				if (send_)
+				if (parentThread.subState_ == 1)
 					{
-						send_ = false;
-						if (feedbackPacket_.successful) parentThread.stateChange(mapScreen);
-						return feedbackPacket_.toJSON();
+						parentThread.subState_ = 0;
+						if (parentThread.loginFeedback_.successful) parentThread.stateChange(mapScreen);
+						return parentThread.loginFeedback_.toJSON();
 					}
 				else return null;
 			}
@@ -174,8 +178,6 @@ public class ClientHandlerThread extends ConnectionPairThread
 		public abstract void processInput(String input, ClientHandlerThread parentThread);
 		public abstract String processOutput(ClientHandlerThread parentThread);
 	}
-	
-	private volatile CurrentState currentState_; // Change this to change the state of the client
 	
 	public ClientHandlerThread()
 	{
