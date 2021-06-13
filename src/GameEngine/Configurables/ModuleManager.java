@@ -61,7 +61,8 @@ public final class ModuleManager
 		urls[1] = jarUrl;
 		
 		URLClassLoader loader = new URLClassLoader(urls);
-		Class moduleClass = loader.loadClass(moduleFile + "." + moduleFile);
+		//Class moduleClass = loader.loadClass(moduleFile + "." + moduleFile);
+		Class moduleClass = loader.loadClass("Modules." + moduleFile + "." + moduleFile); // TODO
 		Module module = (Module) moduleClass.getDeclaredConstructor().newInstance();
 		
 		module.getConfig().priority_ = pri;

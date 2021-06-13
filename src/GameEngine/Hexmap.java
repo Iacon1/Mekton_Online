@@ -8,24 +8,24 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import GameEngine.Configurables.ConfigManager;
+import Utils.Instancer;
+import Utils.Logging;
 import Utils.MiscUtils;
 
-public class Hexmap extends GameEntity
-{
-	private static class HexData // Stores data for the hexes
+public class Hexmap<T extends HexData> extends GameEntity
+{	
+	ArrayList<ArrayList<ArrayList<T>>> hexes_; // A set of rows (x/width) of columns (y/length) of pillars (z/height)
+	Instancer<T> instancer_;
+	
+	public Hexmap()
 	{
-		public boolean solid_; // Is this a wall?
-		public String imagePath_ = "Resources/Server Packs/Default/Tilesets/DummyTileset.PNG"; // Image path
-		public int tX_ = 0; // Tileset X offset in hexes
-		public int tY_ = 0; // Tileset Y offset in hexes
 	}
 	
-	ArrayList<ArrayList<ArrayList<HexData>>> hexes_; // A set of rows (x/width) of columns (y/length) of pillars (z/height)
-	
-	public Hexmap(GameWorld world)
+	public Hexmap(GameWorld world, T hexTemplate)
 	{
 		super(world);
-		hexes_ = new ArrayList<ArrayList<ArrayList<HexData>>>();
+		hexes_ = new ArrayList<ArrayList<ArrayList<T>>>();
+		instancer_ = new Instancer<T>(hexTemplate);
 	}
 
 	public void setDimensions(int x, int y, int z) // Sets new dimensions for map
@@ -33,18 +33,22 @@ public class Hexmap extends GameEntity
 		hexes_ = MiscUtils.resizeArrayList(hexes_, x);
 		for (int i = 0; i < x; ++i)
 		{
-			if (hexes_.get(i) == null) hexes_.set(i, new ArrayList<ArrayList<HexData>>());
-			ArrayList<ArrayList<HexData>> xSlice = hexes_.get(i); // A slice along the x axis; Only has y & z axes
+			if (hexes_.get(i) == null) hexes_.set(i, new ArrayList<ArrayList<T>>());
+			ArrayList<ArrayList<T>> xSlice = hexes_.get(i); // A slice along the x axis; Only has y & z axes
 			xSlice = MiscUtils.resizeArrayList(xSlice, y);
 			
 			for (int j = 0; j < y; ++j)
 			{
-				if (xSlice.get(j) == null) xSlice.set(j, new ArrayList<HexData>());
-				ArrayList<HexData> ySlice = xSlice.get(j); // A slice along the y axis; Only has z axis
+				if (xSlice.get(j) == null) xSlice.set(j, new ArrayList<T>());
+				ArrayList<T> ySlice = xSlice.get(j); // A slice along the y axis; Only has z axis
 				ySlice = MiscUtils.resizeArrayList(ySlice, z);
 				
-				for (int k = 0; k < z; ++k) ySlice.set(k, new HexData());
-				
+				for (int k = 0; k < z; ++k)
+				{
+					try {ySlice.set(k, instancer_.getInstance());}
+					catch (Exception e) {Logging.logException(e);}
+				}
+
 				xSlice.set(j,  ySlice);
 			}
 			
@@ -64,22 +68,22 @@ public class Hexmap extends GameEntity
 		return hexes_.get(0).get(0).size();
 	}
 	
-	public void setHex(int x, int y, int z, HexData data) // Sets the hex data at a coordinate
+	public void setHex(int x, int y, int z, T data) // Sets the hex data at a coordinate
 	{
-		ArrayList<ArrayList<HexData>> xSlice = hexes_.get(x); // A slice along the x axis; Only has y & z axes
-		ArrayList<HexData> ySlice = xSlice.get(y); // A slice along the y axis; Only has z axis
-		HexData zSlice = ySlice.get(z); // A slice along the x axis; Only has y & z axes
+		ArrayList<ArrayList<T>> xSlice = hexes_.get(x); // A slice along the x axis; Only has y & z axes
+		ArrayList<T> ySlice = xSlice.get(y); // A slice along the y axis; Only has z axis
+		T zSlice = ySlice.get(z); // A slice along the x axis; Only has y & z axes
 		
 		zSlice = data;
 		ySlice.set(z, zSlice);
 		xSlice.set(y,  ySlice);
 		hexes_.set(x,  xSlice);
 	}
-	public HexData getHex(int x, int y, int z) // Gets the hex data @ (x, y, z)
+	public T getHex(int x, int y, int z) // Gets the hex data @ (x, y, z)
 	{
-		ArrayList<ArrayList<HexData>> xSlice = hexes_.get(x); // A slice along the x axis; Only has y & z axes
-		ArrayList<HexData> ySlice = xSlice.get(y); // A slice along the y axis; Only has z axis
-		HexData zSlice = ySlice.get(z); // A slice along the x axis; Only has y & z axes
+		ArrayList<ArrayList<T>> xSlice = hexes_.get(x); // A slice along the x axis; Only has y & z axes
+		ArrayList<T> ySlice = xSlice.get(y); // A slice along the y axis; Only has z axis
+		T zSlice = ySlice.get(z); // A slice along the x axis; Only has y & z axes
 		
 		return zSlice;
 	}
@@ -94,16 +98,16 @@ public class Hexmap extends GameEntity
 		
 		return null;
 	}
-	private int GX2SX(int gX, int hexSize) // gX relative to corner-of-screen
+	private int GX2SX(int gX, int hexWidth) // gX relative to corner-of-screen
 	{
-		return (int) Math.round(gX * 0.75 * hexSize);
+		return (int) Math.round(gX * 0.75 * hexWidth);
 	}
-	private int GY2SY(int gY, int hexSize, boolean shift) // gY relative to corner-of-screen
+	private int GY2SY(int gY, int hexHeight, boolean shift) // gY relative to corner-of-screen
 	{
 		if (shift)
-			return (int) Math.round(gY * hexSize + 0.5 * hexSize);
+			return (int) Math.round(gY * hexHeight + 0.5 * hexHeight);
 		else
-			return (int) Math.round(gY * hexSize);
+			return (int) Math.round(gY * hexHeight);
 	}
 	
 	@Override
@@ -131,13 +135,13 @@ public class Hexmap extends GameEntity
 			{
 				for (int k = 0; k < z; ++k)
 				{
-					HexData hex = getHex(i, j, k);
+					T hex = getHex(i, j, k);
 					int cX = GX2SX(i - x, hexWidth);
 					int cY = GY2SY(j - y, hexHeight, shift);
 					int cTX = hex.tX_ * hexWidth;
 					int cTY = hex.tY_ * hexHeight;
 					
-					g.drawImage(GraphicsManager.getImage(hex.imagePath_), pX + cX, pY + cY, pX + cX + hexWidth, pY + cY + hexHeight, cTX, cTY, cTX + hexWidth, cTY + hexHeight, null);
+					g.drawImage(GraphicsManager.getImage(hex.tileset_), pX + cX, pY + cY, pX + cX + hexWidth, pY + cY + hexHeight, cTX, cTY, cTX + hexWidth, cTY + hexHeight, null);
 					PhysicalObject instance = findEntity(i, j, k);
 					if (instance != null)
 						instance.render(pX + cX, pY + cY, g);

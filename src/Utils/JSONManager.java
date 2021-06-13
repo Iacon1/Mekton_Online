@@ -39,6 +39,7 @@ public final class JSONManager
 	public static <C> C deserializeJSON(String serialized, Class<C> classTo) // Unserializes
 	{
 		setupIfNot();
+		//Logging.logNotice(serialized);
 		try {return gson_.fromJson(serialized, classTo);}
 		catch (Exception e) {Logging.logException(e); return null;}
 	}

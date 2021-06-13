@@ -2,7 +2,7 @@
 // Created 04/26/2021
 //
 
-package TestModule;
+package Modules.TestModule;
 
 import java.awt.Graphics2D;
 

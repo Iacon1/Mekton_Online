@@ -5,6 +5,7 @@
 package GameEngine.Configurables;
 
 import Utils.JSONManager;
+import Utils.Logging;
 import Utils.MiscUtils;
 
 public final class ConfigManager
@@ -30,7 +31,9 @@ public final class ConfigManager
 			config_ = JSONManager.deserializeJSON(MiscUtils.readText(path), config_.getClass());
 			if (config_ == null) // Save the default into there
 			{
+				Logging.logError("No config found for server " + server + ". Generating one...");
 				config_ = new Config();
+				Logging.logError("Done.");
 				MiscUtils.saveText(path, JSONManager.serializeJSON(config_));
 			}
 		}

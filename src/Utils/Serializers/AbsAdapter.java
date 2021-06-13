@@ -33,8 +33,6 @@ public class AbsAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T>
 	    try
 	    {            
 	    	String fullName = typeOfT.getTypeName();
-	        String packageText = fullName.substring(0, fullName.lastIndexOf(".") + 1);
-
 	        return context.deserialize(element, Class.forName(type));
 	    }
 	    catch (JsonParseException e) {throw e;}

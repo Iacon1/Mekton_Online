@@ -170,12 +170,14 @@ public class GameClientThread extends ConnectionPairThread
 	
 	public void stateChange(CurrentState newState) // Resets both input & output threads to respect change
 	{
-		currentState_ = newState;
 		runningI_ = false;
 		runningO_ = false;
 		try {Thread.sleep(10);}
 		catch (Exception e) {Logging.logException(e);}
+		currentState_ = newState;
 		currentState_.onEnter(this);
+		try {Thread.sleep(10);}
+		catch (Exception e) {Logging.logException(e);}
 		runningI_ = true;
 		runningO_ = true;
 	}
@@ -196,7 +198,7 @@ public class GameClientThread extends ConnectionPairThread
 		if (this.container_ != null)
 		{
 			this.container_.setVisible(false);
-			//this.container_.dispose();
+			this.container_.setEnabled(false);
 		}
 	}
 	

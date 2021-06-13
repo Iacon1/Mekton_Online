@@ -2,18 +2,20 @@
 // Created 05/31/2021
 // Module file
 
-package TestModule;
+package Modules.TestModule;
 
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
 import GameEngine.Hexmap;
 import GameEngine.Configurables.Module;
+import Modules.TestModule.TestHexmap;
 import Server.Account;
 import Server.Server;
 
 public class TestModule implements Module
 {
 	private ModuleConfig config_;
+	
 	
 	public TestModule()
 	{
@@ -37,7 +39,7 @@ public class TestModule implements Module
 	public GameWorld setup()
 	{
 		GameWorld gameWorld = new GameWorld();
-		Hexmap map = new Hexmap(gameWorld);
+		TestHexmap map = new TestHexmap(gameWorld, new TestHexData());
 		map.setDimensions(18, 9, 1);
 		
 		return gameWorld;

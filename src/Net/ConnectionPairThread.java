@@ -54,7 +54,7 @@ public abstract class ConnectionPairThread extends Thread
 	
 	private void inputRun() // Run by inThread_
 	{
-		while (running_ & runningI_)
+		while (running_ && runningI_)
 		{
 			String input = getInput();
 			try {processInput(input);}
@@ -63,7 +63,7 @@ public abstract class ConnectionPairThread extends Thread
 	}
 	private void outputRun() // Run by outThread_
 	{
-		while (running_ & runningO_)
+		while (running_ && runningO_)
 		{
 			String output = null;
 			try {output = processOutput();}

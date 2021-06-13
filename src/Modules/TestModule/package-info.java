@@ -2,4 +2,4 @@
 // Created 05/31/2021
 // The core module for things like hexmaps and stuff
 
-package TestModule;
+package Modules.TestModule;

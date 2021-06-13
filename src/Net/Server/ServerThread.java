@@ -7,6 +7,7 @@
 
 package Net.Server;
 
+import Utils.Instancer;
 import Utils.Logging;
 import Net.ConnectionPairThread;
 
@@ -17,12 +18,12 @@ public class ServerThread<P extends ConnectionPairThread> extends Thread
 	protected int port_; // Port
 	protected ServerSocket serverSocket_; // Socket for accepting new clients 
 	protected boolean running_ = false; // Keep running?
-	private P pairTemplate_;
+	private Instancer<P> instancer_;
 
 	public ServerThread(int port, P pairTemplate)
 	{
 		port_ = port;
-		pairTemplate_ = pairTemplate;
+		instancer_ = new Instancer<P>(pairTemplate);
 	}
 	
 	public void open() // Opens the server socket
@@ -50,7 +51,7 @@ public class ServerThread<P extends ConnectionPairThread> extends Thread
 			{
 				clientSocket = serverSocket_.accept();
 				
-				P pair = (P) pairTemplate_.getClass().getConstructor().newInstance();
+				P pair = instancer_.getInstance();
 				pair.setSocket(clientSocket);
 				pair.start();
 			}

@@ -10,24 +10,28 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 
+import Utils.Logging;
 import Utils.MiscUtils;
 
 public final class GraphicsManager
 {
-	private static HashMap<String, Image> map_;
+	private static HashMap<String, Image> images_;
 	
 	public static void init()
 	{
-		map_ = new HashMap<String, Image>();
+		images_ = new HashMap<String, Image>();
 	}
 	
-	public static final Image getImage(String path) // Gets an image from path
+	public static Image getImage(String path) // Gets an image from path
 	{
-		Image image = map_.get(path);
+		Image image = images_.get(path);
 		if (image == null)
 		{
+			Logging.logError("Have not loaded image @ " + path + ". Loading...");
 			image = Toolkit.getDefaultToolkit().getImage(MiscUtils.getAbsolute(path));
-			map_.put(path, image);
+			if (image == null) Logging.logError("Could not load image @ " + path);
+			else Logging.logError("Loading done");
+			images_.put(path, image);
 		}
 	
 		return image;
