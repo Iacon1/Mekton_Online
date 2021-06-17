@@ -4,8 +4,8 @@
 
 package Modules.BaseModule.ClientStates;
 
+import Client.ConnectFailDialog;
 import Client.GameClientThread;
-import Client.Frames.ConnectFailDialog;
 import Net.StateFactory;
 import Net.ThreadState;
 import Utils.MiscUtils;

@@ -1,6 +1,5 @@
-package Client.Frames;
+package Modules.BaseModule.ClientFrames;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
@@ -9,28 +8,26 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SpringLayout;
-import javax.swing.border.EmptyBorder;
 
-import GameEngine.GameWorld;
+import javax.swing.JTextField;
+import javax.swing.border.BevelBorder;
+import javax.swing.JLabel;
+import java.awt.Font;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import GameEngine.GraphicsCanvas;
 import GameEngine.Hexmap;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.PacketTypes.GameDataPacket;
-import Utils.JSONManager;
 import Utils.Logging;
 import Utils.MiscUtils;
-import javax.swing.JTextField;
-import javax.swing.JToolBar;
-import javax.swing.border.BevelBorder;
-import javax.swing.JLabel;
-import java.awt.Color;
-import java.awt.Font;
 
-public class ClientGameFrame extends JFrame
+@SuppressWarnings("serial")
+public class ClientMainGameFrame extends JFrame
 {
-
-	private JPanel contentPane;
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+	
 	private final JPanel mapViewPanel = new JPanel();
 	private final JPanel inventoryPanel = new JPanel();
 	private final JPanel characterPanel = new JPanel();
@@ -41,6 +38,9 @@ public class ClientGameFrame extends JFrame
 	private final JPanel commandPanel = new JPanel();
 	private final JLabel commandLabel = new JLabel("Command:");
 	private final JTextField commandBox = new JTextField();
+	
+	private HashMap<String, JPanel> panels_;
+	private ArrayList<String> panelIDs_;
 	
 	private String command_;
 	
@@ -70,25 +70,33 @@ public class ClientGameFrame extends JFrame
 		}
 	}
 	
-	// Don't run this!
-	public static void main(String[] args)
+	public void addTab(String name, JPanel panel)
 	{
-		EventQueue.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				try
-				{
-					ClientGameFrame frame = new ClientGameFrame();
-					frame.setVisible(true);
-				}
-				catch (Exception e) {Logging.logException(e);}
-			}
-		});
+		int id = panelIDs_.size();
+		
+		panels_.put(name, panel);
+		panelIDs_.add(name);
+		
+		tabbedPane.addTab(name, null, panel, null);
+		tabbedPane.setEnabledAt(id, true);
 	}
-
-	public ClientGameFrame()
+	public void removeTab(String name)
 	{
+		int id = panelIDs_.indexOf(name);
+		tabbedPane.removeTabAt(id);
+		panels_.remove(name);
+		panelIDs_.remove(id);
+	}
+	public JPanel getTab(String name)
+	{
+		return panels_.get(name);
+	}
+	
+	public ClientMainGameFrame()
+	{
+		panels_ = new HashMap<String, JPanel>();
+		panelIDs_ = new ArrayList<String>();
+		
 		commandBox.setColumns(10);
 		setTitle(MiscUtils.getProgramName() + " Client: Game Window");
 		
@@ -102,9 +110,6 @@ public class ClientGameFrame extends JFrame
 		
 		tabbedPane.setBounds(0, 0, ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight());
 		getContentPane().add(tabbedPane);
-		
-		tabbedPane.addTab("Map", null, mapViewPanel, null);
-		tabbedPane.setEnabledAt(0, true);
 		
 		mapViewPanel.setLayout(null);
 		mapViewPanel.setSize(tabbedPane.getWidth(), tabbedPane.getHeight() - 25); // TODO calculate size of tabs
@@ -145,14 +150,10 @@ public class ClientGameFrame extends JFrame
 
 		layeredPane.add(hexmapCanvas);
 		
-		tabbedPane.addTab("Inventory", null, inventoryPanel, null);
-		tabbedPane.setEnabledAt(1, false);
-		
-		tabbedPane.addTab("Character", null, characterPanel, null);
-		tabbedPane.setEnabledAt(2, false);
-		
-		tabbedPane.addTab("Mech", null, mekPanel, null);
-		tabbedPane.setEnabledAt(3, false);
+		addTab("Map", mapViewPanel);
+		addTab("Inventory", inventoryPanel);
+		addTab("Character", characterPanel);
+		addTab("Mech", mekPanel);
 		
 		pack();
 		

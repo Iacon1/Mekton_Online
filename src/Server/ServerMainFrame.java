@@ -2,7 +2,7 @@
 // Created 04/26/2021
 // Server overview GUI
 
-package Server.Frames;
+package Server;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -15,9 +15,6 @@ import javax.swing.border.EmptyBorder;
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
 import GameEngine.Configurables.ConfigManager;
-import Server.Account;
-import Server.Server;
-import Server.ServerLogger;
 import Utils.Logging;
 import Utils.MiscUtils;
 

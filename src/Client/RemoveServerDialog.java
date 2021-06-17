@@ -2,7 +2,7 @@
 // Created 04/24/2021
 // Removes server
 
-package Client.Frames;
+package Client;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;

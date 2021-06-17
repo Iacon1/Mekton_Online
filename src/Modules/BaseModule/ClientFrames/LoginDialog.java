@@ -1,4 +1,4 @@
-package Client.Frames;
+package Modules.BaseModule.ClientFrames;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;

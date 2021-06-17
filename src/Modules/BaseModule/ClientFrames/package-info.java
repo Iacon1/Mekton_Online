@@ -2,4 +2,4 @@
 // Created 04/22/2021
 // Frames for the client
 
-package Client.Frames;
+package Modules.BaseModule.ClientFrames;

@@ -2,7 +2,7 @@
 // Created 04/25/2021
 // Main game window
 
-package Client.Frames;
+package Modules.BaseModule.ClientFrames;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -40,7 +40,7 @@ public class ClientGameWindow
 
 	public ClientGameWindow()
 	{
-		frame = new ClientGameFrame();
+		frame = new ClientMainGameFrame();
 		thread_.setContainer(frame);
 		frame.setVisible(true);
 	}

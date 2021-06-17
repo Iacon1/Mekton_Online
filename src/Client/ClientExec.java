@@ -6,12 +6,9 @@ package Client;
 
 import Utils.*;
 import GameEngine.DebugLogger;
-import GameEngine.GameWorld;
 import GameEngine.GraphicsManager;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.Configurables.ModuleManager;
-import Client.Frames.ClientGameWindow;
-import Client.Frames.GetServerFrame;
 
 import javax.swing.UIManager;
 

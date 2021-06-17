@@ -1,10 +1,8 @@
-package Server.Frames;
+package Server;
 
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-
-import Server.Server;
 
 public class ServerWindow
 {

@@ -6,11 +6,8 @@ package Server;
 
 import javax.swing.UIManager;
 
-import GameEngine.DebugLogger;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.Configurables.ModuleManager;
-import Server.Frames.ServerStartDialog;
-import Server.Frames.ServerWindow;
 import Utils.Logging;
 
 public class ServerExec

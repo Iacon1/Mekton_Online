@@ -2,7 +2,7 @@
 // Created 04/23/2021
 // Gets server data from user
 
-package Client.Frames;
+package Client;
 
 import java.awt.EventQueue;
 
@@ -11,8 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.google.gson.reflect.TypeToken;
-
-import Client.GameClientThread;
 
 import Net.Client.Client;
 import Utils.Logging;

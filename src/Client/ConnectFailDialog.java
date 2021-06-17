@@ -2,7 +2,7 @@
 // Created 04/25/2021
 // Notifies that connection failed, then resets
 
-package Client.Frames;
+package Client;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
