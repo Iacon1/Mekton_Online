@@ -7,6 +7,7 @@ package Client;
 import Utils.*;
 import GameEngine.DebugLogger;
 import GameEngine.GameWorld;
+import GameEngine.GraphicsManager;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.Configurables.ModuleManager;
 import Client.Frames.ClientGameWindow;
@@ -20,6 +21,7 @@ public class ClientExec
 	public static void main(String[] args)
 	{
 		Logging.setLogger(new DebugLogger());
+		GraphicsManager.init();
 		
 		try
 		{

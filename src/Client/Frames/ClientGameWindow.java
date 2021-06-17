@@ -4,31 +4,12 @@
 
 package Client.Frames;
 
-import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.Insets;
-
 import javax.swing.JFrame;
 
 import Utils.Logging;
-import Utils.MiscUtils;
-
-import javax.swing.JTabbedPane;
-
-import GameEngine.DebugLogger;
-import GameEngine.GameWorld;
-import GameEngine.GraphicsCanvas;
 import GameEngine.GraphicsManager;
-import GameEngine.Hexmap;
-import GameEngine.Configurables.ConfigManager;
-
-import javax.swing.JPanel;
-import javax.swing.JLayeredPane;
-import javax.swing.SpringLayout;
-
 import Client.GameClientThread;
-
-import java.awt.Canvas;
 
 public class ClientGameWindow
 {	
@@ -48,11 +29,9 @@ public class ClientGameWindow
 		{
 			public void run()
 			{
-				//Logging.setLogger(new DebugLogger());
 				try
 				{
-					GraphicsManager.init();
-					ClientGameWindow window = new ClientGameWindow();
+					new ClientGameWindow();
 				}
 				catch (Exception e) {Logging.logException(e);}
 			}

@@ -1,0 +1,80 @@
+// By Iacon1
+// Created 06/16/2021
+// Checking client state
+
+package Server.States;
+
+import GameEngine.PacketTypes.ClientInfoPacket;
+import GameEngine.PacketTypes.ServerInfoPacket;
+import Net.StateFactory;
+import Net.ThreadState;
+import Server.ClientHandlerThread;
+import Utils.Logging;
+import Utils.MiscUtils;
+
+public class CheckClient implements ThreadState<ClientHandlerThread>
+{
+	boolean sent_;
+	private StateFactory factory_;
+	
+	public CheckClient(StateFactory factory)
+	{
+		factory_ = factory;
+		
+		sent_ = false;
+	}
+	
+	@Override
+	public void onEnter(ClientHandlerThread parentThread) {}
+
+	@Override
+	public void processInput(String input, ClientHandlerThread parentThread)
+	{
+		if (sent_)
+		{
+			ClientInfoPacket packet = new ClientInfoPacket();
+			packet = (ClientInfoPacket) packet.fromJSON(input);
+			if (packet == null || !packet.version.equals(MiscUtils.getVersion())) // We don't actually care about this client anymore
+			{
+				if (packet == null) Logging.logError("Client " + parentThread.getSocket().getInetAddress() + " tried to connect<br> but failed to send a info packet.");
+				else Logging.logError("Client " + parentThread.getSocket().getInetAddress() + " tried to connect<br> but sent a bad packet.");
+				parentThread.close();
+			}
+			else
+			{
+				Logging.logNotice("Client " + parentThread.getSocket().getInetAddress() + " has connected.");
+				parentThread.queueStateChange(getFactory().getState(Login.class.getCanonicalName())); // They're good, let's login	
+			}
+		}
+	}
+	
+	@Override
+	public String processOutput(ClientHandlerThread parentThread)
+	{
+		if (!sent_)
+		{
+			ServerInfoPacket packet = new ServerInfoPacket();
+			packet.serverName = parentThread.getParent().getName();
+			packet.version = MiscUtils.getVersion();
+			packet.resourceFolder = parentThread.getParent().getResourceFolder();
+			
+			if (parentThread.getParent().currentPlayers() >= parentThread.getParent().maxPlayers()) // We're full
+			{
+				packet.note = ServerInfoPacket.Note.full;
+				parentThread.close(); // We don't need this connection any more
+			}
+			else packet.note = ServerInfoPacket.Note.good;
+			sent_ = true;
+			
+			Logging.logNotice("Sent info to " + parentThread.getSocket().getInetAddress());
+			return packet.toJSON();
+		}
+		else return null; // We have nothing to say to them
+	}
+
+	@Override
+	public StateFactory getFactory()
+	{
+		return factory_;
+	}
+}

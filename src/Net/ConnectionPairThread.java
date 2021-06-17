@@ -32,7 +32,12 @@ public abstract class ConnectionPairThread extends Thread
 	
 	private String getInput() // Get the input
 	{
-		try {return inStream_.readUTF();}
+		try
+		{
+			while (inStream_.available() == 0)
+				if (!(running_ && runningI_)) return null;
+			return inStream_.readUTF();
+		}
 		catch (EOFException e) {close(); return null;}
 		catch (IOException e) {close(); return null;}
 		catch (Exception e) {Logging.logException(e); return null;}
@@ -57,6 +62,7 @@ public abstract class ConnectionPairThread extends Thread
 		while (running_ && runningI_)
 		{
 			String input = getInput();
+			if (input == null) return; // TODO Maybe allow handling this?
 			try {processInput(input);}
 			catch (Exception e) {Logging.logException(e);}
 		}
@@ -85,6 +91,10 @@ public abstract class ConnectionPairThread extends Thread
 		}
 		catch (Exception e) {Logging.logException(e);}		
 	}
+	public Socket getSocket()
+	{
+		return socket_;
+	}
 	
 	public ConnectionPairThread()
 	{
@@ -96,30 +106,41 @@ public abstract class ConnectionPairThread extends Thread
 		setSocket(socket);
 	}
 	
-	public void run() // Opens two threads temporarily
+	public void runFunc()
+	{
+		if (socket_ == null || socket_.isClosed()) close(); // SHUT IT DOWN!
+		
+		if ((inThread_ == null || !inThread_.isAlive()) && runningI_)
+		{
+			inThread_ = new Thread(() ->  {inputRun();});
+			inThread_.setName("MtO Connection Pair Input Thread (" + getId() + ")");
+			inThread_.start();
+		}
+		if ((outThread_ == null || !outThread_.isAlive()) && runningO_)
+		{
+			outThread_ = new Thread(() ->  {outputRun();});
+			outThread_.setName("MtO Connection Pair Output Thread (" + getId() + ")");
+			outThread_.start();
+		}
+	}
+	public void run() // Loop
 	{
 		running_ = true;
 		runningI_ = true;
 		runningO_ = true;
-		while (running_)
-		{
-			if (socket_ == null || socket_.isClosed()) close(); // SHUT IT DOWN!
-			
-			if ((inThread_ == null || !inThread_.isAlive()) && runningI_)
-			{
-				inThread_ = new Thread(() ->  {inputRun();});
-				inThread_.setName("MtO Connection Pair Input Thread (" + getId() + ")");
-				inThread_.start();
-			}
-			if ((outThread_ == null || !outThread_.isAlive()) && runningO_)
-			{
-				outThread_ = new Thread(() ->  {outputRun();});
-				outThread_.setName("MtO Connection Pair Output Thread (" + getId() + ")");
-				outThread_.start();
-			}
-		}
+		while (running_) runFunc();
 	}
 	
+	protected boolean isInputRunning() // Returns whether it *should* be alive *or* whether it *is* alive
+	{
+		if (inThread_ == null) return runningI_;
+		else return runningI_ || inThread_.isAlive();
+	}
+	protected boolean isOutputRunning() // Returns whether it *should* be alive *or* whether it *is* alive
+	{
+		if (outThread_ == null) return runningO_;
+		else return runningO_ || outThread_.isAlive();
+	}
 	public void close()
 	{
 		running_ = false;
