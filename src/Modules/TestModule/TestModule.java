@@ -9,6 +9,7 @@ import GameEngine.GameWorld;
 import GameEngine.Hexmap;
 import GameEngine.Configurables.Module;
 import Modules.TestModule.TestHexmap;
+import Net.StateFactory;
 import Server.Account;
 import Server.Server;
 
@@ -23,10 +24,14 @@ public class TestModule implements Module
 		
 		config_.doesImplement_.put("setup", true);
 		config_.doesImplement_.put("loadWorld", true);
+		
 		config_.doesImplement_.put("makePlayer", true);
 		config_.doesImplement_.put("wakePlayer", true);
 		config_.doesImplement_.put("sleepPlayer", false);
 		config_.doesImplement_.put("deletePlayer", false);
+		
+		config_.doesImplement_.put("clientFactory", false);
+		config_.doesImplement_.put("handlerFactory", false);
 	}
 	
 	@Override
@@ -61,7 +66,6 @@ public class TestModule implements Module
 		
 		return player;
 	}
-	
 	@Override
 	public GameEntity wakePlayer(Server server, Account account)
 	{
@@ -72,15 +76,22 @@ public class TestModule implements Module
 		
 		return player;
 	}
-	
 	@Override
 	public GameEntity sleepPlayer(Server server, Account account)
 	{
 		return null;
 	}
-	
 	@Override
 	public GameEntity deletePlayer(Server server, Account account)
+	{
+		return null;
+	}
+
+	public StateFactory clientFactory()
+	{
+		return null;
+	}
+	public StateFactory handlerFactory()
 	{
 		return null;
 	}

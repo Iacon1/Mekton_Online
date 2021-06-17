@@ -6,9 +6,9 @@ package Server;
 
 import Utils.*;
 import GameEngine.GameEntity;
+import GameEngine.Configurables.ModuleManager;
 import Net.StateFactory;
 import Net.StatefulConnectionPairThread;
-import Server.States.HandlerStateFactory;
 
 public class ClientHandlerThread extends StatefulConnectionPairThread
 {
@@ -30,7 +30,7 @@ public class ClientHandlerThread extends StatefulConnectionPairThread
 	public ClientHandlerThread()
 	{
 		super();
-		stateFactory_ = new HandlerStateFactory();
+		stateFactory_ = ModuleManager.handlerFactory();
 		initState(stateFactory_.getState(0));
 	}
 	public void setParent(Server parent)

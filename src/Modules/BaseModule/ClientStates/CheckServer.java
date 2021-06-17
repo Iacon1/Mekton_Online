@@ -1,17 +1,16 @@
-package Client.States;
+package Modules.BaseModule.ClientStates;
 
 import Client.GameClientThread;
 import GameEngine.PacketTypes.ClientInfoPacket;
 import GameEngine.PacketTypes.ServerInfoPacket;
 import Net.StateFactory;
 import Net.ThreadState;
-import Utils.Logging;
 import Utils.MiscUtils;
 
 public class CheckServer implements ThreadState<GameClientThread>
 {
 	private StateFactory factory_;
-	private volatile int result_; // 0 - Waiting for result; 1 - Login; 2 - Bad Server
+	private volatile int result_; // 0 - Waiting for result; 1 - Login; 2 - Bad Server; 3 - Done
 	
 	public CheckServer(StateFactory factory)
 	{
@@ -34,13 +33,13 @@ public class CheckServer implements ThreadState<GameClientThread>
 		if (parentThread.getSocket() == null || packet == null || !packet.version.equals(MiscUtils.getVersion()))
 		{
 			result_ = 2;
-			while (result_ != 0);
+			while (result_ != 3);
 			parentThread.queueStateChange(getFactory().getState(BadServer.class.getCanonicalName()));
 		}
 		else
 		{
 			result_ = 1;
-			while (result_ != 0);
+			while (result_ != 3);
 			parentThread.queueStateChange(getFactory().getState(Login.class.getCanonicalName()));
 		}
 	}
@@ -52,16 +51,17 @@ public class CheckServer implements ThreadState<GameClientThread>
 		
 		if (result_ == 1) // We decided to go forward!
 		{
-			result_ = 0;
+			result_ = 3;
 			ClientInfoPacket packet = new ClientInfoPacket();
 			packet.version = MiscUtils.getVersion();
 			return packet.toJSON();
 		}
 		else if (result_ == 2)
 		{
-			result_ = 0;
+			result_ = 3;
 			return null; // We have nothing to say to them
 		}
+		else if (result_ == 3) return null;
 		else return null; // ???
 	}
 	

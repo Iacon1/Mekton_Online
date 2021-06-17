@@ -1,4 +1,4 @@
-package Server.States;
+package Modules.BaseModule.HandlerStates;
 
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.PacketTypes.LoginFeedbackPacket;

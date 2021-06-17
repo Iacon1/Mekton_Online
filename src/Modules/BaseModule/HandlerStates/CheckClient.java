@@ -2,7 +2,7 @@
 // Created 06/16/2021
 // Checking client state
 
-package Server.States;
+package Modules.BaseModule.HandlerStates;
 
 import GameEngine.PacketTypes.ClientInfoPacket;
 import GameEngine.PacketTypes.ServerInfoPacket;

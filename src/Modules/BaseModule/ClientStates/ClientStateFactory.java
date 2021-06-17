@@ -2,7 +2,7 @@
 // Created 06/16/2021
 //
 
-package Client.States;
+package Modules.BaseModule.ClientStates;
 
 import Net.ThreadState;
 import Client.GameClientThread;

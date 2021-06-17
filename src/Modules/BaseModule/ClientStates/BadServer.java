@@ -2,7 +2,7 @@
 // Created 06/16/2021
 // Bad server
 
-package Client.States;
+package Modules.BaseModule.ClientStates;
 
 import Client.GameClientThread;
 import Client.Frames.ConnectFailDialog;

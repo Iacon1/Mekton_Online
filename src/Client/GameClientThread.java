@@ -6,8 +6,8 @@ package Client;
 
 import java.awt.Container;
 
-import Client.States.ClientStateFactory;
 import GameEngine.GameWorld;
+import GameEngine.Configurables.ModuleManager;
 import GameEngine.PacketTypes.ServerInfoPacket;
 import Net.StateFactory;
 import Net.StatefulConnectionPairThread;
@@ -25,7 +25,7 @@ public class GameClientThread extends StatefulConnectionPairThread
 	public GameClientThread()
 	{
 		super();
-		stateFactory_ = new ClientStateFactory();
+		stateFactory_ = ModuleManager.clientFactory();
 		initState(stateFactory_.getState(0));
 	}
 	

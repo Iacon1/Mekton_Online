@@ -2,7 +2,7 @@
 // Created 06/16/2021
 // Map screen
 
-package Server.States;
+package Modules.BaseModule.HandlerStates;
 
 import GameEngine.PacketTypes.GameDataPacket;
 import Net.StateFactory;

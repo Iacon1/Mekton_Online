@@ -15,6 +15,7 @@ import com.google.gson.reflect.TypeToken;
 
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
+import Net.StateFactory;
 import Server.Account;
 import Server.Server;
 import Utils.JSONManager;
@@ -44,6 +45,7 @@ public final class ModuleManager
 		*/
 		
 		moduleList = new ArrayList<String>();
+		moduleList.add("BaseModule");
 		moduleList.add("TestModule");
 		
 		return moduleList;
@@ -69,10 +71,14 @@ public final class ModuleManager
 		
 		checkDoesImplement("setup", module);
 		checkDoesImplement("loadWorld", module);
+		
 		checkDoesImplement("makePlayer", module);
 		checkDoesImplement("wakePlayer", module);
 		checkDoesImplement("sleepPlayer", module);
 		checkDoesImplement("deletePlayer", module);
+		
+		checkDoesImplement("clientFactory", module);
+		checkDoesImplement("handlerFactory", module);
 		
 		modules_.put(moduleFile, module);
 		Logging.logNotice("Loaded module " + moduleFile);
@@ -127,5 +133,14 @@ public final class ModuleManager
 	public static GameEntity deletePlayer(Server server, Account account)
 	{
 		return highestImplementer_.get("deletePlayer").deletePlayer(server, account);
+	}
+	
+	public static StateFactory clientFactory() // Client factory
+	{
+		return highestImplementer_.get("clientFactory").clientFactory();
+	}
+	public static StateFactory handlerFactory() // Handler factory
+	{
+		return highestImplementer_.get("handlerFactory").handlerFactory();
 	}
 }

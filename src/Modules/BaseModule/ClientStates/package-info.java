@@ -2,4 +2,4 @@
 // Created 06/15/2021
 // Client states
 
-package Client.States;
+package Modules.BaseModule.ClientStates;

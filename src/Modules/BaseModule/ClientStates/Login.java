@@ -2,7 +2,7 @@
 // Created 06/16/2021
 // Login
 
-package Client.States;
+package Modules.BaseModule.ClientStates;
 
 import Client.GameClientThread;
 import Client.Frames.LoginDialog;
