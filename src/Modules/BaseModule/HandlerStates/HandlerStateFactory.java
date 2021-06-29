@@ -5,7 +5,7 @@
 package Modules.BaseModule.HandlerStates;
 
 import Net.ThreadState;
-import Server.ClientHandlerThread;
+import Modules.BaseModule.ClientHandlerThread;
 import Net.StateFactory;
 
 public class HandlerStateFactory implements StateFactory
@@ -18,7 +18,7 @@ public class HandlerStateFactory implements StateFactory
 		{
 		case 0: return new CheckClient(this);
 		case 2: return new Login(this);
-		case 3: return new MapScreen(this);
+		case 3: return new MainScreen(this);
 		default: return new CheckClient(this);
 		}
 	}
@@ -28,7 +28,7 @@ public class HandlerStateFactory implements StateFactory
 	{
 		if (canonicalName.equals(CheckClient.class.getCanonicalName())) return new CheckClient(this);
 		else if (canonicalName.equals(Login.class.getCanonicalName())) return new Login(this);
-		else if (canonicalName.equals(MapScreen.class.getCanonicalName())) return new MapScreen(this);
+		else if (canonicalName.equals(MainScreen.class.getCanonicalName())) return new MainScreen(this);
 		else return new CheckClient(this);
 	}
 

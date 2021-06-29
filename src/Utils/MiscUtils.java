@@ -112,4 +112,19 @@ public final class MiscUtils
         }
 		catch (Exception e) {Logging.logException(e); return "Null";}
 	}
+	
+	public static <T> String arrayToString(T[] array, String sep)
+	{
+		String string = new String();
+		for (int i = 0; i < array.length; ++i) string = string + array[i].toString() + sep;
+		return string;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> String arrayToString(ArrayList<T> array, String sep)
+	{
+		return arrayToString((T[]) array.toArray(), sep);
+	}
+	
+	
 }

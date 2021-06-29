@@ -11,14 +11,12 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.google.gson.reflect.TypeToken;
-
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
 import Net.StateFactory;
+import Net.Server.Server;
 import Server.Account;
-import Server.Server;
-import Utils.JSONManager;
+import Server.GameServer;
 import Utils.Logging;
 import Utils.MiscUtils;
 
@@ -27,10 +25,14 @@ public final class ModuleManager
 	private static HashMap<String, Module> modules_; // The actual modules, by file name
 	private static HashMap<String, Module> highestImplementer_; // The highest-priority module to implement a function
 	
-	private static boolean checkDoesImplement(String function, Module module) 
+	public static void attemptRegister(String function, Module module)
+	{
+		if (highestImplementer_.get(function) == null) highestImplementer_.put(function, module);
+	}
+	public static boolean checkDoesImplement(String function, Module module) 
 	{
 		boolean check = module.getConfig().doesImplement_.get(function);
-		if (highestImplementer_.get(function) == null && check) highestImplementer_.put(function, module);
+		if (check) attemptRegister(function, module);
 		
 		return check;
 	}
@@ -46,11 +48,13 @@ public final class ModuleManager
 		
 		moduleList = new ArrayList<String>();
 		moduleList.add("BaseModule");
+		moduleList.add("MektonCore");
 		moduleList.add("TestModule");
 		
 		return moduleList;
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static void loadModule(String path, String moduleFile, int pri) throws Exception
 	{
 		// TODO this doesn't actually work?
@@ -69,6 +73,7 @@ public final class ModuleManager
 		
 		module.getConfig().priority_ = pri;
 		
+		checkDoesImplement("makeServer", module);
 		checkDoesImplement("setup", module);
 		checkDoesImplement("loadWorld", module);
 		
@@ -82,6 +87,8 @@ public final class ModuleManager
 		
 		modules_.put(moduleFile, module);
 		Logging.logNotice("Loaded module " + moduleFile);
+		module.init();
+		loader.close();
 	}
 	
 	public static void init(String server) // Loads all modules from a server pack
@@ -106,41 +113,52 @@ public final class ModuleManager
 	{
 		return modules_.get(fileName);
 	}
-	
-	// Default access to highest-priority functions
-	public static GameWorld setup()
+	public static Module getHighestImplementer(String function) // Default access to highest-priority functions
 	{
-		return highestImplementer_.get("setup").setup();
+		return highestImplementer_.get(function);
+	}
+	@SuppressWarnings("rawtypes")
+	public static GameServer makeServer() // Sets up the server (not what's in the server!)
+	{
+		return getHighestImplementer("makeServer").makeServer();
 	}
 
+	public static GameWorld setup()
+	{
+		return getHighestImplementer("setup").setup();
+	}
 	public static GameWorld loadWorld(String server)
 	{
-		return highestImplementer_.get("loadWorld").loadWorld(server);
+		return getHighestImplementer("loadWorld").loadWorld(server);
 	}
 	
-	public static GameEntity makePlayer(Server server, Account account)
+	@SuppressWarnings("rawtypes")
+	public static GameEntity makePlayer(GameServer server, Account account)
 	{
-		return highestImplementer_.get("makePlayer").makePlayer(server, account);
+		return getHighestImplementer("makePlayer").makePlayer(server, account);
 	}
-	public static GameEntity wakePlayer(Server server, Account account)
+	@SuppressWarnings("rawtypes")
+	public static GameEntity wakePlayer(GameServer server, Account account)
 	{
-		return highestImplementer_.get("wakePlayer").wakePlayer(server, account);
+		return getHighestImplementer("wakePlayer").wakePlayer(server, account);
 	}
-	public static GameEntity sleepPlayer(Server server, Account account)
+	@SuppressWarnings("rawtypes")
+	public static GameEntity sleepPlayer(GameServer server, Account account)
 	{
-		return highestImplementer_.get("sleepPlayer").sleepPlayer(server, account);
+		return getHighestImplementer("sleepPlayer").sleepPlayer(server, account);
 	}
-	public static GameEntity deletePlayer(Server server, Account account)
+	@SuppressWarnings("rawtypes")
+	public static GameEntity deletePlayer(GameServer server, Account account)
 	{
-		return highestImplementer_.get("deletePlayer").deletePlayer(server, account);
+		return getHighestImplementer("deletePlayer").deletePlayer(server, account);
 	}
 	
 	public static StateFactory clientFactory() // Client factory
 	{
-		return highestImplementer_.get("clientFactory").clientFactory();
+		return getHighestImplementer("clientFactory").clientFactory();
 	}
 	public static StateFactory handlerFactory() // Handler factory
 	{
-		return highestImplementer_.get("handlerFactory").handlerFactory();
+		return getHighestImplementer("handlerFactory").handlerFactory();
 	}
 }

@@ -5,8 +5,8 @@
 package Modules.TestModule;
 
 import GameEngine.GameWorld;
-import GameEngine.HexData;
-import GameEngine.Hexmap;
+import Modules.MektonCore.HexData;
+import Modules.MektonCore.Hexmap;
 
 public class TestHexData extends HexData
 {

@@ -5,7 +5,7 @@
 package Modules.TestModule;
 
 import GameEngine.GameWorld;
-import GameEngine.Hexmap;
+import Modules.MektonCore.Hexmap;
 
 public class TestHexmap extends Hexmap<TestHexData>
 {

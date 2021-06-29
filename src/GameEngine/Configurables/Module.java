@@ -9,8 +9,9 @@ import java.util.HashMap;
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
 import Net.StateFactory;
+import Net.Server.Server;
+import Server.GameServer;
 import Server.Account;
-import Server.Server;
 
 public interface Module
 {
@@ -20,6 +21,7 @@ public interface Module
 		public String moduleVersion_; // Module's version
 		public HashMap<String, Boolean> doesImplement_; // Does the module implement each function?
 		// Functions:
+		// makeServer
 		// setup
 		// loadWorld
 		
@@ -40,15 +42,18 @@ public interface Module
 		}
 	}
 	
-	public ModuleConfig getConfig();
+	public ModuleConfig getConfig(); // Gives the config
+	public void init(); // Any special stuff the module needs to do on loading
 	
+	@SuppressWarnings("rawtypes")
+	public GameServer makeServer(); // Sets up the server (not what's in the server!)
 	public GameWorld setup(); // Sets up a new world; Only used the first time the server is run
 	public GameWorld loadWorld(String server); // Loads a saved world
 	
-	public GameEntity makePlayer(Server server, Account account); // Makes a new player entity for a new account
-	public GameEntity wakePlayer(Server server, Account account); // Wakes up a returning account's current possessee when they login
-	public GameEntity sleepPlayer(Server server, Account account); // Wakes up a returning account's current possessee when they logout
-	public GameEntity deletePlayer(Server server, Account account); // Deletes or detaches a deleted account's current possessee
+	public GameEntity makePlayer(GameServer server, Account account); // Makes a new player entity for a new account
+	public GameEntity wakePlayer(GameServer server, Account account); // Wakes up a returning account's current possessee when they login
+	public GameEntity sleepPlayer(GameServer server, Account account); // Wakes up a returning account's current possessee when they logout
+	public GameEntity deletePlayer(GameServer server, Account account); // Deletes or detaches a deleted account's current possessee
 	
 	public StateFactory clientFactory(); // Client factory
 	public StateFactory handlerFactory(); // Handler factory

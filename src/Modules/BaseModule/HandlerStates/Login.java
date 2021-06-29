@@ -3,10 +3,11 @@ package Modules.BaseModule.HandlerStates;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.PacketTypes.LoginFeedbackPacket;
 import GameEngine.PacketTypes.LoginPacket;
+import Modules.BaseModule.ClientHandlerThread;
+import Modules.TestModule.TestAccount;
 import Net.StateFactory;
 import Net.ThreadState;
 import Server.Account;
-import Server.ClientHandlerThread;
 import Utils.Logging;
 
 public class Login implements ThreadState<ClientHandlerThread>
@@ -33,7 +34,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 		LoginPacket packet = new LoginPacket();
 		packet = (LoginPacket) packet.fromJSON(input);
 		
-		Account account = new Account();
+		Account account = new TestAccount(); // TODO Modularize
 		account.username = packet.username; 
 		account.setHash(packet.password);
 		
@@ -70,7 +71,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 		if (send_)
 		{
 			send_ = false;
-			if (loginFeedback_.successful) parentThread.queueStateChange(getFactory().getState(MapScreen.class.getCanonicalName()));
+			if (loginFeedback_.successful) parentThread.queueStateChange(getFactory().getState(MainScreen.class.getCanonicalName()));
 			return loginFeedback_.toJSON();
 		}
 	else return null;

@@ -4,12 +4,11 @@
 
 package GameEngine;
 
-import java.awt.Canvas;
-
 import javax.swing.JPanel;
 
 import java.awt.*;
 
+@SuppressWarnings("serial")
 public class GraphicsCanvas extends JPanel
 {
 	GameEntity renderer_; // Draws to us

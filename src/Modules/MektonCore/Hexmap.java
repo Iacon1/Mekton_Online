@@ -2,11 +2,15 @@
 // Created 04/25/2021
 //
 
-package GameEngine;
+package Modules.MektonCore;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+import GameEngine.GameEntity;
+import GameEngine.GameWorld;
+import GameEngine.GraphicsManager;
+import GameEngine.PhysicalObject;
 import GameEngine.Configurables.ConfigManager;
 import Utils.Instancer;
 import Utils.Logging;

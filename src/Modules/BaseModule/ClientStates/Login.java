@@ -37,7 +37,7 @@ public class Login implements ThreadState<GameClientThread>
 			LoginDialog dialog = (LoginDialog) parentThread.getContainer();
 			dialog.setVisible(false);
 			dialog.dispose();
-			parentThread.queueStateChange(getFactory().getState(MapScreen.class.getCanonicalName()));
+			parentThread.queueStateChange(getFactory().getState(MainScreen.class.getCanonicalName()));
 		}
 		else
 		{

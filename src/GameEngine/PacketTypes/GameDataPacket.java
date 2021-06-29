@@ -6,7 +6,7 @@ package GameEngine.PacketTypes;
 
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
-import GameEngine.Hexmap;
+import Modules.MektonCore.Hexmap;
 
 public class GameDataPacket extends Packet
 {
@@ -34,10 +34,5 @@ public class GameDataPacket extends Packet
 		
 		currentLocationId = 0; // TODO determine location
 		*/ // TODO figure out copying the world again
-	}
-	
-	public Hexmap getMap()
-	{
-		return (Hexmap) ourView.getEntities().get(currentLocationId);
 	}
 }
