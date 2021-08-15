@@ -4,6 +4,7 @@
 
 package Server;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
@@ -12,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import GameEngine.GameEntity;
+import GameEngine.GameWorld;
 import GameEngine.Configurables.ConfigManager;
 import Utils.Logging;
 import Utils.MiscUtils;
@@ -23,8 +25,8 @@ import javax.swing.JTree;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
-import java.util.TimerTask;
 import java.util.ArrayList;
+import java.util.TimerTask;
 import java.util.Timer;
 import javax.swing.SpringLayout;
 import javax.swing.tree.DefaultTreeModel;

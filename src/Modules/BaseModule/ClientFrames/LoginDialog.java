@@ -51,8 +51,6 @@ public class LoginDialog extends JDialog
 		passwordBox.setText(null);
 		
 		errorLabel.setText(reason);
-		
-		send_ = false;
 	}
 	private void onClickOK() // When OK is pressed
 	{
@@ -74,13 +72,12 @@ public class LoginDialog extends JDialog
 	
 	public LoginDialog()
 	{
-		Logging.logNotice("New dialog!");
 		passwordBox.setColumns(10);
 		usernameBox.setColumns(10);
 		setIconImages(MiscUtils.getIcons(true));
 		
 		setTitle(MiscUtils.getProgramName() + " Client: Login");
-		setBounds(100, 100, 400, 300);
+		setBounds(100, 100, 300, 200);
 		
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

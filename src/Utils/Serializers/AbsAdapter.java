@@ -3,7 +3,7 @@
 // For abstract classes that may be in lists
 // https://stackoverflow.com/questions/16872492/gson-and-abstract-superclasses-deserialization-issue
 
-package Utils.GSONConfig;
+package Utils.Serializers;
 
 import java.lang.reflect.Type;
 
@@ -18,7 +18,7 @@ public class AbsAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T>
 	{
 		JsonObject result = new JsonObject();
 		result.add("type", new JsonPrimitive(src.getClass().getCanonicalName()));
-		result.add("data", context.serialize(src, src.getClass()));
+		result.add("properties", context.serialize(src, src.getClass()));
 
 		return result;
 	}
@@ -28,7 +28,7 @@ public class AbsAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T>
 	{
 	    JsonObject jsonObject = json.getAsJsonObject();
 	    String type = jsonObject.get("type").getAsString();
-	    JsonElement element = jsonObject.get("data");
+	    JsonElement element = jsonObject.get("properties");
 
 	    try
 	    {            

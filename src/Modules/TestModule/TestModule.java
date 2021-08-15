@@ -11,13 +11,7 @@ import GameEngine.Configurables.Module;
 import Modules.TestModule.TestHexmap;
 import Net.StateFactory;
 import Server.Account;
-<<<<<<< Updated upstream
 import Server.Server;
-=======
-import Server.GameServer;
-import Utils.JSONManager;
-import Utils.MiscUtils;
->>>>>>> Stashed changes
 
 public class TestModule implements Module
 {
@@ -52,6 +46,7 @@ public class TestModule implements Module
 		GameWorld gameWorld = new GameWorld();
 		TestHexmap map = new TestHexmap(gameWorld, new TestHexData());
 		map.setDimensions(18, 9, 1);
+		
 		return gameWorld;
 	}
 

@@ -61,7 +61,8 @@ public class GetServerFrame extends JFrame
 	
 	private void populateList() // Populates savedServerList from file
 	{
-		savedServerArray_ = (ArrayList<SavedServer>) JSONManager.deserializeCollectionJSONList(MiscUtils.readText("Local Data/Client/SavedServers.JSON"), ArrayList.class, SavedServer.class);
+		java.lang.reflect.Type listType = new TypeToken<ArrayList<SavedServer>>(){}.getType();
+		savedServerArray_ = (ArrayList<SavedServer>) JSONManager.deserializeArrayJSON(MiscUtils.readText("Local Data/Client/SavedServers.JSON"), listType);
 		if (savedServerArray_ == null)
 		{
 			savedServerArray_ = new ArrayList<SavedServer>();

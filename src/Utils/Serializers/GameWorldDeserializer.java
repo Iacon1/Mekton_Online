@@ -2,7 +2,7 @@
 // Created 06/05/2021
 // For serializing & deserializing GameWorld
 
-package Utils.GSONConfig;
+package Utils.Serializers;
 
 import java.lang.reflect.Type;
 
