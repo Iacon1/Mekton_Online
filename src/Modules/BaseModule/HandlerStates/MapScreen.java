@@ -9,6 +9,7 @@ import Net.StateFactory;
 import Net.ThreadState;
 import Server.ClientHandlerThread;
 import Utils.Logging;
+import Utils.MiscUtils;
 
 public class MapScreen implements ThreadState<ClientHandlerThread>
 {
@@ -37,6 +38,7 @@ public class MapScreen implements ThreadState<ClientHandlerThread>
 	{
 		GameDataPacket packet = new GameDataPacket();
 		packet.viewWorld(parentThread.getParent().gameWorld_);
+		Logging.logNotice(packet.toJSON());
 		return packet.toJSON();
 	}
 

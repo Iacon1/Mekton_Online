@@ -40,8 +40,13 @@ public class ServerStartDialog extends JDialog
 		Integer value = (Integer) portSpinner.getValue();
 		if (value != null)
 		{
+<<<<<<< Updated upstream
 			Server server = new Server();
 			server.start(value); // TODO changeable
+=======
+			GameServer server = ModuleManager.makeServer();
+			server.start(value);
+>>>>>>> Stashed changes
 			ServerWindow.main(server);
 			
 			this.setVisible(false);
