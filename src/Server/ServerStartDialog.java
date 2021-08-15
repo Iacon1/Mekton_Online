@@ -46,6 +46,7 @@ public class ServerStartDialog extends JDialog
 		{
 			GameServer server = ModuleManager.makeServer();
 			server.start(value); // TODO changeable
+
 			ServerWindow.main(server);
 			
 			this.setVisible(false);

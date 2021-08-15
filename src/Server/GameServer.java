@@ -20,11 +20,15 @@ import Utils.MiscUtils;
 public abstract class GameServer<A extends Account, T extends ConnectionPairThread> extends Server<T>
 {
 	private HashMap<String, Account> accounts_;
+
 	@SuppressWarnings("unchecked")
 	private void loadAccounts()
 	{
 		accounts_ = new HashMap<String, Account>();
 		accounts_ = JSONManager.deserializeJSON(MiscUtils.readText("Local Data/Server/Accounts.json"), accounts_.getClass());
+
+		accounts_ = (HashMap<String, Account>) JSONManager.deserializeCollectionJSONList(MiscUtils.readText("Local Data/Server/Accounts.json"), HashMap.class, String.class, Account.class);
+
 		if (accounts_ == null) accounts_ = new HashMap<String, Account>();
 	}
 	private void saveAccounts()
@@ -37,6 +41,9 @@ public abstract class GameServer<A extends Account, T extends ConnectionPairThre
 	public GameServer(T template)
 	{	
 		super(template);
+
+		accounts_ = new HashMap<String, Account>();
+
 		loadAccounts();
 		saveAccounts();
 		loadAccounts();

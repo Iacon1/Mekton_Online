@@ -1,1 +1,1 @@
-{"Bob":{"username":"Bob","possessee":-1,"hash":1995005885}}
+{"Bob":{"type":"Modules.TestModule.TestAccount","data":{"username":"Bob","possessee":-1,"hash":1995005885}}}
