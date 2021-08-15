@@ -9,8 +9,8 @@ import Utils.Logging;
 public abstract class StatefulConnectionPairThread extends ConnectionPairThread
 {
 
-	private volatile ThreadState currentState_;
-	private volatile ThreadState nextState_;
+	private volatile ThreadState currentState_; // The state we're currently on
+	private volatile ThreadState nextState_; // The state we are switching to; Null if we're not switching right now
 	
 	public void initState(ThreadState state)
 	{
@@ -18,7 +18,7 @@ public abstract class StatefulConnectionPairThread extends ConnectionPairThread
 		currentState_.onEnter(this);
 	}
 
-	public void queueStateChange(ThreadState nextState)
+	public void queueStateChange(ThreadState nextState) // Queues a state change. We'll get to that when we can!
 	{
 		nextState_ = nextState;
 	}

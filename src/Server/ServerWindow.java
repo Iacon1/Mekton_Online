@@ -4,13 +4,16 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
+import Net.Server.Server;
+
 public class ServerWindow
 {
-	private static Server server_;
+	@SuppressWarnings("rawtypes")
+	private static GameServer server_;
 	private JFrame frame;
 
 
-	public static void main(Server server)
+	public static void main(GameServer server)
 	{
 		server_ = server;
 		EventQueue.invokeLater(new Runnable()

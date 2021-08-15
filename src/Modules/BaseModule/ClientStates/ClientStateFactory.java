@@ -19,7 +19,7 @@ public class ClientStateFactory implements StateFactory
 		case 0: return new CheckServer(this);
 		case 1: return new BadServer(this);
 		case 2: return new Login(this);
-		case 3: return new MapScreen(this);
+		case 3: return new MainScreen(this);
 		default: return new CheckServer(this);
 		}
 	}
@@ -30,7 +30,7 @@ public class ClientStateFactory implements StateFactory
 		if (canonicalName.equals(CheckServer.class.getCanonicalName())) return new CheckServer(this);
 		else if (canonicalName.equals(BadServer.class.getCanonicalName())) return new BadServer(this);
 		else if (canonicalName.equals(Login.class.getCanonicalName())) return new Login(this);
-		else if (canonicalName.equals(MapScreen.class.getCanonicalName())) return new MapScreen(this);
+		else if (canonicalName.equals(MainScreen.class.getCanonicalName())) return new MainScreen(this);
 		else return new CheckServer(this);
 	}
 

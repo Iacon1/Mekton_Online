@@ -14,6 +14,7 @@ import Net.ThreadState;
 public class Login implements ThreadState<GameClientThread>
 {
 	private StateFactory factory_;
+	private boolean successful_;
 	
 	public Login(StateFactory factory)
 	{
@@ -31,13 +32,13 @@ public class Login implements ThreadState<GameClientThread>
 	{
 		LoginFeedbackPacket packet = new LoginFeedbackPacket();
 		packet = (LoginFeedbackPacket) packet.fromJSON(input);
-		
-		if (packet.successful)
+		successful_ = packet.successful;
+		if (successful_)
 		{
 			LoginDialog dialog = (LoginDialog) parentThread.getContainer();
 			dialog.setVisible(false);
 			dialog.dispose();
-			parentThread.queueStateChange(getFactory().getState(MapScreen.class.getCanonicalName()));
+			parentThread.queueStateChange(getFactory().getState(MainScreen.class.getCanonicalName()));
 		}
 		else
 		{
@@ -50,6 +51,8 @@ public class Login implements ThreadState<GameClientThread>
 	public String processOutput(GameClientThread parentThread)
 	{
 		LoginDialog dialog = (LoginDialog) parentThread.getContainer();
+		if (dialog.isVisible() == false && !successful_)
+			parentThread.close();
 		LoginPacket packet = dialog.getPacket();
 		if (packet != null)
 			return packet.toJSON();

@@ -4,11 +4,16 @@
 
 package Utils;
 
+import java.util.HashMap;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
+import com.sun.tools.javac.code.Type;
 
-import Utils.Serializers.GiveBuilder;
+import Server.Account;
+import Utils.GSONConfig.GiveBuilder;
 
 public final class JSONManager
 {
@@ -45,10 +50,17 @@ public final class JSONManager
 		catch (Exception e) {Logging.logException(e); return null;}
 	}
 
-	public static <C> C deserializeArrayJSON(String serialized, java.lang.reflect.Type typeTo) // Unserializes
+	public static <C> C deserializeCollectionJSON(String serialized, java.lang.reflect.Type typeTo) // Unserializes a collection
 	{
 		setupIfNot();
 		try {return gson_.fromJson(serialized, typeTo);}
 		catch (Exception e) {Logging.logException(e); return null;}
+	}
+	
+	public static <C> C deserializeCollectionJSONList(String serialized, Class mainClass, Class... classArgs) // Unserializes a parameterized collection
+	{
+		java.lang.reflect.Type typeTo = TypeToken.getParameterized(mainClass, classArgs).getType();
+	
+		return deserializeCollectionJSON(serialized, typeTo);
 	}
 }

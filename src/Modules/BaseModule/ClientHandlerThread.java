@@ -2,13 +2,15 @@
 // Created 04/26/2021
 // For handling the connection client-side
 
-package Server;
+package Modules.BaseModule;
 
 import Utils.*;
 import GameEngine.GameEntity;
 import GameEngine.Configurables.ModuleManager;
 import Net.StateFactory;
 import Net.StatefulConnectionPairThread;
+import Net.Server.Server;
+import Server.Account;
 
 public class ClientHandlerThread extends StatefulConnectionPairThread
 {
@@ -25,7 +27,7 @@ public class ClientHandlerThread extends StatefulConnectionPairThread
 		return GameEntity.getEntity(parent_.gameWorld_, parent_.getAccount(username_).possessee);
 	}
 	
-	protected static volatile Server parent_;
+	protected static volatile BaseServer parent_;
 	
 	public ClientHandlerThread()
 	{
@@ -33,7 +35,7 @@ public class ClientHandlerThread extends StatefulConnectionPairThread
 		stateFactory_ = ModuleManager.handlerFactory();
 		initState(stateFactory_.getState(0));
 	}
-	public void setParent(Server parent)
+	public void setParent(BaseServer parent)
 	{
 		parent_ = parent;
 	}
@@ -44,7 +46,7 @@ public class ClientHandlerThread extends StatefulConnectionPairThread
 		Logging.logNotice("Client " + socket_.getInetAddress() + " has disconnected.");
 	}
 	
-	public Server getParent()
+	public BaseServer getParent()
 	{
 		return parent_;
 	}

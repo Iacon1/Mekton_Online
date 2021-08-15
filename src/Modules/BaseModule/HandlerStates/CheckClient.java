@@ -6,9 +6,9 @@ package Modules.BaseModule.HandlerStates;
 
 import GameEngine.PacketTypes.ClientInfoPacket;
 import GameEngine.PacketTypes.ServerInfoPacket;
+import Modules.BaseModule.ClientHandlerThread;
 import Net.StateFactory;
 import Net.ThreadState;
-import Server.ClientHandlerThread;
 import Utils.Logging;
 import Utils.MiscUtils;
 

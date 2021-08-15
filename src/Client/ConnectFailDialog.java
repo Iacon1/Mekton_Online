@@ -18,8 +18,8 @@ import Utils.MiscUtils;
 import javax.swing.SpringLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import javax.swing.JTextField;
 
+@SuppressWarnings("serial")
 public class ConnectFailDialog extends JDialog
 {
 

@@ -1,7 +1,6 @@
 package Modules.BaseModule.ClientFrames;
 
 import java.awt.Dimension;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -17,9 +16,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import GameEngine.GraphicsCanvas;
-import GameEngine.Hexmap;
 import GameEngine.Configurables.ConfigManager;
+import GameEngine.Configurables.ModuleManager;
 import GameEngine.PacketTypes.GameDataPacket;
+import Modules.BaseModule.TabPopulator;
+import Modules.MektonCore.Hexmap;
 import Utils.Logging;
 import Utils.MiscUtils;
 
@@ -28,13 +29,8 @@ public class ClientMainGameFrame extends JFrame
 {
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	
-	private final JPanel mapViewPanel = new JPanel();
-	private final JPanel inventoryPanel = new JPanel();
-	private final JPanel characterPanel = new JPanel();
-	private final JPanel mekPanel = new JPanel();
 	private final JLayeredPane layeredPane = new JLayeredPane();
-	private final JPanel GUIPanel = new JPanel();
-	private final GraphicsCanvas hexmapCanvas = new GraphicsCanvas();
+	private final JPanel BaseGUIPanel = new JPanel();
 	private final JPanel commandPanel = new JPanel();
 	private final JLabel commandLabel = new JLabel("Command:");
 	private final JTextField commandBox = new JTextField();
@@ -47,9 +43,10 @@ public class ClientMainGameFrame extends JFrame
 	public void updateUIStuff(GameDataPacket packet) // Updates UI stuff
 	{
 		Hexmap<?> map = (Hexmap<?>) packet.ourView.getEntities().get(packet.currentLocationId);
-		hexmapCanvas.setRenderer(map);
-		hexmapCanvas.setLayout(null);
-		hexmapCanvas.repaint();
+		GraphicsCanvas canvas = (GraphicsCanvas) getTab("Map").getComponent(0);
+		canvas.setRenderer(map);
+		canvas.setLayout(null);
+		canvas.repaint();
 	}
 	
 	private void resetInputs() // Resets all input elements
@@ -98,6 +95,7 @@ public class ClientMainGameFrame extends JFrame
 		panelIDs_ = new ArrayList<String>();
 		
 		commandBox.setColumns(10);
+		
 		setTitle(MiscUtils.getProgramName() + " Client: Game Window");
 		
 		setIconImages(MiscUtils.getIcons(true));
@@ -108,30 +106,27 @@ public class ClientMainGameFrame extends JFrame
 		
 		getContentPane().setPreferredSize(new Dimension(ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight()));
 		
-		tabbedPane.setBounds(0, 0, ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight());
-		getContentPane().add(tabbedPane);
+		//Set up layered pane
+		layeredPane.setBounds(0, 0, ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight());
+		add(layeredPane);
+		layeredPane.setLayer(BaseGUIPanel, 1);
+		layeredPane.setLayer(tabbedPane, 0);
 		
-		mapViewPanel.setLayout(null);
-		mapViewPanel.setSize(tabbedPane.getWidth(), tabbedPane.getHeight() - 25); // TODO calculate size of tabs
-		mapViewPanel.add(layeredPane);
-		layeredPane.setBounds(0, 0, mapViewPanel.getWidth(), mapViewPanel.getHeight());
+		layeredPane.add(BaseGUIPanel);
+		layeredPane.add(tabbedPane);
 		
-		layeredPane.setLayer(GUIPanel, 1);
-		GUIPanel.setOpaque(false);
+		//Set up Base GUI
+		BaseGUIPanel.setOpaque(false);
+		BaseGUIPanel.setBounds(layeredPane.getBounds());
+		SpringLayout sl_BaseGUIPanel = new SpringLayout();
+		sl_BaseGUIPanel.putConstraint(SpringLayout.WEST, commandPanel, 0, SpringLayout.WEST, BaseGUIPanel);
+		sl_BaseGUIPanel.putConstraint(SpringLayout.EAST, commandPanel, 0, SpringLayout.EAST, BaseGUIPanel);
+		sl_BaseGUIPanel.putConstraint(SpringLayout.SOUTH, commandPanel, 0, SpringLayout.SOUTH, BaseGUIPanel);
+		sl_BaseGUIPanel.putConstraint(SpringLayout.NORTH, commandPanel, -50, SpringLayout.SOUTH, BaseGUIPanel);
+		BaseGUIPanel.setLayout(sl_BaseGUIPanel);
 		
-		layeredPane.add(GUIPanel);
-		GUIPanel.setSize(layeredPane.getSize());
-		SpringLayout sl_GUIPanel = new SpringLayout();
-		
-		sl_GUIPanel.putConstraint(SpringLayout.WEST, commandPanel, 0, SpringLayout.WEST, GUIPanel);
-		sl_GUIPanel.putConstraint(SpringLayout.EAST, commandPanel, 0, SpringLayout.EAST, GUIPanel);
-		sl_GUIPanel.putConstraint(SpringLayout.SOUTH, commandPanel, 0, SpringLayout.SOUTH, GUIPanel);
-		sl_GUIPanel.putConstraint(SpringLayout.NORTH, commandPanel, -50, SpringLayout.SOUTH, GUIPanel);
-		
-		GUIPanel.setLayout(sl_GUIPanel);
-		commandPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		
-		GUIPanel.add(commandPanel);
+		// Set up command panel
+		BaseGUIPanel.add(commandPanel);
 		SpringLayout sl_commandPanel = new SpringLayout();
 		sl_commandPanel.putConstraint(SpringLayout.SOUTH, commandLabel, -5, SpringLayout.SOUTH, commandPanel);
 		sl_commandPanel.putConstraint(SpringLayout.WEST, commandBox, 10, SpringLayout.EAST, commandLabel);
@@ -140,20 +135,16 @@ public class ClientMainGameFrame extends JFrame
 		sl_commandPanel.putConstraint(SpringLayout.EAST, commandBox, -10, SpringLayout.EAST, commandPanel);
 		commandPanel.setLayout(sl_commandPanel);
 		commandLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		
 		commandPanel.add(commandLabel);
-		
 		commandPanel.add(commandBox);
 		commandBox.addActionListener(e -> {command_ = commandBox.getText();});
-		layeredPane.setLayer(hexmapCanvas, 0);
-		hexmapCanvas.setBounds(0, 0, ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight());
-
-		layeredPane.add(hexmapCanvas);
+		commandPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		
-		addTab("Map", mapViewPanel);
-		addTab("Inventory", inventoryPanel);
-		addTab("Character", characterPanel);
-		addTab("Mech", mekPanel);
+		// Set up tabbed pane
+		tabbedPane.setBounds(layeredPane.getBounds());
+		
+		TabPopulator populator = (TabPopulator) ModuleManager.getHighestImplementer("populateTabs");
+		populator.populateTabs(this, tabbedPane);
 		
 		pack();
 		

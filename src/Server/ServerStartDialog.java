@@ -8,6 +8,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import GameEngine.Configurables.ModuleManager;
+import Net.Server.Server;
 import Utils.Logging;
 import Utils.MiscUtils;
 
@@ -17,6 +19,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SpinnerNumberModel;
 
+@SuppressWarnings("serial")
 public class ServerStartDialog extends JDialog
 {
 
@@ -35,13 +38,15 @@ public class ServerStartDialog extends JDialog
 		catch (Exception e) {Logging.logException(e);}
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void onClickOK() // When OK is pressed
 	{
 		Integer value = (Integer) portSpinner.getValue();
 		if (value != null)
 		{
-			Server server = new Server();
+			GameServer server = ModuleManager.makeServer();
 			server.start(value); // TODO changeable
+
 			ServerWindow.main(server);
 			
 			this.setVisible(false);

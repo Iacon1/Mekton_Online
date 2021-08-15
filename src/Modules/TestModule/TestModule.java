@@ -6,12 +6,15 @@ package Modules.TestModule;
 
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
-import GameEngine.Hexmap;
 import GameEngine.Configurables.Module;
-import Modules.TestModule.TestHexmap;
+import Modules.BaseModule.BaseServer;
 import Net.StateFactory;
+import Net.Server.Server;
 import Server.Account;
-import Server.Server;
+
+import Server.GameServer;
+import Utils.JSONManager;
+import Utils.MiscUtils;
 
 public class TestModule implements Module
 {
@@ -22,6 +25,7 @@ public class TestModule implements Module
 	{
 		config_ = new ModuleConfig();
 		
+		config_.doesImplement_.put("makeServer", true);
 		config_.doesImplement_.put("setup", true);
 		config_.doesImplement_.put("loadWorld", true);
 		
@@ -41,12 +45,19 @@ public class TestModule implements Module
 	}
 
 	@Override
+	public void init() {}
+	@SuppressWarnings("rawtypes")
+	@Override
+	public GameServer makeServer()
+	{
+		return new BaseServer<TestAccount>();
+	}
+	@Override
 	public GameWorld setup()
 	{
 		GameWorld gameWorld = new GameWorld();
 		TestHexmap map = new TestHexmap(gameWorld, new TestHexData());
 		map.setDimensions(18, 9, 1);
-		
 		return gameWorld;
 	}
 
@@ -56,8 +67,9 @@ public class TestModule implements Module
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public GameEntity makePlayer(Server server, Account account)
+	public GameEntity makePlayer(GameServer server, Account account)
 	{
 		DummyPlayer player = new DummyPlayer(server.gameWorld_); // Adds a guy to the map
 		account.possessee = player.getId();
@@ -66,8 +78,9 @@ public class TestModule implements Module
 		
 		return player;
 	}
+	@SuppressWarnings("rawtypes")
 	@Override
-	public GameEntity wakePlayer(Server server, Account account)
+	public GameEntity wakePlayer(GameServer server, Account account)
 	{
 		DummyPlayer player = new DummyPlayer(server.gameWorld_); // Adds a guy to the map
 		account.possessee = player.getId();
@@ -76,13 +89,15 @@ public class TestModule implements Module
 		
 		return player;
 	}
+	@SuppressWarnings("rawtypes")
 	@Override
-	public GameEntity sleepPlayer(Server server, Account account)
+	public GameEntity sleepPlayer(GameServer server, Account account)
 	{
 		return null;
 	}
+	@SuppressWarnings("rawtypes")
 	@Override
-	public GameEntity deletePlayer(Server server, Account account)
+	public GameEntity deletePlayer(GameServer server, Account account)
 	{
 		return null;
 	}

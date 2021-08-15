@@ -20,7 +20,7 @@ public class ServerLogger implements Logger
 		public String category_;
 		public String text_;
 	}
-	private ArrayList<LogEntry> log_;
+	private volatile ArrayList<LogEntry> log_;
 	
 	private static String getCaller() // Returns calling function & line
 	{

@@ -22,10 +22,11 @@ public class ServerThread<P extends ConnectionPairThread> extends Thread
 
 	public ServerThread(int port, P pairTemplate)
 	{
+		setName("MtO server Thread (" + getId() + ")");
 		port_ = port;
 		instancer_ = new Instancer<P>(pairTemplate);
 	}
-	
+
 	public void open() // Opens the server socket
 	{
 		try
@@ -49,18 +50,20 @@ public class ServerThread<P extends ConnectionPairThread> extends Thread
 			try
 			{;
 				Socket clientSocket = serverSocket_.accept();
-				Logging.logNotice("Caught a connection!");
 				P pair = instancer_.getInstance();
 				pair.setSocket(clientSocket);
 				pair.start();
 			}
 			catch (Exception e) {Logging.logException(e);}
 		}
-	}
+	}	
 	
-	public String getAddress()
+	public void setPort(int port)
 	{
-		return serverSocket_.getInetAddress().toString();
+		port_ = port;
 	}
-	
+	public int getPort()
+	{
+		return port_;
+	}
 }

@@ -11,11 +11,11 @@ import Modules.BaseModule.ClientFrames.ClientGameWindow;
 import Net.StateFactory;
 import Net.ThreadState;
 
-public class MapScreen implements ThreadState<GameClientThread>
+public class MainScreen implements ThreadState<GameClientThread>
 {
 	private StateFactory factory_;
 	
-	public MapScreen(StateFactory factory)
+	public MainScreen(StateFactory factory)
 	{
 		factory_ = factory;
 	}

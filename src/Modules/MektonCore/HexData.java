@@ -2,7 +2,7 @@
 // Created 06/05/2021
 // Modules can extend this and use it for hexmaps
 
-package GameEngine;
+package Modules.MektonCore;
 
 public abstract class HexData
 {

@@ -4,7 +4,6 @@
 
 package Server;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
@@ -13,8 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import GameEngine.GameEntity;
-import GameEngine.GameWorld;
 import GameEngine.Configurables.ConfigManager;
+import Net.Server.Server;
 import Utils.Logging;
 import Utils.MiscUtils;
 
@@ -25,16 +24,18 @@ import javax.swing.JTree;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
-import java.util.ArrayList;
 import java.util.TimerTask;
+import java.util.ArrayList;
 import java.util.Timer;
 import javax.swing.SpringLayout;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+@SuppressWarnings("serial")
 public class ServerMainFrame extends JFrame
 {	
-	private static Server server_;
+	@SuppressWarnings("rawtypes")
+	private static GameServer server_;
 	private DefaultTreeModel model;
 	private final Timer timer = new Timer();
 	private JPanel contentPane;
@@ -179,7 +180,8 @@ public class ServerMainFrame extends JFrame
 		}
 	}
 	
-	public static void main(Server server)
+	@SuppressWarnings("rawtypes")
+	public static void main(GameServer server)
 	{
 		server_ = server;
 		EventQueue.invokeLater(new Runnable()
@@ -196,7 +198,8 @@ public class ServerMainFrame extends JFrame
 		});
 	}
 
-	public ServerMainFrame(Server server)
+	@SuppressWarnings("rawtypes")
+	public ServerMainFrame(GameServer server)
 	{
 		if (server != null) server_ = server;
 		setTitle(MiscUtils.getProgramName() + " Server: Main Window");

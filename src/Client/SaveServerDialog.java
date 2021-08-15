@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 
+@SuppressWarnings("serial")
 public class SaveServerDialog extends JDialog
 {
 

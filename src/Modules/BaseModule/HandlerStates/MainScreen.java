@@ -5,16 +5,17 @@
 package Modules.BaseModule.HandlerStates;
 
 import GameEngine.PacketTypes.GameDataPacket;
+import Modules.BaseModule.ClientHandlerThread;
 import Net.StateFactory;
 import Net.ThreadState;
-import Server.ClientHandlerThread;
 import Utils.Logging;
+import Utils.MiscUtils;
 
-public class MapScreen implements ThreadState<ClientHandlerThread>
+public class MainScreen implements ThreadState<ClientHandlerThread>
 {
 	private StateFactory factory_;
 	
-	public MapScreen(StateFactory factory)
+	public MainScreen(StateFactory factory)
 	{
 		factory_ = factory;
 	}
@@ -37,6 +38,7 @@ public class MapScreen implements ThreadState<ClientHandlerThread>
 	{
 		GameDataPacket packet = new GameDataPacket();
 		packet.viewWorld(parentThread.getParent().gameWorld_);
+		Logging.logNotice(packet.toJSON());
 		return packet.toJSON();
 	}
 
