@@ -5,6 +5,7 @@
 package Client;
 
 import java.awt.Container;
+import java.util.HashMap;
 
 import GameEngine.GameWorld;
 import GameEngine.Configurables.ModuleManager;
@@ -18,7 +19,7 @@ public class GameClientThread extends StatefulConnectionPairThread
 	
 	private ServerInfoPacket serverInfo_; // The server info we received
 	
-	private Container container_; // The currently-open GUI
+	private HashMap<String, Container> containers_; // All currently-open UI
 	
 	private GameWorld gameWorld_;
 	
@@ -26,27 +27,31 @@ public class GameClientThread extends StatefulConnectionPairThread
 	{
 		super();
 		stateFactory_ = ModuleManager.clientFactory();
+		containers_ = new HashMap<String, Container>();
 		initState(stateFactory_.getState(0));
 	}
 	
 	@Override
 	public void onClose()
 	{
-		if (container_ != null)
+		if (containers_ != null) // Close all containers
 		{
-			container_.setVisible(false);
-			container_.setEnabled(false);
+			for (String name : containers_.keySet())
+			{
+				containers_.get(name).setVisible(false);
+				containers_.get(name).setEnabled(false);
+			}
 		}
 	}
 	
-	public void setContainer(Container container)
+	public void setContainer(String name, Container container)
 	{
-		container_ = container;
+		containers_.put(name, container);
 	}
 	
-	public Container getContainer()
+	public Container getContainer(String name)
 	{
-		return container_;
+		return containers_.get(name);
 	}
 
 	public void setInfo(ServerInfoPacket serverInfo)

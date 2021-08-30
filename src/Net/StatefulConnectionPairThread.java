@@ -4,24 +4,27 @@
 
 package Net;
 
-import Utils.Logging;
-
 public abstract class StatefulConnectionPairThread extends ConnectionPairThread
 {
 
+	@SuppressWarnings("rawtypes")
 	private volatile ThreadState currentState_; // The state we're currently on
+	@SuppressWarnings("rawtypes")
 	private volatile ThreadState nextState_; // The state we are switching to; Null if we're not switching right now
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void initState(ThreadState state)
 	{
 		currentState_ = state;
 		currentState_.onEnter(this);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void queueStateChange(ThreadState nextState) // Queues a state change. We'll get to that when we can!
 	{
 		nextState_ = nextState;
 	}
+	@SuppressWarnings("unchecked")
 	public void changeState() // Changes the state
 	{
 		runningI_ = false;
@@ -34,6 +37,7 @@ public abstract class StatefulConnectionPairThread extends ConnectionPairThread
 		runningO_ = true;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public ThreadState getCurrentState()
 	{
 		return currentState_;
@@ -50,12 +54,14 @@ public abstract class StatefulConnectionPairThread extends ConnectionPairThread
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void processInput(String input)
 	{
 		currentState_.processInput(input, this);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public String processOutput()
 	{

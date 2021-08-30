@@ -4,9 +4,7 @@
 
 package Modules.TestModule;
 
-import GameEngine.GameWorld;
 import Modules.MektonCore.HexData;
-import Modules.MektonCore.Hexmap;
 
 public class TestHexData extends HexData
 {

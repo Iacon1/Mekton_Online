@@ -9,7 +9,6 @@ import Modules.BaseModule.ClientHandlerThread;
 import Net.StateFactory;
 import Net.ThreadState;
 import Utils.Logging;
-import Utils.MiscUtils;
 
 public class MainScreen implements ThreadState<ClientHandlerThread>
 {

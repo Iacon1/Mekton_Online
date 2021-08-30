@@ -4,8 +4,6 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
-import Net.Server.Server;
-
 public class ServerWindow
 {
 	@SuppressWarnings("rawtypes")
@@ -13,6 +11,7 @@ public class ServerWindow
 	private JFrame frame;
 
 
+	@SuppressWarnings("rawtypes")
 	public static void main(GameServer server)
 	{
 		server_ = server;

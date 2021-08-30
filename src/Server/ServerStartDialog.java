@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import GameEngine.Configurables.ModuleManager;
-import Net.Server.Server;
 import Utils.Logging;
 import Utils.MiscUtils;
 

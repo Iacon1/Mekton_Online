@@ -13,7 +13,6 @@ import javax.swing.border.EmptyBorder;
 
 import GameEngine.GameEntity;
 import GameEngine.Configurables.ConfigManager;
-import Net.Server.Server;
 import Utils.Logging;
 import Utils.MiscUtils;
 
@@ -158,6 +157,7 @@ public class ServerMainFrame extends JFrame
 			}
 		}
 	}
+	@SuppressWarnings("unchecked")
 	private void updatePlayersList()
 	{
 		String text = "<html>";
@@ -170,7 +170,7 @@ public class ServerMainFrame extends JFrame
 		
 		playersLabel.setText(text);
 	}
-	private class UpdateTask extends TimerTask
+	private class UpdateTask extends TimerTask // Updates the display
 	{
 		public void run() // Updates the display
 		{

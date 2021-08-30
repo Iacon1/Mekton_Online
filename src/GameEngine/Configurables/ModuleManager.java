@@ -14,7 +14,6 @@ import java.util.HashMap;
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
 import Net.StateFactory;
-import Net.Server.Server;
 import Server.Account;
 import Server.GameServer;
 import Utils.Logging;

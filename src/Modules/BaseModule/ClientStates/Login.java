@@ -35,14 +35,14 @@ public class Login implements ThreadState<GameClientThread>
 		successful_ = packet.successful;
 		if (successful_)
 		{
-			LoginDialog dialog = (LoginDialog) parentThread.getContainer();
+			LoginDialog dialog = (LoginDialog) parentThread.getContainer("login");
 			dialog.setVisible(false);
 			dialog.dispose();
 			parentThread.queueStateChange(getFactory().getState(MainScreen.class.getCanonicalName()));
 		}
 		else
 		{
-			LoginDialog dialog = (LoginDialog) parentThread.getContainer();
+			LoginDialog dialog = (LoginDialog) parentThread.getContainer("login");
 			dialog.onFail("Login failed.");
 		}
 	}
@@ -50,7 +50,7 @@ public class Login implements ThreadState<GameClientThread>
 	@Override
 	public String processOutput(GameClientThread parentThread)
 	{
-		LoginDialog dialog = (LoginDialog) parentThread.getContainer();
+		LoginDialog dialog = (LoginDialog) parentThread.getContainer("login");
 		if (dialog.isVisible() == false && !successful_)
 			parentThread.close();
 		LoginPacket packet = dialog.getPacket();

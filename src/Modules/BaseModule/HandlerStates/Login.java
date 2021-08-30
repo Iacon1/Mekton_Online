@@ -26,6 +26,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 	@Override
 	public void onEnter(ClientHandlerThread parentThread) {}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void processInput(String input, ClientHandlerThread parentThread)
 	{
@@ -74,7 +75,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 			if (loginFeedback_.successful) parentThread.queueStateChange(getFactory().getState(MainScreen.class.getCanonicalName()));
 			return loginFeedback_.toJSON();
 		}
-	else return null;
+		else return null;
 	}
 
 	@Override

@@ -32,14 +32,14 @@ public class MainScreen implements ThreadState<GameClientThread>
 		GameDataPacket packet = new GameDataPacket();
 		packet = (GameDataPacket) packet.fromJSON(input);
 		parentThread.setWorld(packet.ourView);
-		ClientMainGameFrame frame = (ClientMainGameFrame) parentThread.getContainer();
+		ClientMainGameFrame frame = (ClientMainGameFrame) parentThread.getContainer("map");
 		frame.updateUIStuff(packet);
 	}
 	
 	@Override
 	public String processOutput(GameClientThread parentThread)
 	{
-		ClientMainGameFrame frame = (ClientMainGameFrame) parentThread.getContainer();
+		ClientMainGameFrame frame = (ClientMainGameFrame) parentThread.getContainer("map");
 		String input = frame.getCommand();
 		if (input != null) // We got input
 			return input;

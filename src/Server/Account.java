@@ -6,7 +6,6 @@ package Server;
 
 import GameEngine.CommandRunner;
 import GameEngine.GameWorld;
-import GameEngine.PhysicalObject;
 
 public abstract class Account implements CommandRunner
 {

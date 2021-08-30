@@ -91,6 +91,7 @@ public class MektonCore implements Module, TabPopulator
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public GameEntity makePlayer(GameServer server, Account account)
 	{
@@ -98,6 +99,7 @@ public class MektonCore implements Module, TabPopulator
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public GameEntity wakePlayer(GameServer server, Account account)
 	{
@@ -105,6 +107,7 @@ public class MektonCore implements Module, TabPopulator
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public GameEntity sleepPlayer(GameServer server, Account account)
 	{
@@ -112,6 +115,7 @@ public class MektonCore implements Module, TabPopulator
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public GameEntity deletePlayer(GameServer server, Account account)
 	{

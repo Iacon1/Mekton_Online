@@ -6,7 +6,6 @@ package GameEngine.PacketTypes;
 
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
-import Modules.MektonCore.Hexmap;
 
 public class GameDataPacket extends Packet
 {

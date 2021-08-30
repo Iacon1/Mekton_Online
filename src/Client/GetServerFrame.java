@@ -32,7 +32,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({ "serial", "unused" })
 public class GetServerFrame extends JFrame
 {
 	private static class SavedServer

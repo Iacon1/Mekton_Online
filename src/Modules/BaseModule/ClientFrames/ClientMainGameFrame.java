@@ -21,7 +21,6 @@ import GameEngine.Configurables.ModuleManager;
 import GameEngine.PacketTypes.GameDataPacket;
 import Modules.BaseModule.TabPopulator;
 import Modules.MektonCore.Hexmap;
-import Utils.Logging;
 import Utils.MiscUtils;
 
 @SuppressWarnings("serial")

@@ -8,7 +8,6 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 import Utils.Logging;
-import GameEngine.GraphicsManager;
 import Client.GameClientThread;
 
 public class ClientGameWindow
@@ -41,7 +40,7 @@ public class ClientGameWindow
 	public ClientGameWindow()
 	{
 		frame = new ClientMainGameFrame();
-		thread_.setContainer(frame);
+		thread_.setContainer("map", frame);
 		frame.setVisible(true);
 	}
 }

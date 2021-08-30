@@ -4,15 +4,10 @@
 
 package Utils;
 
-import java.util.HashMap;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
-import com.sun.tools.javac.code.Type;
 
-import Server.Account;
 import Utils.GSONConfig.GiveBuilder;
 
 public final class JSONManager
@@ -57,6 +52,7 @@ public final class JSONManager
 		catch (Exception e) {Logging.logException(e); return null;}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static <C> C deserializeCollectionJSONList(String serialized, Class mainClass, Class... classArgs) // Unserializes a parameterized collection
 	{
 		java.lang.reflect.Type typeTo = TypeToken.getParameterized(mainClass, classArgs).getType();

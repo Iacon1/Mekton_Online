@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import java.awt.Color;
 
+@SuppressWarnings("serial")
 public class LoginDialog extends JDialog
 {
 
@@ -65,7 +66,7 @@ public class LoginDialog extends JDialog
 		try
 		{
 			LoginDialog dialog = new LoginDialog();
-			thread.setContainer(dialog);
+			thread.setContainer("login", dialog);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {Logging.logException(e);}
@@ -74,7 +75,6 @@ public class LoginDialog extends JDialog
 	
 	public LoginDialog()
 	{
-		Logging.logNotice("New dialog!");
 		passwordBox.setColumns(10);
 		usernameBox.setColumns(10);
 		setIconImages(MiscUtils.getIcons(true));

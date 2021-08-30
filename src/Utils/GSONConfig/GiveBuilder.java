@@ -8,7 +8,6 @@ import com.google.gson.GsonBuilder;
 
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
-import GameEngine.PacketTypes.Packet;
 import Modules.MektonCore.HexData;
 import Server.Account;
 

@@ -9,7 +9,6 @@ import java.util.HashMap;
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
 import Net.StateFactory;
-import Net.Server.Server;
 import Server.GameServer;
 import Server.Account;
 
@@ -50,9 +49,13 @@ public interface Module
 	public GameWorld setup(); // Sets up a new world; Only used the first time the server is run
 	public GameWorld loadWorld(String server); // Loads a saved world
 	
+	@SuppressWarnings("rawtypes")
 	public GameEntity makePlayer(GameServer server, Account account); // Makes a new player entity for a new account
+	@SuppressWarnings("rawtypes")
 	public GameEntity wakePlayer(GameServer server, Account account); // Wakes up a returning account's current possessee when they login
+	@SuppressWarnings("rawtypes")
 	public GameEntity sleepPlayer(GameServer server, Account account); // Wakes up a returning account's current possessee when they logout
+	@SuppressWarnings("rawtypes")
 	public GameEntity deletePlayer(GameServer server, Account account); // Deletes or detaches a deleted account's current possessee
 	
 	public StateFactory clientFactory(); // Client factory
