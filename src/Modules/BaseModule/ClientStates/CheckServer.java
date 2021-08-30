@@ -23,7 +23,7 @@ public class CheckServer implements ThreadState<GameClientThread>
 	public void onEnter(GameClientThread parentThread) {}
 	
 	@Override
-	public void processInput(String input, GameClientThread parentThread)
+	public void processInputTrio(String input, GameClientThread parentThread)
 	{
 		ServerInfoPacket packet = new ServerInfoPacket();
 		packet = (ServerInfoPacket) packet.fromJSON(input);
@@ -42,12 +42,51 @@ public class CheckServer implements ThreadState<GameClientThread>
 			while (result_ != 3);
 			parentThread.queueStateChange(getFactory().getState(Login.class.getCanonicalName()));
 		}
+	}	
+	@Override
+	public String processOutputTrio(GameClientThread parentThread)
+	{
+		while (result_ == 0);
+		
+		if (result_ == 1) // We decided to go forward!
+		{
+			result_ = 3;
+			ClientInfoPacket packet = new ClientInfoPacket();
+			packet.version = MiscUtils.getVersion();
+			return packet.toJSON();
+		}
+		else if (result_ == 2)
+		{
+			result_ = 3;
+			return null; // We have nothing to say to them
+		}
+		else if (result_ == 3) return null;
+		else return null; // ???
 	}
 	
 	@Override
-	public String processOutput(GameClientThread parentThread)
+	public void processInputMono(String input, GameClientThread parentThread)
 	{
-		while (result_ == 0);
+		ServerInfoPacket packet = new ServerInfoPacket();
+		packet = (ServerInfoPacket) packet.fromJSON(input);
+		
+		parentThread.setInfo(packet);
+		
+		if (parentThread.getSocket() == null || packet == null || !packet.version.equals(MiscUtils.getVersion()))
+		{
+			result_ = 2;
+			parentThread.queueStateChange(getFactory().getState(BadServer.class.getCanonicalName()));
+		}
+		else
+		{
+			result_ = 1;
+			parentThread.queueStateChange(getFactory().getState(Login.class.getCanonicalName()));
+		}
+	}
+	@Override
+	public String processOutputMono(GameClientThread parentThread)
+	{
+		if (result_ == 0) return null;
 		
 		if (result_ == 1) // We decided to go forward!
 		{

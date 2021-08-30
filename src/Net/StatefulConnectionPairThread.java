@@ -58,13 +58,15 @@ public abstract class StatefulConnectionPairThread extends ConnectionPairThread
 	@Override
 	public void processInput(String input)
 	{
-		currentState_.processInput(input, this);
+		if (mono_) currentState_.processInputMono(input, this);
+		else currentState_.processInputTrio(input, this);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public String processOutput()
 	{
-		return currentState_.processOutput(this);
+		if (mono_) return currentState_.processOutputMono(this);
+		else return currentState_.processOutputTrio(this);
 	}
 }

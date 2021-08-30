@@ -12,11 +12,18 @@ public final class ConfigManager
 {
 	private static class Config
 	{
+		// Default values
 		protected int screenWidth_ = 640;
 		protected int screenHeight_ = 480;
 		protected int hexWidth_ = 38;
 		protected int hexHeight_ = 32;
-		protected int frameCap_ = 60; // All default values
+		
+		protected int frameCap_ = 60;
+		protected int checkCapI_ = 60; // 0 - None
+		protected int checkCapO_ = 60; // 0 - None
+		protected int checkCapM_ = 60; // 0 - None
+		
+		protected boolean mono_ = true;
 	}
 	private static Config config_;
 	
@@ -43,6 +50,23 @@ public final class ConfigManager
 	public static int getFrameCap() // In FPS
 	{
 		return config_.frameCap_;
+	}
+	public static int getCheckCapI() // In CPS
+	{
+		return config_.checkCapI_;
+	}
+	public static int getCheckCapO() // In CPS
+	{
+		return config_.checkCapO_;
+	}
+	public static int getCheckCapM() // In CPS
+	{
+		return config_.checkCapM_;
+	}
+	
+	public static boolean getMonoThread()
+	{
+		return config_.mono_;
 	}
 	public static int getScreenWidth() // Width of screen in pixels
 	{

@@ -22,8 +22,7 @@ public class MainScreen implements ThreadState<ClientHandlerThread>
 	@Override
 	public void onEnter(ClientHandlerThread parentThread) {}
 
-	@Override
-	public void processInput(String input, ClientHandlerThread parentThread)
+	public void processInput(String input, ClientHandlerThread parentThread, boolean mono)
 	{
 		if (input != null)
 		{
@@ -31,9 +30,7 @@ public class MainScreen implements ThreadState<ClientHandlerThread>
 			parentThread.getParent().runCommand(parentThread.getAccount().username, input);
 		}
 	}
-	
-	@Override
-	public String processOutput(ClientHandlerThread parentThread)
+	public String processOutput(ClientHandlerThread parentThread, boolean mono)
 	{
 		GameDataPacket packet = new GameDataPacket();
 		packet.viewWorld(parentThread.getParent().gameWorld_);
@@ -41,6 +38,16 @@ public class MainScreen implements ThreadState<ClientHandlerThread>
 		return packet.toJSON();
 	}
 
+	@Override
+	public void processInputTrio(String input, ClientHandlerThread parentThread) {processInput(input, parentThread, false);}
+	@Override
+	public String processOutputTrio(ClientHandlerThread parentThread) {return processOutput(parentThread, false);}
+	
+	@Override
+	public void processInputMono(String input, ClientHandlerThread parentThread) {processInput(input, parentThread, true);}
+	@Override
+	public String processOutputMono(ClientHandlerThread parentThread) {return processOutput(parentThread, true);}
+	
 	@Override
 	public StateFactory getFactory()
 	{

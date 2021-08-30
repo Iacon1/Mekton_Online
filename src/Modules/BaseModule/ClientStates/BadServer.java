@@ -31,12 +31,19 @@ public class BadServer implements ThreadState<GameClientThread>
 		parentThread.close();
 	}
 
+	public void processInput(String input, GameClientThread parentThread, boolean mono) {}
+	public String processOutput(GameClientThread parentThread, boolean mono) {return null;}
+
 	@Override
-	public void processInput(String input, GameClientThread parentThread) {}
+	public void processInputTrio(String input, GameClientThread parentThread) {processInput(input, parentThread, false);}
+	@Override
+	public String processOutputTrio(GameClientThread parentThread) {return processOutput(parentThread, false);}
 	
 	@Override
-	public String processOutput(GameClientThread parentThread) {return null;}
-
+	public void processInputMono(String input, GameClientThread parentThread) {processInput(input, parentThread, true);}
+	@Override
+	public String processOutputMono(GameClientThread parentThread) {return processOutput(parentThread, true);}
+	
 	@Override
 	public StateFactory getFactory()
 	{

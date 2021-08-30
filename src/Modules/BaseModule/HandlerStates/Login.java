@@ -1,5 +1,6 @@
 package Modules.BaseModule.HandlerStates;
 
+import Client.GameClientThread;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.PacketTypes.LoginFeedbackPacket;
 import GameEngine.PacketTypes.LoginPacket;
@@ -26,9 +27,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 	@Override
 	public void onEnter(ClientHandlerThread parentThread) {}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void processInput(String input, ClientHandlerThread parentThread)
+	public void processInput(String input, ClientHandlerThread parentThread, boolean mono)
 	{
 		if (send_) return; // Don't take more packets while still giving feedback on one
 		
@@ -66,8 +65,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 		send_ = true;
 	}
 	
-	@Override
-	public String processOutput(ClientHandlerThread parentThread)
+	public String processOutput(ClientHandlerThread parentThread, boolean mono)
 	{
 		if (send_)
 		{
@@ -78,6 +76,16 @@ public class Login implements ThreadState<ClientHandlerThread>
 		else return null;
 	}
 
+	@Override
+	public void processInputTrio(String input, ClientHandlerThread parentThread) {processInput(input, parentThread, false);}
+	@Override
+	public String processOutputTrio(ClientHandlerThread parentThread) {return processOutput(parentThread, false);}
+	
+	@Override
+	public void processInputMono(String input, ClientHandlerThread parentThread) {processInput(input, parentThread, true);}
+	@Override
+	public String processOutputMono(ClientHandlerThread parentThread) {return processOutput(parentThread, true);}
+	
 	@Override
 	public StateFactory getFactory()
 	{

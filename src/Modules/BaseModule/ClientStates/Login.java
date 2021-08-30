@@ -27,8 +27,7 @@ public class Login implements ThreadState<GameClientThread>
 		LoginDialog.main(parentThread);
 	}
 
-	@Override
-	public void processInput(String input, GameClientThread parentThread)
+	public void processInput(String input, GameClientThread parentThread, boolean mono)
 	{
 		LoginFeedbackPacket packet = new LoginFeedbackPacket();
 		packet = (LoginFeedbackPacket) packet.fromJSON(input);
@@ -47,8 +46,7 @@ public class Login implements ThreadState<GameClientThread>
 		}
 	}
 	
-	@Override
-	public String processOutput(GameClientThread parentThread)
+	public String processOutput(GameClientThread parentThread, boolean mono)
 	{
 		LoginDialog dialog = (LoginDialog) parentThread.getContainer("login");
 		if (dialog.isVisible() == false && !successful_)
@@ -59,6 +57,16 @@ public class Login implements ThreadState<GameClientThread>
 		else return null;
 	}
 
+	@Override
+	public void processInputTrio(String input, GameClientThread parentThread) {processInput(input, parentThread, false);}
+	@Override
+	public String processOutputTrio(GameClientThread parentThread) {return processOutput(parentThread, false);}
+	
+	@Override
+	public void processInputMono(String input, GameClientThread parentThread) {processInput(input, parentThread, true);}
+	@Override
+	public String processOutputMono(GameClientThread parentThread) {return processOutput(parentThread, true);}
+	
 	@Override
 	public StateFactory getFactory()
 	{

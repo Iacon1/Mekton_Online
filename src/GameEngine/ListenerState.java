@@ -26,13 +26,18 @@ public abstract class ListenerState<T extends ConnectionPairThread> implements T
 	{
 		listeners_ = new HashMap<String, BiFunction<T, String, Void>>();
 	}
-	
-	@Override
-	public void processInput(String input, T parentThread)
+
+	public void processInput(String input, T parentThread, boolean mono)
 	{
 		String type = Packet.getType(input);
 		
 		if (listeners_.get(type) == null) Logging.logError("Unrecognized packet type " + type);
 		else listeners_.get(type).apply(parentThread, input);
 	}
+	
+	@Override
+	public void processInputTrio(String input, T parentThread) {processInput(input, parentThread, false);}
+	
+	@Override
+	public void processInputMono(String input, T parentThread) {processInput(input, parentThread, true);}
 }
