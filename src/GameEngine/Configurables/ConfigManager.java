@@ -13,16 +13,22 @@ public final class ConfigManager
 	private static class Config
 	{
 		// Default values
+		
+		// Graphics
 		protected int screenWidth_ = 640;
 		protected int screenHeight_ = 480;
+		protected boolean maintainRatio_ = true;
+		
 		protected int hexWidth_ = 38;
 		protected int hexHeight_ = 32;
 		
+		
 		protected int frameCap_ = 60;
+		
+		//Thread settings
 		protected int checkCapI_ = 60; // 0 - None
 		protected int checkCapO_ = 60; // 0 - None
 		protected int checkCapM_ = 60; // 0 - None
-		
 		protected boolean mono_ = true;
 	}
 	private static Config config_;
@@ -85,6 +91,11 @@ public final class ConfigManager
 	public static int getHexHeight() // Hex height in pixels; Should be 85% of getHexLength()
 	{
 		return config_.hexHeight_;
+	}
+
+	public static boolean maintainRatio()
+	{
+		return config_.maintainRatio_;
 	}
 
 }

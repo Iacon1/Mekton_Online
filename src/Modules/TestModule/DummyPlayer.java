@@ -7,6 +7,7 @@ package Modules.TestModule;
 import java.awt.Graphics2D;
 
 import GameEngine.GameWorld;
+import GameEngine.GraphicsCanvas;
 import GameEngine.PhysicalObject;
 import GameEngine.Configurables.ConfigManager;
 
@@ -24,9 +25,9 @@ public class DummyPlayer extends PhysicalObject
 		return "Dummy Player";
 	}
 	@Override
-	public void render(int pX, int pY, Graphics2D g)
+	public void render(int pX, int pY, Graphics2D g, GraphicsCanvas canvas)
 	{
 
-		super.render(pX, pY, g);
+		super.render(pX, pY, g, canvas);
 	}
 }

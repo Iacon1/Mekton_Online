@@ -4,11 +4,13 @@
 
 package Modules.MektonCore;
 
+import java.awt.Canvas;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
+import GameEngine.GraphicsCanvas;
 import GameEngine.GraphicsManager;
 import GameEngine.PhysicalObject;
 import GameEngine.Configurables.ConfigManager;
@@ -121,7 +123,7 @@ public class Hexmap<T extends HexData> extends GameEntity
 	}
 	
 	@Override
-	public void render(int pX, int pY, Graphics2D g) // Draws starting @ x, y as a left corner @ z to g
+	public void render(int pX, int pY, Graphics2D g, GraphicsCanvas canvas) // Draws starting @ x, y as a left corner @ z to g
 	{
 		int x = 0;
 		int y = 0;
@@ -145,10 +147,10 @@ public class Hexmap<T extends HexData> extends GameEntity
 					int cTX = hex.tX_ * hexWidth;
 					int cTY = hex.tY_ * hexHeight;
 					
-					g.drawImage(GraphicsManager.getImage(hex.tileset_), pX + cX, pY + cY, pX + cX + hexWidth, pY + cY + hexHeight, cTX, cTY, cTX + hexWidth, cTY + hexHeight, null);
+					canvas.drawImageScaled(GraphicsManager.getImage(hex.tileset_), pX + cX, pY + cY, cTX, cTY, hexWidth, hexHeight, g);
 					PhysicalObject instance = findEntity(i, j, k);
 					if (instance != null)
-						instance.render(pX + cX, pY + cY, g);
+						instance.render(pX + cX, pY + cY, g, canvas);
 				}
 			}
 			shift = !shift;

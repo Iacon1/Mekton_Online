@@ -93,8 +93,8 @@ public abstract class PhysicalObject extends GameEntity
 	}
 	
 	@Override
-	public void render(int pX, int pY, Graphics2D g) // We don't know where the top-left of the map corresponds to, so we'll let the map decide where to draw us
+	public void render(int pX, int pY, Graphics2D g, GraphicsCanvas canvas) // We don't know where the top-left of the map corresponds to, so we'll let the map decide where to draw us
 	{
-		g.drawImage(GraphicsManager.getImage(imagePath_), pX, pY, pX + width_, pY + height_, cTX_, cTY_, cTX_ + width_, cTY_ + height_, null);
+		canvas.drawImageScaled(GraphicsManager.getImage(imagePath_), pX, pY, cTX_, cTY_, width_, height_, g);
 	}
 }

@@ -214,7 +214,7 @@ public class ServerMainFrame extends JFrame
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		tabbedPane.setBounds(0, 0, 640, 480);
+		tabbedPane.setBounds(0, 0, 640, 480); // TODO Fix preset values
 		
 		
 		contentPane.add(tabbedPane);

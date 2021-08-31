@@ -27,6 +27,8 @@ public abstract class ConnectionPairThread extends Thread
 	protected volatile boolean runningI_; // Input
 	protected volatile boolean runningO_; // Output
 	
+	private static String noMsg = "NULL"; // For maintaining a connection during silence
+	
 	protected String getConnectedIP()
 	{
 		if (socket_ != null) return socket_.getInetAddress().toString();
@@ -48,7 +50,7 @@ public abstract class ConnectionPairThread extends Thread
 	{	
 		try
 		{
-			if (output == null) return;
+			if (output == null) outStream_.writeUTF(noMsg); //return;
 			outStream_.writeUTF(output);
 		}
 		catch (IOException e) {close();}
@@ -59,15 +61,16 @@ public abstract class ConnectionPairThread extends Thread
 	public abstract String processOutput() throws Exception; // Handle the output
 	public abstract void onClose(); // When closed
 	
-	private void inputRun(boolean loop) // Run by inThread_
+	private boolean inputRun(boolean loop) // Run by inThread_; Returns false if no input was gotten
 	{
 		//Logging.logNotice("Thread started: " + Thread.currentThread().getName());
 		while (running_ && runningI_)
 		{
 			
 			String input = getInput();
-			if (input == null && loop) continue; // TODO Maybe allow handling this?
-			else if (input == null) return;
+			if (input == noMsg && loop) continue;
+			else if (input == noMsg) return true;
+			else if (input == null) return false;
 			
 			try {processInput(input);}
 			catch (Exception e) {Logging.logException(e);}
@@ -77,8 +80,9 @@ public abstract class ConnectionPairThread extends Thread
 				try {Thread.sleep(1000 / ConfigManager.getCheckCapI());}
 				catch (Exception e) {Logging.logException(e);}
 			}
-			else if (!loop) return;
+			else if (!loop) return true;
 		}
+		return true;
 	}
 	private void outputRun(boolean loop) // Run by outThread_
 	{

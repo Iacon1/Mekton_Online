@@ -7,6 +7,7 @@ package Modules.MektonCore;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import GameEngine.GameFrame;
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
 import GameEngine.GraphicsCanvas;
@@ -15,7 +16,6 @@ import GameEngine.Configurables.Module;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.Module.ModuleConfig;
 import Modules.BaseModule.TabPopulator;
-import Modules.BaseModule.ClientFrames.ClientMainGameFrame;
 import Net.StateFactory;
 import Server.Account;
 import Server.GameServer;
@@ -25,7 +25,7 @@ public class MektonCore implements Module, TabPopulator
 	private ModuleConfig config_;
 	
 	@Override
-	public void populateTabs(ClientMainGameFrame frame, JTabbedPane tabbedPane)
+	public void populateTabs(GameFrame frame, JTabbedPane tabbedPane)
 	{
 		JPanel mapViewPanel = new JPanel();
 		JPanel inventoryPanel = new JPanel();
@@ -39,10 +39,10 @@ public class MektonCore implements Module, TabPopulator
 		hexmapCanvas.setBounds(0, 0, ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight());
 		mapViewPanel.add(hexmapCanvas);
 		
-		frame.addTab("Map", mapViewPanel);
-		frame.addTab("Inventory", inventoryPanel);
-		frame.addTab("Character", characterPanel);
-		frame.addTab("Mech", mekPanel);
+		//frame.addTab("Map", mapViewPanel);
+		//frame.addTab("Inventory", inventoryPanel);
+		//frame.addTab("Character", characterPanel);
+		//frame.addTab("Mech", mekPanel);
 	}
 
 	@Override

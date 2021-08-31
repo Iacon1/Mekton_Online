@@ -6,9 +6,9 @@ package Modules.BaseModule;
 
 import javax.swing.JTabbedPane;
 
-import Modules.BaseModule.ClientFrames.ClientMainGameFrame;
+import GameEngine.GameFrame;
 
 public interface TabPopulator
 {
-	public void populateTabs(ClientMainGameFrame frame, JTabbedPane tabbedPane);
+	public void populateTabs(GameFrame frame, JTabbedPane tabbedPane);
 }
