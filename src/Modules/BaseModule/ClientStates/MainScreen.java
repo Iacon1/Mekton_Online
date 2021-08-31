@@ -7,7 +7,6 @@ package Modules.BaseModule.ClientStates;
 import Client.GameClientThread;
 import GameEngine.PacketTypes.GameDataPacket;
 import Modules.BaseModule.ClientFrames.ClientMainGameFrame;
-import Modules.BaseModule.ClientFrames.ClientGameWindow;
 import Net.StateFactory;
 import Net.ThreadState;
 
@@ -23,7 +22,7 @@ public class MainScreen implements ThreadState<GameClientThread>
 	@Override
 	public void onEnter(GameClientThread parentThread)
 	{
-		ClientGameWindow.main(parentThread);
+		parentThread.setContainer("map", new ClientMainGameFrame());
 	}
 
 	public void processInput(String input, GameClientThread parentThread, boolean mono)

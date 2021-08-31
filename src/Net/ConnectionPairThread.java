@@ -172,11 +172,13 @@ public abstract class ConnectionPairThread extends Thread
 	
 	protected boolean isInputRunning() // Returns whether it *should* be alive *or* whether it *is* alive
 	{
+		if (mono_) return false;
 		if (inThread_ == null) return runningI_;
 		else return runningI_ || inThread_.isAlive();
 	}
 	protected boolean isOutputRunning() // Returns whether it *should* be alive *or* whether it *is* alive
 	{
+		if (mono_) return false;
 		if (outThread_ == null) return runningO_;
 		else return runningO_ || outThread_.isAlive();
 	}
