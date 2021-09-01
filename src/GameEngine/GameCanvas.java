@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import GameEngine.Configurables.ModuleManager;
 
 import java.awt.*;
+import java.text.AttributedCharacterIterator;
 
 @SuppressWarnings("serial")
 public class GameCanvas extends JPanel
@@ -33,6 +34,7 @@ public class GameCanvas extends JPanel
 		super.paintComponent(g);
 		g_ = g;
 		ModuleManager.drawWorld(ClientInfo.getWorld(), this);
+		drawText("Hello", "MicrogrammaNormalFix.TTF", GraphicsManager.getColor(255, 0, 0), 0, 0, 32);
 		g_ = null;
 	}
 	
@@ -48,5 +50,29 @@ public class GameCanvas extends JPanel
 		int sy2 = sy1 + h;
 		
 		g_.drawImage(img, dx1s, dy1s, dx2s, dy2s, sx1, sy1, sx2, sy2, null);
+	}
+	
+	
+	public void drawImageScaled(String img, int dx, int dy, int sx1, int sy1, int w, int h)
+	{
+		drawImageScaled(GraphicsManager.getImage(img), dx, dy, sx1, sy1, w, h);
+	}
+	
+	public void drawText(String text, Font font, Color color, int x, int y, int sizePixels)
+	{
+		Color oColor = g_.getColor();
+		int sx = (int) (x * scaleX_);
+		int sy = (int) ((y + sizePixels) * scaleY_);
+		int sSize = (int) (scaleY_ * sizePixels);
+		font = font.deriveFont(GraphicsManager.getFontSize(sSize));
+		g_.setFont(font);
+		g_.setColor(color);
+		g_.drawString(text, sx, sy);
+		g_.setColor(oColor); // reset color to before we used one for the text
+	}
+	
+	public void drawText(String text, String font, Color color, int x, int y, int sizePixels)
+	{
+		drawText(text, GraphicsManager.getFont(font), color, x, y, sizePixels);
 	}
 }

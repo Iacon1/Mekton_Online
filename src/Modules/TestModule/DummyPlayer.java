@@ -5,6 +5,7 @@
 package Modules.TestModule;
 
 import GameEngine.GameWorld;
+import GameEngine.GraphicsManager;
 import GameEngine.GameCanvas;
 import GameEngine.PhysicalObject;
 import GameEngine.SoundManager;
