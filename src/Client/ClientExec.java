@@ -7,6 +7,7 @@ package Client;
 import Utils.*;
 import GameEngine.DebugLogger;
 import GameEngine.GraphicsManager;
+import GameEngine.SoundManager;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.Configurables.ModuleManager;
 
@@ -19,7 +20,7 @@ public class ClientExec
 	{
 		Logging.setLogger(new DebugLogger());
 		GraphicsManager.init();
-		
+		SoundManager.init();
 		try
 		{
 			ConfigManager.init("Default");

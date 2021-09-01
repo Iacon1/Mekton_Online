@@ -18,7 +18,7 @@ public class GameCanvas extends JPanel
 	// Scales the image; Must be integers
 	// 1x scale size is given by ConfigManager
 	
-	Graphics g_;
+	Graphics g_; // TODO hack so we don't have to juggle this in function calls
 	
 	public boolean setScale(float scaleX, float scaleY)
 	{
@@ -27,6 +27,16 @@ public class GameCanvas extends JPanel
 		scaleY_ = scaleY;
 		return changedSize;
 	}
+	
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		g_ = g;
+		ModuleManager.drawWorld(ClientInfo.getWorld(), this);
+		g_ = null;
+	}
+	
+	// Below are a bunch of output functions
 	
 	public void drawImageScaled(Image img, int dx, int dy, int sx1, int sy1, int w, int h)
 	{
@@ -38,13 +48,5 @@ public class GameCanvas extends JPanel
 		int sy2 = sy1 + h;
 		
 		g_.drawImage(img, dx1s, dy1s, dx2s, dy2s, sx1, sy1, sx2, sy2, null);
-	}
-	
-	public void paintComponent(Graphics g)
-	{
-		super.paintComponent(g);
-		g_ = g;
-		ModuleManager.drawWorld(ClientInfo.getWorld(), this);
-		g_ = null;
 	}
 }
