@@ -6,17 +6,19 @@ package GameEngine;
 
 import javax.swing.JPanel;
 
+import GameEngine.Configurables.ModuleManager;
+
 import java.awt.*;
 
 @SuppressWarnings("serial")
-public class GraphicsCanvas extends JPanel
+public class GameCanvas extends JPanel
 {
-	GameEntity renderer_; // Draws to us
-	
 	public float scaleX_;
 	public float scaleY_;
 	// Scales the image; Must be integers
 	// 1x scale size is given by ConfigManager
+	
+	Graphics g_;
 	
 	public boolean setScale(float scaleX, float scaleY)
 	{
@@ -26,7 +28,7 @@ public class GraphicsCanvas extends JPanel
 		return changedSize;
 	}
 	
-	public void drawImageScaled(Image img, int dx, int dy, int sx1, int sy1, int w, int h, Graphics g)
+	public void drawImageScaled(Image img, int dx, int dy, int sx1, int sy1, int w, int h)
 	{
 		int dx1s = (int) (dx * scaleX_);
 		int dy1s = (int) (dy * scaleY_);
@@ -35,18 +37,14 @@ public class GraphicsCanvas extends JPanel
 		int sx2 = sx1 + w;
 		int sy2 = sy1 + h;
 		
-		g.drawImage(img, dx1s, dy1s, dx2s, dy2s, sx1, sy1, sx2, sy2, null);
-	}
-	
-	public void setRenderer(GameEntity renderer)
-	{
-		renderer_ = renderer;
+		g_.drawImage(img, dx1s, dy1s, dx2s, dy2s, sx1, sy1, sx2, sy2, null);
 	}
 	
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		if (renderer_ != null)
-			renderer_.render(0, 0, (Graphics2D) g, this);
+		g_ = g;
+		ModuleManager.drawWorld(ClientInfo.getWorld(), this);
+		g_ = null;
 	}
 }

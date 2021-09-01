@@ -6,6 +6,7 @@ package GameEngine.Configurables;
 
 import java.util.HashMap;
 
+import GameEngine.GameCanvas;
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
 import Net.StateFactory;
@@ -23,6 +24,8 @@ public interface Module
 		// makeServer
 		// setup
 		// loadWorld
+		
+		// drawWorld
 		
 		// makePlayer
 		// wakePlayer
@@ -49,15 +52,14 @@ public interface Module
 	public GameWorld setup(); // Sets up a new world; Only used the first time the server is run
 	public GameWorld loadWorld(String server); // Loads a saved world
 	
-	@SuppressWarnings("rawtypes")
+	public void drawWorld(GameWorld world, GameCanvas canvas); // Draws the world
+
 	public GameEntity makePlayer(GameServer server, Account account); // Makes a new player entity for a new account
-	@SuppressWarnings("rawtypes")
 	public GameEntity wakePlayer(GameServer server, Account account); // Wakes up a returning account's current possessee when they login
-	@SuppressWarnings("rawtypes")
 	public GameEntity sleepPlayer(GameServer server, Account account); // Wakes up a returning account's current possessee when they logout
-	@SuppressWarnings("rawtypes")
 	public GameEntity deletePlayer(GameServer server, Account account); // Deletes or detaches a deleted account's current possessee
 	
 	public StateFactory clientFactory(); // Client factory
 	public StateFactory handlerFactory(); // Handler factory
+	
 }

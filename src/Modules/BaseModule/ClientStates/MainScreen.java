@@ -5,6 +5,7 @@
 package Modules.BaseModule.ClientStates;
 
 import Client.GameClientThread;
+import GameEngine.ClientInfo;
 import GameEngine.GameFrame;
 import GameEngine.PacketTypes.GameDataPacket;
 import Net.StateFactory;
@@ -22,7 +23,6 @@ public class MainScreen implements ThreadState<GameClientThread>
 	@Override
 	public void onEnter(GameClientThread parentThread)
 	{
-		
 		parentThread.setContainer("map", new GameFrame());
 		parentThread.getContainer("map");
 	}
@@ -31,7 +31,7 @@ public class MainScreen implements ThreadState<GameClientThread>
 	{
 		GameDataPacket packet = new GameDataPacket();
 		packet = (GameDataPacket) packet.fromJSON(input);
-		parentThread.setWorld(packet.ourView);
+		ClientInfo.setWorld(packet.ourView);
 		GameFrame frame = (GameFrame) parentThread.getContainer("map");
 		frame.updateUIStuff(packet);
 	}

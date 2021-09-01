@@ -21,7 +21,7 @@ public class GameClientThread extends StatefulConnectionPairThread
 	
 	private HashMap<String, Container> containers_; // All currently-open UI
 	
-	private GameWorld gameWorld_;
+//	private GameWorld gameWorld_;
 	
 	public GameClientThread()
 	{
@@ -63,7 +63,7 @@ public class GameClientThread extends StatefulConnectionPairThread
 		return serverInfo_;
 	}
 	
-	public void setWorld(GameWorld world)
+/*	public void setWorld(GameWorld world)
 	{
 		gameWorld_ = world;
 	}
@@ -71,5 +71,6 @@ public class GameClientThread extends StatefulConnectionPairThread
 	{
 		return gameWorld_;
 	}
+*/
 }
 

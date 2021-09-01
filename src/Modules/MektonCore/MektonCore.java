@@ -10,40 +10,18 @@ import javax.swing.JTabbedPane;
 import GameEngine.GameFrame;
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
-import GameEngine.GraphicsCanvas;
+import GameEngine.GameCanvas;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.Configurables.Module;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.Module.ModuleConfig;
-import Modules.BaseModule.TabPopulator;
 import Net.StateFactory;
 import Server.Account;
 import Server.GameServer;
 
-public class MektonCore implements Module, TabPopulator
+public class MektonCore implements Module
 {
 	private ModuleConfig config_;
-	
-	@Override
-	public void populateTabs(GameFrame frame, JTabbedPane tabbedPane)
-	{
-		JPanel mapViewPanel = new JPanel();
-		JPanel inventoryPanel = new JPanel();
-		JPanel characterPanel = new JPanel();
-		JPanel mekPanel = new JPanel();
-		
-		GraphicsCanvas hexmapCanvas = new GraphicsCanvas();
-		
-		mapViewPanel.setLayout(null);
-		mapViewPanel.setSize(tabbedPane.getWidth(), tabbedPane.getHeight() - 25); // TODO calculate size of tabs
-		hexmapCanvas.setBounds(0, 0, ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight());
-		mapViewPanel.add(hexmapCanvas);
-		
-		//frame.addTab("Map", mapViewPanel);
-		//frame.addTab("Inventory", inventoryPanel);
-		//frame.addTab("Character", characterPanel);
-		//frame.addTab("Mech", mekPanel);
-	}
 
 	@Override
 	public ModuleConfig getConfig()
@@ -53,6 +31,8 @@ public class MektonCore implements Module, TabPopulator
 		config_.doesImplement_.put("makeServer", false);
 		config_.doesImplement_.put("setup", false);
 		config_.doesImplement_.put("loadWorld", false);
+		
+		config_.doesImplement_.put("drawWorld", false);
 		
 		config_.doesImplement_.put("makePlayer", false);
 		config_.doesImplement_.put("wakePlayer", false);
@@ -68,10 +48,8 @@ public class MektonCore implements Module, TabPopulator
 	@Override
 	public void init()
 	{
-		ModuleManager.attemptRegister("populateTabs", this);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public GameServer makeServer()
 	{
@@ -91,7 +69,13 @@ public class MektonCore implements Module, TabPopulator
 		return null;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@Override
+	public void drawWorld(GameWorld world, GameCanvas canvas)
+	{
+		// TODO Auto-generated method stub
+		return;
+	}
+
 	@Override
 	public GameEntity makePlayer(GameServer server, Account account)
 	{

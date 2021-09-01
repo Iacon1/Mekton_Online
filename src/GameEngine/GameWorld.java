@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class GameWorld
 {
 	protected ArrayList<GameEntity> instances_; // List of game instances
-
+	
 	public GameWorld()
 	{
 		instances_ = new ArrayList<GameEntity>();

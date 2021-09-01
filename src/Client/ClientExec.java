@@ -14,7 +14,7 @@ import javax.swing.UIManager;
 
 public class ClientExec
 {
-
+	
 	public static void main(String[] args)
 	{
 		Logging.setLogger(new DebugLogger());

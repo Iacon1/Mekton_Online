@@ -4,6 +4,7 @@
 
 package Modules.TestModule;
 
+import GameEngine.GameCanvas;
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
 import GameEngine.Configurables.Module;
@@ -26,6 +27,8 @@ public class TestModule implements Module
 		config_.doesImplement_.put("setup", true);
 		config_.doesImplement_.put("loadWorld", true);
 		
+		config_.doesImplement_.put("drawWorld", true);
+		
 		config_.doesImplement_.put("makePlayer", true);
 		config_.doesImplement_.put("wakePlayer", true);
 		config_.doesImplement_.put("sleepPlayer", false);
@@ -42,7 +45,10 @@ public class TestModule implements Module
 	}
 
 	@Override
-	public void init() {}
+	public void init()
+	{
+		TestInfo.setup();
+	}
 	@SuppressWarnings("rawtypes")
 	@Override
 	public GameServer makeServer()
@@ -64,7 +70,12 @@ public class TestModule implements Module
 		return null;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@Override
+	public void drawWorld(GameWorld world, GameCanvas canvas)
+	{
+		world.getRootEntities().get(0).render(0, 0, canvas);
+	}
+
 	@Override
 	public GameEntity makePlayer(GameServer server, Account account)
 	{
@@ -75,7 +86,7 @@ public class TestModule implements Module
 		
 		return player;
 	}
-	@SuppressWarnings("rawtypes")
+
 	@Override
 	public GameEntity wakePlayer(GameServer server, Account account)
 	{
@@ -86,13 +97,13 @@ public class TestModule implements Module
 		
 		return player;
 	}
-	@SuppressWarnings("rawtypes")
+
 	@Override
 	public GameEntity sleepPlayer(GameServer server, Account account)
 	{
 		return null;
 	}
-	@SuppressWarnings("rawtypes")
+
 	@Override
 	public GameEntity deletePlayer(GameServer server, Account account)
 	{
@@ -107,4 +118,6 @@ public class TestModule implements Module
 	{
 		return null;
 	}
+
+	
 }

@@ -4,7 +4,6 @@
 
 package GameEngine;
 
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 public abstract class GameEntity
@@ -76,5 +75,5 @@ public abstract class GameEntity
 	}
 	
 	public abstract String getName(); // Gets object name
-	public abstract void render(int pX, int pY, Graphics2D g, GraphicsCanvas canvas); // Renders to g @ x, y on screen
+	public abstract void render(int pX, int pY, GameCanvas canvas); // Renders to g @ x, y on screen
 }

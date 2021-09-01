@@ -11,6 +11,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import GameEngine.GameCanvas;
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
 import Net.StateFactory;
@@ -76,6 +77,8 @@ public final class ModuleManager
 		checkDoesImplement("setup", module);
 		checkDoesImplement("loadWorld", module);
 		
+		checkDoesImplement("drawWorld", module);
+		
 		checkDoesImplement("makePlayer", module);
 		checkDoesImplement("wakePlayer", module);
 		checkDoesImplement("sleepPlayer", module);
@@ -131,7 +134,11 @@ public final class ModuleManager
 		return getHighestImplementer("loadWorld").loadWorld(server);
 	}
 	
-	@SuppressWarnings("rawtypes")
+	public static void drawWorld(GameWorld world, GameCanvas canvas)
+	{
+		getHighestImplementer("drawWorld").drawWorld(world, canvas);
+	}
+
 	public static GameEntity makePlayer(GameServer server, Account account)
 	{
 		return getHighestImplementer("makePlayer").makePlayer(server, account);

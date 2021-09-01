@@ -7,33 +7,19 @@ package GameEngine;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.SpringLayout;
-
-import javax.swing.JTextField;
-import javax.swing.border.BevelBorder;
-import javax.swing.JLabel;
-import java.awt.Font;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import GameEngine.Configurables.ConfigManager;
-import GameEngine.Configurables.ModuleManager;
 import GameEngine.PacketTypes.GameDataPacket;
-import Modules.BaseModule.TabPopulator;
-import Modules.MektonCore.Hexmap;
 import Utils.MiscUtils;
 
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame
 {
 	private String command_;
-	private GraphicsCanvas canvas_;
+	private GameCanvas canvas_;
 	private boolean queueUpdateRes_;
 	
-	public void updateUIStuff(GameDataPacket packet) // Updates UI stuff
+	public void checkScale()
 	{
 		float scaleX = getWidth() / ConfigManager.getScreenWidth();
 		if (scaleX < 1) scaleX = 1;
@@ -64,11 +50,10 @@ public class GameFrame extends JFrame
 			
 			queueUpdateRes_ = false;
 		}
-		
-		// TODO bad; Don't mention a module outside of the modules!
-		Hexmap<?> map = (Hexmap<?>) packet.ourView.getEntities().get(packet.currentLocationId);
-		canvas_.setRenderer(map);
-		canvas_.setLayout(null);
+	}
+	public void updateUIStuff(GameDataPacket packet) // Updates UI stuff
+	{	
+		checkScale();
 		canvas_.repaint();
 	}
 	
@@ -108,7 +93,7 @@ public class GameFrame extends JFrame
 		
 		getContentPane().setPreferredSize(new Dimension(ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight()));
 		
-		canvas_ = new GraphicsCanvas();
+		canvas_ = new GameCanvas();
 		canvas_.setBounds(0, 0, ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight());
 		getContentPane().add(canvas_);
 		

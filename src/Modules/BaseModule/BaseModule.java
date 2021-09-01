@@ -4,6 +4,7 @@
 
 package Modules.BaseModule;
 
+import GameEngine.GameCanvas;
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
 import GameEngine.Configurables.Module;
@@ -26,6 +27,8 @@ public class BaseModule implements Module
 		config_.doesImplement_.put("setup", false);
 		config_.doesImplement_.put("loadWorld", false);
 		
+		config_.doesImplement_.put("drawWorld", false);
+		
 		config_.doesImplement_.put("makePlayer", false);
 		config_.doesImplement_.put("wakePlayer", false);
 		config_.doesImplement_.put("sleepPlayer", false);
@@ -39,8 +42,7 @@ public class BaseModule implements Module
 
 	@Override
 	public void init() {}
-	
-	@SuppressWarnings("rawtypes")
+
 	@Override
 	public GameServer makeServer()
 	{
@@ -53,12 +55,19 @@ public class BaseModule implements Module
 		return null;
 	}
 	@Override
-public GameWorld loadWorld(String server)
+	public GameWorld loadWorld(String server)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
+	public void drawWorld(GameWorld world, GameCanvas canvas)
+	{
+		// TODO Auto-generated method stub
+		return;
+	}
+	
 	@SuppressWarnings("rawtypes")
 	@Override
 	public GameEntity makePlayer(GameServer server, Account account)
@@ -99,5 +108,4 @@ public GameWorld loadWorld(String server)
 	{
 		return new HandlerStateFactory();
 	}
-
 }
