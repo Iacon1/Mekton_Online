@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import GameEngine.GameWorld;
+import GameEngine.PacketTypes.LoginPacket;
 import Net.ConnectionPairThread;
 import Net.Server.Server;
 import Utils.JSONManager;
@@ -52,10 +53,10 @@ public abstract class GameServer<A extends Account, T extends ConnectionPairThre
 		saveAccounts();
 		return true; // TODO whitelist / blacklist
 	}
-	public boolean login(String username, String password)
+	public boolean login(String username, LoginPacket packet)
 	{
 		if (accounts_.get(username) == null) return false;
-		else return accounts_.get(username).eqHash(password);
+		else return accounts_.get(username).eqHash(packet);
 	}
 	@SuppressWarnings("unchecked")
 	public A getAccount(String username)

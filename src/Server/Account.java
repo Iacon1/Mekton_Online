@@ -6,6 +6,7 @@ package Server;
 
 import GameEngine.CommandRunner;
 import GameEngine.GameWorld;
+import GameEngine.PacketTypes.LoginPacket;
 
 public abstract class Account implements CommandRunner
 {
@@ -21,13 +22,13 @@ public abstract class Account implements CommandRunner
 		hash = -1;
 	}
 	
-	public void setHash(String password) // Sets the hash
+	public void setHash(LoginPacket packet) // Sets the hash
 	{
-		hash = password.hashCode(); // More secure probably possible
+		hash = packet.getHash(); // More secure probably possible
 	}
-	public boolean eqHash(String password) // Is the given password equal to our hash?
+	public boolean eqHash(LoginPacket packet) // Is the given password equal to our hash?
 	{
-		return password.hashCode() == hash;
+		return packet.eqHash(hash);
 	}
 	
 	@Override

@@ -36,7 +36,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 		
 		Account account = new TestAccount(); // TODO Modularize
 		account.username = packet.username; 
-		account.setHash(packet.password);
+		account.setHash(packet);
 		
 		if (packet.newUser)
 		{
@@ -52,7 +52,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 		}
 		else
 		{
-			loginFeedback_.successful = parentThread.getParent().login(packet.username, packet.password);
+			loginFeedback_.successful = parentThread.getParent().login(packet.username, packet);
 			if (loginFeedback_.successful)
 			{
 				parentThread.setUsername(account.username);

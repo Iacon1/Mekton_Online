@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
 import Client.GameClientThread;
@@ -25,7 +26,7 @@ public class LoginDialog extends JDialog
 	private final JPanel contentPanel = new JPanel();
 	private final JCheckBox newUserBox = new JCheckBox("New user");
 	private final JTextField usernameBox = new JTextField();
-	private final JTextField passwordBox = new JTextField();
+	private final JPasswordField passwordBox = new JPasswordField();
 	private final JLabel usernameLabel = new JLabel("Username");
 	private final JLabel passwordLabel = new JLabel("Password");
 	private final JLabel serverLabel = new JLabel("Login to ");
@@ -39,7 +40,7 @@ public class LoginDialog extends JDialog
 		
 		LoginPacket packet = new LoginPacket();
 		packet.username = usernameBox.getText();
-		packet.password = passwordBox.getText();
+		packet.setHash(new String(passwordBox.getPassword())); // TODO is this the most secure way?
 		packet.newUser = newUserBox.isSelected();
 		
 		send_ = false;
@@ -57,8 +58,7 @@ public class LoginDialog extends JDialog
 	}
 	private void onClickOK() // When OK is pressed
 	{
-		if (usernameBox.getText() != null && passwordBox.getText() != null) send_ = true;
-		
+		if (usernameBox.getText() != null && passwordBox.getPassword().length != 0) send_ = true;
 	}
 	
 	public static void main(GameClientThread thread)

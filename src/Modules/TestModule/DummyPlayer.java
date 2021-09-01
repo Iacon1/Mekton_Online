@@ -27,7 +27,6 @@ public class DummyPlayer extends PhysicalObject
 	@Override
 	public void render(int pX, int pY, GameCanvas canvas)
 	{
-		SoundManager.playSound("Resources/Server Packs/Default/TestSound.WAV");
 		super.render(pX, pY, canvas);
 	}
 }
