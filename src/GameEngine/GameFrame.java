@@ -15,7 +15,6 @@ import Utils.MiscUtils;
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame
 {
-	private String command_;
 	private GameCanvas canvas_;
 	private boolean queueUpdateRes_;
 	
@@ -57,30 +56,9 @@ public class GameFrame extends JFrame
 		canvas_.repaint();
 	}
 	
-	public void resetCommand() // Resets all input elements
-	{
-		command_ = null;
-	}
-	public void setCommand(String command)
-	{
-		command_ = command;
-	}
-	
-	public String getCommand() // Gets input, resets if not empty, returns null if empty
-	{
-		if (command_ == null)
-			return null;
-		else
-		{
-			String command = command_;
-			resetCommand();
-			
-			return command;
-		}
-	}
-	
 	public GameFrame()
 	{		
+		ClientInfo.setFrame(this);
 		queueUpdateRes_ = false;
 		setTitle(MiscUtils.getProgramName() + " Client: Game Window");
 		

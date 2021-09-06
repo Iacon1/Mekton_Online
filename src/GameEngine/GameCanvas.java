@@ -19,7 +19,7 @@ public class GameCanvas extends JPanel
 	// Scales the image; Must be integers
 	// 1x scale size is given by ConfigManager
 	
-	Graphics g_; // TODO hack so we don't have to juggle this in function calls
+	Graphics g_; // TODO This is a hack so we don't have to juggle this in function calls
 	
 	public boolean setScale(float scaleX, float scaleY)
 	{

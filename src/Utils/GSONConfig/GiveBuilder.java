@@ -8,32 +8,24 @@ import com.google.gson.GsonBuilder;
 
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
+import GameEngine.TransSerializable;
 import Modules.MektonCore.HexData;
 import Server.Account;
 
 public final class GiveBuilder
 {
-	public static GsonBuilder giveBuilderNGW() // Evil temp hack TODO change this
+	public static GsonBuilder giveBuilder()
 	{
 		GsonBuilder builder = new GsonBuilder();
-
-		//builder.registerTypeAdapter(GameEntity.class, new AbsAdapter<GameEntity>());
-		//builder.registerTypeAdapter(Account.class, new AbsAdapter<Account>());
-		//builder.registerTypeAdapter(HexData.class, new AbsAdapter<HexData>());
 
 		builder.registerTypeAdapterFactory(new AbsFactory<GameEntity>(GameEntity.class));
 		builder.registerTypeAdapterFactory(new AbsFactory<Account>(Account.class));
 		builder.registerTypeAdapterFactory(new AbsFactory<HexData>(HexData.class));
+		
+		builder.registerTypeAdapterFactory(new TransSerializableAdapter.Factory()); // Issue is that instances
+		builder.registerTypeAdapterFactory(new GameWorldAdapter.Factory());
 		builder.enableComplexMapKeySerialization();
-		//builder.generateNonExecutableJson();
-
-		return builder;
-	}
-	
-	public static GsonBuilder giveBuilder()
-	{
-		GsonBuilder builder = giveBuilderNGW();
-		builder = builder.registerTypeAdapter(GameWorld.class, new GameWorldDeserializer());
+		
 		return builder;
 	}
 }

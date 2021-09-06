@@ -37,8 +37,7 @@ public class MainScreen implements ThreadState<GameClientThread>
 	}
 	public String processOutput(GameClientThread parentThread, boolean mono)
 	{
-		GameFrame frame = (GameFrame) parentThread.getContainer("map");
-		String input = frame.getCommand();
+		String input = ClientInfo.getCommand();
 		if (input != null) // We got input
 			return input;
 		return null;

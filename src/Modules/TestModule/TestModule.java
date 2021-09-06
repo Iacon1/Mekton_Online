@@ -7,6 +7,7 @@ package Modules.TestModule;
 import GameEngine.GameCanvas;
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
+import GameEngine.SolidEntity;
 import GameEngine.Configurables.Module;
 import Modules.BaseModule.BaseServer;
 import Net.StateFactory;

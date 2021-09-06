@@ -4,9 +4,7 @@
 
 package GameEngine;
 
-import java.awt.Graphics2D;
-
-public abstract class PhysicalObject extends GameEntity
+public abstract class PhysicalObject extends SolidEntity
 {
 	private String imagePath_; // Image path
 	private int cTX_; // Offset on image sheet
@@ -32,6 +30,7 @@ public abstract class PhysicalObject extends GameEntity
 		southEast; // +x, +y
 	}
 	
+	public PhysicalObject() {}
 	public PhysicalObject(GameWorld world)
 	{
 		super(world);

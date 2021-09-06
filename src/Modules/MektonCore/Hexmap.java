@@ -1,4 +1,5 @@
-// By Iacon1
+// By
+// Iacon1
 // Created 04/25/2021
 //
 
@@ -6,9 +7,10 @@ package Modules.MektonCore;
 
 import java.util.ArrayList;
 
-import GameEngine.GameEntity;
 import GameEngine.GameWorld;
+import GameEngine.SolidEntity;
 import GameEngine.GameCanvas;
+import GameEngine.GameEntity;
 import GameEngine.GraphicsManager;
 import GameEngine.PhysicalObject;
 import GameEngine.Configurables.ConfigManager;
@@ -21,10 +23,7 @@ public class Hexmap<T extends HexData> extends GameEntity
 	ArrayList<ArrayList<ArrayList<T>>> hexes_; // A set of rows (x/width) of columns (y/length) of pillars (z/height)
 	Instancer<T> instancer_;
 	
-	public Hexmap()
-	{
-	}
-	
+	public Hexmap() {super();}
 	public Hexmap(GameWorld world, T hexTemplate)
 	{
 		super(world);
