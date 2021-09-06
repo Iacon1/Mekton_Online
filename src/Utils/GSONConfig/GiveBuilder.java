@@ -18,9 +18,9 @@ public final class GiveBuilder
 	{
 		GsonBuilder builder = new GsonBuilder();
 
-		builder.registerTypeAdapterFactory(new AbsFactory<GameEntity>(GameEntity.class));
-		builder.registerTypeAdapterFactory(new AbsFactory<Account>(Account.class));
-		builder.registerTypeAdapterFactory(new AbsFactory<HexData>(HexData.class));
+		builder.registerTypeAdapterFactory(new AbsAdapter.Factory<GameEntity>(GameEntity.class));
+		builder.registerTypeAdapterFactory(new AbsAdapter.Factory<Account>(Account.class));
+		builder.registerTypeAdapterFactory(new AbsAdapter.Factory<HexData>(HexData.class));
 		
 		builder.registerTypeAdapterFactory(new TransSerializableAdapter.Factory()); // Issue is that instances
 		builder.registerTypeAdapterFactory(new GameWorldAdapter.Factory());
