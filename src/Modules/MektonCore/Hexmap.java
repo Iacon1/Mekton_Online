@@ -7,7 +7,6 @@ package Modules.MektonCore;
 
 import java.util.ArrayList;
 
-import GameEngine.GameInfo;
 import GameEngine.GameCanvas;
 import GameEngine.GameEntity;
 import GameEngine.GraphicsManager;

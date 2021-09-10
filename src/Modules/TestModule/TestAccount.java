@@ -5,7 +5,6 @@
 package Modules.TestModule;
 
 import GameEngine.GameInfo;
-import GameEngine.SpriteEntity;
 import Modules.MektonCore.HexEntity;
 import Server.Account;
 

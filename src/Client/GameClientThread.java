@@ -7,7 +7,6 @@ package Client;
 import java.awt.Container;
 import java.util.HashMap;
 
-import GameEngine.GameInfo;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.StateGiverModule;
 import GameEngine.PacketTypes.ServerInfoPacket;

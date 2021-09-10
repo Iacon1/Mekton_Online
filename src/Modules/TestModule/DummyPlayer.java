@@ -4,7 +4,6 @@
 
 package Modules.TestModule;
 
-import GameEngine.GameInfo;
 import GameEngine.TransSerializable;
 import GameEngine.Configurables.ConfigManager;
 import Modules.MektonCore.HexEntity;

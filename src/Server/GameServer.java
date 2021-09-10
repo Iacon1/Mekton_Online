@@ -17,7 +17,6 @@ public abstract class GameServer<A extends Account, T extends ConnectionPairThre
 {
 	private HashMap<String, Account> accounts_;
 
-	@SuppressWarnings("unchecked")
 	private void loadAccounts()
 	{
 		accounts_ = new HashMap<String, Account>();
@@ -49,17 +48,10 @@ public abstract class GameServer<A extends Account, T extends ConnectionPairThre
 		saveAccounts();
 		return true; // TODO whitelist / blacklist
 	}
-	public boolean login(String username, String password)
-	{
-		if (accounts_.get(username) == null) return false;
-		else return accounts_.get(username).eqHash(password);
-	}
-	@SuppressWarnings("unchecked")
 	public A getAccount(String username)
 	{
 		return (A) accounts_.get(username);
 	}
-	@SuppressWarnings("unchecked")
 	public ArrayList<A> getAccounts()
 	{
 		ArrayList<A> accountList = new ArrayList<A>();
@@ -70,5 +62,11 @@ public abstract class GameServer<A extends Account, T extends ConnectionPairThre
 		}
 		
 		return accountList;
+	}
+	
+	public boolean login(String username, String password)
+	{
+		if (accounts_.get(username) == null) return false;
+		else return accounts_.get(username).eqHash(password);
 	}
 }

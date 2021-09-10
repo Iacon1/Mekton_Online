@@ -6,12 +6,9 @@ import javax.swing.JFrame;
 
 public class ServerWindow
 {
-	@SuppressWarnings("rawtypes")
 	private static GameServer server_;
 	private JFrame frame;
 
-
-	@SuppressWarnings("rawtypes")
 	public static void main(GameServer server)
 	{
 		server_ = server;

@@ -6,11 +6,13 @@ package Net;
 
 import Utils.Logging;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.IOException;
 import java.net.*;
 
 import GameEngine.Configurables.ConfigManager;
-
-import java.io.*;
 
 public abstract class ConnectionPairThread extends Thread
 {
@@ -63,7 +65,6 @@ public abstract class ConnectionPairThread extends Thread
 	
 	private boolean inputRun(boolean loop) // Run by inThread_; Returns false if no input was gotten
 	{
-		//Logging.logNotice("Thread started: " + Thread.currentThread().getName());
 		while (running_ && runningI_)
 		{
 			
@@ -86,8 +87,6 @@ public abstract class ConnectionPairThread extends Thread
 	}
 	private void outputRun(boolean loop) // Run by outThread_
 	{
-		long checkO, cap;
-		//Logging.logNotice("Thread started: " + Thread.currentThread().getName());
 		while (running_ && runningO_)
 		{			
 			String output = null;

@@ -38,7 +38,6 @@ public class ServerStartDialog extends JDialog
 		catch (Exception e) {Logging.logException(e);}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void onClickOK() // When OK is pressed
 	{
 		Integer value = (Integer) portSpinner.getValue();

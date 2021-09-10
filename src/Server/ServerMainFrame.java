@@ -34,7 +34,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 @SuppressWarnings("serial")
 public class ServerMainFrame extends JFrame
 {	
-	@SuppressWarnings("rawtypes")
 	private static GameServer server_;
 	private DefaultTreeModel model;
 	private final Timer timer = new Timer();
@@ -158,7 +157,6 @@ public class ServerMainFrame extends JFrame
 			}
 		}
 	}
-	@SuppressWarnings("unchecked")
 	private void updatePlayersList()
 	{
 		String text = "<html>";
@@ -181,7 +179,6 @@ public class ServerMainFrame extends JFrame
 		}
 	}
 	
-	@SuppressWarnings("rawtypes")
 	public static void main(GameServer server)
 	{
 		server_ = server;
@@ -199,7 +196,6 @@ public class ServerMainFrame extends JFrame
 		});
 	}
 
-	@SuppressWarnings("rawtypes")
 	public ServerMainFrame(GameServer server)
 	{
 		if (server != null) server_ = server;

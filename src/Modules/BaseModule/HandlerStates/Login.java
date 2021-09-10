@@ -1,9 +1,7 @@
 package Modules.BaseModule.HandlerStates;
 
-import Client.GameClientThread;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
-import GameEngine.Configurables.ModuleTypes.StateGiverModule;
 import Modules.BaseModule.ClientHandlerThread;
 import Modules.BaseModule.PacketTypes.LoginFeedbackPacket;
 import Modules.BaseModule.PacketTypes.LoginPacket;

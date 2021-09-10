@@ -4,8 +4,6 @@
 
 package Modules.TestModule;
 
-import GameEngine.GameInfo;
-
 import Modules.MektonCore.Hexmap;
 
 public class TestHexmap extends Hexmap<TestHexData>

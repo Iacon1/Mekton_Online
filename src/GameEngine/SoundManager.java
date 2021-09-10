@@ -4,15 +4,15 @@
 
 package GameEngine;
 
-import java.awt.Image;
-import java.awt.Toolkit;
+
 import java.io.File;
 import java.util.HashMap;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.Clip;
 
 import Utils.Logging;
-import Utils.MiscUtils;
 
 public final class SoundManager
 {

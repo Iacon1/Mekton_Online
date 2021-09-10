@@ -4,16 +4,11 @@
 
 package Modules.BaseModule;
 
-import GameEngine.GameCanvas;
-import GameEngine.GameEntity;
-import GameEngine.GameInfo;
 import GameEngine.Configurables.ModuleTypes.Module;
 import GameEngine.Configurables.ModuleTypes.StateGiverModule;
 import Modules.BaseModule.ClientStates.ClientStateFactory;
 import Modules.BaseModule.HandlerStates.HandlerStateFactory;
 import Net.StateFactory;
-import Server.Account;
-import Server.GameServer;
 
 public class BaseModule implements Module, StateGiverModule
 {

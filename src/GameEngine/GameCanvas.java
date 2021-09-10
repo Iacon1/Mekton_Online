@@ -9,8 +9,10 @@ import javax.swing.JPanel;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.GraphicsHandlerModule;
 
-import java.awt.*;
-import java.text.AttributedCharacterIterator;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 
 @SuppressWarnings("serial")
 public class GameCanvas extends JPanel

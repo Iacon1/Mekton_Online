@@ -32,7 +32,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
-@SuppressWarnings({ "serial", "unused" })
+@SuppressWarnings("serial")
 public class GetServerFrame extends JFrame
 {
 	private static class SavedServer
@@ -56,7 +56,6 @@ public class GetServerFrame extends JFrame
 	private ArrayList<SavedServer> savedServerArray_;
 	// Functionality
 	
-	@SuppressWarnings("unchecked")
 	private void populateList() // Populates savedServerList from file
 	{
 		savedServerArray_ = (ArrayList<SavedServer>) JSONManager.deserializeCollectionJSONList(MiscUtils.readText("Local Data/Client/SavedServers.JSON"), ArrayList.class, SavedServer.class);

@@ -9,7 +9,6 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 
-import GameEngine.GameEntity;
 import Utils.Logging;
 
 public class AdapterDelegator // Simply cleans up some of the code in CustomJAdapter by handling delegation
@@ -28,7 +27,6 @@ public class AdapterDelegator // Simply cleans up some of the code in CustomJAda
 		return gson_.getDelegateAdapter(factory_, type);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public <J> TypeAdapter<J> getAdapter(String typeName)
 	{
 		try

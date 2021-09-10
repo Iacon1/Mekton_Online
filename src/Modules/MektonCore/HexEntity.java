@@ -4,7 +4,6 @@
 
 package Modules.MektonCore;
 
-import GameEngine.GameInfo;
 import GameEngine.SpriteEntity;
 
 public abstract class HexEntity extends SpriteEntity

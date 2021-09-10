@@ -9,7 +9,6 @@ import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
@@ -134,7 +133,6 @@ public final class MiscUtils
 		return string;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static <T> String arrayToString(ArrayList<T> array, String sep)
 	{
 		return arrayToString((T[]) array.toArray(), sep);

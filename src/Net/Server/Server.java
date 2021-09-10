@@ -5,7 +5,8 @@
 package Net.Server;
 
 import Net.ConnectionPairThread;
-import Utils.*;
+import Utils.Logging;
+import Utils.MiscUtils;
 
 // TODO these are all dummy values
 public abstract class Server<T extends ConnectionPairThread>

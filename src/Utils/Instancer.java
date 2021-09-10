@@ -13,7 +13,6 @@ public class Instancer<T>
 		template_ = template;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public Class<T> getInstClass()
 	{
 		return (Class<T>) template_.getClass();

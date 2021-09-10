@@ -11,13 +11,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import GameEngine.GameCanvas;
-import GameEngine.GameEntity;
-import GameEngine.GameInfo;
 import GameEngine.Configurables.ModuleTypes.Module;
-import Net.StateFactory;
-import Server.Account;
-import Server.GameServer;
 import Utils.Logging;
 import Utils.MiscUtils;
 
@@ -48,8 +42,7 @@ public final class ModuleManager
 		
 		return moduleList;
 	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+
 	private static void loadModule(String path, String moduleFile) throws Exception
 	{
 		// TODO this doesn't actually work?
