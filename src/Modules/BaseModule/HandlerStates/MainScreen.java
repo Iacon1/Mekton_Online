@@ -8,6 +8,7 @@ import Modules.BaseModule.ClientHandlerThread;
 import Modules.BaseModule.PacketTypes.GameDataPacket;
 import Net.StateFactory;
 import Net.ThreadState;
+import Utils.JSONManager;
 import Utils.Logging;
 
 public class MainScreen implements ThreadState<ClientHandlerThread>
@@ -33,7 +34,7 @@ public class MainScreen implements ThreadState<ClientHandlerThread>
 	public String processOutput(ClientHandlerThread parentThread, boolean mono)
 	{
 		GameDataPacket packet = new GameDataPacket();
-		return packet.toJSON();
+		return JSONManager.serializeJSON(packet);
 	}
 
 	@Override

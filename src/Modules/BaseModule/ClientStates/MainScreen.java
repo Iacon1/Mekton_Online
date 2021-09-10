@@ -10,6 +10,7 @@ import GameEngine.GameInfo;
 import Modules.BaseModule.PacketTypes.GameDataPacket;
 import Net.StateFactory;
 import Net.ThreadState;
+import Utils.JSONManager;
 
 public class MainScreen implements ThreadState<GameClientThread>
 {
@@ -29,8 +30,7 @@ public class MainScreen implements ThreadState<GameClientThread>
 
 	public void processInput(String input, GameClientThread parentThread, boolean mono)
 	{
-		GameDataPacket packet = new GameDataPacket();
-		packet = (GameDataPacket) packet.fromJSON(input);
+		GameDataPacket packet = JSONManager.deserializeJSON(input, GameDataPacket.class);
 		GameInfo.setWorld(packet.ourView);
 		GameFrame frame = (GameFrame) parentThread.getContainer("main");
 		frame.updateUIStuff();

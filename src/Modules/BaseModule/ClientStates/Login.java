@@ -10,6 +10,7 @@ import Modules.BaseModule.PacketTypes.LoginFeedbackPacket;
 import Modules.BaseModule.PacketTypes.LoginPacket;
 import Net.StateFactory;
 import Net.ThreadState;
+import Utils.JSONManager;
 import Utils.MiscUtils;
 
 public class Login implements ThreadState<GameClientThread>
@@ -30,8 +31,8 @@ public class Login implements ThreadState<GameClientThread>
 
 	public void processInput(String input, GameClientThread parentThread, boolean mono)
 	{
-		LoginFeedbackPacket packet = new LoginFeedbackPacket();
-		packet = (LoginFeedbackPacket) packet.fromJSON(input);
+		LoginFeedbackPacket packet = JSONManager.deserializeJSON(input, LoginFeedbackPacket.class);
+		
 		successful_ = packet.successful;
 		if (successful_)
 		{
@@ -54,7 +55,7 @@ public class Login implements ThreadState<GameClientThread>
 			parentThread.close();
 		LoginPacket packet = dialog.getPacket();
 		if (packet != null)
-			return packet.toJSON();
+			return JSONManager.serializeJSON(packet);
 		else return null;
 	}
 

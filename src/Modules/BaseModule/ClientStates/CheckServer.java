@@ -5,6 +5,7 @@ import GameEngine.PacketTypes.ClientInfoPacket;
 import GameEngine.PacketTypes.ServerInfoPacket;
 import Net.StateFactory;
 import Net.ThreadState;
+import Utils.JSONManager;
 import Utils.MiscUtils;
 
 public class CheckServer implements ThreadState<GameClientThread>
@@ -25,12 +26,10 @@ public class CheckServer implements ThreadState<GameClientThread>
 	@Override
 	public void processInputTrio(String input, GameClientThread parentThread)
 	{
-		ServerInfoPacket packet = new ServerInfoPacket();
-		packet = (ServerInfoPacket) packet.fromJSON(input);
+		ServerInfoPacket packet = JSONManager.deserializeJSON(input, ServerInfoPacket.class);
 		
-		parentThread.setInfo(packet);
 		
-		if (parentThread.getSocket() == null || packet == null || !packet.version.equals(MiscUtils.getVersion()))
+		if (packet == null)
 		{
 			result_ = 2;
 			while (result_ != 3);
@@ -38,10 +37,21 @@ public class CheckServer implements ThreadState<GameClientThread>
 		}
 		else
 		{
-			result_ = 1;
-			while (result_ != 3);
-			parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class)));
-		}
+			parentThread.setInfo(packet);
+			
+			if (parentThread.getSocket() == null || !packet.version.equals(MiscUtils.getVersion()))
+			{
+				result_ = 2;
+				while (result_ != 3);
+				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(BadServer.class)));
+			}
+			else
+			{
+				result_ = 1;
+				while (result_ != 3);
+				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class)));
+			}
+		}		
 	}	
 	@Override
 	public String processOutputTrio(GameClientThread parentThread)
@@ -53,7 +63,7 @@ public class CheckServer implements ThreadState<GameClientThread>
 			result_ = 3;
 			ClientInfoPacket packet = new ClientInfoPacket();
 			packet.version = MiscUtils.getVersion();
-			return packet.toJSON();
+			return JSONManager.serializeJSON(packet);
 		}
 		else if (result_ == 2)
 		{
@@ -67,20 +77,27 @@ public class CheckServer implements ThreadState<GameClientThread>
 	@Override
 	public void processInputMono(String input, GameClientThread parentThread)
 	{
-		ServerInfoPacket packet = new ServerInfoPacket();
-		packet = (ServerInfoPacket) packet.fromJSON(input);
+		ServerInfoPacket packet = JSONManager.deserializeJSON(input, ServerInfoPacket.class);
 		
-		parentThread.setInfo(packet);
-		
-		if (parentThread.getSocket() == null || packet == null || !packet.version.equals(MiscUtils.getVersion()))
+		if (packet == null)
 		{
 			result_ = 2;
 			parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(BadServer.class)));
 		}
 		else
 		{
-			result_ = 1;
-			parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class)));
+			parentThread.setInfo(packet);
+			
+			if (parentThread.getSocket() == null || !packet.version.equals(MiscUtils.getVersion()))
+			{
+				result_ = 2;
+				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(BadServer.class)));
+			}
+			else
+			{
+				result_ = 1;
+				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class)));
+			}
 		}
 	}
 	@Override
@@ -93,7 +110,7 @@ public class CheckServer implements ThreadState<GameClientThread>
 			result_ = 3;
 			ClientInfoPacket packet = new ClientInfoPacket();
 			packet.version = MiscUtils.getVersion();
-			return packet.toJSON();
+			return JSONManager.serializeJSON(packet);
 		}
 		else if (result_ == 2)
 		{

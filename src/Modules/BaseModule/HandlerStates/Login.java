@@ -11,6 +11,7 @@ import Modules.TestModule.TestAccount;
 import Net.StateFactory;
 import Net.ThreadState;
 import Server.Account;
+import Utils.JSONManager;
 import Utils.Logging;
 import Utils.MiscUtils;
 
@@ -34,8 +35,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 	{
 		if (send_) return; // Don't take more packets while still giving feedback on one
 		
-		LoginPacket packet = new LoginPacket();
-		packet = (LoginPacket) packet.fromJSON(input);
+		LoginPacket packet = JSONManager.deserializeJSON(input, LoginPacket.class);
 		
 		Account account = new TestAccount(); // TODO Modularize
 		account.username = packet.username; 
@@ -74,7 +74,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 		{
 			send_ = false;
 			if (loginFeedback_.successful) parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(MainScreen.class)));
-			return loginFeedback_.toJSON();
+			return JSONManager.serializeJSON(loginFeedback_);
 		}
 		else return null;
 	}
