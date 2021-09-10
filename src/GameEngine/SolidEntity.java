@@ -45,6 +45,6 @@ public abstract class SolidEntity extends GameEntity
 	
 	public final void registerKeyEvent() // Activates key listeners
 	{
-		ClientInfo.getFrame().addKeyListener(gameKeyListener_);
+//		ClientInfo.getFrame().addKeyListener(gameKeyListener_);
 	}
 }

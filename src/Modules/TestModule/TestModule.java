@@ -48,7 +48,6 @@ public class TestModule implements Module
 	@Override
 	public void init()
 	{
-		TestInfo.setup();
 	}
 	@SuppressWarnings("rawtypes")
 	@Override

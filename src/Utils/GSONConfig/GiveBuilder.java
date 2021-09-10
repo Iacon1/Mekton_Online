@@ -23,7 +23,7 @@ public final class GiveBuilder
 		builder.registerTypeAdapterFactory(new AbsAdapter.Factory<HexData>(HexData.class));
 		
 		builder.registerTypeAdapterFactory(new TransSerializableAdapter.Factory()); // Issue is that instances
-		builder.registerTypeAdapterFactory(new GameWorldAdapter.Factory());
+//		builder.registerTypeAdapterFactory(new GameWorldAdapter.Factory());
 		builder.enableComplexMapKeySerialization();
 		
 		return builder;
