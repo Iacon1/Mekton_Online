@@ -9,12 +9,13 @@ import GameEngine.GraphicsManager;
 import GameEngine.KeyBindingManager;
 import GameEngine.ClientInfo;
 import GameEngine.GameCanvas;
-import GameEngine.PhysicalObject;
+import GameEngine.SpriteEntity;
 import GameEngine.SoundManager;
 import GameEngine.TransSerializable;
 import GameEngine.Configurables.ConfigManager;
+import Modules.MektonCore.HexEntity;
 
-public class DummyPlayer extends PhysicalObject implements TransSerializable
+public class DummyPlayer extends HexEntity implements TransSerializable
 {	
 	public DummyPlayer(GameWorld world)
 	{
@@ -27,29 +28,6 @@ public class DummyPlayer extends PhysicalObject implements TransSerializable
 	{
 		return "Dummy Player";
 	}
-	@Override
-	public void render(int pX, int pY, GameCanvas canvas)
-	{
-		super.render(pX, pY, canvas);
-	}
-
-	@Override
-	public void onKeyPress(int key)
-	{
-		if (key == KeyBindingManager.getBinding("MOVE_NORTH")) ClientInfo.setCommand("move n");
-	}
-	
-	@Override
-	public void onClick(boolean inBounds, boolean left)
-	{
-		
-	}
-
-	@Override
-	public void onKeyRelease(int key)
-	{
-		
-	}
 
 	@Override
 	public void preSerialize() {}
@@ -57,6 +35,5 @@ public class DummyPlayer extends PhysicalObject implements TransSerializable
 	@Override
 	public void postDeserialize()
 	{
-		if (ClientInfo.isClient()) registerKeyEvent();
 	}
 }

@@ -8,11 +8,10 @@ package Modules.MektonCore;
 import java.util.ArrayList;
 
 import GameEngine.GameWorld;
-import GameEngine.SolidEntity;
 import GameEngine.GameCanvas;
 import GameEngine.GameEntity;
 import GameEngine.GraphicsManager;
-import GameEngine.PhysicalObject;
+import GameEngine.SpriteEntity;
 import GameEngine.Configurables.ConfigManager;
 import Utils.Instancer;
 import Utils.Logging;
@@ -90,11 +89,11 @@ public class Hexmap<T extends HexData> extends GameEntity
 		
 		return zSlice;
 	}
-	public PhysicalObject findEntity(int x, int y, int z) // returns a game instance at that position if available
+	public SpriteEntity findEntity(int x, int y, int z) // returns a game instance at that position if available
 	{
 		for (int i = 0; i < childrenIds_.size(); ++i)
 		{
-			PhysicalObject obj = (PhysicalObject) getChild(i); // Please only put physical objects in here
+			HexEntity obj = (HexEntity) getChild(i); // Please only put physical objects in here
 			if (obj.getX() == x && obj.getY() == y && obj.getZ() == z)
 				return obj;
 		}
@@ -145,7 +144,7 @@ public class Hexmap<T extends HexData> extends GameEntity
 					int cTY = hex.tY_ * hexHeight;
 					
 					canvas.drawImageScaled(GraphicsManager.getImage(hex.tileset_), pX + cX, pY + cY, cTX, cTY, hexWidth, hexHeight);
-					PhysicalObject instance = findEntity(i, j, k);
+					SpriteEntity instance = findEntity(i, j, k);
 					if (instance != null)
 						instance.render(pX + cX, pY + cY, canvas);
 				}
