@@ -6,7 +6,6 @@ package Modules.MektonCore;
 
 public abstract class HexData
 {
-	public String tileset_; // Image name
 	public int tX_; // Tileset offset X
 	public int tY_; // Tileset offset Y
 }

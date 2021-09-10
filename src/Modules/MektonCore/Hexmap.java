@@ -20,17 +20,27 @@ import Utils.MiscUtils;
 
 public class Hexmap<T extends HexData> extends GameEntity
 {	
-	ArrayList<ArrayList<ArrayList<T>>> hexes_; // A set of rows (x/width) of columns (y/length) of pillars (z/height)
-	Instancer<T> instancer_;
+	private String tileset_; // Tileset
+	private ArrayList<ArrayList<ArrayList<T>>> hexes_; // A set of rows (x/width) of columns (y/length) of pillars (z/height)
+	private Instancer<T> instancer_;
 	
-	public Hexmap() {super();}
-	public Hexmap(GameWorld world, T hexTemplate)
+	public Hexmap()
 	{
-		super(world);
+		super();
+		hexes_ = new ArrayList<ArrayList<ArrayList<T>>>();
+		instancer_ = null;
+	}
+	public Hexmap(String tileset, T hexTemplate)
+	{
+		tileset_ = tileset;
 		hexes_ = new ArrayList<ArrayList<ArrayList<T>>>();
 		instancer_ = new Instancer<T>(hexTemplate);
 	}
 
+	public void setTileset(String tileset)
+	{
+		tileset_ = tileset;
+	}
 	public void setDimensions(int x, int y, int z) // Sets new dimensions for map
 	{
 		hexes_ = MiscUtils.resizeArrayList(hexes_, x);
@@ -144,7 +154,7 @@ public class Hexmap<T extends HexData> extends GameEntity
 					int cTX = hex.tX_ * hexWidth;
 					int cTY = hex.tY_ * hexHeight;
 					
-					canvas.drawImageScaled(GraphicsManager.getImage(hex.tileset_), pX + cX, pY + cY, cTX, cTY, hexWidth, hexHeight);
+					canvas.drawImageScaled(GraphicsManager.getImage(tileset_), pX + cX, pY + cY, cTX, cTY, hexWidth, hexHeight);
 					PhysicalObject instance = findEntity(i, j, k);
 					if (instance != null)
 						instance.render(pX + cX, pY + cY, canvas);
@@ -152,5 +162,9 @@ public class Hexmap<T extends HexData> extends GameEntity
 			}
 			shift = !shift;
 		}
+	}
+	@Override
+	public void cleanup()
+	{
 	}
 }

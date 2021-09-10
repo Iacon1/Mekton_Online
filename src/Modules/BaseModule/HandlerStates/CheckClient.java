@@ -5,6 +5,7 @@
 package Modules.BaseModule.HandlerStates;
 
 import GameEngine.PacketTypes.ClientInfoPacket;
+import GameEngine.PacketTypes.Packet;
 import GameEngine.PacketTypes.ServerInfoPacket;
 import Modules.BaseModule.ClientHandlerThread;
 import Net.StateFactory;
@@ -31,8 +32,7 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 	{
 		if (sent_)
 		{
-			ClientInfoPacket packet = new ClientInfoPacket();
-			packet = (ClientInfoPacket) packet.fromJSON(input);
+			ClientInfoPacket packet = Packet.fromJSON(input, ClientInfoPacket.class);
 			if (packet == null || !packet.version.equals(MiscUtils.getVersion())) // We don't actually care about this client anymore
 			{
 				if (packet == null) Logging.logError("Client " + parentThread.getSocket().getInetAddress() + " tried to connect<br> but failed to send a info packet.");

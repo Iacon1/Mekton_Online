@@ -9,9 +9,6 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 
-import GameEngine.ClientInfo;
-import Utils.Logging;
-
 public abstract class DelegatingFactory<T> implements TypeAdapterFactory
 {	
 	private Class<T> oClass_;
@@ -30,8 +27,7 @@ public abstract class DelegatingFactory<T> implements TypeAdapterFactory
 
 		if (oClass_.isAssignableFrom(inClass))
 		{
-			try {return getAdapter(delegator, type);}
-			catch (Exception e) {Logging.logException(e); return null;}
+			return getAdapter(delegator, type);
 		}
 		else return null;
 	}

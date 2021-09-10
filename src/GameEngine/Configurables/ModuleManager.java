@@ -125,9 +125,9 @@ public final class ModuleManager
 		return getHighestImplementer("makeServer").makeServer();
 	}
 
-	public static GameWorld setup()
+	public static void setup()
 	{
-		return getHighestImplementer("setup").setup();
+		getHighestImplementer("setup").setup();
 	}
 	public static GameWorld loadWorld(String server)
 	{

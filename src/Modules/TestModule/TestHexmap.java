@@ -4,15 +4,14 @@
 
 package Modules.TestModule;
 
-import GameEngine.GameWorld;
 import Modules.MektonCore.Hexmap;
 
 public class TestHexmap extends Hexmap<TestHexData>
 {
 
-	public TestHexmap(GameWorld gameWorld, TestHexData testHexData)
+	public TestHexmap(String tileset, TestHexData testHexData)
 	{
-		super(gameWorld, testHexData);
+		super(tileset, testHexData);
 	}
 	public TestHexmap()
 	{

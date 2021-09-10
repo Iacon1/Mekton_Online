@@ -5,20 +5,17 @@
 package Modules.TestModule;
 
 import GameEngine.GameWorld;
-import GameEngine.GraphicsManager;
 import GameEngine.KeyBindingManager;
-import GameEngine.ClientInfo;
 import GameEngine.GameCanvas;
 import GameEngine.PhysicalObject;
-import GameEngine.SoundManager;
 import GameEngine.TransSerializable;
 import GameEngine.Configurables.ConfigManager;
 
 public class DummyPlayer extends PhysicalObject implements TransSerializable
 {	
-	public DummyPlayer(GameWorld world)
+	public DummyPlayer()
 	{
-		super(world);
+		super();
 		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, ConfigManager.getHexWidth(), ConfigManager.getHexHeight());
 	}
 	
@@ -36,7 +33,7 @@ public class DummyPlayer extends PhysicalObject implements TransSerializable
 	@Override
 	public void onKeyPress(int key)
 	{
-		if (key == KeyBindingManager.getBinding("MOVE_NORTH")) ClientInfo.setCommand("move n");
+		if (key == KeyBindingManager.getBinding("MOVE_NORTH")) GameWorld.setCommand("move n");
 	}
 	
 	@Override
@@ -57,6 +54,6 @@ public class DummyPlayer extends PhysicalObject implements TransSerializable
 	@Override
 	public void postDeserialize()
 	{
-		if (ClientInfo.isClient()) registerKeyEvent();
+		if (GameWorld.isClient()) registerListeners();
 	}
 }

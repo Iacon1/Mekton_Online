@@ -8,6 +8,8 @@ package GameEngine;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class SolidEntity extends GameEntity
 {
@@ -15,7 +17,8 @@ public abstract class SolidEntity extends GameEntity
 	public abstract void onKeyPress(int key); // When a key is pressed
 	public abstract void onKeyRelease(int key); // When a key is pressed
 	
-	private class GameKeyListener implements KeyListener
+	private static transient List<SolidEntity> entities_ = new ArrayList<SolidEntity>();
+	private static class GameKeyListener implements KeyListener
 	{
 		@Override
 	    public void keyTyped(KeyEvent e) {} // ?
@@ -23,28 +26,37 @@ public abstract class SolidEntity extends GameEntity
 	    @Override
 	    public void keyPressed(KeyEvent e)
 	    {
-	    	onKeyPress(e.getKeyCode());
+	    	for (int i = 0; i < entities_.size(); ++i) entities_.get(i).onKeyPress(e.getKeyCode());
 	    }
 
 	    @Override
 	    public void keyReleased(KeyEvent e)
 	    {
-	        onKeyRelease(e.getKeyCode());
+	    	for (int i = 0; i < entities_.size(); ++i) entities_.get(i).onKeyRelease(e.getKeyCode());
 	    }
 	}
-	private GameKeyListener gameKeyListener_ = new GameKeyListener();
 	
-	public SolidEntity() {super();}
-	public SolidEntity(GameWorld world)
+	private static GameKeyListener gameKeyListener_;
+	private static boolean registered_;
+
+	public SolidEntity()
 	{
-		super(world);
+		super();
+	}
+	
+	public static final void registerListeners() // Activates key listeners
+	{
+		if (!registered_)
+		{
+			if (GameWorld.isClient()) GameWorld.getFrame().addKeyListener(gameKeyListener_);	
+			
+			registered_ = true;
+		}
 	}
 	
 	@Override
-	public abstract String getName();
-	
-	public final void registerKeyEvent() // Activates key listeners
+	public void cleanup()
 	{
-		ClientInfo.getFrame().addKeyListener(gameKeyListener_);
+		entities_.remove(this);
 	}
 }

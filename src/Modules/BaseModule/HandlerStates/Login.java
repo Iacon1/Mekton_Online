@@ -4,6 +4,7 @@ import Client.GameClientThread;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.PacketTypes.LoginFeedbackPacket;
 import GameEngine.PacketTypes.LoginPacket;
+import GameEngine.PacketTypes.Packet;
 import Modules.BaseModule.ClientHandlerThread;
 import Modules.TestModule.TestAccount;
 import Net.StateFactory;
@@ -31,8 +32,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 	{
 		if (send_) return; // Don't take more packets while still giving feedback on one
 		
-		LoginPacket packet = new LoginPacket();
-		packet = (LoginPacket) packet.fromJSON(input);
+		LoginPacket packet = Packet.fromJSON(input, LoginPacket.class);
 		
 		Account account = new TestAccount(); // TODO Modularize
 		account.username = packet.username; 

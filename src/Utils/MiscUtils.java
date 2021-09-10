@@ -9,8 +9,9 @@ import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -133,12 +134,8 @@ public final class MiscUtils
 		for (int i = 0; i < array.length; ++i) string = string + array[i].toString() + sep;
 		return string;
 	}
-	
-	@SuppressWarnings("unchecked")
 	public static <T> String arrayToString(ArrayList<T> array, String sep)
 	{
 		return arrayToString((T[]) array.toArray(), sep);
 	}
-	
-	
 }

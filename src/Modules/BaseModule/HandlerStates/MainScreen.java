@@ -4,10 +4,12 @@
 
 package Modules.BaseModule.HandlerStates;
 
+import GameEngine.GameWorld;
 import GameEngine.PacketTypes.GameDataPacket;
 import Modules.BaseModule.ClientHandlerThread;
 import Net.StateFactory;
 import Net.ThreadState;
+import Utils.JSONManager;
 import Utils.Logging;
 
 public class MainScreen implements ThreadState<ClientHandlerThread>
@@ -33,8 +35,9 @@ public class MainScreen implements ThreadState<ClientHandlerThread>
 	public String processOutput(ClientHandlerThread parentThread, boolean mono)
 	{
 		GameDataPacket packet = new GameDataPacket();
-		packet.viewWorld(parentThread.getParent().gameWorld_);
-		return packet.toJSON();
+		packet.viewWorld();
+		if (GameWorld.getWorld() != null) GameWorld.getWorld().cleanupEntities();
+		return JSONManager.serializeJSON(GameWorld.getWorld().getEntities().get(0)); // packet);
 	}
 
 	@Override

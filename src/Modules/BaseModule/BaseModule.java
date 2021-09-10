@@ -49,11 +49,10 @@ public class BaseModule implements Module
 		return null;
 	}
 	@Override
-	public GameWorld setup()
+	public void setup()
 	{
-		// TODO Auto-generated method stub
-		return null;
 	}
+	
 	@Override
 	public GameWorld loadWorld(String server)
 	{

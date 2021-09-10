@@ -9,6 +9,7 @@ import javax.swing.UIManager;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.Configurables.ModuleManager;
 import Utils.Logging;
+import Utils.GSONConfig.TestGSON;
 
 public class ServerExec
 {
@@ -17,7 +18,6 @@ public class ServerExec
 	{
 		//Logging.setLogger(new DebugLogger());
 		Logging.setLogger(new ServerLogger());
-		
 		try
 		{
 			ConfigManager.init(null);
