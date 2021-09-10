@@ -27,7 +27,9 @@ public abstract class DelegatingFactory<T> implements TypeAdapterFactory
 	{
 		Class<J> inClass = (Class<J>) type.getRawType();
 		AdapterDelegator delegator = new AdapterDelegator(gson, this);
-
+		
+		if (ClientInfo.isClient())
+			Logging.logNotice("Here");
 		if (oClass_.isAssignableFrom(inClass))
 		{
 			try {return getAdapter(delegator, type);}
