@@ -16,7 +16,7 @@ public class BaseServer<A extends Account> extends GameServer<A, ClientHandlerTh
 		ClientHandlerThread thread = new ClientHandlerThread();
 		thread.setParent(this);
 		
-		ModuleManager.setup();
+		gameWorld_ = ModuleManager.setup();
 	}
 	
 	
@@ -41,6 +41,6 @@ public class BaseServer<A extends Account> extends GameServer<A, ClientHandlerTh
 	
 	public void runCommand(String username, String command)
 	{
-		getAccount(username).runCommand(command.split(" "));
+		getAccount(username).runCommand(gameWorld_, command.split(" "));
 	}
 }

@@ -2,7 +2,6 @@ package Modules.BaseModule.ClientStates;
 
 import Client.GameClientThread;
 import GameEngine.PacketTypes.ClientInfoPacket;
-import GameEngine.PacketTypes.Packet;
 import GameEngine.PacketTypes.ServerInfoPacket;
 import Net.StateFactory;
 import Net.ThreadState;
@@ -26,7 +25,8 @@ public class CheckServer implements ThreadState<GameClientThread>
 	@Override
 	public void processInputTrio(String input, GameClientThread parentThread)
 	{
-		ServerInfoPacket packet = Packet.fromJSON(input, ServerInfoPacket.class);
+		ServerInfoPacket packet = new ServerInfoPacket();
+		packet = (ServerInfoPacket) packet.fromJSON(input);
 		
 		parentThread.setInfo(packet);
 		
@@ -67,7 +67,8 @@ public class CheckServer implements ThreadState<GameClientThread>
 	@Override
 	public void processInputMono(String input, GameClientThread parentThread)
 	{
-		ServerInfoPacket packet = Packet.fromJSON(input, ServerInfoPacket.class);
+		ServerInfoPacket packet = new ServerInfoPacket();
+		packet = (ServerInfoPacket) packet.fromJSON(input);
 		
 		parentThread.setInfo(packet);
 		

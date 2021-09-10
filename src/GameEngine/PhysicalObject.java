@@ -6,15 +6,15 @@ package GameEngine;
 
 public abstract class PhysicalObject extends SolidEntity
 {
-	private String imagePath_ = null; // Image path
-	private int cTX_ = 0; // Offset on image sheet
-	private int cTY_ = 0; // Offset on image sheet
-	private int width_ = 0; // Width in pixels
-	private int height_ = 0; // Height in pixels
+	private String imagePath_; // Image path
+	private int cTX_; // Offset on image sheet
+	private int cTY_; // Offset on image sheet
+	private int width_; // Width in pixels
+	private int height_; // Height in pixels
 	
-	private int x_ = 0; // X (of top-front-left corner) on map
-	private int y_ = 0; // Y (of top-front-left corner) on map
-	private int z_ = 0; // Z (of top-front-left corner) on map
+	private int x_; // X (of top-front-left corner) on map
+	private int y_; // Y (of top-front-left corner) on map
+	private int z_; // Z (of top-front-left corner) on map
 	
 	public enum Direction
 	{
@@ -29,10 +29,11 @@ public abstract class PhysicalObject extends SolidEntity
 		southWest, // -x, +y
 		southEast; // +x, +y
 	}
-
-	public PhysicalObject()
+	
+	public PhysicalObject() {}
+	public PhysicalObject(GameWorld world)
 	{
-		super();
+		super(world);
 	}
 	
 	public int getX()

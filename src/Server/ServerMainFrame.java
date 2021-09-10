@@ -12,11 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import GameEngine.GameEntity;
-import GameEngine.GameWorld;
 import GameEngine.Configurables.ConfigManager;
 import Utils.Logging;
 import Utils.MiscUtils;
-import Utils.GSONConfig.TestGSON;
 
 import javax.swing.JTabbedPane;
 import javax.swing.JScrollPane;
@@ -123,12 +121,12 @@ public class ServerMainFrame extends JFrame
 	private void updateObjectsTree() // Updates objectTree
 	{
 		DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) model.getRoot();
-		for (int i = 0; i < Math.max(rootNode.getChildCount(), GameWorld.getWorld().getRootEntities().size()); ++i)
+		for (int i = 0; i < Math.max(rootNode.getChildCount(), server_.gameWorld_.getRootEntities().size()); ++i)
 		{
 			GameEntity instance;
 			InstanceNode node;
 			
-			try {instance = GameWorld.getWorld().getRootEntities().get(i);}
+			try {instance = server_.gameWorld_.getRootEntities().get(i);}
 			catch (Exception e) {instance = null;}
 			try {node = (InstanceNode) rootNode.getChildAt(i);}
 			catch (Exception e) {node = null;}
@@ -179,7 +177,6 @@ public class ServerMainFrame extends JFrame
 			updateLogs();
 			updateObjectsTree();
 			updatePlayersList();
-			TestGSON.test(); // TODO remove when not needed
 		}
 	}
 	

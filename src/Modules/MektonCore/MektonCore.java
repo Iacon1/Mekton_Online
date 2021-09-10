@@ -56,8 +56,10 @@ public class MektonCore implements Module
 		return null;
 	}
 	@Override
-	public void setup()
+	public GameWorld setup()
 	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

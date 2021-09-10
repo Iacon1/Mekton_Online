@@ -49,7 +49,7 @@ public interface Module
 	
 	@SuppressWarnings("rawtypes")
 	public GameServer makeServer(); // Sets up the server (not what's in the server!)
-	public void setup(); // Sets up a new world; Only used the first time the server is run
+	public GameWorld setup(); // Sets up a new world; Only used the first time the server is run
 	public GameWorld loadWorld(String server); // Loads a saved world
 	
 	public void drawWorld(GameWorld world, GameCanvas canvas); // Draws the world

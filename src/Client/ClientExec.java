@@ -5,7 +5,7 @@
 package Client;
 
 import Utils.*;
-import GameEngine.GameWorld;
+import GameEngine.ClientInfo;
 import GameEngine.DebugLogger;
 import GameEngine.GraphicsManager;
 import GameEngine.SoundManager;
@@ -22,7 +22,7 @@ public class ClientExec
 		Logging.setLogger(new DebugLogger());
 		GraphicsManager.init();
 		SoundManager.init();
-		GameWorld.setClient(true);
+		ClientInfo.setClient(true);
 		try
 		{
 			ConfigManager.init("Default");

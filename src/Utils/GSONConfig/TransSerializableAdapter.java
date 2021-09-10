@@ -36,8 +36,7 @@ public class TransSerializableAdapter<T> extends DelegatingAdapter<T>
 	@Override
 	public T read(JsonReader in) throws IOException
 	{
-		TypeAdapter<?> adapter = delegator_.getAdapter(type_);
-		TransSerializable data = (TransSerializable) adapter.read(in); // Deserialize
+		TransSerializable data = (TransSerializable) delegator_.getAdapter(type_).read(in); // Deserialize
 		data.postDeserialize();
 		
 	    return (T) data;

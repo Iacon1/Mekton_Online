@@ -48,8 +48,8 @@ public class TestModule implements Module
 	@Override
 	public void init()
 	{
+		TestInfo.setup();
 	}
-	
 	@SuppressWarnings("rawtypes")
 	@Override
 	public GameServer makeServer()
@@ -57,11 +57,12 @@ public class TestModule implements Module
 		return new BaseServer<TestAccount>();
 	}
 	@Override
-	public void setup()
+	public GameWorld setup()
 	{
-		GameWorld.setWorld(new GameWorld()); // Todo make better
-		TestHexmap map = new TestHexmap("Resources/Server Packs/Default/Tilesets/DummyTileset.png", new TestHexData());
+		GameWorld gameWorld = new GameWorld();
+		TestHexmap map = new TestHexmap(gameWorld, new TestHexData());
 		map.setDimensions(18, 9, 1);
+		return gameWorld;
 	}
 
 	@Override
@@ -79,9 +80,9 @@ public class TestModule implements Module
 	@Override
 	public GameEntity makePlayer(GameServer server, Account account)
 	{
-		DummyPlayer player = new DummyPlayer(); // Adds a guy to the map
+		DummyPlayer player = new DummyPlayer(server.gameWorld_); // Adds a guy to the map
 		account.possessee = player.getId();
-		GameWorld.getWorld().getRootEntities().get(0).addChild(player);
+		server.gameWorld_.getRootEntities().get(0).addChild(player);
 		player.setPos(2, 2, 0);
 		
 		return player;
@@ -90,9 +91,9 @@ public class TestModule implements Module
 	@Override
 	public GameEntity wakePlayer(GameServer server, Account account)
 	{
-		DummyPlayer player = new DummyPlayer(); // Adds a guy to the map
+		DummyPlayer player = new DummyPlayer(server.gameWorld_); // Adds a guy to the map
 		account.possessee = player.getId();
-		GameWorld.getWorld().getRootEntities().get(0).addChild(player);
+		server.gameWorld_.getRootEntities().get(0).addChild(player);
 		player.setPos(2, 2, 0);
 		
 		return player;

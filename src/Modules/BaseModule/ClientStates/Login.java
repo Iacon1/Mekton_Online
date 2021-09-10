@@ -7,7 +7,6 @@ package Modules.BaseModule.ClientStates;
 import Client.GameClientThread;
 import GameEngine.PacketTypes.LoginFeedbackPacket;
 import GameEngine.PacketTypes.LoginPacket;
-import GameEngine.PacketTypes.Packet;
 import Modules.BaseModule.ClientFrames.LoginDialog;
 import Net.StateFactory;
 import Net.ThreadState;
@@ -30,7 +29,8 @@ public class Login implements ThreadState<GameClientThread>
 
 	public void processInput(String input, GameClientThread parentThread, boolean mono)
 	{
-		LoginFeedbackPacket packet = Packet.fromJSON(input, LoginFeedbackPacket.class);
+		LoginFeedbackPacket packet = new LoginFeedbackPacket();
+		packet = (LoginFeedbackPacket) packet.fromJSON(input);
 		successful_ = packet.successful;
 		if (successful_)
 		{

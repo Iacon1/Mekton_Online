@@ -5,16 +5,11 @@
 package Modules.BaseModule.ClientStates;
 
 import Client.GameClientThread;
-import GameEngine.GameWorld;
-import GameEngine.GameEntity;
+import GameEngine.ClientInfo;
 import GameEngine.GameFrame;
 import GameEngine.PacketTypes.GameDataPacket;
-import GameEngine.PacketTypes.Packet;
-import Modules.TestModule.DummyPlayer;
-import Modules.TestModule.TestHexmap;
 import Net.StateFactory;
 import Net.ThreadState;
-import Utils.JSONManager;
 
 public class MainScreen implements ThreadState<GameClientThread>
 {
@@ -34,15 +29,15 @@ public class MainScreen implements ThreadState<GameClientThread>
 
 	public void processInput(String input, GameClientThread parentThread, boolean mono)
 	{
-		TestHexmap e = JSONManager.deserializeJSON(input, TestHexmap.class);
-//		GameDataPacket packet = JSONManager.deserializeJSON(input, GameDataPacket.class);
-//		GameWorld.setWorld(packet.ourView);
+		GameDataPacket packet = new GameDataPacket();
+		packet = (GameDataPacket) packet.fromJSON(input);
+		ClientInfo.setWorld(packet.ourView);
 		GameFrame frame = (GameFrame) parentThread.getContainer("map");
-//		frame.updateUIStuff(packet);
+		frame.updateUIStuff(packet);
 	}
 	public String processOutput(GameClientThread parentThread, boolean mono)
 	{
-		String input = GameWorld.getCommand();
+		String input = ClientInfo.getCommand();
 		if (input != null) // We got input
 			return input;
 		return null;

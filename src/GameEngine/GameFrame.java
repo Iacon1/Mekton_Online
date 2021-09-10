@@ -58,7 +58,7 @@ public class GameFrame extends JFrame
 	
 	public GameFrame()
 	{		
-		GameWorld.setFrame(this);
+		ClientInfo.setFrame(this);
 		queueUpdateRes_ = false;
 		setTitle(MiscUtils.getProgramName() + " Client: Game Window");
 		

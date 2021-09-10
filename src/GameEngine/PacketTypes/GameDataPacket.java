@@ -6,8 +6,6 @@ package GameEngine.PacketTypes;
 
 import GameEngine.GameEntity;
 import GameEngine.GameWorld;
-import Utils.JSONManager;
-import Utils.Logging;
 
 public class GameDataPacket extends Packet
 {
@@ -21,10 +19,10 @@ public class GameDataPacket extends Packet
 		return true; // TODO how to determine
 	}
 	
-	public void viewWorld() // Converts the global game world into the client data
+	public void viewWorld(GameWorld world) // Converts the global game world into the client data
 	{
-		try {ourView = GameWorld.getWorld().clone();}
-		catch (Exception e) {Logging.logException(e);}
+		ourView = world;
+	
 		/*for (int i = 0; i < ourView.getEntities().size(); ++i)
 		{
 			if (!isNeccessary(ourView.getEntities().get(i)))

@@ -7,9 +7,10 @@ package Utils.GSONConfig;
 import com.google.gson.GsonBuilder;
 
 import GameEngine.GameEntity;
+import GameEngine.GameWorld;
+import GameEngine.TransSerializable;
 import Modules.MektonCore.HexData;
 import Server.Account;
-import GameEngine.PacketTypes.Packet;
 
 public final class GiveBuilder
 {
@@ -17,15 +18,13 @@ public final class GiveBuilder
 	{
 		GsonBuilder builder = new GsonBuilder();
 
-		builder.registerTypeAdapterFactory(new TransSerializableAdapter.Factory());
-		
 		builder.registerTypeAdapterFactory(new AbsAdapter.Factory<GameEntity>(GameEntity.class));
 		builder.registerTypeAdapterFactory(new AbsAdapter.Factory<Account>(Account.class));
 		builder.registerTypeAdapterFactory(new AbsAdapter.Factory<HexData>(HexData.class));
-		//builder.registerTypeAdapterFactory(new AbsAdapter.Factory<Packet>(Packet.class));
 		
+		builder.registerTypeAdapterFactory(new TransSerializableAdapter.Factory()); // Issue is that instances
+		builder.registerTypeAdapterFactory(new GameWorldAdapter.Factory());
 		builder.enableComplexMapKeySerialization();
-		builder.serializeNulls();
 		
 		return builder;
 	}
