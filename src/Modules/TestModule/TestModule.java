@@ -7,65 +7,49 @@ package Modules.TestModule;
 import GameEngine.GameCanvas;
 import GameEngine.GameEntity;
 import GameEngine.GameInfo;
-import GameEngine.Configurables.Module;
+import GameEngine.Configurables.ModuleTypes.GraphicsHandlerModule;
+import GameEngine.Configurables.ModuleTypes.Module;
+import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
+import GameEngine.Configurables.ModuleTypes.ServerMakingModule;
+import GameEngine.Configurables.ModuleTypes.WorldMakingModule;
 import Modules.BaseModule.BaseServer;
 import Net.StateFactory;
 import Server.Account;
 
 import Server.GameServer;
 
-public class TestModule implements Module
+public class TestModule implements Module, WorldMakingModule, ServerMakingModule, GraphicsHandlerModule, PlayerHandlerModule
 {
-	private ModuleConfig config_;
-	
-	
-	public TestModule()
-	{
-		config_ = new ModuleConfig();
-		
-		config_.doesImplement_.put("makeServer", true);
-		config_.doesImplement_.put("setup", true);
-		config_.doesImplement_.put("loadWorld", true);
-		
-		config_.doesImplement_.put("drawWorld", true);
-		
-		config_.doesImplement_.put("makePlayer", true);
-		config_.doesImplement_.put("wakePlayer", true);
-		config_.doesImplement_.put("sleepPlayer", false);
-		config_.doesImplement_.put("deletePlayer", false);
-		
-		config_.doesImplement_.put("clientFactory", false);
-		config_.doesImplement_.put("handlerFactory", false);
-	}
-	
 	@Override
-	public ModuleConfig getConfig()
+	public ModuleConfig getModuleConfig()
 	{
-		return config_;
+		ModuleConfig config = new ModuleConfig();
+		
+		return config;
 	}
 
 	@Override
-	public void init()
+	public void initModule()
 	{
 	}
-	@SuppressWarnings("rawtypes")
+
 	@Override
 	public GameServer makeServer()
 	{
 		return new BaseServer<TestAccount>();
 	}
+	
 	@Override
-	public void setup()
+	public void newWorld()
 	{
 		GameInfo.setWorld(new GameInfo.GameWorld());
 		TestHexmap map = new TestHexmap(new TestHexData());
 		map.setDimensions(18, 9, 1);
 	}
-
 	@Override
-	public GameInfo loadWorld(String server)
+	public void loadWorld(String server)
 	{
-		return null;
+		return;
 	}
 
 	@Override
@@ -84,7 +68,6 @@ public class TestModule implements Module
 		
 		return player;
 	}
-
 	@Override
 	public GameEntity wakePlayer(Account account)
 	{
@@ -95,27 +78,14 @@ public class TestModule implements Module
 		
 		return player;
 	}
-
 	@Override
 	public GameEntity sleepPlayer(Account account)
 	{
 		return null;
 	}
-
 	@Override
 	public GameEntity deletePlayer(Account account)
 	{
 		return null;
-	}
-
-	public StateFactory clientFactory()
-	{
-		return null;
-	}
-	public StateFactory handlerFactory()
-	{
-		return null;
-	}
-
-	
+	}	
 }

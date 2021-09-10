@@ -7,6 +7,7 @@ package Modules.BaseModule;
 import Utils.*;
 import GameEngine.GameEntity;
 import GameEngine.Configurables.ModuleManager;
+import GameEngine.Configurables.ModuleTypes.StateGiverModule;
 import Net.StateFactory;
 import Net.StatefulConnectionPairThread;
 import Server.Account;
@@ -32,7 +33,7 @@ public class ClientHandlerThread extends StatefulConnectionPairThread
 	public ClientHandlerThread()
 	{
 		super();
-		stateFactory_ = ModuleManager.handlerFactory();
+		stateFactory_ = ModuleManager.getHighestOfType(StateGiverModule.class).handlerFactory();
 		initState(stateFactory_.getState(0));
 	}
 	@SuppressWarnings("rawtypes")

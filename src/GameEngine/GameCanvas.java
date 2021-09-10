@@ -7,6 +7,7 @@ package GameEngine;
 import javax.swing.JPanel;
 
 import GameEngine.Configurables.ModuleManager;
+import GameEngine.Configurables.ModuleTypes.GraphicsHandlerModule;
 
 import java.awt.*;
 import java.text.AttributedCharacterIterator;
@@ -33,7 +34,7 @@ public class GameCanvas extends JPanel
 	{
 		super.paintComponent(g);
 		g_ = g;
-		ModuleManager.drawWorld(this);
+		ModuleManager.getHighestOfType(GraphicsHandlerModule.class).drawWorld(this);
 		drawText("Hello", "MicrogrammaNormalFix.TTF", GraphicsManager.getColor(255, 0, 0), 0, 0, 32);
 		g_ = null;
 	}

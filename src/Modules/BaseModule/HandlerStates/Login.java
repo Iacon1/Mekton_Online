@@ -2,6 +2,8 @@ package Modules.BaseModule.HandlerStates;
 
 import Client.GameClientThread;
 import GameEngine.Configurables.ModuleManager;
+import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
+import GameEngine.Configurables.ModuleTypes.StateGiverModule;
 import GameEngine.PacketTypes.LoginFeedbackPacket;
 import GameEngine.PacketTypes.LoginPacket;
 import Modules.BaseModule.ClientHandlerThread;
@@ -48,7 +50,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 				parentThread.setUsername(account.username);
 				Logging.logNotice("Client " + parentThread.getSocket().getInetAddress() + " has made account \"" + parentThread.getUsername() + "\".");
 				
-				ModuleManager.makePlayer(parentThread.getAccount());
+				ModuleManager.getHighestOfType(PlayerHandlerModule.class).makePlayer(parentThread.getAccount());
 			}
 		}
 		else
@@ -59,7 +61,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 				parentThread.setUsername(account.username);
 				Logging.logNotice("Client " + parentThread.getSocket().getInetAddress() + " has logged in as account \"" + parentThread.getUsername() + "\".");
 				
-				ModuleManager.wakePlayer(parentThread.getAccount());
+				ModuleManager.getHighestOfType(PlayerHandlerModule.class).makePlayer(parentThread.getAccount());
 			}
 		}
 		

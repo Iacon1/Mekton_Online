@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import GameEngine.GameInfo;
 import GameEngine.Configurables.ModuleManager;
+import GameEngine.Configurables.ModuleTypes.StateGiverModule;
 import GameEngine.PacketTypes.ServerInfoPacket;
 import Net.StateFactory;
 import Net.StatefulConnectionPairThread;
@@ -24,7 +25,7 @@ public class GameClientThread extends StatefulConnectionPairThread
 	public GameClientThread()
 	{
 		super();
-		stateFactory_ = ModuleManager.clientFactory();
+		stateFactory_ = ModuleManager.getHighestOfType(StateGiverModule.class).clientFactory();
 		containers_ = new HashMap<String, Container>();
 		initState(stateFactory_.getState(0));
 	}
