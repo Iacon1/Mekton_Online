@@ -4,8 +4,8 @@
 
 package Modules.BaseModule.HandlerStates;
 
-import GameEngine.PacketTypes.GameDataPacket;
 import Modules.BaseModule.ClientHandlerThread;
+import Modules.BaseModule.PacketTypes.GameDataPacket;
 import Net.StateFactory;
 import Net.ThreadState;
 import Utils.Logging;

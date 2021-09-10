@@ -10,7 +10,7 @@ import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
 import Client.GameClientThread;
-import GameEngine.PacketTypes.LoginPacket;
+import Modules.BaseModule.PacketTypes.LoginPacket;
 import Utils.Logging;
 import Utils.MiscUtils;
 import javax.swing.SpringLayout;
@@ -40,7 +40,7 @@ public class LoginDialog extends JDialog
 		
 		LoginPacket packet = new LoginPacket();
 		packet.username = usernameBox.getText();
-		packet.setHash(new String(passwordBox.getPassword())); // TODO is this the most secure way?
+		packet.myPassword = new String(passwordBox.getPassword()); // TODO is this the most secure way?
 		packet.newUser = newUserBox.isSelected();
 		
 		send_ = false;

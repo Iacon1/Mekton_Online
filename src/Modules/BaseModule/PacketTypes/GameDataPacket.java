@@ -2,11 +2,12 @@
 // Created 04/27/2021
 // Data given to a player on update
 
-package GameEngine.PacketTypes;
+package Modules.BaseModule.PacketTypes;
 
 import GameEngine.GameEntity;
 import GameEngine.GameInfo;
 import GameEngine.TransSerializable;
+import GameEngine.PacketTypes.Packet;
 
 public class GameDataPacket extends Packet implements TransSerializable
 {

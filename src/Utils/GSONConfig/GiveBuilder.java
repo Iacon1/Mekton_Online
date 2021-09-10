@@ -7,9 +7,8 @@ package Utils.GSONConfig;
 import com.google.gson.GsonBuilder;
 
 import GameEngine.GameEntity;
-import GameEngine.GameInfo;
-import GameEngine.TransSerializable;
-import Modules.MektonCore.HexData;
+import GameEngine.Configurables.ModuleManager;
+import GameEngine.Configurables.ModuleTypes.GSONModule;
 import Server.Account;
 
 public final class GiveBuilder
@@ -20,10 +19,12 @@ public final class GiveBuilder
 
 		builder.registerTypeAdapterFactory(new AbsFactory<GameEntity>(GameEntity.class));
 		builder.registerTypeAdapterFactory(new AbsFactory<Account>(Account.class));
-		builder.registerTypeAdapterFactory(new AbsFactory<HexData>(HexData.class));
 		
-		builder.registerTypeAdapterFactory(new TransSerializableAdapter.Factory()); // Issue is that instances
-//		builder.registerTypeAdapterFactory(new GameWorldAdapter.Factory());
+		builder.registerTypeAdapterFactory(new TransSerializableAdapter.Factory());
+		
+		GSONModule module = ModuleManager.getHighestOfType(GSONModule.class);
+		if (module != null) module.addToBuilder(builder);
+		
 		builder.enableComplexMapKeySerialization();
 		
 		return builder;

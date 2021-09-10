@@ -4,9 +4,9 @@ import Client.GameClientThread;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
 import GameEngine.Configurables.ModuleTypes.StateGiverModule;
-import GameEngine.PacketTypes.LoginFeedbackPacket;
-import GameEngine.PacketTypes.LoginPacket;
 import Modules.BaseModule.ClientHandlerThread;
+import Modules.BaseModule.PacketTypes.LoginFeedbackPacket;
+import Modules.BaseModule.PacketTypes.LoginPacket;
 import Modules.TestModule.TestAccount;
 import Net.StateFactory;
 import Net.ThreadState;
@@ -39,7 +39,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 		
 		Account account = new TestAccount(); // TODO Modularize
 		account.username = packet.username; 
-		account.setHash(packet);
+		account.setHash(packet.myPassword);
 		
 		if (packet.newUser)
 		{
@@ -55,7 +55,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 		}
 		else
 		{
-			loginFeedback_.successful = parentThread.getParent().login(packet.username, packet);
+			loginFeedback_.successful = parentThread.getParent().login(packet.username, packet.myPassword);
 			if (loginFeedback_.successful)
 			{
 				parentThread.setUsername(account.username);

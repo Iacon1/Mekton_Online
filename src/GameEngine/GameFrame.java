@@ -9,7 +9,6 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 
 import GameEngine.Configurables.ConfigManager;
-import GameEngine.PacketTypes.GameDataPacket;
 import Utils.MiscUtils;
 
 @SuppressWarnings("serial")
@@ -50,7 +49,7 @@ public class GameFrame extends JFrame
 			queueUpdateRes_ = false;
 		}
 	}
-	public void updateUIStuff(GameDataPacket packet) // Updates UI stuff
+	public void updateUIStuff() // Updates UI stuff
 	{	
 		checkScale();
 		canvas_.repaint();

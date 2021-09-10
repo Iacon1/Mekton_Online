@@ -5,9 +5,9 @@
 package Modules.BaseModule.ClientStates;
 
 import Client.GameClientThread;
-import GameEngine.PacketTypes.LoginFeedbackPacket;
-import GameEngine.PacketTypes.LoginPacket;
 import Modules.BaseModule.ClientFrames.LoginDialog;
+import Modules.BaseModule.PacketTypes.LoginFeedbackPacket;
+import Modules.BaseModule.PacketTypes.LoginPacket;
 import Net.StateFactory;
 import Net.ThreadState;
 import Utils.MiscUtils;

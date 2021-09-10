@@ -2,7 +2,9 @@
 // Created 05/10/2021
 // Contains whether it worked or not
 
-package GameEngine.PacketTypes;
+package Modules.BaseModule.PacketTypes;
+
+import GameEngine.PacketTypes.Packet;
 
 public class LoginFeedbackPacket extends Packet
 {

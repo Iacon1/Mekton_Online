@@ -68,7 +68,7 @@ public class AbsFactory<T> implements TypeAdapterFactory
 		}
 	}
 	
-	AbsFactory(Class<T> superClass)
+	public AbsFactory(Class<T> superClass)
 	{
 		superClass_ = superClass;
 	}

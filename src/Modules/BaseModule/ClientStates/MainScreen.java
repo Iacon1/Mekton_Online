@@ -7,7 +7,7 @@ package Modules.BaseModule.ClientStates;
 import Client.GameClientThread;
 import GameEngine.GameFrame;
 import GameEngine.GameInfo;
-import GameEngine.PacketTypes.GameDataPacket;
+import Modules.BaseModule.PacketTypes.GameDataPacket;
 import Net.StateFactory;
 import Net.ThreadState;
 
@@ -33,7 +33,7 @@ public class MainScreen implements ThreadState<GameClientThread>
 		packet = (GameDataPacket) packet.fromJSON(input);
 		GameInfo.setWorld(packet.ourView);
 		GameFrame frame = (GameFrame) parentThread.getContainer("main");
-		frame.updateUIStuff(packet);
+		frame.updateUIStuff();
 	}
 	public String processOutput(GameClientThread parentThread, boolean mono)
 	{

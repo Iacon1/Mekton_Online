@@ -5,6 +5,8 @@
 
 package GameEngine.Configurables.ModuleTypes;
 
+import com.google.gson.GsonBuilder;
+
 public interface Module
 {
 	public static class ModuleConfig
