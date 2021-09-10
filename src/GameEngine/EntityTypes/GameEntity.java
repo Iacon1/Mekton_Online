@@ -2,9 +2,12 @@
 // Created 04/22/2021
 // Objects in the game state (not character sheets!)
 
-package GameEngine;
+package GameEngine.EntityTypes;
 
 import java.util.ArrayList;
+
+import GameEngine.GameCanvas;
+import GameEngine.GameInfo;
 
 
 public abstract class GameEntity
@@ -14,12 +17,12 @@ public abstract class GameEntity
 
 	public int getId()
 	{
-		return GameInfo.getWorld().instances_.indexOf(this);
+		return GameInfo.getWorld().findEntity(this);
 	}
 	
 	public GameEntity()
 	{
-		if (GameInfo.getWorld() != null) GameInfo.getWorld().instances_.add(this);
+		if (GameInfo.getWorld() != null) GameInfo.getWorld().addEntity(this);
 		// This seems dumb, but note if it's ever null then it will likely be replaced by a new world that already contains us
 		this.parentId_ = -1;
 		childrenIds_ = new ArrayList<Integer>();
@@ -27,7 +30,7 @@ public abstract class GameEntity
 	
 	public static GameEntity getEntity(int id)
 	{
-		return GameInfo.getWorld().instances_.get(id);
+		return GameInfo.getWorld().getEntity(id);
 	}
 	
 	public GameEntity getParent() // Gets parent object; Returns null if none

@@ -8,10 +8,10 @@ package Modules.MektonCore;
 import java.util.ArrayList;
 
 import GameEngine.GameCanvas;
-import GameEngine.GameEntity;
-import GameEngine.GraphicsManager;
-import GameEngine.SpriteEntity;
 import GameEngine.Configurables.ConfigManager;
+import GameEngine.EntityTypes.GameEntity;
+import GameEngine.EntityTypes.SpriteEntity;
+import GameEngine.Managers.GraphicsManager;
 import Utils.Instancer;
 import Utils.Logging;
 import Utils.MiscUtils;

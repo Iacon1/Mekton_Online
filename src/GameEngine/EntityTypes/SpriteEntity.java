@@ -2,7 +2,10 @@
 // Created 04/26/2021
 // An object with a presence on a map
 
-package GameEngine;
+package GameEngine.EntityTypes;
+
+import GameEngine.GameCanvas;
+import GameEngine.Managers.GraphicsManager;
 
 public abstract class SpriteEntity extends GameEntity
 {

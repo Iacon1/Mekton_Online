@@ -4,9 +4,9 @@
 
 package Modules.BaseModule;
 
-import GameEngine.GameEntity;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.StateGiverModule;
+import GameEngine.EntityTypes.GameEntity;
 import Net.StateFactory;
 import Net.StatefulConnectionPairThread;
 import Server.Account;

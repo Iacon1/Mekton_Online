@@ -2,7 +2,7 @@
 // Created 09/02/2021
 // Contains key bindings
 
-package GameEngine;
+package GameEngine.Managers;
 
 import java.awt.event.KeyEvent;
 import java.util.HashMap;

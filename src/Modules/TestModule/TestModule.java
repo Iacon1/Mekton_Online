@@ -5,13 +5,13 @@
 package Modules.TestModule;
 
 import GameEngine.GameCanvas;
-import GameEngine.GameEntity;
 import GameEngine.GameInfo;
 import GameEngine.Configurables.ModuleTypes.GraphicsHandlerModule;
 import GameEngine.Configurables.ModuleTypes.Module;
 import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
 import GameEngine.Configurables.ModuleTypes.ServerMakingModule;
 import GameEngine.Configurables.ModuleTypes.WorldMakingModule;
+import GameEngine.EntityTypes.GameEntity;
 import Modules.BaseModule.BaseServer;
 import Server.Account;
 

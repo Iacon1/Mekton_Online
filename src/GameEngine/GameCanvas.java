@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.GraphicsHandlerModule;
+import GameEngine.Managers.GraphicsManager;
 
 import java.awt.Color;
 import java.awt.Font;

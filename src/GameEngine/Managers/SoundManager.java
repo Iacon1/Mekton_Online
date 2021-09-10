@@ -2,7 +2,7 @@
 // Created 09/01/2021
 // Sound Manager
 
-package GameEngine;
+package GameEngine.Managers;
 
 
 import java.io.File;

@@ -11,8 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import GameEngine.TransSerializable;
-
+import GameEngine.EntityTypes.TransSerializable;
 import Utils.GSONConfig.Delegation.AdapterDelegator;
 import Utils.GSONConfig.Delegation.DelegatingAdapter;
 import Utils.GSONConfig.Delegation.DelegatingFactory;

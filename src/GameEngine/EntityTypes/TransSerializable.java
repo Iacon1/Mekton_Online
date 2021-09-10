@@ -3,7 +3,7 @@
 // preSerialize runs before serialization
 // postSerialize runs after deserialization
 
-package GameEngine;
+package GameEngine.EntityTypes;
 
 public interface TransSerializable
 {

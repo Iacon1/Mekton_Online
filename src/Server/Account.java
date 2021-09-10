@@ -4,7 +4,7 @@
 
 package Server;
 
-import GameEngine.CommandRunner;
+import GameEngine.EntityTypes.CommandRunner;
 
 public abstract class Account implements CommandRunner
 {

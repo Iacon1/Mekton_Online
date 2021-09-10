@@ -4,9 +4,9 @@
 
 package Modules.BaseModule.PacketTypes;
 
-import GameEngine.GameEntity;
 import GameEngine.GameInfo;
-import GameEngine.TransSerializable;
+import GameEngine.EntityTypes.GameEntity;
+import GameEngine.EntityTypes.TransSerializable;
 import GameEngine.PacketTypes.Packet;
 
 public class GameDataPacket extends Packet implements TransSerializable

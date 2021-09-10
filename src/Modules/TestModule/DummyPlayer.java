@@ -4,8 +4,8 @@
 
 package Modules.TestModule;
 
-import GameEngine.TransSerializable;
 import GameEngine.Configurables.ConfigManager;
+import GameEngine.EntityTypes.TransSerializable;
 import Modules.MektonCore.HexEntity;
 
 public class DummyPlayer extends HexEntity implements TransSerializable

@@ -11,9 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import GameEngine.GameEntity;
 import GameEngine.GameInfo;
 import GameEngine.Configurables.ConfigManager;
+import GameEngine.EntityTypes.GameEntity;
 import Utils.Logging;
 import Utils.MiscUtils;
 

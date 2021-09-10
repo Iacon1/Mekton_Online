@@ -4,12 +4,12 @@
 
 package Client;
 
-import GameEngine.DebugLogger;
 import GameEngine.GameInfo;
-import GameEngine.GraphicsManager;
-import GameEngine.SoundManager;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.Configurables.ModuleManager;
+import GameEngine.Managers.GraphicsManager;
+import GameEngine.Managers.SoundManager;
+import Utils.DebugLogger;
 import Utils.Logging;
 
 import javax.swing.UIManager;

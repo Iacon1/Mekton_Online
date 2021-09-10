@@ -2,7 +2,7 @@
 // Created 04/25/2021
 // Manages graphics with Graphics2D
 
-package GameEngine;
+package GameEngine.Managers;
 
 import java.util.HashMap;
 import java.awt.Color;

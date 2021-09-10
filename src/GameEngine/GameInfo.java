@@ -6,6 +6,8 @@ package GameEngine;
 
 import java.util.ArrayList;
 
+import GameEngine.EntityTypes.GameEntity;
+
 public class GameInfo
 {
 	// Things that might need to be communicated
@@ -15,6 +17,19 @@ public class GameInfo
 		public GameWorld()
 		{
 			instances_ = new ArrayList<GameEntity>();
+		}
+		
+		public void addEntity(GameEntity entity)
+		{
+			instances_.add(entity);
+		}
+		public int findEntity(GameEntity entity)
+		{
+			return instances_.indexOf(entity);
+		}
+		public GameEntity getEntity(int id)
+		{
+			return instances_.get(id);
 		}
 		
 		public ArrayList<GameEntity> getRootEntities() // Returns every instance with no parent

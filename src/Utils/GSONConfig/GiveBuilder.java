@@ -6,9 +6,9 @@ package Utils.GSONConfig;
 
 import com.google.gson.GsonBuilder;
 
-import GameEngine.GameEntity;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.GSONModule;
+import GameEngine.EntityTypes.GameEntity;
 import Server.Account;
 
 public final class GiveBuilder

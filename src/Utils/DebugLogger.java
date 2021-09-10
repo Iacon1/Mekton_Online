@@ -2,9 +2,7 @@
 // Created 04/25/2021
 // Debug logger
 
-package GameEngine;
-
-import Utils.Logger;
+package Utils;
 
 public class DebugLogger implements Logger
 {
