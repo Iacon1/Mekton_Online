@@ -15,7 +15,7 @@ public abstract class SpriteEntity extends GameEntity
 
 	
 	public SpriteEntity() {}
-	public SpriteEntity(GameWorld world)
+	public SpriteEntity(GameInfo world)
 	{
 		super(world);
 	}

@@ -7,7 +7,7 @@ package Utils.GSONConfig;
 import com.google.gson.GsonBuilder;
 
 import GameEngine.GameEntity;
-import GameEngine.GameWorld;
+import GameEngine.GameInfo;
 import GameEngine.TransSerializable;
 import Modules.MektonCore.HexData;
 import Server.Account;

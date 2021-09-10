@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import GameEngine.GameWorld;
+import GameEngine.GameInfo;
 import GameEngine.PacketTypes.LoginPacket;
 import Net.ConnectionPairThread;
 import Net.Server.Server;
@@ -34,7 +34,7 @@ public abstract class GameServer<A extends Account, T extends ConnectionPairThre
 		MiscUtils.saveText("Local Data/Server/Accounts.json", JSONManager.serializeJSON(accounts_));
 	}
 	
-	public GameWorld gameWorld_;
+	public GameInfo gameWorld_;
 	
 	public GameServer(T template)
 	{	

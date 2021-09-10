@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 import GameEngine.GameCanvas;
 import GameEngine.GameEntity;
-import GameEngine.GameWorld;
+import GameEngine.GameInfo;
 import Net.StateFactory;
 import Server.Account;
 import Server.GameServer;
@@ -125,16 +125,16 @@ public final class ModuleManager
 		return getHighestImplementer("makeServer").makeServer();
 	}
 
-	public static GameWorld setup()
+	public static GameInfo setup()
 	{
 		return getHighestImplementer("setup").setup();
 	}
-	public static GameWorld loadWorld(String server)
+	public static GameInfo loadWorld(String server)
 	{
 		return getHighestImplementer("loadWorld").loadWorld(server);
 	}
 	
-	public static void drawWorld(GameWorld world, GameCanvas canvas)
+	public static void drawWorld(GameInfo world, GameCanvas canvas)
 	{
 		getHighestImplementer("drawWorld").drawWorld(world, canvas);
 	}

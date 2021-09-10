@@ -4,7 +4,7 @@
 
 package Modules.TestModule;
 
-import GameEngine.GameWorld;
+import GameEngine.GameInfo;
 import GameEngine.SpriteEntity;
 import Modules.MektonCore.HexEntity;
 import Server.Account;
@@ -13,7 +13,7 @@ public class TestAccount extends Account
 {
 
 	@Override
-	public void runCommand(GameWorld world, String[] params)
+	public void runCommand(GameInfo world, String[] params)
 	{
 		{
 			switch (params[0])

@@ -4,20 +4,14 @@
 
 package Modules.TestModule;
 
-import GameEngine.GameWorld;
-import GameEngine.GraphicsManager;
-import GameEngine.KeyBindingManager;
-import GameEngine.ClientInfo;
-import GameEngine.GameCanvas;
-import GameEngine.SpriteEntity;
-import GameEngine.SoundManager;
+import GameEngine.GameInfo;
 import GameEngine.TransSerializable;
 import GameEngine.Configurables.ConfigManager;
 import Modules.MektonCore.HexEntity;
 
 public class DummyPlayer extends HexEntity implements TransSerializable
 {	
-	public DummyPlayer(GameWorld world)
+	public DummyPlayer(GameInfo world)
 	{
 		super(world);
 		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, ConfigManager.getHexWidth(), ConfigManager.getHexHeight());

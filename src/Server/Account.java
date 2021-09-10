@@ -5,7 +5,7 @@
 package Server;
 
 import GameEngine.CommandRunner;
-import GameEngine.GameWorld;
+import GameEngine.GameInfo;
 import GameEngine.PacketTypes.LoginPacket;
 
 public abstract class Account implements CommandRunner
@@ -32,7 +32,7 @@ public abstract class Account implements CommandRunner
 	}
 	
 	@Override
-	public abstract void runCommand(GameWorld world, String[] params); // Commands that a player can type
+	public abstract void runCommand(GameInfo world, String[] params); // Commands that a player can type
 
 	
 }

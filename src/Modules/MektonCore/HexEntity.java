@@ -4,7 +4,7 @@
 
 package Modules.MektonCore;
 
-import GameEngine.GameWorld;
+import GameEngine.GameInfo;
 import GameEngine.SpriteEntity;
 
 public abstract class HexEntity extends SpriteEntity
@@ -27,7 +27,7 @@ public abstract class HexEntity extends SpriteEntity
 		southEast; // +x, +y
 	}
 	
-	public HexEntity(GameWorld world)
+	public HexEntity(GameInfo world)
 	{
 		super(world);
 	}

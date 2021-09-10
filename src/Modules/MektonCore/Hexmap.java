@@ -7,7 +7,7 @@ package Modules.MektonCore;
 
 import java.util.ArrayList;
 
-import GameEngine.GameWorld;
+import GameEngine.GameInfo;
 import GameEngine.GameCanvas;
 import GameEngine.GameEntity;
 import GameEngine.GraphicsManager;
@@ -23,7 +23,7 @@ public class Hexmap<T extends HexData> extends GameEntity
 	Instancer<T> instancer_;
 	
 	public Hexmap() {super();}
-	public Hexmap(GameWorld world, T hexTemplate)
+	public Hexmap(GameInfo world, T hexTemplate)
 	{
 		super(world);
 		hexes_ = new ArrayList<ArrayList<ArrayList<T>>>();

@@ -9,7 +9,6 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 
-import GameEngine.ClientInfo;
 import Utils.Logging;
 
 public abstract class DelegatingFactory<T> implements TypeAdapterFactory

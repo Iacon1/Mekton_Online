@@ -7,7 +7,7 @@ package Client;
 import java.awt.Container;
 import java.util.HashMap;
 
-import GameEngine.GameWorld;
+import GameEngine.GameInfo;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.PacketTypes.ServerInfoPacket;
 import Net.StateFactory;

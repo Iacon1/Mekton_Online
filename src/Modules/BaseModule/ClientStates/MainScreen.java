@@ -5,8 +5,8 @@
 package Modules.BaseModule.ClientStates;
 
 import Client.GameClientThread;
-import GameEngine.ClientInfo;
 import GameEngine.GameFrame;
+import GameEngine.GameInfo;
 import GameEngine.PacketTypes.GameDataPacket;
 import Net.StateFactory;
 import Net.ThreadState;
@@ -31,13 +31,13 @@ public class MainScreen implements ThreadState<GameClientThread>
 	{
 		GameDataPacket packet = new GameDataPacket();
 		packet = (GameDataPacket) packet.fromJSON(input);
-		ClientInfo.setWorld(packet.ourView);
+		GameInfo.setWorld(packet.ourView);
 		GameFrame frame = (GameFrame) parentThread.getContainer("map");
 		frame.updateUIStuff(packet);
 	}
 	public String processOutput(GameClientThread parentThread, boolean mono)
 	{
-		String input = ClientInfo.getCommand();
+		String input = GameInfo.getCommand();
 		if (input != null) // We got input
 			return input;
 		return null;

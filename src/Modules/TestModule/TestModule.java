@@ -6,7 +6,7 @@ package Modules.TestModule;
 
 import GameEngine.GameCanvas;
 import GameEngine.GameEntity;
-import GameEngine.GameWorld;
+import GameEngine.GameInfo;
 import GameEngine.Configurables.Module;
 import Modules.BaseModule.BaseServer;
 import Net.StateFactory;
@@ -47,7 +47,6 @@ public class TestModule implements Module
 	@Override
 	public void init()
 	{
-		TestInfo.setup();
 	}
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -56,22 +55,22 @@ public class TestModule implements Module
 		return new BaseServer<TestAccount>();
 	}
 	@Override
-	public GameWorld setup()
+	public GameInfo setup()
 	{
-		GameWorld gameWorld = new GameWorld();
+		GameInfo gameWorld = new GameInfo();
 		TestHexmap map = new TestHexmap(gameWorld, new TestHexData());
 		map.setDimensions(18, 9, 1);
 		return gameWorld;
 	}
 
 	@Override
-	public GameWorld loadWorld(String server)
+	public GameInfo loadWorld(String server)
 	{
 		return null;
 	}
 
 	@Override
-	public void drawWorld(GameWorld world, GameCanvas canvas)
+	public void drawWorld(GameInfo world, GameCanvas canvas)
 	{
 		world.getRootEntities().get(0).render(0, 0, canvas);
 	}

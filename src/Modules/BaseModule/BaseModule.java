@@ -6,7 +6,7 @@ package Modules.BaseModule;
 
 import GameEngine.GameCanvas;
 import GameEngine.GameEntity;
-import GameEngine.GameWorld;
+import GameEngine.GameInfo;
 import GameEngine.Configurables.Module;
 import Modules.BaseModule.ClientStates.ClientStateFactory;
 import Modules.BaseModule.HandlerStates.HandlerStateFactory;
@@ -49,20 +49,20 @@ public class BaseModule implements Module
 		return null;
 	}
 	@Override
-	public GameWorld setup()
+	public GameInfo setup()
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
-	public GameWorld loadWorld(String server)
+	public GameInfo loadWorld(String server)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void drawWorld(GameWorld world, GameCanvas canvas)
+	public void drawWorld(GameInfo world, GameCanvas canvas)
 	{
 		// TODO Auto-generated method stub
 		return;
