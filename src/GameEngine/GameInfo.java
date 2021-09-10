@@ -46,6 +46,10 @@ public class GameInfo
 		world_ = new GameWorld();
 	}
 	
+	public static void initWorld(GameWorld world)
+	{
+		world_ = new GameWorld();
+	}
 	public static void setWorld(GameWorld world)
 	{
 		world_ = world;

@@ -13,13 +13,13 @@ public class TestAccount extends Account
 {
 
 	@Override
-	public void runCommand(GameInfo.GameWorld world, String[] params)
+	public void runCommand(String[] params)
 	{
 		{
 			switch (params[0])
 			{
 			case "move": // TODO objects with MA
-				HexEntity physObject = (HexEntity) world.getEntities().get(possessee);
+				HexEntity physObject = (HexEntity) GameInfo.getWorld().getEntities().get(possessee);
 				switch (params[1])
 				{
 				case "north": case "no": case "n":

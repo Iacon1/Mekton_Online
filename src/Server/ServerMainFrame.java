@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import GameEngine.GameEntity;
+import GameEngine.GameInfo;
 import GameEngine.Configurables.ConfigManager;
 import Utils.Logging;
 import Utils.MiscUtils;
@@ -121,12 +122,12 @@ public class ServerMainFrame extends JFrame
 	private void updateObjectsTree() // Updates objectTree
 	{
 		DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) model.getRoot();
-		for (int i = 0; i < Math.max(rootNode.getChildCount(), server_.gameWorld_.getRootEntities().size()); ++i)
+		for (int i = 0; i < Math.max(rootNode.getChildCount(), GameInfo.getWorld().getRootEntities().size()); ++i)
 		{
 			GameEntity instance;
 			InstanceNode node;
 			
-			try {instance = server_.gameWorld_.getRootEntities().get(i);}
+			try {instance = GameInfo.getWorld().getRootEntities().get(i);}
 			catch (Exception e) {instance = null;}
 			try {node = (InstanceNode) rootNode.getChildAt(i);}
 			catch (Exception e) {node = null;}

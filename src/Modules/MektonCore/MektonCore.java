@@ -56,10 +56,9 @@ public class MektonCore implements Module
 		return null;
 	}
 	@Override
-	public GameInfo.GameWorld setup()
+	public void setup()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return;
 	}
 
 	@Override
@@ -70,14 +69,14 @@ public class MektonCore implements Module
 	}
 
 	@Override
-	public void drawWorld(GameInfo.GameWorld world, GameCanvas canvas)
+	public void drawWorld(GameCanvas canvas)
 	{
 		// TODO Auto-generated method stub
 		return;
 	}
 
 	@Override
-	public GameEntity makePlayer(GameServer server, Account account)
+	public GameEntity makePlayer(Account account)
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -85,7 +84,7 @@ public class MektonCore implements Module
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public GameEntity wakePlayer(GameServer server, Account account)
+	public GameEntity wakePlayer(Account account)
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -93,7 +92,7 @@ public class MektonCore implements Module
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public GameEntity sleepPlayer(GameServer server, Account account)
+	public GameEntity sleepPlayer(Account account)
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -101,7 +100,7 @@ public class MektonCore implements Module
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public GameEntity deletePlayer(GameServer server, Account account)
+	public GameEntity deletePlayer(Account account)
 	{
 		// TODO Auto-generated method stub
 		return null;

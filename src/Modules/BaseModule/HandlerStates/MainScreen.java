@@ -33,7 +33,6 @@ public class MainScreen implements ThreadState<ClientHandlerThread>
 	public String processOutput(ClientHandlerThread parentThread, boolean mono)
 	{
 		GameDataPacket packet = new GameDataPacket();
-		packet.viewWorld(parentThread.getParent().gameWorld_);
 		return packet.toJSON();
 	}
 

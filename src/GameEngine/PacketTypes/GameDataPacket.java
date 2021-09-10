@@ -6,8 +6,9 @@ package GameEngine.PacketTypes;
 
 import GameEngine.GameEntity;
 import GameEngine.GameInfo;
+import GameEngine.TransSerializable;
 
-public class GameDataPacket extends Packet
+public class GameDataPacket extends Packet implements TransSerializable
 {
 	public int currentLocationId; // Player's location index
 	public int playerObjId; // Player's index
@@ -18,11 +19,12 @@ public class GameDataPacket extends Packet
 	{
 		return true; // TODO how to determine
 	}
-	
-	public void viewWorld(GameInfo.GameWorld world) // Converts the global game world into the client data
+
+	@Override
+	public void preSerialize()
 	{
-		ourView = world;
-	
+		ourView = GameInfo.getWorld();
+		
 		/*for (int i = 0; i < ourView.getEntities().size(); ++i)
 		{
 			if (!isNeccessary(ourView.getEntities().get(i)))
@@ -33,5 +35,11 @@ public class GameDataPacket extends Packet
 		
 		currentLocationId = 0; // TODO determine location
 		*/ // TODO figure out copying the world again
+	}
+
+	@Override
+	public void postDeserialize()
+	{
+		GameInfo.setWorld(ourView);
 	}
 }

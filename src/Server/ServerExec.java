@@ -22,6 +22,7 @@ public class ServerExec
 		{
 			ConfigManager.init(null);
 			ModuleManager.init("Default");
+			ModuleManager.setup();
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			ServerStartDialog.main(null);
 		}

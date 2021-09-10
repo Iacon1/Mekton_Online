@@ -48,7 +48,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 				parentThread.setUsername(account.username);
 				Logging.logNotice("Client " + parentThread.getSocket().getInetAddress() + " has made account \"" + parentThread.getUsername() + "\".");
 				
-				ModuleManager.makePlayer(parentThread.getParent(), parentThread.getAccount());
+				ModuleManager.makePlayer(parentThread.getAccount());
 			}
 		}
 		else
@@ -59,7 +59,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 				parentThread.setUsername(account.username);
 				Logging.logNotice("Client " + parentThread.getSocket().getInetAddress() + " has logged in as account \"" + parentThread.getUsername() + "\".");
 				
-				ModuleManager.wakePlayer(parentThread.getParent(), parentThread.getAccount());
+				ModuleManager.wakePlayer(parentThread.getAccount());
 			}
 		}
 		

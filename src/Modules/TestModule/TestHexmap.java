@@ -11,12 +11,8 @@ import Modules.MektonCore.Hexmap;
 public class TestHexmap extends Hexmap<TestHexData>
 {
 
-	public TestHexmap(GameInfo.GameWorld gameWorld, TestHexData testHexData)
+	public TestHexmap(TestHexData testHexData)
 	{
-		super(gameWorld, testHexData);
-	}
-	public TestHexmap()
-	{
-		super();
+		super(testHexData);
 	}
 }

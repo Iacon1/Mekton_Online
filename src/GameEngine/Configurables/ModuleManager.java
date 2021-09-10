@@ -125,38 +125,38 @@ public final class ModuleManager
 		return getHighestImplementer("makeServer").makeServer();
 	}
 
-	public static GameInfo.GameWorld setup()
+	public static void setup()
 	{
-		return getHighestImplementer("setup").setup();
+		getHighestImplementer("setup").setup();
 	}
 	public static GameInfo loadWorld(String server)
 	{
 		return getHighestImplementer("loadWorld").loadWorld(server);
 	}
 	
-	public static void drawWorld(GameInfo.GameWorld gameWorld, GameCanvas canvas)
+	public static void drawWorld(GameCanvas canvas)
 	{
-		getHighestImplementer("drawWorld").drawWorld(gameWorld, canvas);
+		getHighestImplementer("drawWorld").drawWorld(canvas);
 	}
 
-	public static GameEntity makePlayer(GameServer server, Account account)
+	public static GameEntity makePlayer(Account account)
 	{
-		return getHighestImplementer("makePlayer").makePlayer(server, account);
+		return getHighestImplementer("makePlayer").makePlayer(account);
 	}
 	@SuppressWarnings("rawtypes")
-	public static GameEntity wakePlayer(GameServer server, Account account)
+	public static GameEntity wakePlayer(Account account)
 	{
-		return getHighestImplementer("wakePlayer").wakePlayer(server, account);
+		return getHighestImplementer("wakePlayer").wakePlayer(account);
 	}
 	@SuppressWarnings("rawtypes")
-	public static GameEntity sleepPlayer(GameServer server, Account account)
+	public static GameEntity sleepPlayer(Account account)
 	{
-		return getHighestImplementer("sleepPlayer").sleepPlayer(server, account);
+		return getHighestImplementer("sleepPlayer").sleepPlayer(account);
 	}
 	@SuppressWarnings("rawtypes")
-	public static GameEntity deletePlayer(GameServer server, Account account)
+	public static GameEntity deletePlayer(Account account)
 	{
-		return getHighestImplementer("deletePlayer").deletePlayer(server, account);
+		return getHighestImplementer("deletePlayer").deletePlayer(account);
 	}
 	
 	public static StateFactory clientFactory() // Client factory

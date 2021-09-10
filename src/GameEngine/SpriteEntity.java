@@ -11,15 +11,7 @@ public abstract class SpriteEntity extends GameEntity
 	private int cTY_; // Offset on image sheet
 	private int width_; // Width in pixels
 	private int height_; // Height in pixels
-	
 
-	
-	public SpriteEntity() {}
-	public SpriteEntity(GameInfo.GameWorld world)
-	{
-		super(world);
-	}
-	
 	public void setSprite(String imagePath, Integer cTX, Integer cTY, Integer width, Integer height) // If any input is null then don't change
 	{
 		if (imagePath != null) imagePath_ = imagePath;

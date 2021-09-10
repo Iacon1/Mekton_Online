@@ -11,9 +11,9 @@ import Modules.MektonCore.HexEntity;
 
 public class DummyPlayer extends HexEntity implements TransSerializable
 {	
-	public DummyPlayer(GameInfo.GameWorld world)
+	public DummyPlayer()
 	{
-		super(world);
+		super();
 		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, ConfigManager.getHexWidth(), ConfigManager.getHexHeight());
 	}
 	

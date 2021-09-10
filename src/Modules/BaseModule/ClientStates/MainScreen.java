@@ -23,8 +23,8 @@ public class MainScreen implements ThreadState<GameClientThread>
 	@Override
 	public void onEnter(GameClientThread parentThread)
 	{
-		parentThread.setContainer("map", new GameFrame());
-		parentThread.getContainer("map");
+		parentThread.setContainer("main", new GameFrame());
+		parentThread.getContainer("main");
 	}
 
 	public void processInput(String input, GameClientThread parentThread, boolean mono)
@@ -32,7 +32,7 @@ public class MainScreen implements ThreadState<GameClientThread>
 		GameDataPacket packet = new GameDataPacket();
 		packet = (GameDataPacket) packet.fromJSON(input);
 		GameInfo.setWorld(packet.ourView);
-		GameFrame frame = (GameFrame) parentThread.getContainer("map");
+		GameFrame frame = (GameFrame) parentThread.getContainer("main");
 		frame.updateUIStuff(packet);
 	}
 	public String processOutput(GameClientThread parentThread, boolean mono)

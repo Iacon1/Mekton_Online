@@ -49,15 +49,15 @@ public interface Module
 	
 	@SuppressWarnings("rawtypes")
 	public GameServer makeServer(); // Sets up the server (not what's in the server!)
-	public GameInfo.GameWorld setup(); // Sets up a new world; Only used the first time the server is run
+	public void setup(); // Sets up a new world; Only used the first time the server is run
 	public GameInfo loadWorld(String server); // Loads a saved world
 	
-	public void drawWorld(GameInfo.GameWorld gameWorld, GameCanvas canvas); // Draws the world
+	public void drawWorld(GameCanvas canvas); // Draws the world
 
-	public GameEntity makePlayer(GameServer server, Account account); // Makes a new player entity for a new account
-	public GameEntity wakePlayer(GameServer server, Account account); // Wakes up a returning account's current possessee when they login
-	public GameEntity sleepPlayer(GameServer server, Account account); // Wakes up a returning account's current possessee when they logout
-	public GameEntity deletePlayer(GameServer server, Account account); // Deletes or detaches a deleted account's current possessee
+	public GameEntity makePlayer(Account account); // Makes a new player entity for a new account
+	public GameEntity wakePlayer(Account account); // Wakes up a returning account's current possessee when they login
+	public GameEntity sleepPlayer(Account account); // Wakes up a returning account's current possessee when they logout
+	public GameEntity deletePlayer(Account account); // Deletes or detaches a deleted account's current possessee
 	
 	public StateFactory clientFactory(); // Client factory
 	public StateFactory handlerFactory(); // Handler factory

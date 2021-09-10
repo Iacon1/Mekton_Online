@@ -55,12 +55,11 @@ public class TestModule implements Module
 		return new BaseServer<TestAccount>();
 	}
 	@Override
-	public GameInfo.GameWorld setup()
+	public void setup()
 	{
-		GameInfo.GameWorld gameWorld = new GameInfo.GameWorld();
-		TestHexmap map = new TestHexmap(gameWorld, new TestHexData());
+		GameInfo.setWorld(new GameInfo.GameWorld());
+		TestHexmap map = new TestHexmap(new TestHexData());
 		map.setDimensions(18, 9, 1);
-		return gameWorld;
 	}
 
 	@Override
@@ -70,41 +69,41 @@ public class TestModule implements Module
 	}
 
 	@Override
-	public void drawWorld(GameInfo.GameWorld world, GameCanvas canvas)
+	public void drawWorld(GameCanvas canvas)
 	{
-		world.getRootEntities().get(0).render(0, 0, canvas);
+		if (GameInfo.getWorld() != null) GameInfo.getWorld().getRootEntities().get(0).render(0, 0, canvas);
 	}
 
 	@Override
-	public GameEntity makePlayer(GameServer server, Account account)
+	public GameEntity makePlayer(Account account)
 	{
-		DummyPlayer player = new DummyPlayer(server.gameWorld_); // Adds a guy to the map
+		DummyPlayer player = new DummyPlayer(); // Adds a guy to the map
 		account.possessee = player.getId();
-		server.gameWorld_.getRootEntities().get(0).addChild(player);
+		GameInfo.getWorld().getRootEntities().get(0).addChild(player);
 		player.setPos(2, 2, 0);
 		
 		return player;
 	}
 
 	@Override
-	public GameEntity wakePlayer(GameServer server, Account account)
+	public GameEntity wakePlayer(Account account)
 	{
-		DummyPlayer player = new DummyPlayer(server.gameWorld_); // Adds a guy to the map
+		DummyPlayer player = new DummyPlayer(); // Adds a guy to the map
 		account.possessee = player.getId();
-		server.gameWorld_.getRootEntities().get(0).addChild(player);
+		GameInfo.getWorld().getRootEntities().get(0).addChild(player);
 		player.setPos(2, 2, 0);
 		
 		return player;
 	}
 
 	@Override
-	public GameEntity sleepPlayer(GameServer server, Account account)
+	public GameEntity sleepPlayer(Account account)
 	{
 		return null;
 	}
 
 	@Override
-	public GameEntity deletePlayer(GameServer server, Account account)
+	public GameEntity deletePlayer(Account account)
 	{
 		return null;
 	}

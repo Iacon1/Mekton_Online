@@ -20,9 +20,7 @@ public class GameClientThread extends StatefulConnectionPairThread
 	private ServerInfoPacket serverInfo_; // The server info we received
 	
 	private HashMap<String, Container> containers_; // All currently-open UI
-	
-//	private GameWorld gameWorld_;
-	
+
 	public GameClientThread()
 	{
 		super();
@@ -62,15 +60,5 @@ public class GameClientThread extends StatefulConnectionPairThread
 	{
 		return serverInfo_;
 	}
-	
-/*	public void setWorld(GameWorld world)
-	{
-		gameWorld_ = world;
-	}
-	public GameWorld getWorld()
-	{
-		return gameWorld_;
-	}
-*/
 }
 

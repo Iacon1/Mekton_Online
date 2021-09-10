@@ -33,7 +33,7 @@ public class GameCanvas extends JPanel
 	{
 		super.paintComponent(g);
 		g_ = g;
-		ModuleManager.drawWorld(GameInfo.getWorld(), this);
+		ModuleManager.drawWorld(this);
 		drawText("Hello", "MicrogrammaNormalFix.TTF", GraphicsManager.getColor(255, 0, 0), 0, 0, 32);
 		g_ = null;
 	}

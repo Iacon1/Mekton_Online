@@ -23,7 +23,7 @@ public class ClientHandlerThread extends StatefulConnectionPairThread
 	}
 	protected GameEntity getUserEntity()
 	{
-		return GameEntity.getEntity(parent_.gameWorld_, parent_.getAccount(username_).possessee);
+		return GameEntity.getEntity(parent_.getAccount(username_).possessee);
 	}
 	
 	@SuppressWarnings("rawtypes")

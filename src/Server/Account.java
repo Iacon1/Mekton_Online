@@ -33,7 +33,7 @@ public abstract class Account implements CommandRunner
 	}
 	
 	@Override
-	public abstract void runCommand(GameInfo.GameWorld gameWorld, String[] params); // Commands that a player can type
+	public abstract void runCommand(String[] params); // Commands that a player can type
 
 	
 }

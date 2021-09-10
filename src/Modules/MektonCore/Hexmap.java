@@ -22,10 +22,9 @@ public class Hexmap<T extends HexData> extends GameEntity
 	ArrayList<ArrayList<ArrayList<T>>> hexes_; // A set of rows (x/width) of columns (y/length) of pillars (z/height)
 	Instancer<T> instancer_;
 	
-	public Hexmap() {super();}
-	public Hexmap(GameInfo.GameWorld gameWorld, T hexTemplate)
+	public Hexmap(T hexTemplate)
 	{
-		super(gameWorld);
+		super();
 		hexes_ = new ArrayList<ArrayList<ArrayList<T>>>();
 		instancer_ = new Instancer<T>(hexTemplate);
 	}

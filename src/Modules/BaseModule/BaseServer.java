@@ -4,6 +4,7 @@
 
 package Modules.BaseModule;
 
+import GameEngine.GameInfo;
 import GameEngine.Configurables.ModuleManager;
 import Server.Account;
 import Server.GameServer;
@@ -15,8 +16,6 @@ public class BaseServer<A extends Account> extends GameServer<A, ClientHandlerTh
 		super(new ClientHandlerThread());
 		ClientHandlerThread thread = new ClientHandlerThread();
 		thread.setParent(this);
-		
-		gameWorld_ = ModuleManager.setup();
 	}
 	
 	
@@ -41,6 +40,6 @@ public class BaseServer<A extends Account> extends GameServer<A, ClientHandlerTh
 	
 	public void runCommand(String username, String command)
 	{
-		getAccount(username).runCommand(gameWorld_, command.split(" "));
+		getAccount(username).runCommand(command.split(" "));
 	}
 }
