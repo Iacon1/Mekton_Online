@@ -34,7 +34,7 @@ public abstract class GameServer<A extends Account, T extends ConnectionPairThre
 		MiscUtils.saveText("Local Data/Server/Accounts.json", JSONManager.serializeJSON(accounts_));
 	}
 	
-	public GameInfo gameWorld_;
+	public GameInfo.GameWorld gameWorld_;
 	
 	public GameServer(T template)
 	{	

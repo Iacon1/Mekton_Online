@@ -55,9 +55,9 @@ public class TestModule implements Module
 		return new BaseServer<TestAccount>();
 	}
 	@Override
-	public GameInfo setup()
+	public GameInfo.GameWorld setup()
 	{
-		GameInfo gameWorld = new GameInfo();
+		GameInfo.GameWorld gameWorld = new GameInfo.GameWorld();
 		TestHexmap map = new TestHexmap(gameWorld, new TestHexData());
 		map.setDimensions(18, 9, 1);
 		return gameWorld;
@@ -70,7 +70,7 @@ public class TestModule implements Module
 	}
 
 	@Override
-	public void drawWorld(GameInfo world, GameCanvas canvas)
+	public void drawWorld(GameInfo.GameWorld world, GameCanvas canvas)
 	{
 		world.getRootEntities().get(0).render(0, 0, canvas);
 	}

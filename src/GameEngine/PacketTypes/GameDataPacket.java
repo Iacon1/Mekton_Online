@@ -12,14 +12,14 @@ public class GameDataPacket extends Packet
 	public int currentLocationId; // Player's location index
 	public int playerObjId; // Player's index
 	
-	public GameInfo ourView; // Game world, but only contains the data we need
+	public GameInfo.GameWorld ourView; // Game world, but only contains the data we need
 
 	private boolean isNeccessary(GameEntity instance) // Do we need to record this?
 	{
 		return true; // TODO how to determine
 	}
 	
-	public void viewWorld(GameInfo world) // Converts the global game world into the client data
+	public void viewWorld(GameInfo.GameWorld world) // Converts the global game world into the client data
 	{
 		ourView = world;
 	

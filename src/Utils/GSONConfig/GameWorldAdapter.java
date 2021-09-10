@@ -12,9 +12,8 @@ import com.google.gson.stream.JsonWriter;
 
 import GameEngine.GameInfo;
 import Utils.Logging;
-import Utils.GSONConfig.Delegation.AdapterDelegator;
-import Utils.GSONConfig.Delegation.DelegatingAdapter;
-import Utils.GSONConfig.Delegation.DelegatingFactory;
+import Utils.MiscUtils;
+import Utils.GSONConfig.Delegation.*;
 
 public class GameWorldAdapter<T> extends DelegatingAdapter<T>
 {
@@ -26,10 +25,10 @@ public class GameWorldAdapter<T> extends DelegatingAdapter<T>
 	@Override
 	public T read(JsonReader arg0) throws IOException // Assumed T = GameWorld
 	{
-		GameInfo world = null;
+		GameInfo.GameWorld world = null;
 	    try
 	    {
-	    	world = (GameInfo) delegator_.getAdapter(GameInfo.class.getCanonicalName()).read(arg0);
+	    	world = (GameInfo.GameWorld) delegator_.getAdapter(MiscUtils.ClassToString(GameInfo.GameWorld.class)).read(arg0);
 	    	
 	    	for (int i = 0; i < world.getEntities().size(); ++i)
 	    	{
@@ -41,16 +40,16 @@ public class GameWorldAdapter<T> extends DelegatingAdapter<T>
 	}
 
 	@Override
-	public void write(JsonWriter arg0, T arg1) throws IOException
+	public void write(JsonWriter out, T value) throws IOException
 	{
-		delegator_.getAdapter(GameInfo.class.getCanonicalName()).write(arg0, arg1);
+		delegator_.getAdapter(MiscUtils.ClassToString(GameInfo.GameWorld.class)).write(out, value);
 	}
 	
-	public static class Factory extends DelegatingFactory<GameInfo>
+	public static class Factory extends DelegatingFactory<GameInfo.GameWorld>
 	{
 		Factory()
 		{
-			super(GameInfo.class);
+			super(GameInfo.GameWorld.class);
 		}
 
 		@Override

@@ -8,5 +8,5 @@ public interface StateFactory
 {
 	public abstract ThreadState getState(int id); // Returns a state based off some arbitrary list; 0 should be the initial state
 	
-	public abstract ThreadState getState(String canonicalName); // Returns the state with specified canonical name, should it be part of this factory
+	public abstract ThreadState getState(String className); // Returns the state with specified name, should it be part of this factory
 }

@@ -140,5 +140,8 @@ public final class MiscUtils
 		return arrayToString((T[]) array.toArray(), sep);
 	}
 	
-	
+	public static <T> String ClassToString(Class<T> sClass)
+	{
+		return sClass.getName();
+	}
 }

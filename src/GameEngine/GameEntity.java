@@ -6,11 +6,12 @@ package GameEngine;
 
 import java.util.ArrayList;
 
+
 public abstract class GameEntity
 {
 	private int parentId_; // Parent object index; -1 means none
 	protected ArrayList<Integer> childrenIds_; // Children object indices
-	private transient GameInfo world_; // Our world that we occupy
+	private transient GameInfo.GameWorld world_; // Our world that we occupy
 	
 	public int getId()
 	{
@@ -23,7 +24,7 @@ public abstract class GameEntity
 		this.parentId_ = -1;
 		childrenIds_ = new ArrayList<Integer>();
 	}
-	public GameEntity(GameInfo world)
+	public GameEntity(GameInfo.GameWorld world)
 	{
 		world_ = world;
 		world_.instances_.add(this);
@@ -31,12 +32,12 @@ public abstract class GameEntity
 		childrenIds_ = new ArrayList<Integer>();
 	}
 	
-	public void setWorld(GameInfo world)
+	public void setWorld(GameInfo.GameWorld world)
 	{
 		world_ = world;
 	}
 	
-	public static GameEntity getEntity(GameInfo world, int id)
+	public static GameEntity getEntity(GameInfo.GameWorld world, int id)
 	{
 		return world.instances_.get(id);
 	}

@@ -5,6 +5,7 @@
 package GameEngine.PacketTypes;
 
 import Utils.JSONManager;
+import Utils.MiscUtils;
 
 public class Packet
 {
@@ -12,7 +13,7 @@ public class Packet
 	
 	public Packet()
 	{
-		type = this.getClass().getCanonicalName();
+		type = MiscUtils.ClassToString(this.getClass());
 	}
 	
 	public final String toJSON()

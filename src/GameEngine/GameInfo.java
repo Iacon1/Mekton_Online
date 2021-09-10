@@ -9,42 +9,48 @@ import java.util.ArrayList;
 public class GameInfo
 {
 	// Things that might need to be communicated
-	protected ArrayList<GameEntity> instances_; // List of game instances
-	
-	private static transient GameInfo world_; // Holds any things we might need to transfer to client
+	public static class GameWorld
+	{
+		protected ArrayList<GameEntity> instances_; // List of game instances
+		public GameWorld()
+		{
+			instances_ = new ArrayList<GameEntity>();
+		}
+		
+		public ArrayList<GameEntity> getRootEntities() // Returns every instance with no parent
+		{
+			ArrayList<GameEntity> array = new ArrayList<GameEntity>();
+			for (int i = 0; i < instances_.size(); ++i)
+			{
+				GameEntity instance = instances_.get(i);
+				if (instance.getParent() == null) array.add(instance);
+			}
+			
+			return array;
+		}
+		
+		public ArrayList<GameEntity> getEntities() // Shows every instance instead of just our children; GameWorld.children_ ought be empty
+		{
+			return instances_;
+		}
+	}
+	private static transient GameWorld world_; // Holds any things we might need to transfer to client
 	
 	// Things that don't need to be communicated
 	private static transient GameFrame frame_;
 	private static transient boolean isClient_; // On if client
 	private static transient String command_;
 	
-	public GameInfo()
+	private GameInfo() // Static class, do not call
 	{
-		instances_ = new ArrayList<GameEntity>();
+		world_ = new GameWorld();
 	}
 	
-	public ArrayList<GameEntity> getRootEntities() // Returns every instance with no parent
-	{
-		ArrayList<GameEntity> array = new ArrayList<GameEntity>();
-		for (int i = 0; i < instances_.size(); ++i)
-		{
-			GameEntity instance = instances_.get(i);
-			if (instance.getParent() == null) array.add(instance);
-		}
-		
-		return array;
-	}
-	
-	public ArrayList<GameEntity> getEntities() // Shows every instance instead of just our children; GameWorld.children_ ought be empty
-	{
-		return instances_;
-	}
-	
-	public static void setWorld(GameInfo world)
+	public static void setWorld(GameWorld world)
 	{
 		world_ = world;
 	}
-	public static GameInfo getWorld()
+	public static GameWorld getWorld()
 	{
 		return world_;
 	}

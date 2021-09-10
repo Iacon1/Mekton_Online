@@ -23,9 +23,9 @@ public class Hexmap<T extends HexData> extends GameEntity
 	Instancer<T> instancer_;
 	
 	public Hexmap() {super();}
-	public Hexmap(GameInfo world, T hexTemplate)
+	public Hexmap(GameInfo.GameWorld gameWorld, T hexTemplate)
 	{
-		super(world);
+		super(gameWorld);
 		hexes_ = new ArrayList<ArrayList<ArrayList<T>>>();
 		instancer_ = new Instancer<T>(hexTemplate);
 	}

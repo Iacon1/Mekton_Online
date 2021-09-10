@@ -13,7 +13,7 @@ public class TestAccount extends Account
 {
 
 	@Override
-	public void runCommand(GameInfo world, String[] params)
+	public void runCommand(GameInfo.GameWorld world, String[] params)
 	{
 		{
 			switch (params[0])

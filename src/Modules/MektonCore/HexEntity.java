@@ -27,7 +27,7 @@ public abstract class HexEntity extends SpriteEntity
 		southEast; // +x, +y
 	}
 	
-	public HexEntity(GameInfo world)
+	public HexEntity(GameInfo.GameWorld world)
 	{
 		super(world);
 	}

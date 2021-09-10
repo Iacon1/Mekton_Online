@@ -14,6 +14,7 @@ import com.google.gson.stream.JsonWriter;
 
 import GameEngine.GameEntity;
 import Utils.Logging;
+import Utils.MiscUtils;
 import Utils.GSONConfig.Delegation.AdapterDelegator;
 
 public class AbsFactory<T> implements TypeAdapterFactory
@@ -57,7 +58,7 @@ public class AbsFactory<T> implements TypeAdapterFactory
 		@Override
 		public void write(JsonWriter out, J value) throws IOException
 		{
-			String type = value.getClass().getCanonicalName();
+			String type = MiscUtils.ClassToString(value.getClass());
 			String data = delegator_.getAdapter(type_).toJson(value); // Serialize
 			
 			out.beginObject();

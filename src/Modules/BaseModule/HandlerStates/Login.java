@@ -10,6 +10,7 @@ import Net.StateFactory;
 import Net.ThreadState;
 import Server.Account;
 import Utils.Logging;
+import Utils.MiscUtils;
 
 public class Login implements ThreadState<ClientHandlerThread>
 {
@@ -70,7 +71,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 		if (send_)
 		{
 			send_ = false;
-			if (loginFeedback_.successful) parentThread.queueStateChange(getFactory().getState(MainScreen.class.getCanonicalName()));
+			if (loginFeedback_.successful) parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(MainScreen.class)));
 			return loginFeedback_.toJSON();
 		}
 		else return null;

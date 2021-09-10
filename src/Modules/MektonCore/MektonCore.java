@@ -56,7 +56,7 @@ public class MektonCore implements Module
 		return null;
 	}
 	@Override
-	public GameInfo setup()
+	public GameInfo.GameWorld setup()
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -70,7 +70,7 @@ public class MektonCore implements Module
 	}
 
 	@Override
-	public void drawWorld(GameInfo world, GameCanvas canvas)
+	public void drawWorld(GameInfo.GameWorld world, GameCanvas canvas)
 	{
 		// TODO Auto-generated method stub
 		return;

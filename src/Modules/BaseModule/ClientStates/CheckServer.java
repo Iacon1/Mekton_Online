@@ -34,13 +34,13 @@ public class CheckServer implements ThreadState<GameClientThread>
 		{
 			result_ = 2;
 			while (result_ != 3);
-			parentThread.queueStateChange(getFactory().getState(BadServer.class.getCanonicalName()));
+			parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(BadServer.class)));
 		}
 		else
 		{
 			result_ = 1;
 			while (result_ != 3);
-			parentThread.queueStateChange(getFactory().getState(Login.class.getCanonicalName()));
+			parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class)));
 		}
 	}	
 	@Override
@@ -75,12 +75,12 @@ public class CheckServer implements ThreadState<GameClientThread>
 		if (parentThread.getSocket() == null || packet == null || !packet.version.equals(MiscUtils.getVersion()))
 		{
 			result_ = 2;
-			parentThread.queueStateChange(getFactory().getState(BadServer.class.getCanonicalName()));
+			parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(BadServer.class)));
 		}
 		else
 		{
 			result_ = 1;
-			parentThread.queueStateChange(getFactory().getState(Login.class.getCanonicalName()));
+			parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class)));
 		}
 	}
 	@Override

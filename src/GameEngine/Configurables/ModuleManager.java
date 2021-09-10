@@ -125,7 +125,7 @@ public final class ModuleManager
 		return getHighestImplementer("makeServer").makeServer();
 	}
 
-	public static GameInfo setup()
+	public static GameInfo.GameWorld setup()
 	{
 		return getHighestImplementer("setup").setup();
 	}
@@ -134,9 +134,9 @@ public final class ModuleManager
 		return getHighestImplementer("loadWorld").loadWorld(server);
 	}
 	
-	public static void drawWorld(GameInfo world, GameCanvas canvas)
+	public static void drawWorld(GameInfo.GameWorld gameWorld, GameCanvas canvas)
 	{
-		getHighestImplementer("drawWorld").drawWorld(world, canvas);
+		getHighestImplementer("drawWorld").drawWorld(gameWorld, canvas);
 	}
 
 	public static GameEntity makePlayer(GameServer server, Account account)

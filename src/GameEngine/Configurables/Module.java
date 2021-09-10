@@ -49,10 +49,10 @@ public interface Module
 	
 	@SuppressWarnings("rawtypes")
 	public GameServer makeServer(); // Sets up the server (not what's in the server!)
-	public GameInfo setup(); // Sets up a new world; Only used the first time the server is run
+	public GameInfo.GameWorld setup(); // Sets up a new world; Only used the first time the server is run
 	public GameInfo loadWorld(String server); // Loads a saved world
 	
-	public void drawWorld(GameInfo world, GameCanvas canvas); // Draws the world
+	public void drawWorld(GameInfo.GameWorld gameWorld, GameCanvas canvas); // Draws the world
 
 	public GameEntity makePlayer(GameServer server, Account account); // Makes a new player entity for a new account
 	public GameEntity wakePlayer(GameServer server, Account account); // Wakes up a returning account's current possessee when they login

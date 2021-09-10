@@ -42,7 +42,7 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 			else
 			{
 				Logging.logNotice("Client " + parentThread.getSocket().getInetAddress() + " has connected.");
-				parentThread.queueStateChange(getFactory().getState(Login.class.getCanonicalName())); // They're good, let's login	
+				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class))); // They're good, let's login	
 			}
 		}
 	}

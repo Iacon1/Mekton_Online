@@ -10,6 +10,7 @@ import GameEngine.PacketTypes.LoginPacket;
 import Modules.BaseModule.ClientFrames.LoginDialog;
 import Net.StateFactory;
 import Net.ThreadState;
+import Utils.MiscUtils;
 
 public class Login implements ThreadState<GameClientThread>
 {
@@ -37,7 +38,7 @@ public class Login implements ThreadState<GameClientThread>
 			LoginDialog dialog = (LoginDialog) parentThread.getContainer("login");
 			dialog.setVisible(false);
 			dialog.dispose();
-			parentThread.queueStateChange(getFactory().getState(MainScreen.class.getCanonicalName()));
+			parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(MainScreen.class)));
 		}
 		else
 		{
