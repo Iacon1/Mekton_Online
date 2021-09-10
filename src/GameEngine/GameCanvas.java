@@ -32,6 +32,14 @@ public class GameCanvas extends JPanel
 		scaleY_ = scaleY;
 		return changedSize;
 	}
+	public int descaleX(int x) // Converts a screen coord into a render coord
+	{
+		return Math.round(x / scaleX_);
+	}
+	public int descaleY(int y) // Converts a screen coord into a render coord
+	{
+		return Math.round(y / scaleY_);
+	}
 	
 	public void paintComponent(Graphics g)
 	{

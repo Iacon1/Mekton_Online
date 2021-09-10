@@ -4,11 +4,15 @@
 
 package Modules.TestModule;
 
+import java.awt.event.KeyEvent;
+
 import GameEngine.Configurables.ConfigManager;
+import GameEngine.EntityTypes.InputGetter;
 import GameEngine.EntityTypes.TransSerializable;
 import Modules.MektonCore.HexEntity;
+import Utils.Logging;
 
-public class DummyPlayer extends HexEntity implements TransSerializable
+public class DummyPlayer extends HexEntity implements InputGetter
 {	
 	public DummyPlayer()
 	{
@@ -23,10 +27,20 @@ public class DummyPlayer extends HexEntity implements TransSerializable
 	}
 
 	@Override
-	public void preSerialize() {}
+	public void onMouseClick(int mX, int mY, int button) {Logging.logNotice("Mouse clicked!");}
+	@Override
+	public void onMousePress(int mX, int mY, int button) {}
 
 	@Override
-	public void postDeserialize()
+	public void onMouseRelease(int mX, int mY, int button) {}
+
+	@Override
+	public void onKeyPress(int code) {Logging.logNotice("Key clicked: " + KeyEvent.getKeyText(code));}
+
+	@Override
+	public void onKeyRelease(int code)
 	{
+		// TODO Auto-generated method stub
+		
 	}
 }
