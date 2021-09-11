@@ -1,13 +1,14 @@
 // By Iacon1
-// Created 04/26/2021
-// Has a sprite
+// Created 09/10/2021
+// Has a sprite but doesn't respond to camera
 
-package GameEngine.EntityTypes;
+package GameEngine.EntityTypes.GUITypes;
 
 import GameEngine.GameCanvas;
+import GameEngine.EntityTypes.GameEntity;
 import GameEngine.Managers.GraphicsManager;
 
-public abstract class SpriteEntity extends GameEntity
+public abstract class GUISpriteEntity extends GameEntity
 {
 	private String imagePath_; // Image path
 
@@ -17,8 +18,8 @@ public abstract class SpriteEntity extends GameEntity
 	private int cTX_; // Offset on image sheet
 	private int cTY_; // Offset on image sheet
 	
-	private int width_; // Width in pixels
-	private int height_; // Height in pixels
+	protected int width_; // Width in pixels
+	protected int height_; // Height in pixels
 
 	public void setSprite(String imagePath, Integer cTX, Integer cTY, Integer width, Integer height) // If any input is null then don't change
 	{
@@ -32,6 +33,6 @@ public abstract class SpriteEntity extends GameEntity
 	@Override
 	public void render(GameCanvas canvas) 
 	{
-		canvas.drawImageScaled(GraphicsManager.getImage(imagePath_), x_ - canvas.cX_, y_ - canvas.cY_, cTX_, cTY_, width_, height_);
+		canvas.drawImageScaled(GraphicsManager.getImage(imagePath_), x_, y_, cTX_, cTY_, width_, height_);
 	}
 }

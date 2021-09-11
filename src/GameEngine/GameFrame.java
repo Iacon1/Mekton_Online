@@ -98,7 +98,7 @@ public class GameFrame extends JFrame
 			
 			int mX = canvas_.descaleX(e.getX());
 			int mY = canvas_.descaleY(e.getY());
-			
+				
 			switch (e.getButton())
 			{
 			case MouseEvent.NOBUTTON: return;
@@ -142,7 +142,7 @@ public class GameFrame extends JFrame
 			
 			int mX = canvas_.descaleX(e.getX());
 			int mY = canvas_.descaleY(e.getY());
-			
+				
 			switch (e.getButton())
 			{
 			case MouseEvent.NOBUTTON: return;
@@ -157,7 +157,7 @@ public class GameFrame extends JFrame
 				break;
 			}
 		}
-
+			
 		@Override
 		public void mouseEntered(MouseEvent e) // I don't think this can actually trigger bc of how the canvas is set up
 		{
@@ -172,14 +172,16 @@ public class GameFrame extends JFrame
 		@Override
 		public void keyTyped(KeyEvent e) // Not really useful to us I think; TODO Maybe?
 		{
-			return;
+//			findInputGetters();
+//				
+//			for (int i = 0; i < inputGetters_.size(); ++i) inputGetters_.get(i).onKeyPress(e.getKeyCode());
 		}
-		
+			
 		@Override
 		public void keyPressed(KeyEvent e)
 		{
 			findInputGetters();
-			
+				
 			for (int i = 0; i < inputGetters_.size(); ++i) inputGetters_.get(i).onKeyPress(e.getKeyCode());
 		}
 		@Override
@@ -189,6 +191,7 @@ public class GameFrame extends JFrame
 
 			for (int i = 0; i < inputGetters_.size(); ++i) inputGetters_.get(i).onKeyRelease(e.getKeyCode());
 		}
+		
 		
 		public EntityInputListener()
 		{
@@ -200,8 +203,8 @@ public class GameFrame extends JFrame
 	{
 		EntityInputListener listener = new EntityInputListener();
 		
-		canvas_.addMouseListener(listener);
-		canvas_.addKeyListener(listener);
+		addMouseListener(listener);
+		addKeyListener(listener);
 	}
 	
 	public GameFrame()
@@ -225,6 +228,8 @@ public class GameFrame extends JFrame
 		
 		pack();
 		
+		setFocusable(true);
+		requestFocus();
 		registerInputListener();
 	}
 }

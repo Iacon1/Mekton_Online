@@ -16,7 +16,7 @@ public abstract class HexEntity extends SpriteEntity
 	private void alignCoords()
 	{
 		x_ = Hexmap.GX2SX(hX_, ConfigManager.getHexWidth());
-		y_ = Hexmap.GY2SY(hY_, ConfigManager.getHexHeight(), Math.floorMod(hY_, 2) == 1);
+		y_ = Hexmap.GY2SY(hY_, ConfigManager.getHexHeight(), Math.floorMod(hX_, 2) == 1);
 	}
 	public enum Direction
 	{
@@ -61,21 +61,21 @@ public abstract class HexEntity extends SpriteEntity
 		
 		case north: hY_ -= 1; break;
 		case northEast:
-			hX_ -= 1; 
+			hX_ += 1; 
 			if (hX_ % 2 == 1) hY_ -= 1; // Odd columns are drawn down, evens aren't
 			break;
 		case northWest:
-			hX_ += 1;
+			hX_ -= 1;
 			if (hX_ % 2 == 1) hY_ -= 1; // Odd columns are drawn down, evens aren't
 			break;
 			
 		case south: hY_ += 1; break;
 		case southEast:
-			hX_ -= 1; 
+			hX_ += 1; 
 			if (hX_ % 2 == 0) hY_ += 1; // Odd columns are drawn down, evens aren't
 			break;
 		case southWest:
-			hX_ += 1;
+			hX_ -= 1;
 			if (hX_ % 2 == 0) hY_ += 1; // Odd columns are drawn down, evens aren't
 			break;
 		}

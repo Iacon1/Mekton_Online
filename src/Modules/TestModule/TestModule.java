@@ -12,6 +12,7 @@ import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
 import GameEngine.Configurables.ModuleTypes.ServerMakingModule;
 import GameEngine.Configurables.ModuleTypes.WorldMakingModule;
 import GameEngine.EntityTypes.GameEntity;
+import GameEngine.EntityTypes.GUITypes.GUIPin;
 import Modules.BaseModule.BaseServer;
 import Server.Account;
 import Modules.MektonCore.Hexmap;
@@ -66,6 +67,8 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	public GameEntity makePlayer(Account account)
 	{
 		DummyPlayer player = new DummyPlayer(); // Adds a guy to the map
+		new GUIPin(account);
+		GUIPin.findPin(account).addChild(new TestHandle());
 		account.possessee = player.getId();
 		GameInfo.getWorld().getRootEntities().get(0).addChild(player);
 		player.setPos(2, 2, 0);
@@ -75,12 +78,8 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	@Override
 	public GameEntity wakePlayer(Account account)
 	{
-		DummyPlayer player = new DummyPlayer(); // Adds a guy to the map
-		account.possessee = player.getId();
-		GameInfo.getWorld().getRootEntities().get(0).addChild(player);
-		player.setPos(2, 2, 0);
-		
-		return player;
+		if (account.possessee != -1) return null;
+		else return makePlayer(account);
 	}
 	@Override
 	public GameEntity sleepPlayer(Account account)

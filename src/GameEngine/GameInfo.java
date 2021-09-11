@@ -19,9 +19,10 @@ public class GameInfo
 			instances_ = new ArrayList<GameEntity>();
 		}
 		
-		public void addEntity(GameEntity entity)
+		public int addEntity(GameEntity entity)
 		{
 			instances_.add(entity);
+			return instances_.size() - 1;
 		}
 		public int findEntity(GameEntity entity)
 		{
@@ -31,6 +32,10 @@ public class GameInfo
 		{
 			return instances_.get(id);
 		}
+//		public void removeEntity(int index)
+//		{
+//			instances_.remove(index);
+//		}
 		
 		public ArrayList<GameEntity> getRootEntities() // Returns every instance with no parent
 		{
