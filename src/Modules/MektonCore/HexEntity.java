@@ -4,14 +4,20 @@
 
 package Modules.MektonCore;
 
+import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.SpriteEntity;
 
 public abstract class HexEntity extends SpriteEntity
 {
-	private int x_; // X (of top-front-left corner) on map
-	private int y_; // Y (of top-front-left corner) on map
-	private int z_; // Z (of top-front-left corner) on map
+	private int hX_; // x in hexes
+	private int hY_; // y in hexes
+	private int hZ_; // Z (of top-front-left corner) on map in hexes;
 	
+	private void alignCoords()
+	{
+		x_ = Hexmap.GX2SX(hX_, ConfigManager.getHexWidth());
+		y_ = Hexmap.GY2SY(hY_, ConfigManager.getHexHeight(), Math.floorMod(hY_, 2) == 1);
+	}
 	public enum Direction
 	{
 		down, // -z
@@ -26,51 +32,53 @@ public abstract class HexEntity extends SpriteEntity
 		southEast; // +x, +y
 	}
 	
-	public int getX()
+	public int getX() // In hexes
 	{
-		return x_;
+		return hX_ / ConfigManager.getHexWidth();
 	}
 	public int getY()
 	{
-		return y_;
+		return hY_ / ConfigManager.getScreenHeight();
 	}
 	public int getZ()
 	{
-		return z_;
+		return hZ_;
 	}
 	public void setPos(Integer x, Integer y, Integer z) // If any input is null then don't change
 	{
-		if (x != null) x_ = x;
-		if (y != null) y_ = y;
-		if (z != null) z_ = z;
+		if (x != null) hX_ = x;
+		if (y != null) hY_ = y;
+		if (z != null) hZ_ = z;
+		alignCoords();
 	}
 	
 	public void move(Direction direction, int distance)
 	{
 		switch (direction)
 		{
-		case down: z_ -= 1; break;
-		case up: z_ += 1; break;
+		case down: hZ_ -= 1; break;
+		case up: hZ_ += 1; break;
 		
-		case north: y_ -= 1; break;
+		case north: hY_ -= 1; break;
 		case northEast:
-			x_ -= 1; 
-			if (x_ % 2 == 1) y_ -= 1; // Odd columns are drawn down, evens aren't
+			hX_ -= 1; 
+			if (hX_ % 2 == 1) hY_ -= 1; // Odd columns are drawn down, evens aren't
 			break;
 		case northWest:
-			x_ += 1;
-			if (x_ % 2 == 1) y_ -= 1; // Odd columns are drawn down, evens aren't
+			hX_ += 1;
+			if (hX_ % 2 == 1) hY_ -= 1; // Odd columns are drawn down, evens aren't
 			break;
 			
-		case south: y_ += 1; break;
+		case south: hY_ += 1; break;
 		case southEast:
-			x_ -= 1; 
-			if (x_ % 2 == 0) y_ += 1; // Odd columns are drawn down, evens aren't
+			hX_ -= 1; 
+			if (hX_ % 2 == 0) hY_ += 1; // Odd columns are drawn down, evens aren't
 			break;
 		case southWest:
-			x_ += 1;
-			if (x_ % 2 == 0) y_ += 1; // Odd columns are drawn down, evens aren't
+			hX_ += 1;
+			if (hX_ % 2 == 0) hY_ += 1; // Odd columns are drawn down, evens aren't
 			break;
 		}
+		alignCoords();
 	}
 }

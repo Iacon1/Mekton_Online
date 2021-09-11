@@ -14,6 +14,7 @@ import GameEngine.Configurables.ModuleTypes.WorldMakingModule;
 import GameEngine.EntityTypes.GameEntity;
 import Modules.BaseModule.BaseServer;
 import Server.Account;
+import Modules.MektonCore.Hexmap;
 
 import Server.GameServer;
 
@@ -54,7 +55,11 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	@Override
 	public void drawWorld(GameCanvas canvas)
 	{
-		if (GameInfo.getWorld() != null) GameInfo.getWorld().getRootEntities().get(0).render(0, 0, canvas);
+		if (GameInfo.getWorld() == null) return;
+		canvas.cX_ = 0;
+		canvas.cY_ = 0;
+		((Hexmap) GameInfo.getWorld().getRootEntities().get(0)).setCameraHeight(1);
+		GameInfo.getWorld().getRootEntities().get(0).render(canvas);
 	}
 
 	@Override

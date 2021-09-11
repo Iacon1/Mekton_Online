@@ -10,8 +10,13 @@ import GameEngine.Managers.GraphicsManager;
 public abstract class SpriteEntity extends GameEntity
 {
 	private String imagePath_; // Image path
+
+	protected int x_; // X position
+	protected int y_; // Y position
+	
 	private int cTX_; // Offset on image sheet
 	private int cTY_; // Offset on image sheet
+	
 	private int width_; // Width in pixels
 	private int height_; // Height in pixels
 
@@ -24,9 +29,17 @@ public abstract class SpriteEntity extends GameEntity
 		if (height != null) height_ = height;
 	}
 	
+	/**
+	* Called when mouse is clicked.
+	* <p>
+	* 
+	* @param  cX     Camera's uppermost-leftmost corner's X-position
+	* @param  cY     Camera's uppermost-leftmost corner's Y-position
+	* @param  canvas Canvas to draw to
+	*/
 	@Override
-	public void render(int pX, int pY, GameCanvas canvas) // We don't know where the top-left of the map corresponds to, so we'll let the map decide where to draw us
+	public void render(GameCanvas canvas) 
 	{
-		canvas.drawImageScaled(GraphicsManager.getImage(imagePath_), pX, pY, cTX_, cTY_, width_, height_);
+		canvas.drawImageScaled(GraphicsManager.getImage(imagePath_), x_ - canvas.cX_, y_ - canvas.cY_, cTX_, cTY_, width_, height_);
 	}
 }

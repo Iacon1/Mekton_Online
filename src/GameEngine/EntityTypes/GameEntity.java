@@ -67,5 +67,11 @@ public abstract class GameEntity
 	}
 	
 	public abstract String getName(); // Gets object name
-	public abstract void render(int pX, int pY, GameCanvas canvas);
+	/**
+	* Draws to canvas.
+	* <p>
+	* 
+	* @param  canvas Canvas to draw to.
+	*/
+	public abstract void render(GameCanvas canvas);
 }

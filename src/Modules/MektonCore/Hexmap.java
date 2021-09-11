@@ -18,8 +18,9 @@ import Utils.MiscUtils;
 
 public class Hexmap<T extends HexData> extends GameEntity
 {	
-	ArrayList<ArrayList<ArrayList<T>>> hexes_; // A set of rows (x/width) of columns (y/length) of pillars (z/height)
-	Instancer<T> instancer_;
+	private ArrayList<ArrayList<ArrayList<T>>> hexes_; // A set of rows (x/width) of columns (y/length) of pillars (z/height)
+	private Instancer<T> instancer_;
+	private int cZ_;
 	
 	public Hexmap(T hexTemplate)
 	{
@@ -98,11 +99,11 @@ public class Hexmap<T extends HexData> extends GameEntity
 		
 		return null;
 	}
-	private int GX2SX(int gX, int hexWidth) // gX relative to corner-of-screen
+	public static int GX2SX(int gX, int hexWidth) // gX relative to corner-of-screen
 	{
 		return (int) Math.round(gX * 0.75 * hexWidth);
 	}
-	private int GY2SY(int gY, int hexHeight, boolean shift) // gY relative to corner-of-screen
+	public static int GY2SY(int gY, int hexHeight, boolean shift) // gY relative to corner-of-screen
 	{
 		if (shift)
 			return (int) Math.round(gY * hexHeight + 0.5 * hexHeight);
@@ -116,38 +117,40 @@ public class Hexmap<T extends HexData> extends GameEntity
 		return "Hexmap"; // TODO
 	}
 	
-	@Override
-	public void render(int pX, int pY, GameCanvas canvas) // Draws starting @ x, y as a left corner @ z to g
+	public void setCameraHeight(int z) // Set camera height in hexes
 	{
-		int x = 0;
-		int y = 0;
-		int z = 1;
+		cZ_ = z;
+	}
+	@Override
+	public void render(GameCanvas canvas)
+	{
 		int hexWidth = ConfigManager.getHexWidth(); // Hex width
-		int hexHeight = ConfigManager.getHexHeight(); // Hex height
-		int w = ConfigManager.getScreenWidth() / hexWidth;
-		int h = ConfigManager.getScreenHeight() / hexHeight;
+		int hexHeight = ConfigManager.getHexHeight(); // Hex height	
 		
-		boolean shift = false; // Shift down on y-axis by half-column?
-		
-		for (int i = x; i < Math.min(getMapWidth(), x + w); ++i)
+		for (int k = 0; k < cZ_; ++k)
 		{
-			for (int j = y; j < Math.min(getMapLength(), y + h); ++j)
+			boolean shift = false; // Shift down on y-axis by half-column?
+			for (int i = 0; i < getMapWidth(); ++i)
 			{
-				for (int k = 0; k < z; ++k)
+				for (int j = 0; j < getMapLength(); ++j)
 				{
 					T hex = getHex(i, j, k);
-					int cX = GX2SX(i - x, hexWidth);
-					int cY = GY2SY(j - y, hexHeight, shift);
+					int hX = GX2SX(i, hexWidth);
+					int hY = GY2SY(j, hexHeight, shift);
 					int cTX = hex.tX_ * hexWidth;
 					int cTY = hex.tY_ * hexHeight;
 					
-					canvas.drawImageScaled(GraphicsManager.getImage(hex.tileset_), pX + cX, pY + cY, cTX, cTY, hexWidth, hexHeight);
-					SpriteEntity instance = findEntity(i, j, k);
-					if (instance != null)
-						instance.render(pX + cX, pY + cY, canvas);
+					canvas.drawImageScaled(GraphicsManager.getImage(hex.tileset_), canvas.cX_ + hX, canvas.cY_ + hY, cTX, cTY, hexWidth, hexHeight);
 				}
+				shift = !shift;
 			}
-			shift = !shift;
+			
+			for (int t = 0; t < getChildren().size(); ++t)
+			{
+				HexEntity entity = (HexEntity) getChildren().get(t);
+			
+				if (entity.getZ() == k) entity.render(canvas);
+			}
 		}
 	}
 }
