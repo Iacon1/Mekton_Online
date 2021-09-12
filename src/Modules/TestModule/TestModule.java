@@ -4,6 +4,7 @@
 
 package Modules.TestModule;
 
+import GameEngine.Camera;
 import GameEngine.GameCanvas;
 import GameEngine.GameInfo;
 import GameEngine.Configurables.ModuleTypes.GraphicsHandlerModule;
@@ -15,7 +16,8 @@ import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.GUITypes.GUIPin;
 import Modules.BaseModule.BaseServer;
 import Server.Account;
-import Modules.MektonCore.Hexmap;
+import Modules.MektonCore.HexCamera;
+import Modules.MektonCore.HexEntity;
 
 import Server.GameServer;
 
@@ -57,10 +59,12 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	public void drawWorld(GameCanvas canvas)
 	{
 		if (GameInfo.getWorld() == null) return;
-		canvas.cX_ = 0;
-		canvas.cY_ = 0;
-		((Hexmap) GameInfo.getWorld().getRootEntities().get(0)).setCameraHeight(1);
+		HexEntity possessee = (HexEntity) GameInfo.getWorld().getEntity(GameInfo.getPossessee());
+//		HexCamera.pX = possessee.getPX() - ConfigManager.getScreenWidth() / 2;
+//		HexCamera.pY = possessee.getPY() - ConfigManager.getScreenHeight() / 2;
+		HexCamera.hZ = possessee.getHZ() + 1;
 		GameInfo.getWorld().getRootEntities().get(0).render(canvas);
+		Camera.gui.render(canvas);
 	}
 
 	@Override
@@ -70,6 +74,7 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 		new GUIPin(account);
 		GUIPin.findPin(account).addChild(new TestHandle());
 		account.possessee = player.getId();
+		GameInfo.setPossessee(account.possessee);
 		GameInfo.getWorld().getRootEntities().get(0).addChild(player);
 		player.setPos(2, 2, 0);
 		
@@ -84,11 +89,13 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	@Override
 	public GameEntity sleepPlayer(Account account)
 	{
+		GameInfo.getWorld().removeEntity(account.possessee, true);
 		return null;
 	}
 	@Override
 	public GameEntity deletePlayer(Account account)
 	{
+		GameInfo.getWorld().removeEntity(account.possessee, true);
 		return null;
 	}	
 }

@@ -11,6 +11,6 @@ public class TestHexmap extends Hexmap<TestHexData>
 
 	public TestHexmap(TestHexData testHexData)
 	{
-		super(testHexData);
+		super(testHexData, "Resources/Server Packs/Default/Tilesets/DummyTileset.PNG", "Resources/Server Packs/Default/Tilesets/ZFog.PNG");
 	}
 }

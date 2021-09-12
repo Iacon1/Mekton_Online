@@ -18,15 +18,19 @@ import Utils.MiscUtils;
 
 public class Hexmap<T extends HexData> extends GameEntity
 {	
+	private String tileset_;
+	private String zFog_; // A z-fog tile, which has the same resolution as the tileset but is laid out in a repeating square grid
 	private ArrayList<ArrayList<ArrayList<T>>> hexes_; // A set of rows (x/width) of columns (y/length) of pillars (z/height)
 	private Instancer<T> instancer_;
-	private int cZ_;
-	
-	public Hexmap(T hexTemplate)
+
+	public Hexmap(T hexTemplate, String tileset, String zFog)
 	{
 		super();
 		hexes_ = new ArrayList<ArrayList<ArrayList<T>>>();
 		instancer_ = new Instancer<T>(hexTemplate);
+		
+		tileset_ = tileset;
+		zFog_ = zFog;
 	}
 
 	public void setDimensions(int x, int y, int z) // Sets new dimensions for map
@@ -82,6 +86,8 @@ public class Hexmap<T extends HexData> extends GameEntity
 	}
 	public T getHex(int x, int y, int z) // Gets the hex data @ (x, y, z)
 	{
+		if (x >= hexes_.size() || y >= hexes_.get(0).size() || z >= hexes_.get(0).get(0).size()) return null;
+		
 		ArrayList<ArrayList<T>> xSlice = hexes_.get(x); // A slice along the x axis; Only has y & z axes
 		ArrayList<T> ySlice = xSlice.get(y); // A slice along the y axis; Only has z axis
 		T zSlice = ySlice.get(z); // A slice along the x axis; Only has y & z axes
@@ -93,7 +99,7 @@ public class Hexmap<T extends HexData> extends GameEntity
 		for (int i = 0; i < childrenIds_.size(); ++i)
 		{
 			HexEntity obj = (HexEntity) getChild(i); // Please only put physical objects in here
-			if (obj.getX() == x && obj.getY() == y && obj.getZ() == z)
+			if (obj.getHX() == x && obj.getHY() == y && obj.getHZ() == z)
 				return obj;
 		}
 		
@@ -101,7 +107,7 @@ public class Hexmap<T extends HexData> extends GameEntity
 	}
 	public static int GX2SX(int gX, int hexWidth) // gX relative to corner-of-screen
 	{
-		return (int) Math.round(gX * 0.75 * hexWidth);
+		return (int) Math.round(gX * 0.79 * hexWidth);
 	}
 	public static int GY2SY(int gY, int hexHeight, boolean shift) // gY relative to corner-of-screen
 	{
@@ -110,37 +116,60 @@ public class Hexmap<T extends HexData> extends GameEntity
 		else
 			return (int) Math.round(gY * hexHeight);
 	}
+	public static boolean getShift(int gX)
+	{
+		return Math.floorMod(gX, 2) == 1;
+	}
+	public static int GY2SY(int gY, int hexHeight, int gX) // Calculates shift for you
+	{
+		return GY2SY(gY, hexHeight, getShift(gX));
+	}
 	
 	@Override
 	public String getName()
 	{
 		return "Hexmap"; // TODO
 	}
-	
-	public void setCameraHeight(int z) // Set camera height in hexes
-	{
-		cZ_ = z;
-	}
+	@Override
+	public void update() {}
 	@Override
 	public void render(GameCanvas canvas)
 	{
 		int hexWidth = ConfigManager.getHexWidth(); // Hex width
 		int hexHeight = ConfigManager.getHexHeight(); // Hex height	
 		
-		for (int k = 0; k < cZ_; ++k)
+		int mapWidthSquare = GX2SX(getMapWidth(), hexWidth) / hexWidth; // For Z-Fog
+		int mapHeightSquare = GY2SY(getMapLength(), hexHeight, true) / hexHeight;
+		
+		for (int k = 0; k < HexCamera.hZ; ++k)
 		{
+			if (k != 0) // Draw Z-fog
+			{
+				for (int i = 0; i < Math.max(ConfigManager.getScreenWidth(), mapWidthSquare); ++i)
+				{
+					for (int j = 0; j < Math.max(ConfigManager.getScreenHeight(), mapHeightSquare); ++j)
+					{
+						int hX = i * hexWidth;
+						int hY = j * hexHeight;
+						
+						canvas.drawImageScaled(GraphicsManager.getImage(zFog_), HexCamera.pX + hX, HexCamera.pY + hY, 0, 0, hexWidth, hexHeight);
+					}
+				}
+			}
+			
 			boolean shift = false; // Shift down on y-axis by half-column?
 			for (int i = 0; i < getMapWidth(); ++i)
 			{
 				for (int j = 0; j < getMapLength(); ++j)
 				{
 					T hex = getHex(i, j, k);
+					if (hex == null) continue;
 					int hX = GX2SX(i, hexWidth);
 					int hY = GY2SY(j, hexHeight, shift);
 					int cTX = hex.tX_ * hexWidth;
 					int cTY = hex.tY_ * hexHeight;
 					
-					canvas.drawImageScaled(GraphicsManager.getImage(hex.tileset_), canvas.cX_ + hX, canvas.cY_ + hY, cTX, cTY, hexWidth, hexHeight);
+					canvas.drawImageScaled(GraphicsManager.getImage(tileset_), HexCamera.pX + hX, HexCamera.pY + hY, cTX, cTY, hexWidth, hexHeight);
 				}
 				shift = !shift;
 			}
@@ -149,7 +178,7 @@ public class Hexmap<T extends HexData> extends GameEntity
 			{
 				HexEntity entity = (HexEntity) getChildren().get(t);
 			
-				if (entity.getZ() == k) entity.render(canvas);
+				if (entity.getHZ() <= k) entity.render(canvas);
 			}
 		}
 	}

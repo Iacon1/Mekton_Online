@@ -10,7 +10,8 @@ import GameEngine.GameCanvas;
 import GameEngine.GameInfo;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.InputGetter;
-import GameEngine.EntityTypes.GUITypes.GUIPin;
+import GameEngine.Managers.GraphicsManager;
+import Modules.MektonCore.HexEntity;
 
 public class TestHandle extends GameEntity implements InputGetter
 {
@@ -46,6 +47,8 @@ public class TestHandle extends GameEntity implements InputGetter
 		case KeyEvent.VK_A: GameInfo.setCommand("move sw"); break;
 		case KeyEvent.VK_S: GameInfo.setCommand("move so"); break;
 		case KeyEvent.VK_D: GameInfo.setCommand("move se"); break;
+		case KeyEvent.VK_SPACE: GameInfo.setCommand("move up"); break;
+		case KeyEvent.VK_SHIFT: GameInfo.setCommand("move do"); break;
 		}
 	}
 
@@ -64,10 +67,12 @@ public class TestHandle extends GameEntity implements InputGetter
 	}
 
 	@Override
+	public void update() {}
+	@Override
 	public void render(GameCanvas canvas)
 	{
-		// TODO Auto-generated method stub
-
+		HexEntity possessee = (HexEntity) GameInfo.getWorld().getEntity(GameInfo.getPossessee());
+		canvas.drawText("Height: " + possessee.getHZ(), "MicrogrammaNormalFix.TTF", GraphicsManager.getColor(255, 0, 0), 0, 0, 32);
 	}
 
 }

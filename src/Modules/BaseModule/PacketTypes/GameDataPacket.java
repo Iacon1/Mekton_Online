@@ -4,25 +4,28 @@
 
 package Modules.BaseModule.PacketTypes;
 
+import GameEngine.Camera;
 import GameEngine.GameInfo;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.TransSerializable;
+import GameEngine.EntityTypes.GUITypes.GUIPin;
 import GameEngine.PacketTypes.Packet;
+import Server.Account;
 
 public class GameDataPacket extends Packet implements TransSerializable
 {
 	public int currentLocationId; // Player's location index
-	public int playerObjId; // Player's index
+	public int possesseeId; // Player's index
 	
 	public GameInfo.GameWorld ourView; // Game world, but only contains the data we need
-
+	public int ourGUI;
+	
 	private boolean isNeccessary(GameEntity instance) // Do we need to record this?
 	{
 		return true; // TODO how to determine
 	}
 
-	@Override
-	public void preSerialize()
+	public GameDataPacket(Account player)
 	{
 		ourView = GameInfo.getWorld();
 		
@@ -35,12 +38,21 @@ public class GameDataPacket extends Packet implements TransSerializable
 		}
 		
 		currentLocationId = 0; // TODO determine location
-		*/ // TODO figure out copying the world again
+		*/
+		ourGUI = GUIPin.findPin(player).getId();
+		possesseeId = player.possessee;
+	}
+	@Override
+	public void preSerialize()
+	{
+
 	}
 
 	@Override
 	public void postDeserialize()
 	{
 		GameInfo.setWorld(ourView);
+		GameInfo.setPossessee(possesseeId);
+		Camera.gui = (GUIPin) GameInfo.getWorld().getEntity(ourGUI);
 	}
 }

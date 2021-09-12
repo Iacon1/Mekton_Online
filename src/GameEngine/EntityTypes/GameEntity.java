@@ -39,15 +39,20 @@ public abstract class GameEntity
 		else return getEntity(parentId_);
 	}
 	
-	public void removeChild(GameEntity child) // Removes a child without destroying it
+	public void removeChild(GameEntity child, boolean recurse)
 	{
 		child.parentId_ = -1;
+		if (recurse) child.clearChildren(true);
 		this.childrenIds_.remove(child.getId());
+	}
+	public void clearChildren(boolean recurse)
+	{
+		for (int i = childrenIds_.size() - 1; i >= 0; --i) removeChild(getEntity(i), recurse);
 	}
 	public void addChild(GameEntity child) // Adds a new child, replacing its old parent if needed
 	{
 		if (child.parentId_ != -1)
-			child.getParent().removeChild(child);
+			child.getParent().removeChild(child, false);
 		child.parentId_ = this.getId();
 		childrenIds_.add(child.getId());
 	}
@@ -67,6 +72,7 @@ public abstract class GameEntity
 	}
 	
 	public abstract String getName(); // Gets object name
+	public abstract void update(); // Updates regularly
 	/**
 	* Draws to canvas.
 	* <p>

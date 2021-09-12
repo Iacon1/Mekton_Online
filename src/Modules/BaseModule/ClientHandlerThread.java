@@ -41,6 +41,13 @@ public class ClientHandlerThread extends StatefulConnectionPairThread
 	}
 	
 	@Override
+	public void runFunc()
+	{
+		parent_.update();
+		super.runFunc();
+	}
+	
+	@Override
 	public void onClose()
 	{
 		Logging.logNotice("Client " + socket_.getInetAddress() + " has disconnected.");

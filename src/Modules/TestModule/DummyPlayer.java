@@ -4,13 +4,9 @@
 
 package Modules.TestModule;
 
-import java.awt.event.KeyEvent;
-
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.InputGetter;
-import GameEngine.EntityTypes.TransSerializable;
 import Modules.MektonCore.HexEntity;
-import Utils.Logging;
 
 public class DummyPlayer extends HexEntity implements InputGetter
 {	
@@ -27,7 +23,7 @@ public class DummyPlayer extends HexEntity implements InputGetter
 	}
 
 	@Override
-	public void onMouseClick(int mX, int mY, int button) {Logging.logNotice("Mouse clicked!");}
+	public void onMouseClick(int mX, int mY, int button) {}
 	@Override
 	public void onMousePress(int mX, int mY, int button) {}
 
@@ -35,7 +31,7 @@ public class DummyPlayer extends HexEntity implements InputGetter
 	public void onMouseRelease(int mX, int mY, int button) {}
 
 	@Override
-	public void onKeyPress(int code) {Logging.logNotice("Key clicked: " + KeyEvent.getKeyText(code));}
+	public void onKeyPress(int code) {}
 
 	@Override
 	public void onKeyRelease(int code)

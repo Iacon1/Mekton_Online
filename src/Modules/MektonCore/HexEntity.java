@@ -5,9 +5,9 @@
 package Modules.MektonCore;
 
 import GameEngine.Configurables.ConfigManager;
-import GameEngine.EntityTypes.SpriteEntity;
+import GameEngine.EntityTypes.KineticSpriteEntity;
 
-public abstract class HexEntity extends SpriteEntity
+public abstract class HexEntity extends KineticSpriteEntity
 {
 	private int hX_; // x in hexes
 	private int hY_; // y in hexes
@@ -16,7 +16,7 @@ public abstract class HexEntity extends SpriteEntity
 	private void alignCoords()
 	{
 		x_ = Hexmap.GX2SX(hX_, ConfigManager.getHexWidth());
-		y_ = Hexmap.GY2SY(hY_, ConfigManager.getHexHeight(), Math.floorMod(hX_, 2) == 1);
+		y_ = Hexmap.GY2SY(hY_, ConfigManager.getHexHeight(), hX_);
 	}
 	public enum Direction
 	{
@@ -32,15 +32,15 @@ public abstract class HexEntity extends SpriteEntity
 		southEast; // +x, +y
 	}
 	
-	public int getX() // In hexes
+	public int getHX() // In hexes
 	{
 		return hX_ / ConfigManager.getHexWidth();
 	}
-	public int getY()
+	public int getHY()
 	{
 		return hY_ / ConfigManager.getScreenHeight();
 	}
-	public int getZ()
+	public int getHZ()
 	{
 		return hZ_;
 	}
@@ -51,34 +51,76 @@ public abstract class HexEntity extends SpriteEntity
 		if (z != null) hZ_ = z;
 		alignCoords();
 	}
-	
-	public void move(Direction direction, int distance)
+	/**
+	* Move to a (2D) hex coord at a set speed.
+	* <p>
+	*
+	* @param  hX    Hex x coord to move to.
+	* @param  hY    Hex y coord to move to.
+	* @param  speed Speed to move at. (in pixels!)
+	*/
+	public void moveTargetHex(int hX, int hY, int speed)
 	{
+		int tX = Hexmap.GX2SX(hX, ConfigManager.getHexWidth());
+		int tY = Hexmap.GY2SY(hY, ConfigManager.getHexHeight(), hX);
+		
+		moveTargetSpeed(tX, tY, speed);
+	}
+	/**
+	* Move in 2D hexes at a set speed.
+	* <p>
+	*
+	* @param  hX    How far right (or left, if negative) to move.
+	* @param  hY    How far down (or up, if negative) to move
+	* @param  speed Speed to move at. (in pixels!)
+	*/
+	public void moveDeltaHex(int hX, int hY, int speed)
+	{
+		moveTargetHex(hX + hX_, hY + hY_, speed);
+	}
+
+	public void moveDirectional(Direction direction, int distance, int speed)
+	{
+		int dX = 0, dY = 0, dZ = 0;
 		switch (direction)
 		{
-		case down: hZ_ -= 1; break;
-		case up: hZ_ += 1; break;
+		case down:
+			dZ = -distance; break;
+		case up:
+			dZ = distance; break;
 		
-		case north: hY_ -= 1; break;
+		case north:
+			dY = -distance; break;
 		case northEast:
-			hX_ += 1; 
-			if (hX_ % 2 == 1) hY_ -= 1; // Odd columns are drawn down, evens aren't
+			dX = distance; 
+			if (Hexmap.getShift(dX + hX_)) dY = -distance;
 			break;
 		case northWest:
-			hX_ -= 1;
-			if (hX_ % 2 == 1) hY_ -= 1; // Odd columns are drawn down, evens aren't
+			dX = -distance;
+			if (Hexmap.getShift(dX + hX_)) dY = -distance;
 			break;
 			
-		case south: hY_ += 1; break;
+		case south:
+			dY = distance; break;
 		case southEast:
-			hX_ += 1; 
-			if (hX_ % 2 == 0) hY_ += 1; // Odd columns are drawn down, evens aren't
+			dX = distance; 
+			if (!Hexmap.getShift(dX + hX_)) dY = distance;
 			break;
 		case southWest:
-			hX_ -= 1;
-			if (hX_ % 2 == 0) hY_ += 1; // Odd columns are drawn down, evens aren't
+			dX = -distance;
+			if (!Hexmap.getShift(dX + hX_)) dY = distance;
 			break;
 		}
+//		alignCoords();
+		moveDeltaHex(dX, dY, speed);
+		hX_ += dX;
+		hY_ += dY;
+		hZ_ += dZ;
+	}
+	
+	@Override
+	public void onStop()
+	{
 		alignCoords();
 	}
 }

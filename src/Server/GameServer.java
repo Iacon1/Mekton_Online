@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import GameEngine.GameInfo;
+import GameEngine.EntityTypes.GameEntity;
 import Net.ConnectionPairThread;
 import Net.Server.Server;
 import Utils.JSONManager;
@@ -63,7 +65,14 @@ public abstract class GameServer<A extends Account, T extends ConnectionPairThre
 		
 		return accountList;
 	}
-	
+	public void update()
+	{
+		for (int i = 0; i < GameInfo.getWorld().getEntities().size(); ++i)
+		{
+			GameEntity entity = GameInfo.getWorld().getEntities().get(i);
+			if (entity != null) entity.update();
+		}
+	}
 	public boolean login(String username, String password)
 	{
 		if (accounts_.get(username) == null) return false;

@@ -22,10 +22,7 @@ public class GameCanvas extends JPanel
 	public float scaleY_;
 	// Scales the image; Must be integers
 	// 1x scale size is given by ConfigManager
-	
-	public int cX_; // Camera X
-	public int cY_; // Camera Y
-	
+
 	Graphics g_; // TODO This is a hack so we don't have to juggle this in function calls
 	
 	public boolean setScale(float scaleX, float scaleY)
@@ -49,7 +46,6 @@ public class GameCanvas extends JPanel
 		super.paintComponent(g);
 		g_ = g;
 		ModuleManager.getHighestOfType(GraphicsHandlerModule.class).drawWorld(this);
-		drawText("Hello", "MicrogrammaNormalFix.TTF", GraphicsManager.getColor(255, 0, 0), 0, 0, 32);
 		g_ = null;
 	}
 	

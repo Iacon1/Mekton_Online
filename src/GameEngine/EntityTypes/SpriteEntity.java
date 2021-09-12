@@ -4,6 +4,7 @@
 
 package GameEngine.EntityTypes;
 
+import GameEngine.Camera;
 import GameEngine.GameCanvas;
 import GameEngine.Managers.GraphicsManager;
 
@@ -29,9 +30,22 @@ public abstract class SpriteEntity extends GameEntity
 		if (height != null) height_ = height;
 	}
 
+	public int getPX()
+	{
+		return x_;
+	}
+	public int getPY()
+	{
+		return y_;
+	}
+	public void setPos(int x, int y)
+	{
+		x_ = x;
+		y_ = y;
+	}
 	@Override
 	public void render(GameCanvas canvas) 
 	{
-		canvas.drawImageScaled(GraphicsManager.getImage(imagePath_), x_ - canvas.cX_, y_ - canvas.cY_, cTX_, cTY_, width_, height_);
+		canvas.drawImageScaled(GraphicsManager.getImage(imagePath_), x_ - Camera.pX, y_ - Camera.pY, cTX_, cTY_, width_, height_);
 	}
 }

@@ -8,12 +8,6 @@ import Server.Account;
 public final class GUIPin extends GameEntity
 {
 	private Account owner_;
-	
-	@Override
-	public String getName()
-	{
-		return "GUI Pin: " + owner_.username;
-	}
 
 	public GUIPin(Account owner)
 	{
@@ -52,6 +46,13 @@ public final class GUIPin extends GameEntity
 		return findPin(account.username);
 	}
 	
+	@Override
+	public String getName()
+	{
+		return "GUI Pin: " + owner_.username;
+	}
+	@Override
+	public void update() {}
 	@Override
 	public void render(GameCanvas canvas)
 	{
