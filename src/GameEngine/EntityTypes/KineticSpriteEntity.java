@@ -4,6 +4,8 @@
 
 package GameEngine.EntityTypes;
 
+import GameEngine.PixelCoord;
+
 public abstract class KineticSpriteEntity extends SpriteEntity
 {
 	protected int tX_ = -1; // Target coords; -1 if no target
@@ -36,6 +38,17 @@ public abstract class KineticSpriteEntity extends SpriteEntity
 		tX_ = x;
 		tY_ = y;
 		speed_ = speed;
+	}
+	/**
+	* Moves to target at a set speed.
+	* <p>
+	*
+	* @param  target Target positon.
+	* @param  speed  How fast to move.
+	*/
+	public void moveTargetSpeed(PixelCoord target, int speed)
+	{
+		moveTargetSpeed(target.x_, target.y_, speed);
 	}
 	/**
 	* Moves x to the right and y to the left at a set speed.

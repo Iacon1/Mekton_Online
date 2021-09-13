@@ -6,14 +6,15 @@ package Modules.TestModule;
 
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.InputGetter;
-import Modules.MektonCore.HexEntity;
+import Modules.HexUtilities.HexEntity;
+import Modules.HexUtilities.HexConfigManager;
 
 public class DummyPlayer extends HexEntity implements InputGetter
 {	
 	public DummyPlayer()
 	{
 		super();
-		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, ConfigManager.getHexWidth(), ConfigManager.getHexHeight());
+		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight());
 	}
 	
 	@Override

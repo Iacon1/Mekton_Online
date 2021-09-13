@@ -4,9 +4,9 @@
 
 package Modules.TestModule;
 
-import Modules.MektonCore.Hexmap;
+import Modules.MektonCore.GameMap;
 
-public class TestHexmap extends Hexmap<TestHexData>
+public class TestHexmap extends GameMap<TestHexData>
 {
 
 	public TestHexmap(TestHexData testHexData)

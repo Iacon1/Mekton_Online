@@ -19,10 +19,6 @@ public final class ConfigManager
 		protected int screenHeight_ = 480;
 		protected boolean maintainRatio_ = true;
 		
-		protected int hexWidth_ = 38;
-		protected int hexHeight_ = 32;
-		
-		
 		protected int frameCap_ = 60;
 		
 		//Thread settings
@@ -39,7 +35,7 @@ public final class ConfigManager
 		config_ = null;
 		if (server != null)
 		{
-			path = "Resources/Server Packs/" + server + "/Config.json";
+			path = "Resources/Server Packs/" + server + "/BaseConfig.json";
 			config_ = new Config();
 			config_ = JSONManager.deserializeJSON(MiscUtils.readText(path), config_.getClass());
 			if (config_ == null) // Save the default into there
@@ -82,15 +78,6 @@ public final class ConfigManager
 	public static int getScreenHeight() // Height of screen in pixels
 	{
 		return config_.screenHeight_;
-	}
-
-	public static int getHexWidth() // Hex width in pixels
-	{
-		return config_.hexWidth_;
-	}
-	public static int getHexHeight() // Hex height in pixels; Should be 85% of getHexLength()
-	{
-		return config_.hexHeight_;
 	}
 
 	public static boolean maintainRatio()

@@ -2,7 +2,7 @@
 // Created 06/05/2021
 // Modules can extend this and use it for hexmaps
 
-package Modules.MektonCore;
+package Modules.HexUtilities;
 
 public abstract class HexData
 {

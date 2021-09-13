@@ -2,7 +2,7 @@
 // Created 09/11/2021
 // Includes a Z-layer
 
-package Modules.MektonCore;
+package Modules.HexUtilities;
 
 import GameEngine.Camera;
 

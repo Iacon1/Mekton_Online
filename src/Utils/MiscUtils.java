@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 
@@ -141,5 +142,38 @@ public final class MiscUtils
 	public static <T> String ClassToString(Class<T> sClass)
 	{
 		return sClass.getName();
+	}
+	
+	public static int divCeil(int a, int b)
+	{
+		return (int) (((float) a) / ((float) b));
+	}
+	public static int divFloor(int a, int b)
+	{
+		return (int) (((float) a) / ((float) b));
+	}
+	
+	public static int multiMax(int x, int... X)
+	{
+		int y;
+		if (X.length > 1)
+		{
+			int[] sX = Arrays.copyOfRange(X, 1, X.length - 1);
+			y = multiMax(X[0], sX);
+		}
+		else y = X[0];
+		
+		return Math.max(x, y);
+	}
+	
+	/** I forgot what lerp does
+	 * 
+	 * @ param a
+	 * @ param b
+	 * @ param t
+	 */
+	public static float lerp(float a, float b, float t)
+	{
+		return a + (b - a) * t;
 	}
 }

@@ -5,7 +5,8 @@
 package Modules.TestModule;
 
 import GameEngine.GameInfo;
-import Modules.MektonCore.HexEntity;
+import Modules.HexUtilities.HexDirection;
+import Modules.HexUtilities.HexEntity;
 import Server.Account;
 
 public class TestAccount extends Account
@@ -22,30 +23,30 @@ public class TestAccount extends Account
 				switch (params[1])
 				{
 				case "north": case "no": case "n":
-					physObject.moveDirectional(HexEntity.Direction.north, 1, 2);
+					physObject.moveDirectional(HexDirection.north, 2, 2);
 					break;
 				case "northwest": case "nw":
-					physObject.moveDirectional(HexEntity.Direction.northWest, 1, 2);
+					physObject.moveDirectional(HexDirection.northWest, 2, 2);
 					break;
 				case "northeast": case "ne":
-					physObject.moveDirectional(HexEntity.Direction.northEast, 1, 2);
+					physObject.moveDirectional(HexDirection.northEast, 2, 2);
 					break;
 					
 				case "south": case "so": case "s":
-					physObject.moveDirectional(HexEntity.Direction.south, 1, 2);
+					physObject.moveDirectional(HexDirection.south, 2, 2);
 					break;
 				case "southwest": case "sw":
-					physObject.moveDirectional(HexEntity.Direction.southWest, 1, 2);
+					physObject.moveDirectional(HexDirection.southWest, 2, 2);
 					break;
 				case "southeast": case "se":
-					physObject.moveDirectional(HexEntity.Direction.southEast, 1, 2);
+					physObject.moveDirectional(HexDirection.southEast, 2, 2);
 					break;
 					
 				case "up":
-					physObject.moveDirectional(HexEntity.Direction.up, 1, 2);
+					physObject.moveDirectional(HexDirection.up, 2, 2);
 					break;
 				case "down": case "do":
-					physObject.moveDirectional(HexEntity.Direction.down, 1, 2);
+					physObject.moveDirectional(HexDirection.down, 2, 2);
 					break;
 				}
 				break;

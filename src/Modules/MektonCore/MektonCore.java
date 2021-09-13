@@ -8,7 +8,7 @@ import com.google.gson.GsonBuilder;
 
 import GameEngine.Configurables.ModuleTypes.GSONModule;
 import GameEngine.Configurables.ModuleTypes.Module;
-
+import Modules.HexUtilities.HexData;
 import Utils.GSONConfig.AbsFactory;
 
 public class MektonCore implements Module, GSONModule

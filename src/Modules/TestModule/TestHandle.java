@@ -11,7 +11,7 @@ import GameEngine.GameInfo;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.InputGetter;
 import GameEngine.Managers.GraphicsManager;
-import Modules.MektonCore.HexEntity;
+import Modules.HexUtilities.HexEntity;
 
 public class TestHandle extends GameEntity implements InputGetter
 {
@@ -72,7 +72,7 @@ public class TestHandle extends GameEntity implements InputGetter
 	public void render(GameCanvas canvas)
 	{
 		HexEntity possessee = (HexEntity) GameInfo.getWorld().getEntity(GameInfo.getPossessee());
-		canvas.drawText("Height: " + possessee.getHZ(), "MicrogrammaNormalFix.TTF", GraphicsManager.getColor(255, 0, 0), 0, 0, 32);
+		canvas.drawText("Height: " + possessee.getPos().z_, "MicrogrammaNormalFix.TTF", GraphicsManager.getColor(255, 0, 0), 0, 0, 32);
 	}
 
 }

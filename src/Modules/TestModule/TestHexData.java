@@ -4,7 +4,7 @@
 
 package Modules.TestModule;
 
-import Modules.MektonCore.HexData;
+import Modules.HexUtilities.HexData;
 
 public class TestHexData extends HexData
 {

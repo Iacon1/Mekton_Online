@@ -37,6 +37,7 @@ public final class ModuleManager
 		
 		moduleList = new ArrayList<String>();
 		moduleList.add("BaseModule");
+		moduleList.add("HexUtilities");
 		moduleList.add("MektonCore");
 		moduleList.add("TestModule");
 		
