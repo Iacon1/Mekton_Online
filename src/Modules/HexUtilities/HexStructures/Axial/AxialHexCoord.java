@@ -114,7 +114,7 @@ public class AxialHexCoord implements HexCoord
 	@Override
 	public PixelCoord toPixel() // https://www.redblobgames.com/grids/hexagons/#hex-to-pixel
 	{
-		int x = (3 * HexConfigManager.getHexWidth()) / 4 * q_;
+		int x = (3 * HexConfigManager.getHexWidth()) / 4 * q_ + q_; // Last q fixes a off-by-one spacing issue
 		// x = (3 / 2 * q * size) = (3 * width) / 4 * q
 		int y = (HexConfigManager.getHexHeight() / 2) * q_ +  HexConfigManager.getHexHeight() * r_;
 		// y = size * (sqrt3 / 2 * q + sqrt3 * r) = (height / 2 * q + height * r)
