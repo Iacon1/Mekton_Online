@@ -4,28 +4,26 @@
 
 package Modules.HexUtilities;
 
-import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.KineticSpriteEntity;
-import Modules.HexUtilities.HexStructures.AxialCoord;
-import Modules.HexUtilities.HexStructures.AxialCoord3D;
-import Modules.MektonCore.GameMap;
+import Modules.HexUtilities.HexStructures.HexCoord;
 
-public abstract class HexEntity extends KineticSpriteEntity // T is coordinate type
+public abstract class HexEntity<T extends HexCoord> extends KineticSpriteEntity // T is coordinate type
 {
-	AxialCoord3D pos_;
+	T pos_;
 	
 	private void alignCoords()
 	{
-		
+		this.setPos(pos_.toPixel().x_, pos_.toPixel().y_);
 	}
 	
-	public AxialCoord3D getPos()
+	public T getPos()
 	{
 		return pos_;
 	}
-	public void setPos(AxialCoord3D pos)
+	public void setPos(T pos)
 	{
 		pos_ = pos;
+		alignCoords();
 	}
 	
 	/**
@@ -35,10 +33,10 @@ public abstract class HexEntity extends KineticSpriteEntity // T is coordinate t
 	* @param  target Target position. (in hexes)
 	* @param  speed  Speed to move at. (in pixels!)
 	*/
-	public void moveTargetHex(AxialCoord target, int speed)
+	public void moveTargetHex(T target, int speed)
 	{
-		
-		moveTargetSpeed(AxialCoord.hex2Pixel(target), speed);
+		pos_ = target;
+		moveTargetSpeed(target.toPixel(), speed);
 	}
 	/**
 	* Move in 2D hexes at a set speed.
@@ -48,30 +46,20 @@ public abstract class HexEntity extends KineticSpriteEntity // T is coordinate t
 	* @param  hY    How far down (or up, if negative) to move
 	* @param  speed Speed to move at. (in pixels!)
 	*/
-	public void moveDeltaHex(AxialCoord delta, int speed)
+	public void moveDeltaHex(T delta, int speed)
 	{
 		moveTargetHex(pos_.rAdd(delta), speed);
 	}
 
 	public void moveDirectional(HexDirection dir, int distance, int speed)
 	{
-		AxialCoord3D delta = new AxialCoord3D(0, 0, 0);
-		switch (dir)
-		{
-		case down: delta.z_ = -distance; break;
-		case up: delta.z_ = distance; break;
-		default:
-			delta.q_ = AxialCoord.getUnitVector(dir).multiply(distance).q_;
-			delta.r_ = AxialCoord.getUnitVector(dir).multiply(distance).r_;
-		}
-//		alignCoords();
+		T delta = pos_.getUnitVector(dir).rMultiply(distance);
 		moveDeltaHex(delta, speed);
-		
 	}
 	
-	public boolean isPresentAt(int hX, int hY, int hZ)
+	public boolean isPresentAt(T pos)
 	{
-		return false; //return hX == hX_ && hY == hY_ && hZ == hZ_;
+		return pos_ == pos;
 	}
 	@Override
 	public void onStop()

@@ -44,8 +44,10 @@ public class HexConfigManager
 	{
 		return getHexRadius() * 2;
 	}
-	public static int getHexHeight() // Hex height in pixels; Should be 85% of getHexLength()
+	public static int getHexHeight() // Hex height in pixels
 	{
-		return (int) ((float) Math.sqrt(3.0) * (float) getHexRadius());
+		double size = (double) getHexRadius();
+		double h = Math.sqrt(3.0) * size;
+		return (int) h;
 	}
 }

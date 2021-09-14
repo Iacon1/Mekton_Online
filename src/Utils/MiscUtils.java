@@ -176,4 +176,13 @@ public final class MiscUtils
 	{
 		return a + (b - a) * t;
 	}
+	
+	public static int forceMult(float a, float b)
+	{
+		return (int) (Math.floor(a / b) * b);
+	}
+	public static int forceMult(double a, double b)
+	{
+		return (int) (Math.floor(a / b) * b);
+	}
 }

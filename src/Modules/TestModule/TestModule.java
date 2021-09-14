@@ -18,7 +18,7 @@ import Modules.BaseModule.BaseServer;
 import Modules.HexUtilities.HexCamera;
 import Modules.HexUtilities.HexConfigManager;
 import Modules.HexUtilities.HexEntity;
-import Modules.HexUtilities.HexStructures.AxialCoord3D;
+import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Server.Account;
 import Server.GameServer;
 
@@ -48,8 +48,8 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	public void newWorld()
 	{
 		GameInfo.setWorld(new GameInfo.GameWorld());
-		TestHexmap map = new TestHexmap(new TestHexData());
-		map.setDimensions(18, 9, 1);
+		TestHexmap map = new TestHexmap();
+		map.setDimensions(18, 9, 1, new TestHexData());
 	}
 	@Override
 	public void loadWorld(String server)
@@ -61,7 +61,7 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	public void drawWorld(GameCanvas canvas)
 	{
 		if (GameInfo.getWorld() == null) return;
-		HexEntity possessee = (HexEntity) GameInfo.getWorld().getEntity(GameInfo.getPossessee());
+		HexEntity<AxialHexCoord3D> possessee = (HexEntity<AxialHexCoord3D>) GameInfo.getWorld().getEntity(GameInfo.getPossessee());
 //		HexCamera.pX = possessee.getPX() - ConfigManager.getScreenWidth() / 2;
 //		HexCamera.pY = possessee.getPY() - ConfigManager.getScreenHeight() / 2;
 		HexCamera.hZ = possessee.getPos().z_ + 1;
@@ -78,7 +78,7 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 		account.possessee = player.getId();
 		GameInfo.setPossessee(account.possessee);
 		GameInfo.getWorld().getRootEntities().get(0).addChild(player);
-		player.setPos(new AxialCoord3D(2, 2, 0));
+		player.setPos(new AxialHexCoord3D(2, 2, 0));
 		
 		return player;
 	}

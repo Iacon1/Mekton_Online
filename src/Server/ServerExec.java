@@ -9,6 +9,7 @@ import javax.swing.UIManager;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.WorldMakingModule;
+import Utils.DebugLogger;
 import Utils.Logging;
 
 public class ServerExec
@@ -16,7 +17,7 @@ public class ServerExec
 
 	public static void main(String[] args)
 	{
-		//Logging.setLogger(new DebugLogger());
+//		Logging.setLogger(new DebugLogger());
 		Logging.setLogger(new ServerLogger());
 		
 		try

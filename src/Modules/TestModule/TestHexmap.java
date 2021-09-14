@@ -9,8 +9,8 @@ import Modules.MektonCore.GameMap;
 public class TestHexmap extends GameMap<TestHexData>
 {
 
-	public TestHexmap(TestHexData testHexData)
+	public TestHexmap()
 	{
-		super(testHexData, "Resources/Server Packs/Default/Tilesets/DummyTileset.PNG", "Resources/Server Packs/Default/Tilesets/ZFog.PNG");
+		super("Resources/Server Packs/Default/Tilesets/DummyTileset.PNG", "Resources/Server Packs/Default/Tilesets/ZFog.PNG");
 	}
 }

@@ -23,30 +23,30 @@ public class TestAccount extends Account
 				switch (params[1])
 				{
 				case "north": case "no": case "n":
-					physObject.moveDirectional(HexDirection.north, 2, 2);
+					physObject.moveDirectional(HexDirection.north, 1, 2);
 					break;
 				case "northwest": case "nw":
-					physObject.moveDirectional(HexDirection.northWest, 2, 2);
+					physObject.moveDirectional(HexDirection.northWest, 1, 2);
 					break;
 				case "northeast": case "ne":
-					physObject.moveDirectional(HexDirection.northEast, 2, 2);
+					physObject.moveDirectional(HexDirection.northEast, 1, 2);
 					break;
 					
 				case "south": case "so": case "s":
-					physObject.moveDirectional(HexDirection.south, 2, 2);
+					physObject.moveDirectional(HexDirection.south, 1, 2);
 					break;
 				case "southwest": case "sw":
-					physObject.moveDirectional(HexDirection.southWest, 2, 2);
+					physObject.moveDirectional(HexDirection.southWest, 1, 2);
 					break;
 				case "southeast": case "se":
-					physObject.moveDirectional(HexDirection.southEast, 2, 2);
+					physObject.moveDirectional(HexDirection.southEast, 1, 2);
 					break;
 					
 				case "up":
-					physObject.moveDirectional(HexDirection.up, 2, 2);
+					physObject.moveDirectional(HexDirection.up, 1, 2);
 					break;
 				case "down": case "do":
-					physObject.moveDirectional(HexDirection.down, 2, 2);
+					physObject.moveDirectional(HexDirection.down, 1, 2);
 					break;
 				}
 				break;

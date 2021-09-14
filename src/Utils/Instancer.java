@@ -6,16 +6,21 @@ package Utils;
 
 public class Instancer<T>
 {
-	private T template_;
+	private Class<T> class_;
 	
-	public Instancer(T template)
+	public Instancer(T template) // TODO remove
 	{
-		template_ = template;
+		class_ = (Class<T>) template.getClass();
+	}
+	
+	public Instancer(Class<T> tClass)
+	{
+		class_ = tClass;
 	}
 	
 	public Class<T> getInstClass()
 	{
-		return (Class<T>) template_.getClass();
+		return class_;
 	}
 	public T getInstance()
 	{
