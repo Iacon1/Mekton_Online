@@ -7,9 +7,10 @@ package Modules.TestModule;
 import GameEngine.EntityTypes.InputGetter;
 import Modules.HexUtilities.HexEntity;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
+import Modules.MektonCore.DirectionalHexEntity;
 import Modules.HexUtilities.HexConfigManager;
 
-public class DummyPlayer extends HexEntity<AxialHexCoord3D> implements InputGetter
+public class DummyPlayer extends DirectionalHexEntity<AxialHexCoord3D> implements InputGetter
 {	
 	public DummyPlayer()
 	{

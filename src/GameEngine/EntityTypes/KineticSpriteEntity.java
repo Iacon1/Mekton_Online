@@ -12,6 +12,10 @@ public abstract class KineticSpriteEntity extends SpriteEntity
 	protected int tY_ = -1;
 	protected int speed_ = 0; // Speed, 0 if none
 
+	public int getSpeed()
+	{
+		return speed_;
+	}
 	/**
 	* Moves x pixels to the right and y pixels down.
 	* <p>

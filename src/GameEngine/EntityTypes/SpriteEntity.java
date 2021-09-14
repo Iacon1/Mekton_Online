@@ -15,8 +15,8 @@ public abstract class SpriteEntity extends GameEntity
 	protected int x_; // X position
 	protected int y_; // Y position
 	
-	private int cTX_; // Offset on image sheet
-	private int cTY_; // Offset on image sheet
+	protected int cTX_; // Offset on image sheet
+	protected int cTY_; // Offset on image sheet
 	
 	private int width_; // Width in pixels
 	private int height_; // Height in pixels

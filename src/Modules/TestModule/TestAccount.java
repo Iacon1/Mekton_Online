@@ -20,6 +20,7 @@ public class TestAccount extends Account
 			{
 			case "move": // TODO objects with MA
 				HexEntity physObject = (HexEntity) GameInfo.getWorld().getEntities().get(possessee);
+				if (physObject.getSpeed() != 0) return;
 				switch (params[1])
 				{
 				case "north": case "no": case "n":
