@@ -6,7 +6,7 @@ package Modules.HexUtilities.HexStructures;
 
 import java.util.ArrayList;
 
-import GameEngine.PixelCoord;
+import GameEngine.Point2D;
 import Modules.HexUtilities.HexConfigManager;
 import Modules.HexUtilities.HexDirection;
 import Utils.MiscUtils;
@@ -57,5 +57,5 @@ public interface HexCoord
 	/** Converts to a pixel coordinate. Should return the top-left corner for a hex-shaped sprite,
 	 *  which is actually *outside* the hex.
 	 */
-	public PixelCoord toPixel();
+	public Point2D toPixel();
 }

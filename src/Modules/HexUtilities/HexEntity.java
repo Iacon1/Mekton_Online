@@ -4,25 +4,25 @@
 
 package Modules.HexUtilities;
 
-import GameEngine.EntityTypes.KineticSpriteEntity;
+import GameEngine.EntityTypes.SpriteEntity;
 import Modules.HexUtilities.HexStructures.HexCoord;
 
-public abstract class HexEntity<T extends HexCoord> extends KineticSpriteEntity // T is coordinate type
+public abstract class HexEntity<T extends HexCoord> extends SpriteEntity // T is coordinate type
 {
-	T pos_;
+	T hexPos_;
 	
 	private void alignCoords()
 	{
-		this.setPos(pos_.toPixel().x_, pos_.toPixel().y_);
+		this.setPos(hexPos_.toPixel());
 	}
 	
-	public T getPos()
+	public T getHexPos()
 	{
-		return pos_;
+		return hexPos_;
 	}
-	public void setPos(T pos)
+	public void setHexPos(T pos)
 	{
-		pos_ = pos;
+		hexPos_ = pos;
 		alignCoords();
 	}
 	
@@ -35,7 +35,7 @@ public abstract class HexEntity<T extends HexCoord> extends KineticSpriteEntity 
 	*/
 	public void moveTargetHex(T target, int speed)
 	{
-		pos_ = target;
+		hexPos_ = target;
 		moveTargetSpeed(target.toPixel(), speed);
 	}
 	/**
@@ -48,18 +48,18 @@ public abstract class HexEntity<T extends HexCoord> extends KineticSpriteEntity 
 	*/
 	public void moveDeltaHex(T delta, int speed)
 	{
-		moveTargetHex(pos_.rAdd(delta), speed);
+		moveTargetHex(hexPos_.rAdd(delta), speed);
 	}
 
 	public void moveDirectional(HexDirection dir, int distance, int speed)
 	{
-		T delta = pos_.getUnitVector(dir).rMultiply(distance);
+		T delta = hexPos_.getUnitVector(dir).rMultiply(distance);
 		moveDeltaHex(delta, speed);
 	}
 	
 	public boolean isPresentAt(T pos)
 	{
-		return pos_ == pos;
+		return hexPos_ == pos;
 	}
 	@Override
 	public void onStop()

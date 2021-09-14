@@ -18,7 +18,7 @@ import Modules.HexUtilities.HexStructures.Axial.AxialHexMapRectangle;
 import Modules.HexUtilities.HexStructures.HexMap;
 import Modules.HexUtilities.HexStructures.Axial.AxialHex3DMap;
 import GameEngine.ScreenCanvas;
-import GameEngine.PixelCoord;
+import GameEngine.Point2D;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.SpriteEntity;
@@ -85,7 +85,7 @@ public class GameMap<T extends HexData> extends GameEntity implements HexMap<Axi
 		for (int i = 0; i < childrenIds_.size(); ++i)
 		{
 			HexEntity obj = (HexEntity) getChild(i); // Please only put physical objects in here
-			if (obj.getPos() == coord) return obj;
+			if (obj.getHexPos() == coord) return obj;
 		}
 		
 		return null;
@@ -101,9 +101,9 @@ public class GameMap<T extends HexData> extends GameEntity implements HexMap<Axi
 	
 	private void drawZFog(ScreenCanvas canvas, int hexWidth, int hexHeight)
 	{
-		canvas.drawImageScaled(GraphicsManager.getImage(zFog_), 0, 0, 0, 0, ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight());
+		canvas.drawImageScaled(GraphicsManager.getImage(zFog_), new Point2D(0, 0), new Point2D(0, 0), new Point2D(ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight()));
 	}
-	private void drawHexes(ScreenCanvas canvas, int k, int hexWidth, int hexHeight)
+	private void drawHexes(ScreenCanvas canvas, Point2D camera, int k, int hexWidth, int hexHeight)
 	{
 		if (k >= map_.getLevels()) return; // Cannot draw hexes above this
 		// TODO optimization using BakingCanvas
@@ -111,23 +111,23 @@ public class GameMap<T extends HexData> extends GameEntity implements HexMap<Axi
 			for (int j = map_.firstRow(i); j <= map_.lastRow(i); ++j)
 			{
 				AxialHexCoord3D hexCoord = new AxialHexCoord3D(i, j, k);
-				PixelCoord pixelCoord = hexCoord.toPixel();
+				Point2D pixelCoord = hexCoord.toPixel();
 				T t = getHex(hexCoord);
 				
-				canvas.drawImageScaled(tileset_, HexCamera.pX + pixelCoord.x_, HexCamera.pY + pixelCoord.y_, t.tX_ * hexWidth, t.tY_ * hexHeight, hexWidth, hexHeight);
+				canvas.drawImageScaled(tileset_, pixelCoord.add(camera), new Point2D(t.tX_ * hexWidth, t.tY_ * hexHeight), new Point2D(hexWidth, hexHeight));
 			}
 	}
-	private void drawChildren(ScreenCanvas canvas, int k)
+	private void drawChildren(ScreenCanvas canvas, Point2D camera, int k)
 	{
 		for (int t = 0; t < getChildren().size(); ++t) // O(w)
 		{
 			HexEntity<AxialHexCoord3D> entity = (HexEntity<AxialHexCoord3D>) getChildren().get(t);
-			AxialHexCoord3D pos3D = (AxialHexCoord3D) entity.getPos();
-			if (pos3D.z_ == k) entity.render(canvas);
+			AxialHexCoord3D pos3D = (AxialHexCoord3D) entity.getHexPos();
+			if (pos3D.z_ == k) entity.render(canvas, camera);
 		}
 	}
 	@Override
-	public void render(ScreenCanvas canvas)
+	public void render(ScreenCanvas canvas, Point2D camera)
 	{
 		if (map_ == null || map_.getColumns() == 0 || map_.getRows() == 0 || map_.getLevels() == 0) return;
 		int hexWidth = HexConfigManager.getHexWidth(); // Hex width
@@ -137,9 +137,9 @@ public class GameMap<T extends HexData> extends GameEntity implements HexMap<Axi
 		{
 			if (k < HexCamera.hZ - 1) drawZFog(canvas, hexWidth, hexHeight); // O(1)
 			
-			drawHexes(canvas, k, hexWidth, hexHeight); // O(n^2)
+			drawHexes(canvas, camera, k, hexWidth, hexHeight); // O(n^2)
 			
-			drawChildren(canvas, k); // O(w)
+			drawChildren(canvas, camera, k); // O(w)
 		}
 	}
 	// TODO really slow

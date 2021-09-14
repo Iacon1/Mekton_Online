@@ -4,9 +4,7 @@
 
 package Modules.HexUtilities;
 
-import GameEngine.Camera;
-
-public class HexCamera extends Camera
+public class HexCamera
 {
 	public static int hZ;
 }

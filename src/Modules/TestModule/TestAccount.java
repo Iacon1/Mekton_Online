@@ -19,35 +19,35 @@ public class TestAccount extends Account
 			switch (params[0])
 			{
 			case "move": // TODO objects with MA
-				HexEntity physObject = (HexEntity) GameInfo.getWorld().getEntities().get(possessee);
-				if (physObject.getSpeed() != 0) return;
+				HexEntity hexObject = (HexEntity) GameInfo.getWorld().getEntities().get(possessee);
+				if (hexObject.getSpeed() != 0) return;
 				switch (params[1])
 				{
 				case "north": case "no": case "n":
-					physObject.moveDirectional(HexDirection.north, 1, 2);
+					hexObject.moveDirectional(HexDirection.north, 1, 2);
 					break;
 				case "northwest": case "nw":
-					physObject.moveDirectional(HexDirection.northWest, 1, 2);
+					hexObject.moveDirectional(HexDirection.northWest, 1, 2);
 					break;
 				case "northeast": case "ne":
-					physObject.moveDirectional(HexDirection.northEast, 1, 2);
+					hexObject.moveDirectional(HexDirection.northEast, 1, 2);
 					break;
 					
 				case "south": case "so": case "s":
-					physObject.moveDirectional(HexDirection.south, 1, 2);
+					hexObject.moveDirectional(HexDirection.south, 1, 2);
 					break;
 				case "southwest": case "sw":
-					physObject.moveDirectional(HexDirection.southWest, 1, 2);
+					hexObject.moveDirectional(HexDirection.southWest, 1, 2);
 					break;
 				case "southeast": case "se":
-					physObject.moveDirectional(HexDirection.southEast, 1, 2);
+					hexObject.moveDirectional(HexDirection.southEast, 1, 2);
 					break;
 					
 				case "up":
-					physObject.moveDirectional(HexDirection.up, 1, 2);
+					hexObject.moveDirectional(HexDirection.up, 1, 2);
 					break;
 				case "down": case "do":
-					physObject.moveDirectional(HexDirection.down, 1, 2);
+					hexObject.moveDirectional(HexDirection.down, 1, 2);
 					break;
 				}
 				break;

@@ -4,7 +4,6 @@
 
 package Modules.BaseModule.PacketTypes;
 
-import GameEngine.Camera;
 import GameEngine.GameInfo;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.TransSerializable;
@@ -53,6 +52,6 @@ public class GameDataPacket extends Packet implements TransSerializable
 	{
 		GameInfo.setWorld(ourView);
 		GameInfo.setPossessee(possesseeId);
-		Camera.gui = (GUIPin) GameInfo.getWorld().getEntity(ourGUI);
+//		Camera.gui = (GUIPin) GameInfo.getWorld().getEntity(ourGUI);
 	}
 }

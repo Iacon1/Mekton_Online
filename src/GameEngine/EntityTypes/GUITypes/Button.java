@@ -18,6 +18,6 @@ public abstract class Button extends GUISpriteEntity implements InputGetter
 	@Override
 	public void onMouseClick(int mX, int mY, int button)
 	{
-		if (x_ <= mX && mX <= x_ + width_ && y_ <= mY && y_ + height_ <= mY) onButtonClick(button);
+		if (pos_.x_ <= mX && mX <= pos_.x_ + textureSize_.x_ && pos_.y_ <= mY && pos_.y_ + textureSize_.y_ <= mY) onButtonClick(button);
 	}
 }

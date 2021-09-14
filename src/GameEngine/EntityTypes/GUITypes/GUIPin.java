@@ -2,6 +2,7 @@ package GameEngine.EntityTypes.GUITypes;
 
 import GameEngine.ScreenCanvas;
 import GameEngine.GameInfo;
+import GameEngine.Point2D;
 import GameEngine.EntityTypes.GameEntity;
 import Server.Account;
 
@@ -54,8 +55,8 @@ public final class GUIPin extends GameEntity
 	@Override
 	public void update() {}
 	@Override
-	public void render(ScreenCanvas canvas)
+	public void render(ScreenCanvas canvas, Point2D camera)
 	{
-		for (int i = 0; i < getChildren().size(); ++i) getChildren().get(i).render(canvas);
+		for (int i = 0; i < getChildren().size(); ++i) getChildren().get(i).render(canvas, camera);
 	}
 }

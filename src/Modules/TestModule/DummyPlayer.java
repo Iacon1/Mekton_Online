@@ -4,13 +4,11 @@
 
 package Modules.TestModule;
 
-import GameEngine.EntityTypes.InputGetter;
-import Modules.HexUtilities.HexEntity;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
-import Modules.MektonCore.DirectionalHexEntity;
+import Modules.HexUtilities.DirectionalHexEntity;
 import Modules.HexUtilities.HexConfigManager;
 
-public class DummyPlayer extends DirectionalHexEntity<AxialHexCoord3D> implements InputGetter
+public class DummyPlayer extends DirectionalHexEntity<AxialHexCoord3D>
 {	
 	public DummyPlayer()
 	{
@@ -25,20 +23,8 @@ public class DummyPlayer extends DirectionalHexEntity<AxialHexCoord3D> implement
 	}
 
 	@Override
-	public void onMouseClick(int mX, int mY, int button) {}
-	@Override
-	public void onMousePress(int mX, int mY, int button) {}
+	public void onStart() {}
 
 	@Override
-	public void onMouseRelease(int mX, int mY, int button) {}
-
-	@Override
-	public void onKeyPress(int code) {}
-
-	@Override
-	public void onKeyRelease(int code)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	public void onAnimStop() {}
 }

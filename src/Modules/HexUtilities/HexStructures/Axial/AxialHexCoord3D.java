@@ -2,7 +2,7 @@ package Modules.HexUtilities.HexStructures.Axial;
 
 import java.util.ArrayList;
 
-import GameEngine.PixelCoord;
+import GameEngine.Point2D;
 import Modules.HexUtilities.HexDirection;
 import Modules.HexUtilities.HexStructures.HexCoord;
 import Modules.HexUtilities.HexStructures.HexCoordConverter;

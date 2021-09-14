@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import GameEngine.ScreenCanvas;
 import GameEngine.GameInfo;
+import GameEngine.Point2D;
 
 
 public abstract class GameEntity
@@ -79,5 +80,5 @@ public abstract class GameEntity
 	* 
 	* @param  canvas Canvas to draw to.
 	*/
-	public abstract void render(ScreenCanvas canvas);
+	public abstract void render(ScreenCanvas canvas, Point2D camera);
 }

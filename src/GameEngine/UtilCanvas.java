@@ -39,28 +39,31 @@ public abstract class UtilCanvas extends JPanel
 		return Math.round(y / scaleY_);
 	}
 	
-	public void drawImageScaled(Image img, int dx, int dy, int sx1, int sy1, int w, int h)
+	public void drawImageScaled(Image textureFile, Point2D pos, Point2D texturePos, Point2D textureSize)
 	{
-		int dx1s = (int) (dx * scaleX_);
-		int dy1s = (int) (dy * scaleY_);
-		int dx2s = (int) (dx1s + w * scaleX_);
-		int dy2s = (int) (dy1s + h * scaleY_);
-		int sx2 = sx1 + w;
-		int sy2 = sy1 + h;
+		int dx1s = (int) (pos.x_ * scaleX_);
+		int dy1s = (int) (pos.y_ * scaleY_);
+		int dx2s = (int) (dx1s + textureSize.x_ * scaleX_);
+		int dy2s = (int) (dy1s + textureSize.y_ * scaleY_);
 		
-		g_.drawImage(img, dx1s, dy1s, dx2s, dy2s, sx1, sy1, sx2, sy2, null);
+		int sx1 = texturePos.x_;
+		int sy1 = texturePos.y_;
+		int sx2 = texturePos.x_ + textureSize.x_;
+		int sy2 = texturePos.y_ + textureSize.y_;
+		
+		g_.drawImage(textureFile, dx1s, dy1s, dx2s, dy2s, sx1, sy1, sx2, sy2, null);
 	}
 	
-	public void drawImageScaled(String img, int dx, int dy, int sx1, int sy1, int w, int h)
+	public void drawImageScaled(String textureFile, Point2D pos, Point2D texturePos, Point2D textureSize)
 	{
-		drawImageScaled(GraphicsManager.getImage(img), dx, dy, sx1, sy1, w, h);
+		drawImageScaled(GraphicsManager.getImage(textureFile), pos, texturePos, textureSize);
 	}
 	
-	public void drawText(String text, Font font, Color color, int x, int y, int sizePixels)
+	public void drawText(String text, Font font, Color color, Point2D pos, int sizePixels)
 	{
 		Color oColor = g_.getColor();
-		int sx = (int) (x * scaleX_);
-		int sy = (int) ((y + sizePixels) * scaleY_);
+		int sx = (int) (pos.x_ * scaleX_);
+		int sy = (int) ((pos.y_ + sizePixels) * scaleY_);
 		int sSize = (int) (scaleY_ * sizePixels);
 		font = font.deriveFont(GraphicsManager.getFontSize(sSize));
 		g_.setFont(font);
@@ -69,8 +72,8 @@ public abstract class UtilCanvas extends JPanel
 		g_.setColor(oColor); // reset color to before we used one for the text
 	}
 	
-	public void drawText(String text, String font, Color color, int x, int y, int sizePixels)
+	public void drawText(String text, String font, Color color, Point2D pos, int sizePixels)
 	{
-		drawText(text, GraphicsManager.getFont(font), color, x, y, sizePixels);
+		drawText(text, GraphicsManager.getFont(font), color, pos, sizePixels);
 	}
 }

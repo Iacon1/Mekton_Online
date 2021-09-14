@@ -18,6 +18,6 @@ public abstract class MetaHexEntity<T extends HexCoord> extends HexEntity<T>
 	@Override
 	public boolean isPresentAt(T pos)
 	{
-		return pos_.withinDistance(radius_).contains(pos);
+		return hexPos_.withinDistance(radius_).contains(pos);
 	}
 }

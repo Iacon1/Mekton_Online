@@ -2,11 +2,8 @@
 // Created 09/14/2021
 //
 
-package Modules.MektonCore;
+package Modules.HexUtilities;
 
-import Modules.HexUtilities.HexConfigManager;
-import Modules.HexUtilities.HexDirection;
-import Modules.HexUtilities.HexEntity;
 import Modules.HexUtilities.HexStructures.HexCoord;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord;
 
@@ -37,8 +34,8 @@ public abstract class DirectionalHexEntity<T extends HexCoord> extends HexEntity
 		default: return;
 		}
 		
-		this.cTX_ = HexConfigManager.getHexWidth() * mult;
-		this.dir_ = dir;
+		texturePos_.x_ = textureSize_.x_ * mult;
+		dir_ = dir;
 	}
 	
 	@Override

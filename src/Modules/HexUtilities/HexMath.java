@@ -7,7 +7,7 @@ package Modules.HexUtilities;
 import java.util.ArrayList;
 
 import Utils.Instancer;
-import GameEngine.PixelCoord;
+import GameEngine.Point2D;
 import Modules.HexUtilities.HexStructures.HexCoord;
 
 public class HexMath
@@ -72,5 +72,5 @@ public class HexMath
 	 * 
 	 * @param coord Coordinate to convert
 	 */
-	public static PixelCoord toPixel(HexCoord coord) {return coord.toPixel();}
+	public static Point2D toPixel(HexCoord coord) {return coord.toPixel();}
 }

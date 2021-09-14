@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 
 import GameEngine.ScreenCanvas;
 import GameEngine.GameInfo;
+import GameEngine.Point2D;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.InputGetter;
 import GameEngine.Managers.GraphicsManager;
@@ -70,10 +71,10 @@ public class TestHandle extends GameEntity implements InputGetter
 	@Override
 	public void update() {}
 	@Override
-	public void render(ScreenCanvas canvas)
+	public void render(ScreenCanvas canvas, Point2D camera)
 	{
 		HexEntity<AxialHexCoord3D> possessee = (HexEntity<AxialHexCoord3D>) GameInfo.getWorld().getEntity(GameInfo.getPossessee());
-		canvas.drawText("Height: " + possessee.getPos().z_, "MicrogrammaNormalFix.TTF", GraphicsManager.getColor(255, 0, 0), 0, 0, 32);
+		canvas.drawText("Height: " + possessee.getHexPos().z_, "MicrogrammaNormalFix.TTF", GraphicsManager.getColor(255, 0, 0), new Point2D(0, 0), 32);
 	}
 
 }

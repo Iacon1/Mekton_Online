@@ -4,9 +4,9 @@
 
 package Modules.TestModule;
 
-import GameEngine.Camera;
 import GameEngine.ScreenCanvas;
 import GameEngine.GameInfo;
+import GameEngine.Point2D;
 import GameEngine.Configurables.ModuleTypes.GraphicsHandlerModule;
 import GameEngine.Configurables.ModuleTypes.Module;
 import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
@@ -16,7 +16,6 @@ import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.GUITypes.GUIPin;
 import Modules.BaseModule.BaseServer;
 import Modules.HexUtilities.HexCamera;
-import Modules.HexUtilities.HexConfigManager;
 import Modules.HexUtilities.HexEntity;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Server.Account;
@@ -64,9 +63,9 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 		HexEntity<AxialHexCoord3D> possessee = (HexEntity<AxialHexCoord3D>) GameInfo.getWorld().getEntity(GameInfo.getPossessee());
 //		HexCamera.pX = possessee.getPX() - ConfigManager.getScreenWidth() / 2;
 //		HexCamera.pY = possessee.getPY() - ConfigManager.getScreenHeight() / 2;
-		HexCamera.hZ = possessee.getPos().z_ + 1;
-		GameInfo.getWorld().getRootEntities().get(0).render(canvas);
-		Camera.gui.render(canvas);
+		HexCamera.hZ = possessee.getHexPos().z_ + 1;
+		GameInfo.getWorld().getRootEntities().get(0).render(canvas, new Point2D(0, 0));
+//		Camera.gui.render(canvas);
 	}
 
 	@Override
@@ -78,7 +77,7 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 		account.possessee = player.getId();
 		GameInfo.setPossessee(account.possessee);
 		GameInfo.getWorld().getRootEntities().get(0).addChild(player);
-		player.setPos(new AxialHexCoord3D(2, 2, 0));
+		player.setHexPos(new AxialHexCoord3D(2, 2, 0));
 		
 		return player;
 	}
