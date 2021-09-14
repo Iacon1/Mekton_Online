@@ -4,7 +4,7 @@
 
 package GameEngine.EntityTypes.GUITypes;
 
-import GameEngine.GameCanvas;
+import GameEngine.ScreenCanvas;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.Managers.GraphicsManager;
 
@@ -31,7 +31,7 @@ public abstract class GUISpriteEntity extends GameEntity
 	}
 
 	@Override
-	public void render(GameCanvas canvas) 
+	public void render(ScreenCanvas canvas) 
 	{
 		canvas.drawImageScaled(GraphicsManager.getImage(imagePath_), x_, y_, cTX_, cTY_, width_, height_);
 	}

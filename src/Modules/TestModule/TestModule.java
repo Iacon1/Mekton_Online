@@ -5,7 +5,7 @@
 package Modules.TestModule;
 
 import GameEngine.Camera;
-import GameEngine.GameCanvas;
+import GameEngine.ScreenCanvas;
 import GameEngine.GameInfo;
 import GameEngine.Configurables.ModuleTypes.GraphicsHandlerModule;
 import GameEngine.Configurables.ModuleTypes.Module;
@@ -58,7 +58,7 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	}
 
 	@Override
-	public void drawWorld(GameCanvas canvas)
+	public void drawWorld(ScreenCanvas canvas)
 	{
 		if (GameInfo.getWorld() == null) return;
 		HexEntity<AxialHexCoord3D> possessee = (HexEntity<AxialHexCoord3D>) GameInfo.getWorld().getEntity(GameInfo.getPossessee());

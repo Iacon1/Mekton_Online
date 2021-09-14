@@ -1,29 +1,27 @@
 // By Iacon1
-// Created 04/25/2021
-// Game Canvas
+// Created 09/14/2021
+// A canvas with all the drawing utils
 
 package GameEngine;
-
-import javax.swing.JPanel;
-
-import GameEngine.Configurables.ModuleManager;
-import GameEngine.Configurables.ModuleTypes.GraphicsHandlerModule;
-import GameEngine.Managers.GraphicsManager;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 
-@SuppressWarnings("serial")
-public class GameCanvas extends JPanel
+import javax.swing.JPanel;
+
+import GameEngine.Managers.GraphicsManager;
+
+public abstract class UtilCanvas extends JPanel
 {
 	public float scaleX_;
 	public float scaleY_;
 	// Scales the image; Must be integers
 	// 1x scale size is given by ConfigManager
 
-	Graphics g_; // TODO This is a hack so we don't have to juggle this in function calls
+	Graphics g_; // TODO This is a hack so we don't have to juggle this in function calls;
+	// Set it before drawing and clear before the next set
 	
 	public boolean setScale(float scaleX, float scaleY)
 	{
@@ -41,16 +39,6 @@ public class GameCanvas extends JPanel
 		return Math.round(y / scaleY_);
 	}
 	
-	public void paintComponent(Graphics g)
-	{
-		super.paintComponent(g);
-		g_ = g;
-		ModuleManager.getHighestOfType(GraphicsHandlerModule.class).drawWorld(this);
-		g_ = null;
-	}
-	
-	// Below are a bunch of output functions
-	
 	public void drawImageScaled(Image img, int dx, int dy, int sx1, int sy1, int w, int h)
 	{
 		int dx1s = (int) (dx * scaleX_);
@@ -62,7 +50,6 @@ public class GameCanvas extends JPanel
 		
 		g_.drawImage(img, dx1s, dy1s, dx2s, dy2s, sx1, sy1, sx2, sy2, null);
 	}
-	
 	
 	public void drawImageScaled(String img, int dx, int dy, int sx1, int sy1, int w, int h)
 	{

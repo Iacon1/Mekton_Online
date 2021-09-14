@@ -4,9 +4,9 @@
 
 package GameEngine.Configurables.ModuleTypes;
 
-import GameEngine.GameCanvas;
+import GameEngine.ScreenCanvas;
 
 public interface GraphicsHandlerModule
 {
-	public void drawWorld(GameCanvas canvas); // Draws the world
+	public void drawWorld(ScreenCanvas canvas); // Draws the world
 }

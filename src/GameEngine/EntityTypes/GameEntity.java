@@ -6,7 +6,7 @@ package GameEngine.EntityTypes;
 
 import java.util.ArrayList;
 
-import GameEngine.GameCanvas;
+import GameEngine.ScreenCanvas;
 import GameEngine.GameInfo;
 
 
@@ -79,5 +79,5 @@ public abstract class GameEntity
 	* 
 	* @param  canvas Canvas to draw to.
 	*/
-	public abstract void render(GameCanvas canvas);
+	public abstract void render(ScreenCanvas canvas);
 }

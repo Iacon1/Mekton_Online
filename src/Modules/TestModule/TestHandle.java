@@ -6,7 +6,7 @@ package Modules.TestModule;
 
 import java.awt.event.KeyEvent;
 
-import GameEngine.GameCanvas;
+import GameEngine.ScreenCanvas;
 import GameEngine.GameInfo;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.InputGetter;
@@ -70,7 +70,7 @@ public class TestHandle extends GameEntity implements InputGetter
 	@Override
 	public void update() {}
 	@Override
-	public void render(GameCanvas canvas)
+	public void render(ScreenCanvas canvas)
 	{
 		HexEntity<AxialHexCoord3D> possessee = (HexEntity<AxialHexCoord3D>) GameInfo.getWorld().getEntity(GameInfo.getPossessee());
 		canvas.drawText("Height: " + possessee.getPos().z_, "MicrogrammaNormalFix.TTF", GraphicsManager.getColor(255, 0, 0), 0, 0, 32);

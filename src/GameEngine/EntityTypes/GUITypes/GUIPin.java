@@ -1,6 +1,6 @@
 package GameEngine.EntityTypes.GUITypes;
 
-import GameEngine.GameCanvas;
+import GameEngine.ScreenCanvas;
 import GameEngine.GameInfo;
 import GameEngine.EntityTypes.GameEntity;
 import Server.Account;
@@ -54,7 +54,7 @@ public final class GUIPin extends GameEntity
 	@Override
 	public void update() {}
 	@Override
-	public void render(GameCanvas canvas)
+	public void render(ScreenCanvas canvas)
 	{
 		for (int i = 0; i < getChildren().size(); ++i) getChildren().get(i).render(canvas);
 	}

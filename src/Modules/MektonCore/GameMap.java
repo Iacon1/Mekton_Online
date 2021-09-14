@@ -1,7 +1,9 @@
 // By
 // Iacon1
 // Created 04/25/2021
-//
+// Notes:
+// If you are at z = 1 then you are *above* on the tiles at z = 0, not *in* them
+// Level 0 should be a ground level, then; Comprised entirely of ground tiles that you cannot walk through
 
 package Modules.MektonCore;
 
@@ -13,10 +15,9 @@ import Modules.HexUtilities.HexData;
 import Modules.HexUtilities.HexEntity;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexMapRectangle;
-import Utils.Logging;
 import Modules.HexUtilities.HexStructures.HexMap;
 import Modules.HexUtilities.HexStructures.Axial.AxialHex3DMap;
-import GameEngine.GameCanvas;
+import GameEngine.ScreenCanvas;
 import GameEngine.PixelCoord;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.GameEntity;
@@ -26,9 +27,9 @@ import GameEngine.Managers.GraphicsManager;
 public class GameMap<T extends HexData> extends GameEntity implements HexMap<AxialHexCoord3D, T>
 {	
 	private String tileset_; // Tileset
-	private String zFog_; // A z-fog tile, which has the same resolution as the tileset but is laid out in a repeating square grid
+	private String zFog_; // A translucent image the same size as the screen that renders between Z-levels
 	private AxialHex3DMap<AxialHexMapRectangle<T>, T> map_;
-
+	
 	public GameMap(String tileset, String zFog)
 	{
 		super();
@@ -98,21 +99,14 @@ public class GameMap<T extends HexData> extends GameEntity implements HexMap<Axi
 	@Override
 	public void update() {}
 	
-	private void drawZFog(GameCanvas canvas, int hexWidth, int hexHeight)
+	private void drawZFog(ScreenCanvas canvas, int hexWidth, int hexHeight)
 	{
-		for (int i = 0; i < ConfigManager.getScreenWidth(); ++i) // O(ScreenW) base, O(ScreenW * ScreenH) total
-		{
-			for (int j = 0; j < ConfigManager.getScreenHeight(); ++j) // O(ScreenH)
-			{
-				int hX = i * hexWidth;
-				int hY = j * hexHeight;
-					
-				canvas.drawImageScaled(GraphicsManager.getImage(zFog_), HexCamera.pX + hX, HexCamera.pY + hY, 0, 0, hexWidth, hexHeight);
-			}
-		}
+		canvas.drawImageScaled(GraphicsManager.getImage(zFog_), 0, 0, 0, 0, ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight());
 	}
-	private void drawHexes(GameCanvas canvas, int k, int hexWidth, int hexHeight)
+	private void drawHexes(ScreenCanvas canvas, int k, int hexWidth, int hexHeight)
 	{
+		if (k >= map_.getLevels()) return; // Cannot draw hexes above this
+		// TODO optimization using BakingCanvas
 		for (int i = 0; i < map_.getColumns(); ++i) // columns
 			for (int j = map_.firstRow(i); j <= map_.lastRow(i); ++j)
 			{
@@ -123,7 +117,7 @@ public class GameMap<T extends HexData> extends GameEntity implements HexMap<Axi
 				canvas.drawImageScaled(tileset_, HexCamera.pX + pixelCoord.x_, HexCamera.pY + pixelCoord.y_, t.tX_ * hexWidth, t.tY_ * hexHeight, hexWidth, hexHeight);
 			}
 	}
-	private void drawChildren(GameCanvas canvas, int k)
+	private void drawChildren(ScreenCanvas canvas, int k)
 	{
 		for (int t = 0; t < getChildren().size(); ++t) // O(w)
 		{
@@ -133,15 +127,15 @@ public class GameMap<T extends HexData> extends GameEntity implements HexMap<Axi
 		}
 	}
 	@Override
-	public void render(GameCanvas canvas)
+	public void render(ScreenCanvas canvas)
 	{
 		if (map_ == null || map_.getColumns() == 0 || map_.getRows() == 0 || map_.getLevels() == 0) return;
 		int hexWidth = HexConfigManager.getHexWidth(); // Hex width
 		int hexHeight = HexConfigManager.getHexHeight(); // Hex height	
 		
-		for (int k = 0; k < Math.min(map_.getLevels(), HexCamera.hZ); ++k) // O(n * m^2 + n * n^2 + n * w)
+		for (int k = 0; k < HexCamera.hZ; ++k) // O(n + n * n^2 + n * w) = O(n^3)
 		{
-			if (k != 0) drawZFog(canvas, hexWidth, hexHeight); // O(m^2)
+			if (k < HexCamera.hZ - 1) drawZFog(canvas, hexWidth, hexHeight); // O(1)
 			
 			drawHexes(canvas, k, hexWidth, hexHeight); // O(n^2)
 			

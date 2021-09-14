@@ -21,7 +21,7 @@ import Utils.MiscUtils;
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame
 {
-	private GameCanvas canvas_;
+	private ScreenCanvas canvas_;
 	private boolean queueUpdateRes_;
 	
 	public void checkScale()
@@ -222,7 +222,7 @@ public class GameFrame extends JFrame
 		
 		getContentPane().setPreferredSize(new Dimension(ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight()));
 		
-		canvas_ = new GameCanvas();
+		canvas_ = new ScreenCanvas();
 		canvas_.setBounds(0, 0, ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight());
 		getContentPane().add(canvas_);
 		

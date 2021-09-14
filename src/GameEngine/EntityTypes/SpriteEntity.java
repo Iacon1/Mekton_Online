@@ -5,7 +5,7 @@
 package GameEngine.EntityTypes;
 
 import GameEngine.Camera;
-import GameEngine.GameCanvas;
+import GameEngine.ScreenCanvas;
 import GameEngine.Managers.GraphicsManager;
 
 public abstract class SpriteEntity extends GameEntity
@@ -44,7 +44,7 @@ public abstract class SpriteEntity extends GameEntity
 		y_ = y;
 	}
 	@Override
-	public void render(GameCanvas canvas) 
+	public void render(ScreenCanvas canvas) 
 	{
 		canvas.drawImageScaled(GraphicsManager.getImage(imagePath_), x_ - Camera.pX, y_ - Camera.pY, cTX_, cTY_, width_, height_);
 	}
