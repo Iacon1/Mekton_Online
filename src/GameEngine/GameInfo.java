@@ -68,7 +68,7 @@ public class GameInfo
 		}
 		
 		/** Returns the list of instances.
-		 *  No guarantee that it's not null!
+		 *  No guarantee that any one entity *isn't* null!
 		 */
 		public ArrayList<GameEntity> getEntities() // Shows every instance instead of just our children; GameWorld.children_ ought be empty
 		{
