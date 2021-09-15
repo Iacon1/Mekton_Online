@@ -44,7 +44,7 @@ public abstract class GameEntity
 	{
 		child.parentId_ = -1;
 		if (recurse) child.clearChildren(true);
-		this.childrenIds_.remove(child.getId());
+		this.childrenIds_.remove(Integer.valueOf(child.getId()));
 	}
 	public void clearChildren(boolean recurse)
 	{

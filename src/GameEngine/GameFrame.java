@@ -68,7 +68,7 @@ public class GameFrame extends JFrame
 		
 		private boolean hasUpdated()
 		{
-			if (GameInfo.getWorld().hashCode() == worldHash_) return false;
+			if (GameInfo.getWorld() == null || GameInfo.getWorld().hashCode() == worldHash_) return false;
 			else
 			{
 				worldHash_ = GameInfo.getWorld().hashCode();

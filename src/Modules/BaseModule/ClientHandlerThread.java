@@ -6,6 +6,7 @@ package Modules.BaseModule;
 
 import GameEngine.Account;
 import GameEngine.Configurables.ModuleManager;
+import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
 import GameEngine.Configurables.ModuleTypes.StateGiverModule;
 import GameEngine.EntityTypes.GameEntity;
 import Net.StateFactory;
@@ -51,6 +52,7 @@ public class ClientHandlerThread extends StatefulConnectionPairThread
 	public void onClose()
 	{
 		Logging.logNotice("Client " + socket_.getInetAddress() + " has disconnected.");
+		ModuleManager.getHighestOfType(PlayerHandlerModule.class).sleepPlayer(getAccount());
 	}
 	
 	public BaseServer getParent()

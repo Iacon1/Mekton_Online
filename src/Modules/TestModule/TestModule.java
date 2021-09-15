@@ -20,7 +20,8 @@ import Modules.BaseModule.BaseServer;
 
 import Modules.HexUtilities.HexEntity;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
-import Modules.MektonCore.GameMap;
+import Modules.MektonCore.MektonHexData;
+import Modules.MektonCore.MektonMap;
 
 public class TestModule implements Module, WorldMakingModule, ServerMakingModule, GraphicsHandlerModule, PlayerHandlerModule
 {
@@ -48,8 +49,8 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	public void newWorld()
 	{
 		GameInfo.setWorld(new GameInfo.GameWorld());
-		TestHexmap map = new TestHexmap();
-		map.setDimensions(18, 9, 1, new TestHexData());
+		MektonMap map = new MektonMap("Resources/Server Packs/Default/Tilesets/DummyTileset.PNG", "Resources/Server Packs/Default/Tilesets/ZFog.PNG");
+		map.setDimensions(18, 9, 1, new MektonHexData());
 	}
 	@Override
 	public void loadWorld(String server)
@@ -62,7 +63,7 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	{
 		if (GameInfo.getWorld() == null) return;
 		HexEntity<AxialHexCoord3D> possessee = (HexEntity<AxialHexCoord3D>) GameInfo.getWorld().getEntity(GameInfo.getPossessee());
-		((GameMap<TestHexData>) GameInfo.getWorld().getRootEntities().get(0)).render(canvas, GameInfo.getCamera(), possessee.getHexPos().z_);
+		((MektonMap) GameInfo.getWorld().getRootEntities().get(0)).render(canvas, GameInfo.getCamera(), possessee.getHexPos().z_);
 		(GameInfo.getWorld().getEntity(GameInfo.getGUI())).render(canvas, GameInfo.getCamera());
 	}
 

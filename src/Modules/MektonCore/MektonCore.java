@@ -8,7 +8,6 @@ import com.google.gson.GsonBuilder;
 
 import GameEngine.Configurables.ModuleTypes.GSONModule;
 import GameEngine.Configurables.ModuleTypes.Module;
-import Modules.HexUtilities.HexData;
 import Utils.GSONConfig.AbsFactory;
 
 public class MektonCore implements Module, GSONModule
@@ -31,6 +30,6 @@ public class MektonCore implements Module, GSONModule
 	@Override
 	public void addToBuilder(GsonBuilder builder)
 	{
-		builder.registerTypeAdapterFactory(new AbsFactory<HexData>(HexData.class));
+		builder.registerTypeAdapterFactory(new AbsFactory<MektonHexData>(MektonHexData.class));
 	}
 }
