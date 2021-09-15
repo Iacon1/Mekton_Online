@@ -1,10 +1,13 @@
 // By
 // Iacon1
 // Created 04/25/2021
-// Notes:
-// If you are at z = 1 then you are *above* on the tiles at z = 0, not *in* them
-// Level 0 should be a ground level, then; Comprised entirely of ground tiles that you cannot walk through
 
+/* Notes:
+ * If you are at z = 1 then you are *above* on the tiles at z = 0, not *in* them
+ * Level 0 should be a ground level, then; Comprised entirely of ground tiles that you cannot walk through
+ *
+ * Make a hex null to make it air/vacuum
+ */
 package Modules.MektonCore;
 
 import java.util.function.Supplier;
@@ -15,6 +18,7 @@ import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexMapRectangle;
 import Modules.HexUtilities.HexStructures.HexMap;
 import Modules.HexUtilities.HexStructures.Axial.AxialHex3DMap;
+import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord;
 import GameEngine.ScreenCanvas;
 import GameEngine.Point2D;
 import GameEngine.Configurables.ConfigManager;
@@ -78,6 +82,26 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 		return map_.getHex(coord);
 	}
 	
+	/** Finds the highest hex at a position below a certain threshold, if one exists, and
+	 *  returns its z-value (or -1 if none found).
+	 * 
+	 *  @param coord Coordinate to look at.
+	 *  @param zMax  Maximum altitude to check.
+	 */
+	public int findHighestHex(AxialHexCoord coord, int zMax) // O(z); TODO memoize
+	{
+		if (zMax >= map_.getLevels()) zMax = map_.getLevels() - 1;
+		if (!map_.inBounds(new AxialHexCoord3D(coord.q_, coord.r_, zMax))) return -1;
+		
+		for (int k = zMax; k >= 0; --k)
+		{
+			AxialHexCoord3D coord3D = new AxialHexCoord3D(coord.q_, coord.r_, k);
+			if (map_.getHex(coord3D) != null) return k;
+		}
+		
+		return -1;
+	}
+	
 	public SpriteEntity findEntity(AxialHexCoord3D coord) // returns a game instance at that position if available
 	{
 		for (int i = 0; i < childrenIds_.size(); ++i)
@@ -101,13 +125,15 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	{
 		canvas.drawImageScaled(GraphicsManager.getImage(zFog_), new Point2D(0, 0), new Point2D(0, 0), new Point2D(ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight()));
 	}
-	private void drawHexes(ScreenCanvas canvas, Point2D camera, int k, int hexWidth, int hexHeight)
+	private void drawHexes(ScreenCanvas canvas, Point2D camera, int k, int cameraZ, int hexWidth, int hexHeight)
 	{
 		if (k >= map_.getLevels()) return; // Cannot draw hexes above this
 		// TODO optimization using BakingCanvas
 		for (int i = 0; i < map_.getColumns(); ++i) // columns
 			for (int j = map_.firstRow(i); j <= map_.lastRow(i); ++j)
 			{
+				if (k != findHighestHex(new AxialHexCoord(i, j), cameraZ)) continue;
+				
 				AxialHexCoord3D hexCoord = new AxialHexCoord3D(i, j, k);
 				Point2D pixelCoord = hexCoord.toPixel();
 				MektonHexData hex = getHex(hexCoord);
@@ -134,7 +160,7 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 		{
 			if (k < z - 1) drawZFog(canvas, hexWidth, hexHeight); // O(1)
 			
-			drawHexes(canvas, camera, k, hexWidth, hexHeight); // O(n^2)
+			drawHexes(canvas, camera, k, z, hexWidth, hexHeight); // O(n^2)
 			
 			drawChildren(canvas, camera, k); // O(w)
 		}
