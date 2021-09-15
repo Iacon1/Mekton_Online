@@ -129,28 +129,24 @@ public abstract class SpriteEntity extends GameEntity
 		moveTargetSpeed(pos_.add(delta), speed);
 	}
 
-	protected int getDirSpeedX(Point2D delta)
+	protected Point2D getSpeedVector(Point2D delta)
 	{
 		double angle = Math.atan2(delta.y_, delta.x_);
-		return (int) (((double) speed_) * Math.cos(angle)); // Directional speeds
-	}
-	protected int getDirSpeedY(Point2D delta)
-	{
-		double angle = Math.atan2(delta.y_, delta.x_);
-		return (int) (((double) speed_) * Math.sin(angle));
+		int sX = (int) (((double) speed_) * Math.cos(angle)); // Directional speeds
+		int sY = (int) (((double) speed_) * Math.sin(angle));
+		return new Point2D(sX, sY);
 	}
 	private void updateMove() // Updates movement with speed
 	{
 		if (targetPos_.equals(new Point2D(-1, -1)) && speed_ == 0) return;
 		Point2D delta = new Point2D(targetPos_.x_ - pos_.x_, targetPos_.y_ - pos_.y_);
 		
-		int speedX = getDirSpeedX(delta); 
-		int speedY = getDirSpeedY(delta);
+		Point2D speedVector = getSpeedVector(delta);
 		
-		if (Math.abs(delta.x_) <= Math.abs(speedX)) pos_.x_ = targetPos_.x_; // We're within speed of target
-		else pos_.x_ += speedX;
-		if (Math.abs(delta.y_) <= Math.abs(speedY)) pos_.y_ = targetPos_.y_; // We're within speed of target
-		else pos_.y_ += speedY;
+		if (Math.abs(delta.x_) <= Math.abs(speedVector.x_)) pos_.x_ = targetPos_.x_; // We're within speed of target
+		else pos_.x_ += speedVector.x_;
+		if (Math.abs(delta.y_) <= Math.abs(speedVector.y_)) pos_.y_ = targetPos_.y_; // We're within speed of target
+		else pos_.y_ += speedVector.y_;
 		
 		if (pos_.equals(targetPos_))
 		{

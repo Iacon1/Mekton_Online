@@ -9,7 +9,7 @@ import GameEngine.GameInfo;
 import GameEngine.Point2D;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.TransSerializable;
-import GameEngine.EntityTypes.GUITypes.GUIPin;
+
 import GameEngine.PacketTypes.Packet;
 
 public class GameDataPacket extends Packet implements TransSerializable
@@ -19,8 +19,7 @@ public class GameDataPacket extends Packet implements TransSerializable
 	
 	public GameInfo.GameWorld ourView; // Game world, but only contains the data we need
 	public Point2D camera;
-	public int ourGUI;
-	
+
 	private boolean isNeccessary(GameEntity instance) // Do we need to record this?
 	{
 		return true; // TODO how to determine
@@ -28,19 +27,16 @@ public class GameDataPacket extends Packet implements TransSerializable
 
 	public GameDataPacket(Account player)
 	{
-		ourView = GameInfo.getWorld();
+		ourView = new GameInfo.GameWorld();
 		
-		/*for (int i = 0; i < ourView.getEntities().size(); ++i)
+		for (int i = 0; i < GameInfo.getWorld().getEntities().size(); ++i)
 		{
-			if (!isNeccessary(ourView.getEntities().get(i)))
-			{
-				ourView.getEntities().set(i, null); // Doesn't delete, just hides
-			}
+			if (!isNeccessary(GameInfo.getWorld().getEntities().get(i))) ourView.getEntities().add(null);
+			else ourView.getEntities().add(GameInfo.getWorld().getEntities().get(i));
 		}
 		
 		currentLocationId = 0; // TODO determine location
-		*/
-		ourGUI = player.getGUIPin();
+		
 		possesseeId = player.possessee;
 		camera = player.getCamera();
 	}
@@ -56,7 +52,6 @@ public class GameDataPacket extends Packet implements TransSerializable
 		GameInfo.setWorld(ourView);
 		GameInfo.setPossessee(possesseeId);
 		GameInfo.setCamera(camera);
-		GameInfo.setGUI(ourGUI);
 //		Camera.gui = (GUIPin) GameInfo.getWorld().getEntity(ourGUI);
 	}
 }

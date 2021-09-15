@@ -6,7 +6,6 @@ package GameEngine;
 
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.GameEntity;
-import GameEngine.EntityTypes.GUITypes.GUIPin;
 
 public abstract class Account implements CommandRunner
 {
@@ -37,7 +36,6 @@ public abstract class Account implements CommandRunner
 	}
 	
 	public abstract Point2D getCamera();
-	public int getGUIPin() {return GUIPin.findPin(this).getId();}
 	
 	@Override
 	public abstract void runCommand(String[] params); // Commands that a player can type

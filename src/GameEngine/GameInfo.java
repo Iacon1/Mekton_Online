@@ -60,12 +60,16 @@ public class GameInfo
 			for (int i = 0; i < instances_.size(); ++i)
 			{
 				GameEntity instance = instances_.get(i);
+				if (instance == null) continue;
 				if (instance.getParent() == null) array.add(instance);
 			}
 			
 			return array;
 		}
 		
+		/** Returns the list of instances.
+		 *  No guarantee that it's not null!
+		 */
 		public ArrayList<GameEntity> getEntities() // Shows every instance instead of just our children; GameWorld.children_ ought be empty
 		{
 			return instances_;

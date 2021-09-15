@@ -15,7 +15,7 @@ import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
 import GameEngine.Configurables.ModuleTypes.ServerMakingModule;
 import GameEngine.Configurables.ModuleTypes.WorldMakingModule;
 import GameEngine.EntityTypes.GameEntity;
-import GameEngine.EntityTypes.GUITypes.GUIPin;
+
 import Modules.BaseModule.BaseServer;
 
 import Modules.HexUtilities.HexEntity;
@@ -71,8 +71,7 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	public GameEntity makePlayer(Account account)
 	{
 		DummyPlayer player = new DummyPlayer(); // Adds a guy to the map
-		new GUIPin(account);
-		GUIPin.findPin(account).addChild(new TestHandle());
+
 		account.possessee = player.getId();
 		GameInfo.setPossessee(account.possessee);
 		GameInfo.getWorld().getRootEntities().get(0).addChild(player);

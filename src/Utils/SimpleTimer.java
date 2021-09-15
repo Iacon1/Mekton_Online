@@ -24,7 +24,7 @@ public class SimpleTimer
 	public boolean checkTime(int threshold)
 	{
 		if (startTime_ == -1) return false;
-		int currTime = (int) System.currentTimeMillis();
+		int currTime = (int) System.currentTimeMillis() - startTime_;
 		if (currTime >= threshold)
 		{
 			startTime_ = -1;
@@ -35,7 +35,8 @@ public class SimpleTimer
 	
 	public int stopTime()
 	{
+		int totalTime = (int) System.currentTimeMillis() - startTime_;
 		startTime_ = -1;
-		return (int) System.currentTimeMillis();
+		return totalTime;
 	}
 }
