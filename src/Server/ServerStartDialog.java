@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import GameEngine.GameServer;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.ServerMakingModule;
 import Utils.Logging;

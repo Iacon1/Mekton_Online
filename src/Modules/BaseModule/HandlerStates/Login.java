@@ -1,5 +1,6 @@
 package Modules.BaseModule.HandlerStates;
 
+import GameEngine.Account;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
 import Modules.BaseModule.ClientHandlerThread;
@@ -8,7 +9,6 @@ import Modules.BaseModule.PacketTypes.LoginPacket;
 import Modules.TestModule.TestAccount;
 import Net.StateFactory;
 import Net.ThreadState;
-import Server.Account;
 import Utils.JSONManager;
 import Utils.Logging;
 import Utils.MiscUtils;

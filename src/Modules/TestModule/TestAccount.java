@@ -4,10 +4,12 @@
 
 package Modules.TestModule;
 
+import GameEngine.Account;
 import GameEngine.GameInfo;
+import GameEngine.Point2D;
+import GameEngine.Configurables.ConfigManager;
 import Modules.HexUtilities.HexDirection;
 import Modules.HexUtilities.HexEntity;
-import Server.Account;
 
 public class TestAccount extends Account
 {
@@ -19,8 +21,7 @@ public class TestAccount extends Account
 			switch (params[0])
 			{
 			case "move": // TODO objects with MA
-				HexEntity hexObject = (HexEntity) GameInfo.getWorld().getEntities().get(possessee);
-				if (hexObject.getSpeed() != 0) return;
+				HexEntity hexObject = (HexEntity) getPossessee();
 				switch (params[1])
 				{
 				case "north": case "no": case "n":
@@ -53,6 +54,14 @@ public class TestAccount extends Account
 				break;
 			}
 		}
+	}
+
+	@Override
+	public Point2D getCamera()
+	{
+		HexEntity hexObject = (HexEntity) getPossessee();
+		return new Point2D(0, 0);
+//		return hexObject.getPos().subtract(new Point2D(ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight()).divide(2));
 	}
 
 }

@@ -80,6 +80,8 @@ public class GameInfo
 	private static transient boolean isClient_; // On if client
 	private static transient String command_;
 	private static transient int possessee_; // Client's current player form
+	private static transient Point2D camera_;
+	private static transient int gui_;
 	
 	private GameInfo() // Static class, do not call
 	{
@@ -145,5 +147,23 @@ public class GameInfo
 	public static int getPossessee()
 	{
 		return possessee_;
+	}
+
+	public static void setCamera(Point2D camera)
+	{
+		camera_ = camera;
+	}
+	public static Point2D getCamera()
+	{
+		return camera_;
+	}
+	
+	public static void setGUI(int gui)
+	{
+		gui_ = gui;
+	}
+	public static int getGUI()
+	{
+		return gui_;
 	}
 }

@@ -10,6 +10,7 @@ import Modules.HexUtilities.HexStructures.HexCoord;
 public abstract class HexEntity<T extends HexCoord> extends SpriteEntity // T is coordinate type
 {
 	T hexPos_;
+	T targetHexPos_;
 	
 	private void alignCoords()
 	{
@@ -35,7 +36,7 @@ public abstract class HexEntity<T extends HexCoord> extends SpriteEntity // T is
 	*/
 	public void moveTargetHex(T target, int speed)
 	{
-		hexPos_ = target;
+		targetHexPos_ = target;
 		moveTargetSpeed(target.toPixel(), speed);
 	}
 	/**
@@ -64,6 +65,7 @@ public abstract class HexEntity<T extends HexCoord> extends SpriteEntity // T is
 	@Override
 	public void onStop()
 	{
-		alignCoords();
+		hexPos_ = targetHexPos_;
+//		alignCoords();
 	}
 }

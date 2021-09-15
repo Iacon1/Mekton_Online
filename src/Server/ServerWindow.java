@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
+import GameEngine.GameServer;
+
 public class ServerWindow
 {
 	private static GameServer server_;

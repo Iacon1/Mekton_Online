@@ -4,12 +4,13 @@
 
 package Modules.BaseModule.PacketTypes;
 
+import GameEngine.Account;
 import GameEngine.GameInfo;
+import GameEngine.Point2D;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.TransSerializable;
 import GameEngine.EntityTypes.GUITypes.GUIPin;
 import GameEngine.PacketTypes.Packet;
-import Server.Account;
 
 public class GameDataPacket extends Packet implements TransSerializable
 {
@@ -17,6 +18,7 @@ public class GameDataPacket extends Packet implements TransSerializable
 	public int possesseeId; // Player's index
 	
 	public GameInfo.GameWorld ourView; // Game world, but only contains the data we need
+	public Point2D camera;
 	public int ourGUI;
 	
 	private boolean isNeccessary(GameEntity instance) // Do we need to record this?
@@ -38,8 +40,9 @@ public class GameDataPacket extends Packet implements TransSerializable
 		
 		currentLocationId = 0; // TODO determine location
 		*/
-		ourGUI = GUIPin.findPin(player).getId();
+		ourGUI = player.getGUIPin();
 		possesseeId = player.possessee;
+		camera = player.getCamera();
 	}
 	@Override
 	public void preSerialize()
@@ -52,6 +55,8 @@ public class GameDataPacket extends Packet implements TransSerializable
 	{
 		GameInfo.setWorld(ourView);
 		GameInfo.setPossessee(possesseeId);
+		GameInfo.setCamera(camera);
+		GameInfo.setGUI(ourGUI);
 //		Camera.gui = (GUIPin) GameInfo.getWorld().getEntity(ourGUI);
 	}
 }

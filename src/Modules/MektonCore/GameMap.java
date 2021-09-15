@@ -9,7 +9,6 @@ package Modules.MektonCore;
 
 import java.util.function.Supplier;
 
-import Modules.HexUtilities.HexCamera;
 import Modules.HexUtilities.HexConfigManager;
 import Modules.HexUtilities.HexData;
 import Modules.HexUtilities.HexEntity;
@@ -114,7 +113,7 @@ public class GameMap<T extends HexData> extends GameEntity implements HexMap<Axi
 				Point2D pixelCoord = hexCoord.toPixel();
 				T t = getHex(hexCoord);
 				
-				canvas.drawImageScaled(tileset_, pixelCoord.add(camera), new Point2D(t.tX_ * hexWidth, t.tY_ * hexHeight), new Point2D(hexWidth, hexHeight));
+				canvas.drawImageScaled(tileset_, pixelCoord.subtract(camera), new Point2D(t.tX_ * hexWidth, t.tY_ * hexHeight), new Point2D(hexWidth, hexHeight));
 			}
 	}
 	private void drawChildren(ScreenCanvas canvas, Point2D camera, int k)
@@ -126,16 +125,15 @@ public class GameMap<T extends HexData> extends GameEntity implements HexMap<Axi
 			if (pos3D.z_ == k) entity.render(canvas, camera);
 		}
 	}
-	@Override
-	public void render(ScreenCanvas canvas, Point2D camera)
+	public void render(ScreenCanvas canvas, Point2D camera, int z)
 	{
 		if (map_ == null || map_.getColumns() == 0 || map_.getRows() == 0 || map_.getLevels() == 0) return;
 		int hexWidth = HexConfigManager.getHexWidth(); // Hex width
 		int hexHeight = HexConfigManager.getHexHeight(); // Hex height	
 		
-		for (int k = 0; k < HexCamera.hZ; ++k) // O(n + n * n^2 + n * w) = O(n^3)
+		for (int k = 0; k <= z; ++k) // O(n + n * n^2 + n * w) = O(n^3)
 		{
-			if (k < HexCamera.hZ - 1) drawZFog(canvas, hexWidth, hexHeight); // O(1)
+			if (k < z - 1) drawZFog(canvas, hexWidth, hexHeight); // O(1)
 			
 			drawHexes(canvas, camera, k, hexWidth, hexHeight); // O(n^2)
 			
@@ -143,4 +141,9 @@ public class GameMap<T extends HexData> extends GameEntity implements HexMap<Axi
 		}
 	}
 	// TODO really slow
+	@Override
+	public void render(ScreenCanvas canvas, Point2D camera)
+	{
+		render(canvas, camera, 0);
+	}
 }

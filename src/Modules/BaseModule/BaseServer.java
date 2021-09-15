@@ -4,8 +4,8 @@
 
 package Modules.BaseModule;
 
-import Server.Account;
-import Server.GameServer;
+import GameEngine.Account;
+import GameEngine.GameServer;
 
 public class BaseServer<A extends Account> extends GameServer<A, ClientHandlerThread>
 {	

@@ -27,6 +27,10 @@ public class Point2D
 	{
 		return add(delta.multiply(-1));
 	}
+	public Point2D divide(int factor)
+	{
+		return new Point2D(this.x_ / factor, this.y_ / factor);
+	}
 	
 	@Override
 	public boolean equals(Object obj)

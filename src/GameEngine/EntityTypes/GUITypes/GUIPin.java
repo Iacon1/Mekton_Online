@@ -1,10 +1,10 @@
 package GameEngine.EntityTypes.GUITypes;
 
 import GameEngine.ScreenCanvas;
+import GameEngine.Account;
 import GameEngine.GameInfo;
 import GameEngine.Point2D;
 import GameEngine.EntityTypes.GameEntity;
-import Server.Account;
 
 public final class GUIPin extends GameEntity
 {
