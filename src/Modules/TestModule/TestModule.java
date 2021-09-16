@@ -17,7 +17,7 @@ import GameEngine.Configurables.ModuleTypes.WorldMakingModule;
 import GameEngine.EntityTypes.GameEntity;
 
 import Modules.BaseModule.BaseServer;
-
+import Modules.HexUtilities.HexConfigManager;
 import Modules.HexUtilities.HexEntity;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.MektonCore.MektonHexData;

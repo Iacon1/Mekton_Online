@@ -114,7 +114,7 @@ public class AxialHexCoord implements HexCoord
 	@Override
 	public Point2D toPixel() // https://www.redblobgames.com/grids/hexagons/#hex-to-pixel
 	{
-		int x = (3 * HexConfigManager.getHexWidth()) / 4 * q_ + q_; // Last q fixes a off-by-one spacing issue
+		int x = ((3 * HexConfigManager.getHexWidth()) / 4 + 1) * q_; // Last q fixes a off-by-one spacing issue
 		// x = (3 / 2 * q * size) = (3 * width) / 4 * q
 		int y = (HexConfigManager.getHexHeight() / 2) * q_ +  HexConfigManager.getHexHeight() * r_;
 		// y = size * (sqrt3 / 2 * q + sqrt3 * r) = (height / 2 * q + height * r)
@@ -122,4 +122,16 @@ public class AxialHexCoord implements HexCoord
 		// Using approximations somehow works better, yay
 		return new Point2D(x, y);
 	}
+
+	@Override
+	public AxialHexCoord fromPixel(Point2D point)
+	{
+		AxialHexCoord coord = new AxialHexCoord(0, 0);
+		coord.q_ = point.x_ /  ((3 * HexConfigManager.getHexWidth()) / 4 + 1) * q_; // Last q fixes a off-by-one spacing issue
+		// x = (3 / 2 * q * size) = (3 * width) / 4 * q
+		coord.r_ = (point.y_ - (HexConfigManager.getHexHeight() / 2) * q_) / HexConfigManager.getHexHeight();
+		
+		return coord;
+	}
+
 }

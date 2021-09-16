@@ -41,7 +41,16 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 		tileset_ = tileset;
 		zFog_ = zFog;
 	}
-
+	public MektonMap()
+	{
+		super();
+		Supplier<AxialHexMapRectangle<MektonHexData>> supplier = () -> new AxialHexMapRectangle<MektonHexData>();
+		map_ = new AxialHex3DMap<AxialHexMapRectangle<MektonHexData>, MektonHexData>(supplier);
+		
+		tileset_ = null;
+		zFog_ = null;
+	}
+	
 	/** Sets the width, length, and height of the map; Clears the map!
 	 * 
 	 * @param columns    Length in q-axis.

@@ -3,6 +3,7 @@ package Modules.HexUtilities.HexStructures.Axial;
 import java.util.ArrayList;
 
 import GameEngine.Point2D;
+import Modules.HexUtilities.HexConfigManager;
 import Modules.HexUtilities.HexDirection;
 import Modules.HexUtilities.HexStructures.HexCoord;
 import Modules.HexUtilities.HexStructures.HexCoordConverter;
@@ -78,4 +79,10 @@ public class AxialHexCoord3D extends AxialHexCoord
 			// TODO Auto-generated method stub
 			return null;
 		}*/
+		
+		@Override
+		public AxialHexCoord3D fromPixel(Point2D point)
+		{
+			return convertAxial(super.fromPixel(point), 0);
+		}
 	}

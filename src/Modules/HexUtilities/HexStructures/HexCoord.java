@@ -58,4 +58,9 @@ public interface HexCoord
 	 *  which is actually *outside* the hex.
 	 */
 	public Point2D toPixel();
+	/** Converts a pixel coordinate to a hex coordinate.
+	 * 
+	 * @param point Point to convert.
+	 */
+	public <T extends HexCoord> T fromPixel(Point2D point);
 }
