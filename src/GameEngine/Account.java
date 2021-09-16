@@ -4,6 +4,8 @@
 
 package GameEngine;
 
+import javax.swing.JPanel;
+
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.GameEntity;
 
@@ -12,6 +14,7 @@ public abstract class Account implements CommandRunner
 	public String username;
 	public int possessee; // Entity our user is possessing
 	
+	protected boolean loggedIn; // Am I logged in?
 	private int hash;
 	
 	
@@ -34,6 +37,13 @@ public abstract class Account implements CommandRunner
 	{
 		return GameInfo.getWorld().getEntity(possessee);
 	}
+	
+	public void setLogged(boolean logged)
+	{
+		this.loggedIn = loggedIn;
+	}
+	
+	public abstract JPanel serverPanel();
 	
 	public abstract Point2D getCamera();
 	

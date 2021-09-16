@@ -70,6 +70,7 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	@Override
 	public GameEntity makePlayer(Account account)
 	{
+		account.setLogged(true);
 		DummyPlayer player = new DummyPlayer(); // Adds a guy to the map
 
 		account.possessee = player.getId();
@@ -82,18 +83,21 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	@Override
 	public GameEntity wakePlayer(Account account)
 	{
+		account.setLogged(true);
 		if (account.possessee != -1) return null;
 		else return makePlayer(account);
 	}
 	@Override
 	public GameEntity sleepPlayer(Account account)
 	{
+		account.setLogged(false);
 		GameInfo.getWorld().removeEntity(account.possessee, true);
 		return null;
 	}
 	@Override
 	public GameEntity deletePlayer(Account account)
 	{
+		account.setLogged(false);
 		GameInfo.getWorld().removeEntity(account.possessee, true);
 		return null;
 	}	

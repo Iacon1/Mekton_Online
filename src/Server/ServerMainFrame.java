@@ -4,9 +4,11 @@
 
 package Server;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -24,6 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.util.TimerTask;
@@ -32,6 +35,7 @@ import java.util.Timer;
 import javax.swing.SpringLayout;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.GridLayout;
 
 @SuppressWarnings("serial")
 public class ServerMainFrame extends JFrame
@@ -55,7 +59,6 @@ public class ServerMainFrame extends JFrame
 	private final JSplitPane splitPane = new JSplitPane();
 	private final JTree objectTree = new JTree();
 	private final JPanel playersPanel = new JPanel();
-	private final JLabel playersLabel = new JLabel("New label");
 	
 	private class InstanceNode extends DefaultMutableTreeNode
 	{
@@ -161,16 +164,21 @@ public class ServerMainFrame extends JFrame
 	}
 	private void updatePlayersList()
 	{
-		String text = "<html>";
 		ArrayList<Account> accounts = server_.getAccounts();
 		
+		playersPanel.removeAll();
+		
+		boolean color = false;
 		for (int i = 0; i < accounts.size(); ++i)
 		{
-			text = text + accounts.get(i).username + "<br><br>";
+			playersPanel.add(accounts.get(i).serverPanel());
+			if (color) playersPanel.setBackground(Color.LIGHT_GRAY);
+			else playersPanel.setBackground(Color.GRAY);
 		}
 		
-		playersLabel.setText(text);
+		
 	}
+	
 	private class UpdateTask extends TimerTask // Updates the display
 	{
 		public void run() // Updates the display
@@ -252,12 +260,7 @@ public class ServerMainFrame extends JFrame
 		splitPane.setLeftComponent(objectTree);
 		
 		tabbedPane.addTab("Players", null, playersPanel, null);
-		SpringLayout sl_playersPanel = new SpringLayout();
-		sl_playersPanel.putConstraint(SpringLayout.NORTH, playersLabel, 10, SpringLayout.NORTH, playersPanel);
-		sl_playersPanel.putConstraint(SpringLayout.WEST, playersLabel, 10, SpringLayout.WEST, playersPanel);
-		playersPanel.setLayout(sl_playersPanel);
-		
-		playersPanel.add(playersLabel);
+		playersPanel.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		tabbedPane.addTab("Overview", null, overviewPanel, null);
 		SpringLayout sl_overviewPanel = new SpringLayout();

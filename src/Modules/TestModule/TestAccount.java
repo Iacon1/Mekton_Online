@@ -4,6 +4,8 @@
 
 package Modules.TestModule;
 
+import javax.swing.JPanel;
+
 import GameEngine.Account;
 import GameEngine.GameInfo;
 import GameEngine.Point2D;
@@ -35,6 +37,15 @@ public class TestAccount extends Account
 		HexEntity hexObject = (HexEntity) getPossessee();
 //		return new Point2D(0, 0);
 		return hexObject.getPos().subtract(new Point2D(ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight()).divide(2));
+	}
+
+	@Override
+	public JPanel serverPanel()
+	{
+		String status = null;
+		if (loggedIn == true) status = "Online";
+		else status = "Offline";
+		return new AccountPanel(username, status);
 	}
 
 }
