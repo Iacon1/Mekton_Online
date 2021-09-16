@@ -14,16 +14,17 @@ import GameEngine.Point2D;
 public abstract class GameEntity
 {
 	private int parentId_; // Parent object index; -1 means none
+	private int ourId_;
 	protected ArrayList<Integer> childrenIds_; // Children object indices
 
 	public int getId()
 	{
-		return GameInfo.getWorld().findEntity(this);
+		return ourId_;
 	}
 	
 	public GameEntity()
 	{
-		if (GameInfo.getWorld() != null) GameInfo.getWorld().addEntity(this);
+		if (GameInfo.getWorld() != null) ourId_ = GameInfo.getWorld().addEntity(this);
 		// This seems dumb, but note if it's ever null then it will likely be replaced by a new world that already contains us
 		this.parentId_ = -1;
 		childrenIds_ = new ArrayList<Integer>();

@@ -11,12 +11,14 @@ import Utils.SimpleTimer;
 import java.awt.event.KeyEvent;
 
 import GameEngine.GameInfo;
+import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.InputGetter;
 
 import Modules.HexUtilities.HexConfigManager;
+import Modules.HexUtilities.HexDirection;
 import Modules.HexUtilities.HexEntity;
 
-public class DummyPlayer extends HexEntity<AxialHexCoord3D> implements InputGetter
+public class DummyPlayer extends HexEntity<AxialHexCoord3D> implements InputGetter, CommandRunner
 {	
 	public DummyPlayer()
 	{
@@ -89,5 +91,46 @@ public class DummyPlayer extends HexEntity<AxialHexCoord3D> implements InputGett
 	{
 		super.onStop();
 		Logging.logNotice("Took " + timer_.stopTime() + " millis");
+	}
+
+	@Override
+	public void runCommand(String[] params)
+	{
+		{
+			switch (params[0])
+			{
+			case "move": // TODO objects with MA
+				switch (params[1])
+				{
+				case "north": case "no": case "n":
+					moveDirectional(HexDirection.north, 1, 2);
+					break;
+				case "northwest": case "nw":
+					moveDirectional(HexDirection.northWest, 1, 2);
+					break;
+				case "northeast": case "ne":
+					moveDirectional(HexDirection.northEast, 1, 2);
+					break;
+					
+				case "south": case "so": case "s":
+					moveDirectional(HexDirection.south, 1, 2);
+					break;
+				case "southwest": case "sw":
+					moveDirectional(HexDirection.southWest, 1, 2);
+					break;
+				case "southeast": case "se":
+					moveDirectional(HexDirection.southEast, 1, 2);
+					break;
+					
+				case "up":
+					moveDirectional(HexDirection.up, 1, 2);
+					break;
+				case "down": case "do":
+					moveDirectional(HexDirection.down, 1, 2);
+					break;
+				}
+				break;
+			}
+		}
 	}
 }

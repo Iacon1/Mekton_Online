@@ -16,6 +16,7 @@ import Modules.HexUtilities.HexConfigManager;
 import Modules.HexUtilities.HexEntity;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexMapRectangle;
+import Utils.Logging;
 import Modules.HexUtilities.HexStructures.HexMap;
 import Modules.HexUtilities.HexStructures.Axial.AxialHex3DMap;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord;
@@ -146,7 +147,8 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 				AxialHexCoord3D hexCoord = new AxialHexCoord3D(i, j, k);
 				Point2D pixelCoord = hexCoord.toPixel();
 				MektonHexData hex = getHex(hexCoord);
-				
+				if (hex.texturePos_.x_ != 0)
+					Logging.logNotice("special");
 				canvas.drawImageScaled(tileset_, pixelCoord.subtract(camera), new Point2D(hex.texturePos_.x_ * hexWidth, hex.texturePos_.y_ * hexHeight), new Point2D(hexWidth, hexHeight));
 			}
 	}

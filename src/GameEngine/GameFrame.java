@@ -96,8 +96,9 @@ public class GameFrame extends JFrame
 		{
 			findInputGetters();
 			
-			int mX = canvas_.descaleX(e.getX());
-			int mY = canvas_.descaleY(e.getY());
+			Point2D point = new Point2D(e.getX(), e.getY());
+			int mX = canvas_.descale(point).x_;
+			int mY = canvas_.descale(point).y_;
 				
 			switch (e.getButton())
 			{
@@ -118,8 +119,9 @@ public class GameFrame extends JFrame
 		{
 			findInputGetters();
 			
-			int mX = canvas_.descaleX(e.getX());
-			int mY = canvas_.descaleY(e.getY());
+			Point2D point = new Point2D(e.getX(), e.getY());
+			int mX = canvas_.descale(point).x_;
+			int mY = canvas_.descale(point).y_;
 			
 			switch (e.getButton())
 			{
@@ -140,8 +142,9 @@ public class GameFrame extends JFrame
 		{
 			findInputGetters();
 			
-			int mX = canvas_.descaleX(e.getX());
-			int mY = canvas_.descaleY(e.getY());
+			Point2D point = new Point2D(e.getX(), e.getY());
+			int mX = canvas_.descale(point).x_;
+			int mY = canvas_.descale(point).y_;
 				
 			switch (e.getButton())
 			{

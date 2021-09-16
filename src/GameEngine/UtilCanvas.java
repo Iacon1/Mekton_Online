@@ -30,15 +30,11 @@ public abstract class UtilCanvas extends JPanel
 		scaleY_ = scaleY;
 		return changedSize;
 	}
-	public int descaleX(int x) // Converts a screen coord into a render coord
+	public Point2D descale(Point2D point) // Converts a screen coord into a render coord
 	{
-		return Math.round(x / scaleX_);
+		return new Point2D(Math.round(point.x_ / scaleX_), Math.round(point.y_ / scaleY_));
 	}
-	public int descaleY(int y) // Converts a screen coord into a render coord
-	{
-		return Math.round(y / scaleY_);
-	}
-	
+
 	public void drawImageScaled(Image textureFile, Point2D pos, Point2D texturePos, Point2D textureSize)
 	{
 		int dx1s = (int) (pos.x_ * scaleX_);
