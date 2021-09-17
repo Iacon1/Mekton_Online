@@ -6,6 +6,8 @@ package Modules.MektonCore.MektonUtil;
 
 import java.util.Random;
 
+import Modules.MektonCore.StatsStuff.ServoLocation;
+
 public class Rolls
 {
 	private static int maxRolls = 256; // So explosions don't go on forever
@@ -37,4 +39,8 @@ public class Rolls
 		else return roll;
 	}
 
+	public static ServoLocation hitChart()
+	{
+		return null; // TODO
+	}
 }

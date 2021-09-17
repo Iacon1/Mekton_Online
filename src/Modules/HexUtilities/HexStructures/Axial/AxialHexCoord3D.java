@@ -1,3 +1,7 @@
+// By Iacon1
+// Created 09/12/2021
+// Axial coordinates plus 3D
+
 package Modules.HexUtilities.HexStructures.Axial;
 
 import GameEngine.Point2D;

@@ -9,6 +9,7 @@
 
 package Modules.MektonCore.StatsStuff;
 
+import Modules.MektonCore.StatsStuff.ServoLocation.ServoType;
 import Utils.GappyArrayList;
 
 public class MekServo extends Servo
@@ -43,7 +44,7 @@ public class MekServo extends Servo
 		this.maxSpace = maxSpace;
 	}
 	
-	public void setClass(ServoClass servoClass, ServoList.ServoType servoType)
+	public void setClass(ServoClass servoClass, ServoType servoType)
 	{
 		switch (servoType)
 		{
@@ -109,7 +110,7 @@ public class MekServo extends Servo
 			} break;
 		}
 	}
-	public MekServo(ServoClass servoClass, ServoList.ServoType servoType)
+	public MekServo(ServoClass servoClass, ServoType servoType)
 	{
 		this.spaceTakers = new GappyArrayList<Integer>();
 		setClass(servoClass, servoType);
