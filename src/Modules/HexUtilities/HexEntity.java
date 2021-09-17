@@ -14,6 +14,15 @@ public abstract class HexEntity<T extends HexCoord> extends SpriteEntity // T is
 	private T targetHexPos_;
 	private HexDirection facing_;
 	
+	public HexEntity()
+	{
+		super();
+	}
+	public HexEntity(String owner)
+	{
+		super(owner);
+	}
+
 	private void alignCoords()
 	{
 		this.setPos(hexPos_.toPixel());

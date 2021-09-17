@@ -23,17 +23,23 @@ import Modules.HexUtilities.HexEntity;
 
 public class DummyPlayer extends HexEntity<AxialHexCoord3D> implements InputGetter, CommandRunner
 {	
-	private int testMenu1;
-	private int testMenu2;
+	private int testMenu1 = -1;
+	private int testMenu2 = -1;
 	
 	public DummyPlayer()
 	{
 		super();
 		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight());
+	}
+	public DummyPlayer(String owner)
+	{
+		super(owner);
+		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight());
+
 		if (!GameInfo.isClient())
 		{
-			testMenu1 = new TestMenu("Bob").getId();
-			testMenu2 = new TestMenu("Bob").getId();
+			testMenu1 = new TestMenu(getOwner()).getId();
+			testMenu2 = new TestMenu(getOwner()).getId();
 			((Alignable) getEntity(testMenu2)).align(Alignable.AlignmentPoint.northEast, ((Alignable) getEntity(testMenu1)), Alignable.AlignmentPoint.southWest);
 		}
 	}
@@ -150,7 +156,7 @@ public class DummyPlayer extends HexEntity<AxialHexCoord3D> implements InputGett
 	public void render(ScreenCanvas canvas, Point2D camera)
 	{
 		super.render(canvas, camera);
-		GameInfo.getWorld().getEntity(testMenu1).render(canvas, camera);
-		GameInfo.getWorld().getEntity(testMenu2).render(canvas, camera);
+		if (getEntity(testMenu1) != null) GameInfo.getWorld().getEntity(testMenu1).render(canvas, camera);
+		if (getEntity(testMenu2) != null) GameInfo.getWorld().getEntity(testMenu2).render(canvas, camera);
 	}
 }

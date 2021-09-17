@@ -114,7 +114,7 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	
 	public SpriteEntity findEntity(AxialHexCoord3D coord) // returns a game instance at that position if available
 	{
-		for (int i = 0; i < childrenIds_.size(); ++i)
+		for (int i = 0; i < childrenIds.size(); ++i)
 		{
 			HexEntity obj = (HexEntity) getChild(i); // Please only put physical objects in here
 			if (obj.getHexPos().equals(coord)) return obj;

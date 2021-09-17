@@ -49,6 +49,17 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	
 	// Basic sprite functions
 	
+	public SpriteEntity(String owner)
+	{
+		super(owner);
+		
+		pos_ = new Point2D(0, 0);
+		texturePos_ = new Point2D(0, 0);
+		textureSize_ = new Point2D(0, 0);
+		targetPos_ = new Point2D(-1, -1);
+		animTimer_ = new SimpleTimer();
+	}
+
 	/** Sets the sprite.
 	 *  If any value is null then that value will not be update.
 	 *  Good for animations or changing specific offsets.
@@ -130,6 +141,7 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 		double angle = Math.atan2(delta.y, delta.x);
 		int sX = (int) (((double) speed_) * Math.cos(angle)); // Directional speeds
 		int sY = (int) (((double) speed_) * Math.sin(angle));
+		
 		return new Point2D(sX, sY);
 	}
 	private void updateMove() // Updates movement with speed

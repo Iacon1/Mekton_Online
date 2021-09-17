@@ -70,12 +70,11 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	public GameEntity makePlayer(Account account)
 	{
 		account.setLogged(true);
-		DummyPlayer player = new DummyPlayer(); // Adds a guy to the map
+		DummyPlayer player = new DummyPlayer(account.username); // Adds a guy to the map
 
 		account.possessee = player.getId();
 		GameInfo.setPossessee(account.possessee);
 		GameInfo.getWorld().getRootEntities().get(0).addChild(player);
-		player.addChild(new TestMenu(account.username));
 		player.setHexPos(new AxialHexCoord3D(2, 2, 0));
 		
 		return player;

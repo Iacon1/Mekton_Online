@@ -13,22 +13,15 @@ import GameEngine.Managers.GraphicsManager;
 
 public abstract class GUISpriteEntity extends SpriteEntity
 {
-	private String owner_;
-	
 	public GUISpriteEntity()
 	{
 		super();
-		owner_ = null;
 	}
 	public GUISpriteEntity(String owner)
 	{
-		super();
-		owner_ = owner;
+		super(owner);
 	}
-	public boolean isOwner(String name)
-	{
-		return owner_.equals(name);
-	}
+
 	@Override
 	public void render(ScreenCanvas canvas, Point2D camera) 
 	{
