@@ -32,20 +32,20 @@ public abstract class UtilCanvas extends JPanel
 	}
 	public Point2D descale(Point2D point) // Converts a screen coord into a render coord
 	{
-		return new Point2D(Math.round(point.x_ / scaleX_), Math.round(point.y_ / scaleY_));
+		return new Point2D(Math.round(point.x / scaleX_), Math.round(point.y / scaleY_));
 	}
 
 	public void drawImageScaled(Image textureFile, Point2D pos, Point2D texturePos, Point2D textureSize)
 	{
-		int dx1s = (int) (pos.x_ * scaleX_);
-		int dy1s = (int) (pos.y_ * scaleY_);
-		int dx2s = (int) (dx1s + textureSize.x_ * scaleX_);
-		int dy2s = (int) (dy1s + textureSize.y_ * scaleY_);
+		int dx1s = (int) (pos.x * scaleX_);
+		int dy1s = (int) (pos.y * scaleY_);
+		int dx2s = (int) (dx1s + textureSize.x * scaleX_);
+		int dy2s = (int) (dy1s + textureSize.y * scaleY_);
 		
-		int sx1 = texturePos.x_;
-		int sy1 = texturePos.y_;
-		int sx2 = texturePos.x_ + textureSize.x_;
-		int sy2 = texturePos.y_ + textureSize.y_;
+		int sx1 = texturePos.x;
+		int sy1 = texturePos.y;
+		int sx2 = texturePos.x + textureSize.x;
+		int sy2 = texturePos.y + textureSize.y;
 		
 		g_.drawImage(textureFile, dx1s, dy1s, dx2s, dy2s, sx1, sy1, sx2, sy2, null);
 	}
@@ -58,8 +58,8 @@ public abstract class UtilCanvas extends JPanel
 	public void drawText(String text, Font font, Color color, Point2D pos, int sizePixels)
 	{
 		Color oColor = g_.getColor();
-		int sx = (int) (pos.x_ * scaleX_);
-		int sy = (int) ((pos.y_ + sizePixels) * scaleY_);
+		int sx = (int) (pos.x * scaleX_);
+		int sy = (int) ((pos.y + sizePixels) * scaleY_);
 		int sSize = (int) (scaleY_ * sizePixels);
 		font = font.deriveFont(GraphicsManager.getFontSize(sSize));
 		g_.setFont(font);

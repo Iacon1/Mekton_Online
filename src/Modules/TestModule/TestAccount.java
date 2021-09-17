@@ -6,12 +6,12 @@ package Modules.TestModule;
 
 import javax.swing.JPanel;
 
-import GameEngine.Account;
 import GameEngine.GameInfo;
 import GameEngine.Point2D;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.GameEntity;
+import GameEngine.Server.Account;
 import Modules.BaseModule.CommandParser;
 import Modules.HexUtilities.HexDirection;
 import Modules.HexUtilities.HexEntity;

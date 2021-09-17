@@ -5,11 +5,11 @@
 package Modules.BaseModule.ClientStates;
 
 import Client.GameClientThread;
+import GameEngine.Net.StateFactory;
+import GameEngine.Net.ThreadState;
 import Modules.BaseModule.ClientFrames.LoginDialog;
 import Modules.BaseModule.PacketTypes.LoginFeedbackPacket;
 import Modules.BaseModule.PacketTypes.LoginPacket;
-import Net.StateFactory;
-import Net.ThreadState;
 import Utils.JSONManager;
 import Utils.MiscUtils;
 

@@ -2,10 +2,12 @@
 // Created 05/10/2021
 // Account data
 
-package GameEngine;
+package GameEngine.Server;
 
 import javax.swing.JPanel;
 
+import GameEngine.GameInfo;
+import GameEngine.Point2D;
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.GameEntity;
 

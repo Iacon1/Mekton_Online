@@ -5,13 +5,14 @@
 
 // http://tutorials.jenkov.com/java-multithreaded-servers/singlethreaded-server.html
 
-package Net.Server;
+package GameEngine.Net.Server;
 
 import Utils.Logging;
-import Net.ConnectionPairThread;
 
 import java.net.*;
 import java.util.function.Supplier;
+
+import GameEngine.Net.ConnectionPairThread;
 
 public class ServerThread<P extends ConnectionPairThread> extends Thread
 {

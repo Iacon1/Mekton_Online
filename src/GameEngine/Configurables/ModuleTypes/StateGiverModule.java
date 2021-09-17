@@ -4,7 +4,7 @@
 
 package GameEngine.Configurables.ModuleTypes;
 
-import Net.StateFactory;
+import GameEngine.Net.StateFactory;
 
 public interface StateGiverModule
 {

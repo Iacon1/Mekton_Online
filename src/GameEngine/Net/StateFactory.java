@@ -2,7 +2,7 @@
 // Created 06/16/2021
 // Generates one of many states
 
-package Net;
+package GameEngine.Net;
 
 public interface StateFactory
 {

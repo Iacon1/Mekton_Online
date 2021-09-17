@@ -2,4 +2,4 @@
 //Created 4/19/2021
 //Networking stuff for client
 
-package Net.Client;
+package GameEngine.Net.Client;

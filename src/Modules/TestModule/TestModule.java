@@ -5,9 +5,7 @@
 package Modules.TestModule;
 
 import GameEngine.ScreenCanvas;
-import GameEngine.Account;
 import GameEngine.GameInfo;
-import GameEngine.GameServer;
 import GameEngine.Point2D;
 import GameEngine.Configurables.ModuleTypes.GraphicsHandlerModule;
 import GameEngine.Configurables.ModuleTypes.Module;
@@ -15,7 +13,8 @@ import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
 import GameEngine.Configurables.ModuleTypes.ServerMakingModule;
 import GameEngine.Configurables.ModuleTypes.WorldMakingModule;
 import GameEngine.EntityTypes.GameEntity;
-
+import GameEngine.Server.Account;
+import GameEngine.Server.GameServer;
 import Modules.BaseModule.BaseServer;
 import Modules.HexUtilities.HexConfigManager;
 import Modules.HexUtilities.HexEntity;
@@ -63,7 +62,7 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	{
 		if (GameInfo.getWorld() == null) return;
 		HexEntity<AxialHexCoord3D> possessee = (HexEntity<AxialHexCoord3D>) GameInfo.getWorld().getEntity(GameInfo.getPossessee());
-		((MektonMap) GameInfo.getWorld().getRootEntities().get(0)).render(canvas, GameInfo.getCamera(), possessee.getHexPos().z_);
+		((MektonMap) GameInfo.getWorld().getRootEntities().get(0)).render(canvas, GameInfo.getCamera(), possessee.getHexPos().z);
 		(GameInfo.getWorld().getEntity(GameInfo.getGUI())).render(canvas, GameInfo.getCamera());
 	}
 

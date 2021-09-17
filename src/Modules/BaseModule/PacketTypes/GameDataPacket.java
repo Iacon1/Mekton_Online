@@ -4,13 +4,13 @@
 
 package Modules.BaseModule.PacketTypes;
 
-import GameEngine.Account;
 import GameEngine.GameInfo;
 import GameEngine.Point2D;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.TransSerializable;
 
 import GameEngine.PacketTypes.Packet;
+import GameEngine.Server.Account;
 
 public class GameDataPacket extends Packet implements TransSerializable
 {

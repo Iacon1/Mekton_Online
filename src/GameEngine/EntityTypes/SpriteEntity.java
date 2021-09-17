@@ -61,10 +61,10 @@ public abstract class SpriteEntity extends GameEntity
 	public void setSprite(String texturePath, Integer textureX, Integer textureY, Integer width, Integer height) // If any input is null then don't change
 	{
 		if (texturePath != null) texturePath_ = texturePath;
-		if (textureX != null) texturePos_.x_ = textureX;
-		if (textureY != null) texturePos_.y_ = textureY;
-		if (width != null) textureSize_.x_ = width;
-		if (height != null) textureSize_.y_ = height;
+		if (textureX != null) texturePos_.x = textureX;
+		if (textureY != null) texturePos_.y = textureY;
+		if (width != null) textureSize_.x = width;
+		if (height != null) textureSize_.y = height;
 	}
 	
 	public void setPos(Point2D pos)
@@ -131,7 +131,7 @@ public abstract class SpriteEntity extends GameEntity
 
 	protected Point2D getSpeedVector(Point2D delta)
 	{
-		double angle = Math.atan2(delta.y_, delta.x_);
+		double angle = Math.atan2(delta.y, delta.x);
 		int sX = (int) (((double) speed_) * Math.cos(angle)); // Directional speeds
 		int sY = (int) (((double) speed_) * Math.sin(angle));
 		return new Point2D(sX, sY);
@@ -139,14 +139,14 @@ public abstract class SpriteEntity extends GameEntity
 	private void updateMove() // Updates movement with speed
 	{
 		if (targetPos_.equals(new Point2D(-1, -1)) && speed_ == 0) return;
-		Point2D delta = new Point2D(targetPos_.x_ - pos_.x_, targetPos_.y_ - pos_.y_);
+		Point2D delta = new Point2D(targetPos_.x - pos_.x, targetPos_.y - pos_.y);
 		
 		Point2D speedVector = getSpeedVector(delta);
 		
-		if (Math.abs(delta.x_) <= Math.abs(speedVector.x_)) pos_.x_ = targetPos_.x_; // We're within speed of target
-		else pos_.x_ += speedVector.x_;
-		if (Math.abs(delta.y_) <= Math.abs(speedVector.y_)) pos_.y_ = targetPos_.y_; // We're within speed of target
-		else pos_.y_ += speedVector.y_;
+		if (Math.abs(delta.x) <= Math.abs(speedVector.x)) pos_.x = targetPos_.x; // We're within speed of target
+		else pos_.x += speedVector.x;
+		if (Math.abs(delta.y) <= Math.abs(speedVector.y)) pos_.y = targetPos_.y; // We're within speed of target
+		else pos_.y += speedVector.y;
 		
 		if (pos_.equals(targetPos_))
 		{
@@ -160,7 +160,7 @@ public abstract class SpriteEntity extends GameEntity
 	
 	private void setFrame(int offset) // In height multiples
 	{
-		setSprite(null, null, textureSize_.y_ * offset, null, null);
+		setSprite(null, null, textureSize_.y * offset, null, null);
 	}
 	public void startAnimation(Animation animation)
 	{

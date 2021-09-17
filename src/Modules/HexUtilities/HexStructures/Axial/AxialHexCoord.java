@@ -16,29 +16,29 @@ import Utils.MiscUtils;
 
 public class AxialHexCoord implements HexCoord
 {
-	public int q_; // "Column"
-	public int r_; // "Row"
+	public int q; // "Column"
+	public int r; // "Row"
 	public int s() // "Side"?
 	{
-		return -(q_ + r_);
+		return -(q + r);
 	}
 
 	public AxialHexCoord(int q, int r)
 	{
-		q_ = q;
-		r_ = r;
+		this.q = q;
+		this.r = r;
 	}
 
 	@Override
 	public AxialHexCoord rAdd(HexCoord delta)
 	{
 		AxialHexCoord deltaAxial = HexCoordConverter.convert(delta, delta.getClass(), AxialHexCoord.class);
-		return new AxialHexCoord(q_ + deltaAxial.q_, r_ + deltaAxial.r_);
+		return new AxialHexCoord(q + deltaAxial.q, r + deltaAxial.r);
 	}
 	@Override
 	public AxialHexCoord rMultiply(int factor)
 	{
-		return new AxialHexCoord(this.q_ * factor, this.r_ * factor);
+		return new AxialHexCoord(this.q * factor, this.r * factor);
 	}
 
 	@Override
@@ -67,8 +67,8 @@ public class AxialHexCoord implements HexCoord
 	public int distance(HexCoord target) // https://www.redblobgames.com/grids/hexagons/#distances-cube
 	{	
 		AxialHexCoord targetAxial = HexCoordConverter.convert(target, target.getClass(), AxialHexCoord.class);
-		int dQ = q_ - targetAxial.q_;
-		int dR = r_ - targetAxial.r_;
+		int dQ = q - targetAxial.q;
+		int dR = r - targetAxial.r;
 		int dS = s() - targetAxial.s();
 		return MiscUtils.multiMax(dQ, dR, dS);
 	}
@@ -81,10 +81,10 @@ public class AxialHexCoord implements HexCoord
 		
 		int dist = distance(targetAxial);
 		
-		float fAQ = (float) q_;
-		float fAR = (float) r_;
-		float fBQ = (float) targetAxial.q_;
-		float fBR = (float) targetAxial.r_;
+		float fAQ = (float) q;
+		float fAR = (float) r;
+		float fBQ = (float) targetAxial.q;
+		float fBR = (float) targetAxial.r;
 		for (int i = 0; i < dist; ++i)
 		{
 			float t = 1.0f / ((float) dist) * (float) i;
@@ -115,9 +115,9 @@ public class AxialHexCoord implements HexCoord
 	public Point2D toPixel() // https://www.redblobgames.com/grids/hexagons/#hex-to-pixel
 	{
 		Point2D point = new Point2D(0, 0);
-		point.x_ = ((3 * HexConfigManager.getHexWidth()) / 4 + 1) * q_; // Last q fixes a off-by-one spacing issue
+		point.x = ((3 * HexConfigManager.getHexWidth()) / 4 + 1) * q; // Last q fixes a off-by-one spacing issue
 		// x = (3 / 2 * q * size) = (3 * width) / 4 * q
-		point.y_ = (HexConfigManager.getHexHeight() / 2) * q_ +  HexConfigManager.getHexHeight() * r_;
+		point.y = (HexConfigManager.getHexHeight() / 2) * q +  HexConfigManager.getHexHeight() * r;
 		// y = size * (sqrt3 / 2 * q + sqrt3 * r) = (height / 2 * q + height * r)
 
 		// Using approximations somehow works better, yay
@@ -128,9 +128,9 @@ public class AxialHexCoord implements HexCoord
 	public AxialHexCoord fromPixel(Point2D point)
 	{
 		AxialHexCoord coord = new AxialHexCoord(0, 0);
-		coord.q_ = point.x_ /  ((3 * HexConfigManager.getHexWidth()) / 4 + 1); // Just invert to-pixel
+		coord.q = point.x /  ((3 * HexConfigManager.getHexWidth()) / 4 + 1); // Just invert to-pixel
 		// x = (3 / 2 * q * size) = (3 * width) / 4 * q
-		coord.r_ = (point.y_ - (HexConfigManager.getHexHeight() / 2) * coord.q_) / HexConfigManager.getHexHeight();
+		coord.r = (point.y - (HexConfigManager.getHexHeight() / 2) * coord.q) / HexConfigManager.getHexHeight();
 		
 		return coord;
 	}

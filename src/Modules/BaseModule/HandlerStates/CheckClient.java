@@ -4,11 +4,11 @@
 
 package Modules.BaseModule.HandlerStates;
 
+import GameEngine.Net.StateFactory;
+import GameEngine.Net.ThreadState;
 import GameEngine.PacketTypes.ClientInfoPacket;
 import GameEngine.PacketTypes.ServerInfoPacket;
 import Modules.BaseModule.ClientHandlerThread;
-import Net.StateFactory;
-import Net.ThreadState;
 import Utils.JSONManager;
 import Utils.Logging;
 import Utils.MiscUtils;

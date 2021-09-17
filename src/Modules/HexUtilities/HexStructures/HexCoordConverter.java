@@ -23,7 +23,7 @@ public final class HexCoordConverter
 		{
 			if (targetClass == AxialHexCoord.class) return (T) coord;
 			else if (targetClass == AxialHexCoord3D.class)
-				return (T) new AxialHexCoord3D(((AxialHexCoord) coord).q_, ((AxialHexCoord) coord).r_, 0);
+				return (T) new AxialHexCoord3D(((AxialHexCoord) coord).q, ((AxialHexCoord) coord).r, 0);
 			else return null;
 		}
 		else if (sourceClass == AxialHexCoord3D.class)

@@ -4,7 +4,7 @@
 
 package GameEngine.Configurables.ModuleTypes;
 
-import GameEngine.GameServer;
+import GameEngine.Server.GameServer;
 
 public interface ServerMakingModule
 {

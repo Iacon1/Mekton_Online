@@ -13,11 +13,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import GameEngine.Account;
 import GameEngine.GameInfo;
-import GameEngine.GameServer;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.GameEntity;
+import GameEngine.Server.Account;
+import GameEngine.Server.GameServer;
 import Utils.Logging;
 import Utils.MiscUtils;
 

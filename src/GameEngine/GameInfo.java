@@ -7,34 +7,26 @@ package GameEngine;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
+import GameEngine.Client.GameFrame;
 import GameEngine.EntityTypes.GameEntity;
+import Utils.GappyArrayList;
 
 public class GameInfo
 {
 	// Things that might need to be communicated
 	public static class GameWorld
 	{
-		protected ArrayList<GameEntity> instances_; // List of game instances
-		protected ArrayDeque<Integer> gaps_; // Gaps can form in the entity list when things are removed
+		protected GappyArrayList<GameEntity> instances_; // List of game instances
 		public GameWorld()
 		{
-			instances_ = new ArrayList<GameEntity>();
-			gaps_ = new ArrayDeque<Integer>();
+			instances_ = new GappyArrayList<GameEntity>();
 		}
 		
 		public int addEntity(GameEntity entity)
 		{
-			if (gaps_.isEmpty())
-			{
-				instances_.add(entity);
-				return instances_.size() - 1;
-			}
-			else
-			{
-				int gap = gaps_.pop();
-				instances_.set(gap, entity);
-				return gap;
-			}
+			int index = instances_.getFirstGap();
+			instances_.add(entity);
+			return index;
 		}
 		public int findEntity(GameEntity entity)
 		{
@@ -49,8 +41,7 @@ public class GameInfo
 			GameEntity entity = getEntity(id);
 			entity.getParent().removeChild(entity, false);
 			entity.clearChildren(true);
-			gaps_.push(id);
-			instances_.set(id, null);
+			instances_.remove(id);
 			
 		}
 		

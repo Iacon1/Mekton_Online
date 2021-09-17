@@ -9,9 +9,9 @@ import java.util.HashMap;
 
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.StateGiverModule;
+import GameEngine.Net.StateFactory;
+import GameEngine.Net.StatefulConnectionPairThread;
 import GameEngine.PacketTypes.ServerInfoPacket;
-import Net.StateFactory;
-import Net.StatefulConnectionPairThread;
 
 public class GameClientThread extends StatefulConnectionPairThread
 {

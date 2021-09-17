@@ -2,7 +2,7 @@
 // Created 4/20/2021
 // Constructed with a socket, runs two threads
 
-package Net;
+package GameEngine.Net;
 
 import Utils.Logging;
 

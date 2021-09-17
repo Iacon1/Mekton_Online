@@ -2,11 +2,11 @@
 // Created 04/26/2021
 //
 
-package Net.Server;
+package GameEngine.Net.Server;
 
 import java.util.function.Supplier;
 
-import Net.ConnectionPairThread;
+import GameEngine.Net.ConnectionPairThread;
 import Utils.Logging;
 import Utils.MiscUtils;
 

@@ -4,13 +4,13 @@
 
 package Modules.BaseModule;
 
-import GameEngine.Account;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
 import GameEngine.Configurables.ModuleTypes.StateGiverModule;
 import GameEngine.EntityTypes.GameEntity;
-import Net.StateFactory;
-import Net.StatefulConnectionPairThread;
+import GameEngine.Net.StateFactory;
+import GameEngine.Net.StatefulConnectionPairThread;
+import GameEngine.Server.Account;
 import Utils.Logging;
 
 public class ClientHandlerThread extends StatefulConnectionPairThread

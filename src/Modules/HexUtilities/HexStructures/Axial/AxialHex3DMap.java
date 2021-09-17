@@ -71,20 +71,20 @@ public class AxialHex3DMap<M extends AxialHexMap<T>, T> implements HexMap<AxialH
 	@Override
 	public boolean inBounds(AxialHexCoord3D coord)
 	{
-		if (0 < coord.z_ || coord.z_ >= levels_) return false;
+		if (0 < coord.z || coord.z >= levels_) return false;
 		else return maps_.get(0).inBounds(coord);
 	}
 	@Override
 	public void setHex(AxialHexCoord3D coord, T t)
 	{
 		if (!inBounds(coord)) return;
-		else maps_.get(coord.z_).setHex(coord, t);
+		else maps_.get(coord.z).setHex(coord, t);
 	}
 	@Override
 	public T getHex(AxialHexCoord3D coord)
 	{
 		if (!inBounds(coord)) return null;
-		else return maps_.get(coord.z_).getHex(coord);
+		else return maps_.get(coord.z).getHex(coord);
 	}
 
 }

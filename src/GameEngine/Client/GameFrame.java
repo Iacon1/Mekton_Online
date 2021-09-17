@@ -2,7 +2,7 @@
 // Created who knows when
 // Client game frame - The meat of the game's IO
 
-package GameEngine;
+package GameEngine.Client;
 
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
@@ -13,6 +13,9 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import GameEngine.GameInfo;
+import GameEngine.Point2D;
+import GameEngine.ScreenCanvas;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.InputGetter;
@@ -97,8 +100,8 @@ public class GameFrame extends JFrame
 			findInputGetters();
 			
 			Point2D point = new Point2D(e.getX(), e.getY());
-			int mX = canvas_.descale(point).x_;
-			int mY = canvas_.descale(point).y_;
+			int mX = canvas_.descale(point).x;
+			int mY = canvas_.descale(point).y;
 				
 			switch (e.getButton())
 			{
@@ -120,8 +123,8 @@ public class GameFrame extends JFrame
 			findInputGetters();
 			
 			Point2D point = new Point2D(e.getX(), e.getY());
-			int mX = canvas_.descale(point).x_;
-			int mY = canvas_.descale(point).y_;
+			int mX = canvas_.descale(point).x;
+			int mY = canvas_.descale(point).y;
 			
 			switch (e.getButton())
 			{
@@ -143,8 +146,8 @@ public class GameFrame extends JFrame
 			findInputGetters();
 			
 			Point2D point = new Point2D(e.getX(), e.getY());
-			int mX = canvas_.descale(point).x_;
-			int mY = canvas_.descale(point).y_;
+			int mX = canvas_.descale(point).x;
+			int mY = canvas_.descale(point).y;
 				
 			switch (e.getButton())
 			{

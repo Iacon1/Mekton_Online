@@ -6,22 +6,22 @@ package GameEngine;
 
 public class Point2D
 {
-	public int x_;
-	public int y_;
+	public int x;
+	public int y;
 	
 	public Point2D(int x, int y)
 	{
-		x_ = x;
-		y_ = y;
+		this.x = x;
+		this.y = y;
 	}
 	
 	public Point2D add(Point2D delta)
 	{
-		return new Point2D(this.x_ + delta.x_, this.y_ + delta.y_);
+		return new Point2D(this.x + delta.x, this.y + delta.y);
 	}
 	public Point2D multiply(int factor)
 	{
-		return new Point2D(this.x_ * factor, this.y_ * factor);
+		return new Point2D(this.x * factor, this.y * factor);
 	}
 	public Point2D subtract(Point2D delta)
 	{
@@ -29,7 +29,7 @@ public class Point2D
 	}
 	public Point2D divide(int factor)
 	{
-		return new Point2D(this.x_ / factor, this.y_ / factor);
+		return new Point2D(this.x / factor, this.y / factor);
 	}
 	
 	@Override
@@ -39,12 +39,12 @@ public class Point2D
 		else
 		{
 			Point2D point = (Point2D) obj;
-			return (x_ == point.x_) && (y_ == point.y_);
+			return (x == point.x) && (y == point.y);
 		}
 	}
 	@Override
 	public int hashCode()
 	{
-		return (x_ + ", " + y_).hashCode();
+		return (x + ", " + y).hashCode();
 	}
 }

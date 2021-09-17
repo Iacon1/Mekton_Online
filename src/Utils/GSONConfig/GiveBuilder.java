@@ -6,10 +6,10 @@ package Utils.GSONConfig;
 
 import com.google.gson.GsonBuilder;
 
-import GameEngine.Account;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.GSONModule;
 import GameEngine.EntityTypes.GameEntity;
+import GameEngine.Server.Account;
 
 public final class GiveBuilder
 {

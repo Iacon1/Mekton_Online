@@ -101,11 +101,11 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	public int findHighestHex(AxialHexCoord coord, int zMax) // O(z); TODO memoize
 	{
 		if (zMax >= map_.getLevels()) zMax = map_.getLevels() - 1;
-		if (!map_.inBounds(new AxialHexCoord3D(coord.q_, coord.r_, zMax))) return -1;
+		if (!map_.inBounds(new AxialHexCoord3D(coord.q, coord.r, zMax))) return -1;
 		
 		for (int k = zMax; k >= 0; --k)
 		{
-			AxialHexCoord3D coord3D = new AxialHexCoord3D(coord.q_, coord.r_, k);
+			AxialHexCoord3D coord3D = new AxialHexCoord3D(coord.q, coord.r, k);
 			if (map_.getHex(coord3D) != null) return k;
 		}
 		
@@ -147,9 +147,9 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 				AxialHexCoord3D hexCoord = new AxialHexCoord3D(i, j, k);
 				Point2D pixelCoord = hexCoord.toPixel();
 				MektonHexData hex = getHex(hexCoord);
-				if (hex.texturePos_.x_ != 0)
+				if (hex.texturePos_.x != 0)
 					Logging.logNotice("special");
-				canvas.drawImageScaled(tileset_, pixelCoord.subtract(camera), new Point2D(hex.texturePos_.x_ * hexWidth, hex.texturePos_.y_ * hexHeight), new Point2D(hexWidth, hexHeight));
+				canvas.drawImageScaled(tileset_, pixelCoord.subtract(camera), new Point2D(hex.texturePos_.x * hexWidth, hex.texturePos_.y * hexHeight), new Point2D(hexWidth, hexHeight));
 			}
 	}
 	private void drawChildren(ScreenCanvas canvas, Point2D camera, int k)
@@ -158,7 +158,7 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 		{
 			HexEntity<AxialHexCoord3D> entity = (HexEntity<AxialHexCoord3D>) getChildren().get(t);
 			AxialHexCoord3D pos3D = (AxialHexCoord3D) entity.getHexPos();
-			if (pos3D.z_ == k) entity.render(canvas, camera);
+			if (pos3D.z == k) entity.render(canvas, camera);
 		}
 	}
 	public void render(ScreenCanvas canvas, Point2D camera, int z)

@@ -2,12 +2,13 @@
 // Created 4/20/2021
 // Client test
 
-package Net.Client;
+package GameEngine.Net.Client;
 
 import Utils.Logging;
-import Net.ConnectionPairThread;
 
 import java.net.Socket;
+
+import GameEngine.Net.ConnectionPairThread;
 
 public class Client<P extends ConnectionPairThread>
 {

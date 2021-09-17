@@ -2,7 +2,7 @@
 // Created 06/15/2021
 // A connection pair thread with thread states
 
-package Net;
+package GameEngine.Net;
 
 public abstract class StatefulConnectionPairThread extends ConnectionPairThread
 {

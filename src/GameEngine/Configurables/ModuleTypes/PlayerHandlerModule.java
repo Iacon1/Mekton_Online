@@ -4,8 +4,8 @@
 
 package GameEngine.Configurables.ModuleTypes;
 
-import GameEngine.Account;
 import GameEngine.EntityTypes.GameEntity;
+import GameEngine.Server.Account;
 
 public interface PlayerHandlerModule
 {

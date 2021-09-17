@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Net.Client.Client;
+import GameEngine.Net.Client.Client;
 import Utils.Logging;
 import Utils.MiscUtils;
 import Utils.JSONManager;

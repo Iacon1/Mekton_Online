@@ -5,11 +5,11 @@
 package Modules.BaseModule.ClientStates;
 
 import Client.GameClientThread;
-import GameEngine.GameFrame;
 import GameEngine.GameInfo;
+import GameEngine.Client.GameFrame;
+import GameEngine.Net.StateFactory;
+import GameEngine.Net.ThreadState;
 import Modules.BaseModule.PacketTypes.GameDataPacket;
-import Net.StateFactory;
-import Net.ThreadState;
 import Utils.JSONManager;
 
 public class MainScreen implements ThreadState<GameClientThread>

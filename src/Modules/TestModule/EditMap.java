@@ -25,10 +25,10 @@ public class EditMap extends MektonMap implements InputGetter, CommandRunner
 	public void runCommand(String[] params)
 	{
 		AxialHexCoord3D coord = new AxialHexCoord3D(0, 0, 0);
-		coord.q_ = Integer.valueOf(params[0]);
-		coord.r_ = Integer.valueOf(params[1]);
+		coord.q = Integer.valueOf(params[0]);
+		coord.r = Integer.valueOf(params[1]);
 		MektonHexData data = new MektonHexData();
-		data.texturePos_.x_ = 1;
+		data.texturePos_.x = 1;
 		data.type_ = MektonHexData.TerrainType.solid_;
 		setHex(coord, data);
 	}
@@ -41,7 +41,7 @@ public class EditMap extends MektonMap implements InputGetter, CommandRunner
 			AxialHexCoord coord = new AxialHexCoord(0, 0);
 			coord = coord.fromPixel(new Point2D(mX, mY));
 			
-			GameInfo.setCommand("@" + this.getId() + " " + coord.q_ + " " + coord.r_);
+			GameInfo.setCommand("@" + this.getId() + " " + coord.q + " " + coord.r);
 		}
 	}
 

@@ -58,9 +58,9 @@ public abstract class AxialHexMap<T> implements HexMap<AxialHexCoord, T>
 	
 	public boolean inBounds(AxialHexCoord coord)
 	{
-		if (coord.r_ < firstRow(coord.q_) || coord.r_ > lastRow(coord.q_)) // OOB r
+		if (coord.r < firstRow(coord.q) || coord.r > lastRow(coord.q)) // OOB r
 			return false;
-		else if (coord.q_ < 0 || coord.q_ >= columns_) // OOB q
+		else if (coord.q < 0 || coord.q >= columns_) // OOB q
 			return false;
 		else return true;
 	}
@@ -69,8 +69,8 @@ public abstract class AxialHexMap<T> implements HexMap<AxialHexCoord, T>
 		if (!inBounds(coord)) return;
 		else
 		{
-			int r = coord.r_ - firstRow(coord.q_);
-			hexes_.get(coord.q_).set(r, t);
+			int r = coord.r - firstRow(coord.q);
+			hexes_.get(coord.q).set(r, t);
 		}
 	}
 	public T getHex(AxialHexCoord coord)
@@ -78,8 +78,8 @@ public abstract class AxialHexMap<T> implements HexMap<AxialHexCoord, T>
 		if (!inBounds(coord)) return null;
 		else
 		{
-			int r = coord.r_ - firstRow(coord.q_);
-			return hexes_.get(coord.q_).get(r);
+			int r = coord.r - firstRow(coord.q);
+			return hexes_.get(coord.q).get(r);
 		}
 	}
 }

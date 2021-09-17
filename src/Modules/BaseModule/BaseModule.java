@@ -6,9 +6,9 @@ package Modules.BaseModule;
 
 import GameEngine.Configurables.ModuleTypes.Module;
 import GameEngine.Configurables.ModuleTypes.StateGiverModule;
+import GameEngine.Net.StateFactory;
 import Modules.BaseModule.ClientStates.ClientStateFactory;
 import Modules.BaseModule.HandlerStates.HandlerStateFactory;
-import Net.StateFactory;
 
 public class BaseModule implements Module, StateGiverModule
 {

@@ -6,8 +6,8 @@ package Modules.BaseModule.ClientStates;
 
 import Client.ConnectFailDialog;
 import Client.GameClientThread;
-import Net.StateFactory;
-import Net.ThreadState;
+import GameEngine.Net.StateFactory;
+import GameEngine.Net.ThreadState;
 import Utils.MiscUtils;
 
 public class BadServer implements ThreadState<GameClientThread>

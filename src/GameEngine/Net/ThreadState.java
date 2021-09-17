@@ -4,7 +4,7 @@
 // Keep in mind that mono-thread assures processOutput will always run exactly once after the last processInput
 // Whereas in trio-thread they will run simultaneously (ish)
 
-package Net;
+package GameEngine.Net;
 
 public interface ThreadState<T extends ConnectionPairThread>
 {

@@ -4,10 +4,10 @@
 
 package Modules.BaseModule.ClientStates;
 
-import Net.ThreadState;
 import Utils.MiscUtils;
 import Client.GameClientThread;
-import Net.StateFactory;
+import GameEngine.Net.StateFactory;
+import GameEngine.Net.ThreadState;
 
 public class ClientStateFactory implements StateFactory
 {

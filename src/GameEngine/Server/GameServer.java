@@ -2,16 +2,17 @@
 // Created 06/17/2021
 //
 
-package GameEngine;
+package GameEngine.Server;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import GameEngine.GameInfo;
 import GameEngine.EntityTypes.GameEntity;
-import Net.ConnectionPairThread;
-import Net.Server.Server;
+import GameEngine.Net.ConnectionPairThread;
+import GameEngine.Net.Server.Server;
 import Utils.JSONManager;
 import Utils.MiscUtils;
 
