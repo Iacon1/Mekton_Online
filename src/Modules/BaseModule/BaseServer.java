@@ -11,7 +11,7 @@ public class BaseServer<A extends Account> extends GameServer<A, ClientHandlerTh
 {	
 	public BaseServer()
 	{	
-		super(new ClientHandlerThread());
+		super(() -> new ClientHandlerThread());
 		ClientHandlerThread thread = new ClientHandlerThread();
 		thread.setParent(this);
 	}

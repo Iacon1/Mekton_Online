@@ -7,50 +7,50 @@
 
 package Net.Server;
 
-import Utils.Instancer;
 import Utils.Logging;
 import Net.ConnectionPairThread;
 
 import java.net.*;
+import java.util.function.Supplier;
 
 public class ServerThread<P extends ConnectionPairThread> extends Thread
 {
-	protected int port_; // Port
-	protected ServerSocket serverSocket_; // Socket for accepting new clients 
-	protected boolean running_ = false; // Keep running?
-	private Instancer<P> instancer_;
+	protected int port; // Port
+	protected ServerSocket serverSocket; // Socket for accepting new clients 
+	protected boolean running = false; // Keep running?
+	private Supplier<P> supplier;
 
-	public ServerThread(int port, P pairTemplate)
+	public ServerThread(int port, Supplier<P> supplier)
 	{
 		setName("MtO server Thread (" + getId() + ")");
-		port_ = port;
-		instancer_ = new Instancer<P>(pairTemplate);
+		this.port = port;
+		this.supplier = supplier;
 	}
 
 	public void open() // Opens the server socket
 	{
 		try
 		{
-			serverSocket_ = new ServerSocket(port_);
-			running_ = true;
+			serverSocket = new ServerSocket(port);
+			running = true;
 		}
 		catch (Exception e) {Logging.logException(e);}
 	}
 	public void close()
 	{
-		running_ = false;
-		try {serverSocket_.close();}
+		running = false;
+		try {serverSocket.close();}
 		catch (Exception e) {Logging.logException(e);}
 	}
 
 	public void run()
 	{
-		while (running_)
+		while (running)
 		{
 			try
 			{;
-				Socket clientSocket = serverSocket_.accept();
-				P pair = instancer_.getInstance();
+				Socket clientSocket = serverSocket.accept();
+				P pair = supplier.get();
 				pair.setSocket(clientSocket);
 				pair.start();
 			}
@@ -60,10 +60,10 @@ public class ServerThread<P extends ConnectionPairThread> extends Thread
 	
 	public void setPort(int port)
 	{
-		port_ = port;
+		this.port = port;
 	}
 	public int getPort()
 	{
-		return port_;
+		return port;
 	}
 }

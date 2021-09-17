@@ -7,6 +7,7 @@ package GameEngine;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import GameEngine.EntityTypes.GameEntity;
 import Net.ConnectionPairThread;
@@ -16,27 +17,27 @@ import Utils.MiscUtils;
 
 public abstract class GameServer<A extends Account, T extends ConnectionPairThread> extends Server<T>
 {
-	private HashMap<String, Account> accounts_;
+	private HashMap<String, Account> accounts;
 
 	private void loadAccounts()
 	{
-		accounts_ = new HashMap<String, Account>();
-		accounts_ = JSONManager.deserializeJSON(MiscUtils.readText("Local Data/Server/Accounts.json"), accounts_.getClass());
+		accounts = new HashMap<String, Account>();
+		accounts = JSONManager.deserializeJSON(MiscUtils.readText("Local Data/Server/Accounts.json"), accounts.getClass());
 
-		accounts_ = (HashMap<String, Account>) JSONManager.deserializeCollectionJSONList(MiscUtils.readText("Local Data/Server/Accounts.json"), HashMap.class, String.class, Account.class);
+		accounts = (HashMap<String, Account>) JSONManager.deserializeCollectionJSONList(MiscUtils.readText("Local Data/Server/Accounts.json"), HashMap.class, String.class, Account.class);
 
-		if (accounts_ == null) accounts_ = new HashMap<String, Account>();
+		if (accounts == null) accounts = new HashMap<String, Account>();
 	}
 	private void saveAccounts()
 	{
-		MiscUtils.saveText("Local Data/Server/Accounts.json", JSONManager.serializeJSON(accounts_));
+		MiscUtils.saveText("Local Data/Server/Accounts.json", JSONManager.serializeJSON(accounts));
 	}
 	
-	public GameServer(T template)
+	public GameServer(Supplier<T> supplier)
 	{	
-		super(template);
+		super(supplier);
 
-		accounts_ = new HashMap<String, Account>();
+		accounts = new HashMap<String, Account>();
 
 		loadAccounts();
 		saveAccounts();
@@ -45,19 +46,19 @@ public abstract class GameServer<A extends Account, T extends ConnectionPairThre
 	
 	public boolean addAccount(A account) // Returns true if successful
 	{
-		accounts_.put(account.username, account);
+		accounts.put(account.username, account);
 		saveAccounts();
 		return true; // TODO whitelist / blacklist
 	}
 	public A getAccount(String username)
 	{
-		return (A) accounts_.get(username);
+		return (A) accounts.get(username);
 	}
 	public ArrayList<A> getAccounts()
 	{
 		ArrayList<A> accountList = new ArrayList<A>();
 		
-		for (Map.Entry<String, Account> entry : accounts_.entrySet())
+		for (Map.Entry<String, Account> entry : accounts.entrySet())
 		{
 			accountList.add((A) entry.getValue());
 		}
@@ -74,7 +75,7 @@ public abstract class GameServer<A extends Account, T extends ConnectionPairThre
 	}
 	public boolean login(String username, String password)
 	{
-		if (accounts_.get(username) == null) return false;
-		else return accounts_.get(username).eqHash(password);
+		if (accounts.get(username) == null) return false;
+		else return accounts.get(username).eqHash(password);
 	}
 }

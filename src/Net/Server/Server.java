@@ -4,6 +4,8 @@
 
 package Net.Server;
 
+import java.util.function.Supplier;
+
 import Net.ConnectionPairThread;
 import Utils.Logging;
 import Utils.MiscUtils;
@@ -11,19 +13,19 @@ import Utils.MiscUtils;
 // TODO these are all dummy values
 public abstract class Server<T extends ConnectionPairThread>
 {
-	private ServerThread<T> serverThread_;
+	private ServerThread<T> serverThread;
 	
-	public Server(T template)
+	public Server(Supplier<T> supplier)
 	{	
-		serverThread_ = new ServerThread<T>(-1, template);
+		serverThread = new ServerThread<T>(-1, supplier);
 	}
 	
 	public void start(int port)
 	{
-		serverThread_.setPort(port);
-		serverThread_.open();
-		serverThread_.start();
-		if (serverThread_.isAlive()) Logging.logNotice("Server started on IP " + MiscUtils.getExIp() + "<br> & port " + port);
+		serverThread.setPort(port);
+		serverThread.open();
+		serverThread.start();
+		if (serverThread.isAlive()) Logging.logNotice("Server started on IP " + MiscUtils.getExIp() + "<br> & port " + port);
 	}
 	
 	public abstract String getName();
