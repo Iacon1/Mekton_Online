@@ -36,5 +36,4 @@ public class ItemIcon extends GUISpriteEntity
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

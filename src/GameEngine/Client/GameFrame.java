@@ -17,6 +17,8 @@ import GameEngine.GameInfo;
 import GameEngine.Point2D;
 import GameEngine.ScreenCanvas;
 import GameEngine.Configurables.ConfigManager;
+import GameEngine.EntityTypes.Alignable;
+import GameEngine.EntityTypes.Alignable.AlignmentPoint;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.InputGetter;
 import Utils.MiscUtils;
@@ -237,5 +239,35 @@ public class GameFrame extends JFrame
 		setFocusable(true);
 		requestFocus();
 		registerInputListener();
+	}
+	
+	public static Point2D getAlignmentPoint(AlignmentPoint point)
+	{
+		Point2D pos = new Point2D(0, 0);
+		switch (point)
+		{
+		case northWest: break;
+		case north: pos.x = ConfigManager.getScreenWidth() / 2; break;
+		case northEast: pos.x = ConfigManager.getScreenWidth(); break;
+		
+		case west: pos.y = ConfigManager.getScreenHeight() / 2; break;
+		case center: pos.x = ConfigManager.getScreenWidth() / 2;
+			pos.y = ConfigManager.getScreenHeight() / 2; break;
+		case east: pos.x = ConfigManager.getScreenWidth() - 1; 
+			pos.y = ConfigManager.getScreenHeight() / 2; break;
+			
+		case southWest: pos.y = ConfigManager.getScreenHeight() - 1; break;
+		case south: pos.x = ConfigManager.getScreenWidth() / 2; 
+			pos.y = ConfigManager.getScreenHeight() - 1; break;
+		case southEast: pos.x = ConfigManager.getScreenWidth() - 1; 
+			pos.y = ConfigManager.getScreenHeight() - 1; break;
+			
+		default: return null;
+		}
+		return pos;
+	}
+	public static void align(AlignmentPoint point, Alignable target, AlignmentPoint targetPoint)
+	{
+		target.align(targetPoint, null, point);
 	}
 }

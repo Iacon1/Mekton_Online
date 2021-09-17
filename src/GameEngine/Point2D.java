@@ -4,7 +4,7 @@
 
 package GameEngine;
 
-public class Point2D
+public class Point2D implements Cloneable
 {
 	public int x;
 	public int y;
@@ -32,6 +32,11 @@ public class Point2D
 		return new Point2D(this.x / factor, this.y / factor);
 	}
 	
+	@Override
+	public Point2D clone()
+	{
+		return new Point2D(this.x, this.y);
+	}
 	@Override
 	public boolean equals(Object obj)
 	{

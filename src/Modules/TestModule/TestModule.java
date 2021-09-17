@@ -75,6 +75,7 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 		account.possessee = player.getId();
 		GameInfo.setPossessee(account.possessee);
 		GameInfo.getWorld().getRootEntities().get(0).addChild(player);
+		player.addChild(new TestMenu(account.username));
 		player.setHexPos(new AxialHexCoord3D(2, 2, 0));
 		
 		return player;

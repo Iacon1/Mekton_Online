@@ -11,6 +11,9 @@ import Utils.SimpleTimer;
 import java.awt.event.KeyEvent;
 
 import GameEngine.GameInfo;
+import GameEngine.Point2D;
+import GameEngine.ScreenCanvas;
+import GameEngine.EntityTypes.Alignable;
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.InputGetter;
 
@@ -20,10 +23,19 @@ import Modules.HexUtilities.HexEntity;
 
 public class DummyPlayer extends HexEntity<AxialHexCoord3D> implements InputGetter, CommandRunner
 {	
+	private int testMenu1;
+	private int testMenu2;
+	
 	public DummyPlayer()
 	{
 		super();
 		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight());
+		if (!GameInfo.isClient())
+		{
+			testMenu1 = new TestMenu("Bob").getId();
+			testMenu2 = new TestMenu("Bob").getId();
+			((Alignable) getEntity(testMenu2)).align(Alignable.AlignmentPoint.northEast, ((Alignable) getEntity(testMenu1)), Alignable.AlignmentPoint.southWest);
+		}
 	}
 	
 	@Override
@@ -132,5 +144,13 @@ public class DummyPlayer extends HexEntity<AxialHexCoord3D> implements InputGett
 				break;
 			}
 		}
+	}
+
+	@Override
+	public void render(ScreenCanvas canvas, Point2D camera)
+	{
+		super.render(canvas, camera);
+		GameInfo.getWorld().getEntity(testMenu1).render(canvas, camera);
+		GameInfo.getWorld().getEntity(testMenu2).render(canvas, camera);
 	}
 }

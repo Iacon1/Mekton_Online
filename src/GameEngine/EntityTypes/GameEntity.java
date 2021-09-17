@@ -72,7 +72,7 @@ public abstract class GameEntity
 		
 		return children;
 	}
-	
+
 	public abstract String getName(); // Gets object name
 	public abstract void update(); // Updates regularly
 	/**

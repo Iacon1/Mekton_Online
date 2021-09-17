@@ -5,12 +5,14 @@
 package GameEngine.EntityTypes;
 
 import GameEngine.Animation;
+import GameEngine.GameInfo;
 import GameEngine.Point2D;
 import GameEngine.ScreenCanvas;
+import GameEngine.UtilCanvas;
 import GameEngine.Managers.GraphicsManager;
 import Utils.SimpleTimer;
 
-public abstract class SpriteEntity extends GameEntity
+public abstract class SpriteEntity extends GameEntity implements Alignable
 {
 	// Basic sprite variables
 	
@@ -74,12 +76,6 @@ public abstract class SpriteEntity extends GameEntity
 	public Point2D getPos()
 	{
 		return pos_;
-	}
-	
-	@Override
-	public void render(ScreenCanvas canvas, Point2D camera) 
-	{
-		canvas.drawImageScaled(texturePath_, pos_.subtract(camera), texturePos_, textureSize_);
 	}
 	
 	// Kinetic functions
@@ -202,8 +198,59 @@ public abstract class SpriteEntity extends GameEntity
 		}
 	}
 	
+	// Alignment functions
+	
+	private Point2D getAlignmentOffset(AlignmentPoint point) // Gets the offset instead of the point
+	{
+		Point2D offset = new Point2D(0, 0);
+		switch (point)
+		{
+		case northWest: break;
+		case north: offset.x = textureSize_.x / 2; break;
+		case northEast: offset.x = textureSize_.x - 1; break;
+		
+		case west: offset.y = textureSize_.y / 2; break;
+		case center: offset.x = textureSize_.x / 2;
+			offset.y = textureSize_.y / 2; break;
+		case east: offset.x = textureSize_.x - 1; 
+			offset.y = textureSize_.y / 2; break;
+			
+		case southWest: offset.y = textureSize_.y - 1; break;
+		case south: offset.x = textureSize_.x / 2; 
+			offset.y = textureSize_.y - 1; break;
+		case southEast: offset.x = textureSize_.x - 1; 
+			offset.y = textureSize_.y - 1; break;
+			
+		default: return null;
+		}
+		return offset;
+	}
+	
 	// Override functions
 	
 	@Override
+	public Point2D getAlignmentPoint(AlignmentPoint point)
+	{
+		Point2D offset = getAlignmentOffset(point);
+		if (offset != null) return pos_.add(offset);
+		else return null;
+	}
+	@Override
+	public void align(AlignmentPoint point, Alignable target, AlignmentPoint targetPoint)
+	{
+		Point2D targetPos = null;
+		if (target != null) targetPos = target.getAlignmentPoint(targetPoint);
+		else targetPos = GameInfo.getFrame().getAlignmentPoint(targetPoint); // Align with frame;
+		
+		setPos(targetPos.subtract(getAlignmentOffset(point)));
+	}
+	
+	@Override
 	public void update() {updateAnim(); updateMove();}
+	
+	@Override
+	public void render(ScreenCanvas canvas, Point2D camera) 
+	{
+		canvas.drawImageScaled(texturePath_, pos_.subtract(camera), texturePos_, textureSize_);
+	}
 }
