@@ -6,7 +6,7 @@ package Modules.MektonCore;
 
 import GameEngine.Point2D;
 
-public class MektonHexData
+public class MektonHex
 {
 	// Texture properties (tileset & size defined elsewhere, not controllable per tile)
 	

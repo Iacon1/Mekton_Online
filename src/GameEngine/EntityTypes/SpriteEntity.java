@@ -10,6 +10,7 @@ import GameEngine.Point2D;
 import GameEngine.ScreenCanvas;
 import GameEngine.UtilCanvas;
 import GameEngine.Managers.GraphicsManager;
+import Utils.Logging;
 import Utils.SimpleTimer;
 
 public abstract class SpriteEntity extends GameEntity implements Alignable
@@ -33,7 +34,7 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	protected Animation animation_; // Current animation
 	protected int frame_ = -1; // Current frame, -1 if not playing
 	protected SimpleTimer animTimer_;
-	
+
 	// Constructor
 	
 	public SpriteEntity()
@@ -138,10 +139,10 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 
 	protected Point2D getSpeedVector(Point2D delta)
 	{
-		double angle = Math.atan2(delta.y, delta.x);
-		int sX = (int) (((double) speed_) * Math.cos(angle)); // Directional speeds
-		int sY = (int) (((double) speed_) * Math.sin(angle));
 		
+		double angle = Math.atan2(delta.y, delta.x);
+		int sX = (int) Math.floor(((double) speed_) * Math.cos(angle)); // Directional speeds
+		int sY = (int) Math.floor(((double) speed_) * Math.sin(angle));
 		return new Point2D(sX, sY);
 	}
 	private void updateMove() // Updates movement with speed
@@ -263,6 +264,7 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	@Override
 	public void render(ScreenCanvas canvas, Point2D camera) 
 	{
+		super.render(canvas, camera);
 		canvas.drawImageScaled(texturePath_, pos_.subtract(camera), texturePos_, textureSize_);
 	}
 }

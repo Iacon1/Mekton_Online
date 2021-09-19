@@ -10,6 +10,7 @@
  */
 package Modules.MektonCore;
 
+import java.awt.Color;
 import java.util.function.Supplier;
 
 import Modules.HexUtilities.HexConfigManager;
@@ -27,17 +28,17 @@ import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.SpriteEntity;
 import GameEngine.Managers.GraphicsManager;
 
-public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, MektonHexData>
+public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, MektonHex>
 {	
 	private String tileset_; // Tileset
 	private String zFog_; // A translucent image the same size as the screen that renders between Z-levels
-	private AxialHex3DMap<AxialHexMapRectangle<MektonHexData>, MektonHexData> map_;
+	private AxialHex3DMap<AxialHexMapRectangle<MektonHex>, MektonHex> map_;
 	
 	public MektonMap(String tileset, String zFog)
 	{
 		super();
-		Supplier<AxialHexMapRectangle<MektonHexData>> supplier = () -> new AxialHexMapRectangle<MektonHexData>();
-		map_ = new AxialHex3DMap<AxialHexMapRectangle<MektonHexData>, MektonHexData>(supplier);
+		Supplier<AxialHexMapRectangle<MektonHex>> supplier = () -> new AxialHexMapRectangle<MektonHex>();
+		map_ = new AxialHex3DMap<AxialHexMapRectangle<MektonHex>, MektonHex>(supplier);
 		
 		tileset_ = tileset;
 		zFog_ = zFog;
@@ -45,8 +46,8 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	public MektonMap()
 	{
 		super();
-		Supplier<AxialHexMapRectangle<MektonHexData>> supplier = () -> new AxialHexMapRectangle<MektonHexData>();
-		map_ = new AxialHex3DMap<AxialHexMapRectangle<MektonHexData>, MektonHexData>(supplier);
+		Supplier<AxialHexMapRectangle<MektonHex>> supplier = () -> new AxialHexMapRectangle<MektonHex>();
+		map_ = new AxialHex3DMap<AxialHexMapRectangle<MektonHex>, MektonHex>(supplier);
 		
 		tileset_ = null;
 		zFog_ = null;
@@ -59,7 +60,7 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	 * @param levels     Length in z-axis.
 	 * @param defaultHex Default hex data.
 	 */
-	public void setDimensions(int columns, int rows, int levels, MektonHexData defaultHex) // Sets new dimensions for map
+	public void setDimensions(int columns, int rows, int levels, MektonHex defaultHex) // Sets new dimensions for map
 	{
 		map_.setDimensions(columns, rows, levels);
 		for (int k = 0; k < levels; ++k)
@@ -83,11 +84,11 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	{
 		return map_.inBounds(coord);
 	}
-	public void setHex(AxialHexCoord3D coord, MektonHexData hex)
+	public void setHex(AxialHexCoord3D coord, MektonHex hex)
 	{
 		map_.setHex(coord, hex);
 	}
-	public MektonHexData getHex(AxialHexCoord3D coord)
+	public MektonHex getHex(AxialHexCoord3D coord)
 	{
 		return map_.getHex(coord);
 	}
@@ -146,10 +147,9 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 				
 				AxialHexCoord3D hexCoord = new AxialHexCoord3D(i, j, k);
 				Point2D pixelCoord = hexCoord.toPixel();
-				MektonHexData hex = getHex(hexCoord);
-				if (hex.texturePos_.x != 0)
-					Logging.logNotice("special");
+				MektonHex hex = getHex(hexCoord);
 				canvas.drawImageScaled(tileset_, pixelCoord.subtract(camera), new Point2D(hex.texturePos_.x * hexWidth, hex.texturePos_.y * hexHeight), new Point2D(hexWidth, hexHeight));
+				canvas.drawText(hexCoord.q + ", " + hexCoord.r, GraphicsManager.getFont("MicrogrammaNormalFix.TTF"), Color.white, pixelCoord.subtract(camera), 16);
 			}
 	}
 	private void drawChildren(ScreenCanvas canvas, Point2D camera, int k)
@@ -180,6 +180,7 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	@Override
 	public void render(ScreenCanvas canvas, Point2D camera)
 	{
+		super.render(canvas, camera);
 		render(canvas, camera, 0);
 	}
 }

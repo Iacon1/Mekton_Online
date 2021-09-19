@@ -30,6 +30,6 @@ public class MektonCore implements Module, GSONModule
 	@Override
 	public void addToBuilder(GsonBuilder builder)
 	{
-		builder.registerTypeAdapterFactory(new AbsFactory<MektonHexData>(MektonHexData.class));
+		builder.registerTypeAdapterFactory(new AbsFactory<MektonHex>(MektonHex.class));
 	}
 }

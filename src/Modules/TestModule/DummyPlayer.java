@@ -96,19 +96,15 @@ public class DummyPlayer extends HexEntity<AxialHexCoord3D> implements InputGett
 		// TODO Auto-generated method stub
 		
 	}
-	
-	private SimpleTimer timer_;
+
 	@Override
 	public void onStart()
 	{
-		if (timer_ == null) timer_ = new SimpleTimer();
-		timer_.start();
 	}
 	@Override
 	public void onStop()
 	{
 		super.onStop();
-		Logging.logNotice("Took " + timer_.stopTime() + " millis");
 	}
 
 	@Override
