@@ -7,9 +7,7 @@ package GameEngine.EntityTypes.GUITypes;
 
 import GameEngine.Point2D;
 import GameEngine.ScreenCanvas;
-import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.SpriteEntity;
-import GameEngine.Managers.GraphicsManager;
 
 public abstract class GUISpriteEntity extends SpriteEntity
 {

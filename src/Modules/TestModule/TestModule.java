@@ -6,7 +6,6 @@ package Modules.TestModule;
 
 import GameEngine.ScreenCanvas;
 import GameEngine.GameInfo;
-import GameEngine.Point2D;
 import GameEngine.Configurables.ModuleTypes.GraphicsHandlerModule;
 import GameEngine.Configurables.ModuleTypes.Module;
 import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
@@ -16,7 +15,6 @@ import GameEngine.EntityTypes.GameEntity;
 import GameEngine.Server.Account;
 import GameEngine.Server.GameServer;
 import Modules.BaseModule.BaseServer;
-import Modules.HexUtilities.HexConfigManager;
 import Modules.HexUtilities.HexEntity;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.MektonCore.MektonHex;

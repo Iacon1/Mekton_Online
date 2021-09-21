@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -26,7 +25,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.util.TimerTask;
@@ -191,7 +189,7 @@ public class ServerMainFrame extends JFrame
 	
 	public static void main(GameServer server)
 	{
-		this.server = server;
+		ServerMainFrame.server = server;
 		EventQueue.invokeLater(new Runnable()
 		{
 			public void run()
@@ -208,7 +206,7 @@ public class ServerMainFrame extends JFrame
 
 	public ServerMainFrame(GameServer server)
 	{
-		if (server != null) this.server = server;
+		if (server != null) ServerMainFrame.server = server;
 		setTitle(MiscUtils.getProgramName() + " Server: Main Window");
 
 		setResizable(false);

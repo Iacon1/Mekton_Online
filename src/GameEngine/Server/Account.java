@@ -42,7 +42,7 @@ public abstract class Account implements CommandRunner
 	
 	public void setLogged(boolean logged)
 	{
-		this.loggedIn = loggedIn;
+		this.loggedIn = logged;
 	}
 	
 	public abstract JPanel serverPanel();

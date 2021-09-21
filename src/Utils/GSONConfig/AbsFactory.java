@@ -28,8 +28,8 @@ public class AbsFactory<T> implements TypeAdapterFactory
 		
 		public AbsAdapter(AdapterDelegator delegator, TypeToken<J> type)
 		{
-			delegator = delegator;
-			type = type;
+			this.delegator = delegator;
+			this.type = type;
 		}
 
 		@Override
@@ -58,7 +58,7 @@ public class AbsFactory<T> implements TypeAdapterFactory
 		public void write(JsonWriter out, J value) throws IOException
 		{
 			String type = MiscUtils.ClassToString(value.getClass());
-			String data = delegator.getAdapter(type).toJson(value); // Serialize
+			String data = delegator.getAdapter(this.type).toJson(value); // Serialize
 			
 			out.beginObject();
 			out.name("type").value(type);
@@ -69,7 +69,7 @@ public class AbsFactory<T> implements TypeAdapterFactory
 	
 	public AbsFactory(Class<T> superClass)
 	{
-		superClass = superClass;
+		this.superClass = superClass;
 	}
 	
 	public <J> TypeAdapter<J> create(Gson gson, TypeToken<J> type)

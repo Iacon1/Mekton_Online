@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.function.Supplier;
 
-import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
-
 public class PathfindingAdapter<T, A extends PathfindingAlgorithm>
 {
 	public static interface Cost<T>

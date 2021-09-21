@@ -5,12 +5,9 @@
 package GameEngine.EntityTypes;
 
 import GameEngine.Animation;
-import GameEngine.GameInfo;
+import GameEngine.Client.GameFrame;
 import GameEngine.Point2D;
 import GameEngine.ScreenCanvas;
-import GameEngine.UtilCanvas;
-import GameEngine.Managers.GraphicsManager;
-import Utils.Logging;
 import Utils.SimpleTimer;
 
 public abstract class SpriteEntity extends GameEntity implements Alignable
@@ -253,7 +250,7 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	{
 		Point2D targetPos = null;
 		if (target != null) targetPos = target.getAlignmentPoint(targetPoint);
-		else targetPos = GameInfo.getFrame().getAlignmentPoint(targetPoint); // Align with frame;
+		else targetPos = GameFrame.getAlignmentPoint(targetPoint); // Align with frame;
 		
 		setPos(targetPos.subtract(getAlignmentOffset(point)));
 	}

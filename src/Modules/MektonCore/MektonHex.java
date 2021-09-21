@@ -4,8 +4,6 @@
 
 package Modules.MektonCore;
 
-import java.util.HashMap;
-
 import GameEngine.Point2D;
 
 public class MektonHex

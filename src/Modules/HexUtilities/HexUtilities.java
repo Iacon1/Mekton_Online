@@ -13,7 +13,8 @@ public class HexUtilities implements Module
 	public ModuleConfig getModuleConfig()
 	{
 		ModuleConfig config = new ModuleConfig();
-		return null;
+
+		return config;
 	}
 
 	@Override

@@ -26,7 +26,6 @@ import Modules.HexUtilities.HexStructures.HexMap;
 import Modules.HexUtilities.HexStructures.Axial.AxialHex3DMap;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord;
 import GameEngine.ScreenCanvas;
-import GameEngine.GameInfo;
 import GameEngine.Point2D;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.GameEntity;

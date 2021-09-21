@@ -37,7 +37,7 @@ public class BakingCanvas extends UtilCanvas
 		BufferedImage image = new BufferedImage(w, h, type);
 		g = image.createGraphics();
 		
-		func = func;
+		this.func = func;
 		this.print(g);
 		
 		return image;

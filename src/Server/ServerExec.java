@@ -9,7 +9,6 @@ import javax.swing.UIManager;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.WorldMakingModule;
-import Utils.DebugLogger;
 import Utils.Logging;
 
 public class ServerExec

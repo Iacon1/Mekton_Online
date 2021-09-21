@@ -4,10 +4,8 @@
 
 package Modules.HexUtilities;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
-import GameEngine.Point2D;
 import GameEngine.EntityTypes.SpriteEntity;
 import Modules.HexUtilities.HexStructures.HexCoord;
 

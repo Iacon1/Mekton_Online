@@ -11,7 +11,6 @@ import Modules.HexUtilities.HexConfigManager;
 import Modules.HexUtilities.HexDirection;
 import Modules.HexUtilities.HexStructures.HexCoord;
 import Modules.HexUtilities.HexStructures.HexCoordConverter;
-import Utils.Logging;
 import Utils.MiscUtils;
 
 public class AxialHexCoord implements HexCoord

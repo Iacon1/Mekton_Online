@@ -7,9 +7,7 @@ package Modules.HexUtilities.HexStructures;
 import java.util.ArrayList;
 
 import GameEngine.Point2D;
-import Modules.HexUtilities.HexConfigManager;
 import Modules.HexUtilities.HexDirection;
-import Utils.MiscUtils;
 
 public interface HexCoord
 {
