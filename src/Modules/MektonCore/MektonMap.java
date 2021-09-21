@@ -268,6 +268,7 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	}
 	public void render(ScreenCanvas canvas, Point2D camera, int z)
 	{
+		super.render(canvas, camera);
 		if (map == null || map.getColumns() == 0 || map.getRows() == 0 || map.getLevels() == 0) return;
 		int hexWidth = HexConfigManager.getHexWidth(); // Hex width
 		int hexHeight = HexConfigManager.getHexHeight(); // Hex height	
@@ -285,7 +286,6 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	@Override
 	public void render(ScreenCanvas canvas, Point2D camera)
 	{
-		super.render(canvas, camera);
 		render(canvas, camera, 0);
 	}
 }

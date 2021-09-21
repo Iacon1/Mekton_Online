@@ -134,7 +134,7 @@ public class AxialHexCoord implements HexCoord
 		Point2D point = new Point2D(0, 0);
 		point.x = ((3 * HexConfigManager.getHexWidth()) / 4 + 1) * q; // Extra q fixes a off-by-one spacing issue
 		// x = (3 / 2 * q * size) = (3 * width) / 4 * q
-		point.y = (HexConfigManager.getHexHeight() / 2) * q +  HexConfigManager.getHexHeight() * r;
+		point.y = (HexConfigManager.getHexHeight() / 2) * q + HexConfigManager.getHexHeight() * r;
 		// y = size * (sqrt3 / 2 * q + sqrt3 * r) = (height / 2 * q + height * r)
 
 		// Using approximations somehow works better, yay
@@ -145,9 +145,11 @@ public class AxialHexCoord implements HexCoord
 	public AxialHexCoord fromPixel(Point2D point)
 	{
 		AxialHexCoord coord = new AxialHexCoord(0, 0);
-		coord.q = (point.x - HexConfigManager.getHexWidth() / 2) /  ((3 * HexConfigManager.getHexWidth()) / 4 + 1); // Just invert to-pixel
-		// x = (3 / 2 * q * size) = (3 * width) / 4 * q
-		coord.r = ((point.y - HexConfigManager.getHexHeight() / 2) - (HexConfigManager.getHexHeight() / 2) * coord.q) / HexConfigManager.getHexHeight();
+		coord.q = Math.floorDiv(point.x, (3 * HexConfigManager.getHexWidth()) / 4 + 1);
+		
+		coord.r = Math.floorDiv(point.y - (HexConfigManager.getHexHeight() / 2) * coord.q, HexConfigManager.getHexHeight());
+		if (point.y >= coord.toPixel().y) coord.r -= 1; // Hack
+		
 		return coord;
 	}
 }

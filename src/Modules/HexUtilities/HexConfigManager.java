@@ -36,6 +36,15 @@ public class HexConfigManager
 		else hexConfig = new HexConfig();
 	}
 	
+	public static int multSqrt3(int x)
+	{
+		return (int) (x * Math.sqrt(3));
+	}
+	public static int divSqrt3(int x)
+	{
+		return (int) (x / Math.sqrt(3));
+	}
+	
 	public static int getHexRadius() // Hex radius in pixels
 	{
 		return hexConfig.hexSize;
@@ -46,8 +55,7 @@ public class HexConfigManager
 	}
 	public static int getHexHeight() // Hex height in pixels
 	{
-		double size = (double) getHexRadius();
-		double h = Math.sqrt(3.0) * size;
-		return (int) h;
+		return (int) multSqrt3(getHexRadius());
 	}
+	
 }
