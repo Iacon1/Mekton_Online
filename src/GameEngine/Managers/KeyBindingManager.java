@@ -11,18 +11,18 @@ import Utils.Logging;
 
 public final class KeyBindingManager
 {
-	private static HashMap<String, Integer> bindings_;
+	private static HashMap<String, Integer> bindings;
 	
 	public static void init()
 	{
-		bindings_ = new HashMap<String, Integer>();
-		bindings_.put("MOVE_NORTH", KeyEvent.VK_W);
+		bindings = new HashMap<String, Integer>();
+		bindings.put("MOVE_NORTH", KeyEvent.VK_W);
 	}
 	
 	public static int getBinding(String name) // Gets a binding from a name
 	{
 		int binding = -1;
-		binding = bindings_.get(name);
+		binding = bindings.get(name);
 		if (binding == -1) Logging.logError("Binding " + name + " not found.");
 	
 		return binding;

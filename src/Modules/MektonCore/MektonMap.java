@@ -35,9 +35,9 @@ import GameEngine.Managers.GraphicsManager;
 
 public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, MektonHex>
 {	
-	private String tileset_; // Tileset
-	private String zFog_; // A translucent image the same size as the screen that renders between Z-levels
-	private AxialHex3DMap<AxialHexMapRectangle<MektonHex>, MektonHex> map_;
+	private String tileset; // Tileset
+	private String zFog; // A translucent image the same size as the screen that renders between Z-levels
+	private AxialHex3DMap<AxialHexMapRectangle<MektonHex>, MektonHex> map;
 
 	private int hexCost(AxialHexCoord3D a, AxialHexCoord3D b) // Cost of coord
 	{
@@ -66,10 +66,10 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	{
 		super();
 		Supplier<AxialHexMapRectangle<MektonHex>> supplier = () -> new AxialHexMapRectangle<MektonHex>();
-		map_ = new AxialHex3DMap<AxialHexMapRectangle<MektonHex>, MektonHex>(supplier);
+		map = new AxialHex3DMap<AxialHexMapRectangle<MektonHex>, MektonHex>(supplier);
 		
-		tileset_ = tileset;
-		zFog_ = zFog;
+		this.tileset = tileset;
+		this.zFog = zFog;
 		
 		pathfinder = new PathfindingAdapter<AxialHexCoord3D, AStar>(
 				(AxialHexCoord3D a, AxialHexCoord3D b) -> hexCost(a, b),
@@ -81,10 +81,10 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	{
 		super();
 		Supplier<AxialHexMapRectangle<MektonHex>> supplier = () -> new AxialHexMapRectangle<MektonHex>();
-		map_ = new AxialHex3DMap<AxialHexMapRectangle<MektonHex>, MektonHex>(supplier);
+		map = new AxialHex3DMap<AxialHexMapRectangle<MektonHex>, MektonHex>(supplier);
 		
-		tileset_ = null;
-		zFog_ = null;
+		tileset = null;
+		zFog = null;
 		
 		pathfinder = new PathfindingAdapter<AxialHexCoord3D, AStar>(
 				(AxialHexCoord3D a, AxialHexCoord3D b) -> hexCost(a, b),
@@ -102,10 +102,10 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	 */
 	public void setDimensions(int columns, int rows, int levels, MektonHex defaultHex) // Sets new dimensions for map
 	{
-		map_.setDimensions(columns, rows, levels);
+		map.setDimensions(columns, rows, levels);
 		for (int k = 0; k < levels; ++k)
 			for (int i = 0; i < columns; ++i)
-				for (int j = map_.firstRow(i); j <= map_.lastRow(i); ++j)
+				for (int j = map.firstRow(i); j <= map.lastRow(i); ++j)
 					setHex(new AxialHexCoord3D(i, j, k), defaultHex);
 	}
 	/** Sets the width, length, and height of the map; Clears the map!
@@ -132,9 +132,9 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 		
 		ArrayList<AxialHexCoord3D> layer = new ArrayList<AxialHexCoord3D>();
 		
-		for (int i = 0; i < map_.getColumns(); ++i) // Generate the list of hex coords
+		for (int i = 0; i < map.getColumns(); ++i) // Generate the list of hex coords
 		{
-			for (int j = map_.firstRow(i); j <= map_.lastRow(i); ++j)
+			for (int j = map.firstRow(i); j <= map.lastRow(i); ++j)
 			{
 				layer.add(new AxialHexCoord3D(i, j, a.z));
 			}
@@ -145,15 +145,15 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	
 	public boolean inBounds(AxialHexCoord3D coord)
 	{
-		return map_.inBounds(coord);
+		return map.inBounds(coord);
 	}
 	public void setHex(AxialHexCoord3D coord, MektonHex hex)
 	{
-		map_.setHex(coord, hex);
+		map.setHex(coord, hex);
 	}
 	public MektonHex getHex(AxialHexCoord3D coord)
 	{
-		return map_.getHex(coord);
+		return map.getHex(coord);
 	}
 	
 	/** Converts a hex coord to a *screen* coordinate, i. e. accounting for camera pos.
@@ -208,13 +208,13 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	 */
 	public int findHighestHex(AxialHexCoord coord, int zMax) // O(z); TODO memoize
 	{
-		if (zMax >= map_.getLevels()) zMax = map_.getLevels() - 1;
-		if (!map_.inBounds(new AxialHexCoord3D(coord.q, coord.r, zMax))) return -1;
+		if (zMax >= map.getLevels()) zMax = map.getLevels() - 1;
+		if (!map.inBounds(new AxialHexCoord3D(coord.q, coord.r, zMax))) return -1;
 		
 		for (int k = zMax; k >= 0; --k)
 		{
 			AxialHexCoord3D coord3D = new AxialHexCoord3D(coord.q, coord.r, k);
-			if (map_.getHex(coord3D) != null) return k;
+			if (map.getHex(coord3D) != null) return k;
 		}
 		
 		return -1;
@@ -241,20 +241,20 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	
 	private void drawZFog(ScreenCanvas canvas, int hexWidth, int hexHeight)
 	{
-		canvas.drawImageScaled(GraphicsManager.getImage(zFog_), new Point2D(0, 0), new Point2D(0, 0), new Point2D(ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight()));
+		canvas.drawImageScaled(GraphicsManager.getImage(zFog), new Point2D(0, 0), new Point2D(0, 0), new Point2D(ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight()));
 	}
 	private void drawHexes(ScreenCanvas canvas, Point2D camera, int k, int cameraZ, int hexWidth, int hexHeight)
 	{
-		if (k >= map_.getLevels()) return; // Cannot draw hexes above this
+		if (k >= map.getLevels()) return; // Cannot draw hexes above this
 		// TODO optimization using BakingCanvas
-		for (int i = 0; i < map_.getColumns(); ++i) // columns
-			for (int j = map_.firstRow(i); j <= map_.lastRow(i); ++j)
+		for (int i = 0; i < map.getColumns(); ++i) // columns
+			for (int j = map.firstRow(i); j <= map.lastRow(i); ++j)
 			{
 				if (k != findHighestHex(new AxialHexCoord(i, j), cameraZ)) continue;
 				
 				AxialHexCoord3D hexCoord = new AxialHexCoord3D(i, j, k);
 				MektonHex hex = getHex(hexCoord);
-				canvas.drawImageScaled(tileset_, toPixel(hexCoord, camera), new Point2D(hex.texturePos_.x * hexWidth, hex.texturePos_.y * hexHeight), new Point2D(hexWidth, hexHeight));
+				canvas.drawImageScaled(tileset, toPixel(hexCoord, camera), new Point2D(hex.texturePos.x * hexWidth, hex.texturePos.y * hexHeight), new Point2D(hexWidth, hexHeight));
 				canvas.drawText(hexCoord.q + ", " + hexCoord.r, GraphicsManager.getFont("MicrogrammaNormalFix.TTF"), Color.white, toPixel(hexCoord, camera), 16);
 			}
 	}
@@ -269,7 +269,7 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	}
 	public void render(ScreenCanvas canvas, Point2D camera, int z)
 	{
-		if (map_ == null || map_.getColumns() == 0 || map_.getRows() == 0 || map_.getLevels() == 0) return;
+		if (map == null || map.getColumns() == 0 || map.getRows() == 0 || map.getLevels() == 0) return;
 		int hexWidth = HexConfigManager.getHexWidth(); // Hex width
 		int hexHeight = HexConfigManager.getHexHeight(); // Hex height	
 		

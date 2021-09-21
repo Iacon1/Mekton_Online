@@ -12,7 +12,7 @@ public class MektonHex
 {
 	// Texture properties (tileset & size defined elsewhere, not controllable per tile)
 	
-	public Point2D texturePos_ = new Point2D(0, 0);
+	public Point2D texturePos = new Point2D(0, 0);
 	
 	// Game properties
 	public enum TerrainType

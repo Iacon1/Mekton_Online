@@ -16,24 +16,24 @@ import GameEngine.Configurables.ConfigManager;
 
 public abstract class ConnectionPairThread extends Thread
 {
-	protected boolean mono_; // true = Mono-thread, false = tri-thread
-	private Thread inThread_; // Thread for getting & processing input
-	private Thread outThread_; // Thread for processing & sending output
+	protected boolean mono; // true = Mono-thread, false = tri-thread
+	private Thread inThread; // Thread for getting & processing input
+	private Thread outThread; // Thread for processing & sending output
 	
-	private DataInputStream inStream_;
-	private DataOutputStream outStream_;
+	private DataInputStream inStream;
+	private DataOutputStream outStream;
 	
-	protected Socket socket_; // Socket for communicating
+	protected Socket socket; // Socket for communicating
 	
-	protected volatile boolean running_; // Main
-	protected volatile boolean runningI_; // Input
-	protected volatile boolean runningO_; // Output
+	protected volatile boolean running; // Main
+	protected volatile boolean runningI; // Input
+	protected volatile boolean runningO; // Output
 	
 	private static String noMsg = "NULL"; // For maintaining a connection during silence
 	
 	protected String getConnectedIP()
 	{
-		if (socket_ != null) return socket_.getInetAddress().toString();
+		if (socket != null) return socket.getInetAddress().toString();
 		else return null;
 	}
 	
@@ -41,8 +41,8 @@ public abstract class ConnectionPairThread extends Thread
 	{
 		try
 		{
-			if (inStream_.available() == 0) return null;
-			else return inStream_.readUTF();
+			if (inStream.available() == 0) return null;
+			else return inStream.readUTF();
 		}
 		catch (EOFException e) {close(); return null;}
 		catch (IOException e) {close(); return null;}
@@ -52,8 +52,8 @@ public abstract class ConnectionPairThread extends Thread
 	{	
 		try
 		{
-			if (output == null) outStream_.writeUTF(noMsg); //return;
-			outStream_.writeUTF(output);
+			if (output == null) outStream.writeUTF(noMsg); //return;
+			outStream.writeUTF(output);
 		}
 		catch (IOException e) {close();}
 		catch (Exception e) {Logging.logException(e);}
@@ -63,9 +63,9 @@ public abstract class ConnectionPairThread extends Thread
 	public abstract String processOutput() throws Exception; // Handle the output
 	public abstract void onClose(); // When closed
 	
-	private boolean inputRun(boolean loop) // Run by inThread_; Returns false if no input was gotten
+	private boolean inputRun(boolean loop) // Run by inThread; Returns false if no input was gotten
 	{
-		while (running_ && runningI_)
+		while (running && runningI)
 		{
 			
 			String input = getInput();
@@ -85,9 +85,9 @@ public abstract class ConnectionPairThread extends Thread
 		}
 		return true;
 	}
-	private void outputRun(boolean loop) // Run by outThread_
+	private void outputRun(boolean loop) // Run by outThread
 	{
-		while (running_ && runningO_)
+		while (running && runningO)
 		{			
 			String output = null;
 			try {output = processOutput();}
@@ -108,41 +108,41 @@ public abstract class ConnectionPairThread extends Thread
 	{
 		try
 		{
-			if (running_) close();
-			socket_ = socket;
+			if (running) close();
+			this.socket = socket;
 			
-			inStream_ = new DataInputStream(socket_.getInputStream());
-			outStream_ = new DataOutputStream(socket_.getOutputStream());
+			inStream = new DataInputStream(this.socket.getInputStream());
+			outStream = new DataOutputStream(this.socket.getOutputStream());
 		}
 		catch (Exception e) {Logging.logException(e);}		
 	}
 	public Socket getSocket()
 	{
-		return socket_;
+		return socket;
 	}
 	
 	public ConnectionPairThread()
 	{
-		mono_ = ConfigManager.getMonoThread();
-		if (mono_) setName("MtO Connection Pair Thread (" + getId() + ")");
+		mono = ConfigManager.getMonoThread();
+		if (mono) setName("MtO Connection Pair Thread (" + getId() + ")");
 		else setName("MtO Connection Pair Main Thread (" + getId() + ")");
 	}
 	public ConnectionPairThread(Socket socket)
 	{
-		mono_ = ConfigManager.getMonoThread();
-		if (mono_) setName("MtO Connection Pair Thread (" + getId() + ")");
+		mono = ConfigManager.getMonoThread();
+		if (mono) setName("MtO Connection Pair Thread (" + getId() + ")");
 		else setName("MtO Connection Pair Main Thread (" + getId() + ")");
 		setSocket(socket);
 	}
 	
 	public void runFunc()
 	{
-		if (socket_ == null || socket_.isClosed()) close(); // SHUT IT DOWN!
+		if (socket == null || socket.isClosed()) close(); // SHUT IT DOWN!
 		
-		if (mono_)
+		if (mono)
 		{
-			if (runningI_) inputRun(false);
-			if (runningO_) outputRun(false);
+			if (runningI) inputRun(false);
+			if (runningO) outputRun(false);
 			if (ConfigManager.getCheckCapM() != 0)
 			{
 				try {Thread.sleep(1000 / ConfigManager.getCheckCapM());}
@@ -151,47 +151,47 @@ public abstract class ConnectionPairThread extends Thread
 		}
 		else
 		{
-			if ((inThread_ == null || !inThread_.isAlive()) && runningI_)
+			if ((inThread == null || !inThread.isAlive()) && runningI)
 			{
-				inThread_ = new Thread(() ->  {inputRun(true);});
-				inThread_.setName("MtO Connection Pair Input Thread (" + getId() + ")");
-				inThread_.start();
+				inThread = new Thread(() ->  {inputRun(true);});
+				inThread.setName("MtO Connection Pair Input Thread (" + getId() + ")");
+				inThread.start();
 			}
-			if ((outThread_ == null || !outThread_.isAlive()) && runningO_)
+			if ((outThread == null || !outThread.isAlive()) && runningO)
 			{
-				outThread_ = new Thread(() ->  {outputRun(true);});
-				outThread_.setName("MtO Connection Pair Output Thread (" + getId() + ")");
-				outThread_.start();
+				outThread = new Thread(() ->  {outputRun(true);});
+				outThread.setName("MtO Connection Pair Output Thread (" + getId() + ")");
+				outThread.start();
 			}
 		}
 	}
 	public void run() // Loop
 	{
-		running_ = true;
-		runningI_ = true;
-		runningO_ = true;
-		while (running_) runFunc();
+		running = true;
+		runningI = true;
+		runningO = true;
+		while (running) runFunc();
 	}
 	
 	protected boolean isInputRunning() // Returns whether it *should* be alive *or* whether it *is* alive
 	{
-		if (mono_) return false;
-		if (inThread_ == null) return runningI_;
-		else return runningI_ || inThread_.isAlive();
+		if (mono) return false;
+		if (inThread == null) return runningI;
+		else return runningI || inThread.isAlive();
 	}
 	protected boolean isOutputRunning() // Returns whether it *should* be alive *or* whether it *is* alive
 	{
-		if (mono_) return false;
-		if (outThread_ == null) return runningO_;
-		else return runningO_ || outThread_.isAlive();
+		if (mono) return false;
+		if (outThread == null) return runningO;
+		else return runningO || outThread.isAlive();
 	}
 	public void close()
 	{
-		running_ = false;
-		runningI_ = false;
-		runningO_ = false;
+		running = false;
+		runningI = false;
+		runningO = false;
 		
-		try {if (socket_ == null || socket_.isClosed()) socket_.close();}
+		try {if (socket == null || socket.isClosed()) socket.close();}
 		catch (Exception e) {Logging.logException(e);}
 		
 		onClose();

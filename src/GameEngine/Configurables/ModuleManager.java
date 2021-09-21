@@ -17,15 +17,15 @@ import Utils.MiscUtils;
 
 public final class ModuleManager
 {
-	private static HashMap<String, Module> modules_; // The actual modules, by file name
-	private static ArrayList<String> modulePriorities_; // The module names by priority
+	private static HashMap<String, Module> modules; // The actual modules, by file name
+	private static ArrayList<String> modulePriorities; // The module names by priority
 
 	public static <T> boolean doesImplement(Module module, Class<T> moduleType) // Does module implement that module type? 
 	{
 		return moduleType.isAssignableFrom(module.getClass());
 	}
 	
-	// Checks if module implements function. If it does, and if nothing else has yet, then sets highestImplementer_ of function to module
+	// Checks if module implements function. If it does, and if nothing else has yet, then sets highestImplementer of function to module
 	// Functions are listed in Module.java
 	
 	private static ArrayList<String> getModules(String path) // Lists all modules
@@ -60,8 +60,8 @@ public final class ModuleManager
 		Class moduleClass = loader.loadClass("Modules." + moduleFile + "." + moduleFile); // TODO
 		Module module = (Module) moduleClass.getDeclaredConstructor().newInstance();
 
-		modules_.put(moduleFile, module);
-		modulePriorities_.add(moduleFile);
+		modules.put(moduleFile, module);
+		modulePriorities.add(moduleFile);
 		
 		Logging.logNotice("Loaded module " + moduleFile);
 		module.initModule();
@@ -74,8 +74,8 @@ public final class ModuleManager
 		
 		ArrayList<String> moduleList = getModules(path);
 		
-		modules_ = new HashMap<String, Module>();
-		modulePriorities_ = new ArrayList<String>();
+		modules = new HashMap<String, Module>();
+		modulePriorities = new ArrayList<String>();
 		
 		for (int i = 0; i < moduleList.size(); ++i) // From highest priority to lowest
 		{			
@@ -88,14 +88,14 @@ public final class ModuleManager
 
 	public static Module getModule(String fileName) // In case you need a specific module
 	{
-		return modules_.get(fileName);
+		return modules.get(fileName);
 	}
 
 	public static <T> T getHighestOfType(Class<T> moduleType, Module delegate) // Get highest implementer of a moduleType, ignoring result delegate if not null; Please make sure T is a module type!
 	{
-		for (int i = modulePriorities_.size() - 1; i >= 0; --i)
+		for (int i = modulePriorities.size() - 1; i >= 0; --i)
 		{
-			Module module = modules_.get(modulePriorities_.get(i));
+			Module module = modules.get(modulePriorities.get(i));
 			if (doesImplement(module, moduleType) && (delegate == null || module != delegate)) return (T) module;
 		}
 		

@@ -12,7 +12,7 @@ import GameEngine.Net.ConnectionPairThread;
 
 public class Client<P extends ConnectionPairThread>
 {
-	protected P pair_;
+	protected P pair;
 	
 	public Client(String address, int port, P pair)
 	{
@@ -20,12 +20,12 @@ public class Client<P extends ConnectionPairThread>
 		try {socket = new Socket(address, port);}
 		catch (Exception e) {Logging.logException(e);}
 		
-		pair_ = pair;
-		pair_.setSocket(socket);
+		this.pair = pair;
+		this.pair.setSocket(socket);
 	}
 	
 	public void run()
 	{
-		pair_.start();
+		pair.start();
 	}
 }

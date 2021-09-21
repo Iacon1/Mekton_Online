@@ -13,13 +13,13 @@ import Utils.Logging;
 
 public abstract class DelegatingFactory<T> implements TypeAdapterFactory
 {	
-	private Class<T> oClass_;
+	private Class<T> oClass;
 
 	protected abstract <J> DelegatingAdapter<J> getAdapter(AdapterDelegator delegator, TypeToken<J> type);
 	
 	protected DelegatingFactory(Class<T> oClass)
 	{
-		oClass_ = oClass;
+		this.oClass = oClass;
 	}
 
 	public <J> TypeAdapter<J> create(Gson gson, TypeToken<J> type)
@@ -27,7 +27,7 @@ public abstract class DelegatingFactory<T> implements TypeAdapterFactory
 		Class<J> inClass = (Class<J>) type.getRawType();
 		AdapterDelegator delegator = new AdapterDelegator(gson, this);
 
-		if (oClass_.isAssignableFrom(inClass))
+		if (oClass.isAssignableFrom(inClass))
 		{
 			try {return getAdapter(delegator, type);}
 			catch (Exception e) {Logging.logException(e); return null;}

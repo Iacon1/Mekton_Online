@@ -16,41 +16,41 @@ public class GameInfo
 	// Things that might need to be communicated
 	public static class GameWorld
 	{
-		protected GappyArrayList<GameEntity> instances_; // List of game instances
+		protected GappyArrayList<GameEntity> instances; // List of game instances
 		public GameWorld()
 		{
-			instances_ = new GappyArrayList<GameEntity>();
+			instances = new GappyArrayList<GameEntity>();
 		}
 		
 		public int addEntity(GameEntity entity)
 		{
-			int index = instances_.getFirstGap();
-			instances_.add(entity);
+			int index = instances.getFirstGap();
+			instances.add(entity);
 			return index;
 		}
 		public int findEntity(GameEntity entity)
 		{
-			return instances_.indexOf(entity);
+			return instances.indexOf(entity);
 		}
 		public GameEntity getEntity(int id)
 		{
-			return instances_.get(id);
+			return instances.get(id);
 		}
 		public void removeEntity(int id, boolean recurse) // Removes an entity and, if needed, its children
 		{
 			GameEntity entity = getEntity(id);
 			entity.getParent().removeChild(entity, false);
 			entity.clearChildren(true);
-			instances_.remove(id);
+			instances.remove(id);
 			
 		}
 		
 		public ArrayList<GameEntity> getRootEntities() // Returns every instance with no parent
 		{
 			ArrayList<GameEntity> array = new ArrayList<GameEntity>();
-			for (int i = 0; i < instances_.size(); ++i)
+			for (int i = 0; i < instances.size(); ++i)
 			{
-				GameEntity instance = instances_.get(i);
+				GameEntity instance = instances.get(i);
 				if (instance == null) continue;
 				if (instance.getParent() == null) array.add(instance);
 			}
@@ -61,74 +61,73 @@ public class GameInfo
 		/** Returns the list of instances.
 		 *  No guarantee that any one entity *isn't* null!
 		 */
-		public ArrayList<GameEntity> getEntities() // Shows every instance instead of just our children; GameWorld.children_ ought be empty
+		public ArrayList<GameEntity> getEntities() // Shows every instance instead of just our children; GameWorld.children ought be empty
 		{
-			return instances_;
+			return instances;
 		}
 	}
-	private static transient GameWorld world_; // Holds any things we might need to transfer to client
+	private static transient GameWorld world; // Holds any things we might need to transfer to client
 	
 	// Things that don't need to be communicated
 	
 	// Client-side
-	private static transient GameFrame frame_;
-	private static transient boolean isClient_; // On if client
-	private static transient String command_;
-	private static transient int possessee_; // Client's current player form
-	private static transient Point2D camera_;
-	private static transient int gui_;
-	
+	private static transient GameFrame frame;
+	private static transient boolean isClient; // On if client
+	private static transient String command;
+	private static transient int possessee; // Client's current player form
+	private static transient Point2D camera;
+
 	private GameInfo() // Static class, do not call
 	{
-		world_ = new GameWorld();
+		world = new GameWorld();
 	}
 	
 	public static void initWorld(GameWorld world)
 	{
-		world_ = new GameWorld();
+		world = new GameWorld();
 	}
 	public static void setWorld(GameWorld world)
 	{
-		world_ = world;
+		GameInfo.world = world;
 	}
 	public static GameWorld getWorld()
 	{
-		return world_;
+		return world;
 	}
 	
 	public static void setFrame(GameFrame frame)
 	{
-		frame_ = frame;
+		GameInfo.frame = frame;
 	}
 	public static GameFrame getFrame()
 	{
-		return frame_;
+		return frame;
 	}
 	
 	public static void setClient(boolean isClient)
 	{
-		isClient_ = isClient;
+		GameInfo.isClient = isClient;
 	}
 	public static boolean isClient()
 	{
-		return isClient_;
+		return isClient;
 	}
 	
 	public static void resetCommand() // Resets all input elements
 	{
-		command_ = null;
+		GameInfo.command = null;
 	}
 	public static void setCommand(String command)
 	{
-		command_ = command;
+		GameInfo.command = command;
 	}
 	public static String getCommand() // Gets input, resets if not empty, returns null if empty
 	{
-		if (command_ == null)
+		if (GameInfo.command == null)
 			return null;
 		else
 		{
-			String command = command_;
+			String command = GameInfo.command;
 			resetCommand();
 			
 			return command;
@@ -137,28 +136,19 @@ public class GameInfo
 	
 	public static void setPossessee(int id)
 	{
-		possessee_ = id;
+		GameInfo.possessee = id;
 	}
 	public static int getPossessee()
 	{
-		return possessee_;
+		return possessee;
 	}
 
 	public static void setCamera(Point2D camera)
 	{
-		camera_ = camera;
+		GameInfo.camera = camera;
 	}
 	public static Point2D getCamera()
 	{
-		return camera_;
-	}
-	
-	public static void setGUI(int gui)
-	{
-		gui_ = gui;
-	}
-	public static int getGUI()
-	{
-		return gui_;
+		return camera;
 	}
 }

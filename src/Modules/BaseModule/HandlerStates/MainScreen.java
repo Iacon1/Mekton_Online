@@ -13,11 +13,11 @@ import Utils.Logging;
 
 public class MainScreen implements ThreadState<ClientHandlerThread>
 {
-	private StateFactory factory_;
+	private StateFactory factory;
 	
 	public MainScreen(StateFactory factory)
 	{
-		factory_ = factory;
+		this.factory = factory;
 	}
 	
 	@Override
@@ -50,6 +50,6 @@ public class MainScreen implements ThreadState<ClientHandlerThread>
 	@Override
 	public StateFactory getFactory()
 	{
-		return factory_;
+		return factory;
 	}
 }

@@ -63,7 +63,6 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 		if (GameInfo.getWorld() == null) return;
 		HexEntity<AxialHexCoord3D> possessee = (HexEntity<AxialHexCoord3D>) GameInfo.getWorld().getEntity(GameInfo.getPossessee());
 		((MektonMap) GameInfo.getWorld().getRootEntities().get(0)).render(canvas, GameInfo.getCamera(), possessee.getHexPos().z);
-		(GameInfo.getWorld().getEntity(GameInfo.getGUI())).render(canvas, GameInfo.getCamera());
 	}
 
 	@Override

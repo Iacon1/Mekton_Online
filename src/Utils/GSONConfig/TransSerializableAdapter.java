@@ -27,13 +27,13 @@ public class TransSerializableAdapter<T> extends DelegatingAdapter<T>
 	public void write(JsonWriter out, T value) throws IOException
 	{
 		((TransSerializable) value).preSerialize(); // We can assume T is extended from TransSerializable
-		delegator_.getAdapter(type_).write(out, value); // Serialize
+		delegator.getAdapter(type).write(out, value); // Serialize
 	}
 
 	@Override
 	public T read(JsonReader in) throws IOException
 	{
-		TransSerializable data = (TransSerializable) delegator_.getAdapter(type_).read(in); // Deserialize
+		TransSerializable data = (TransSerializable) delegator.getAdapter(type).read(in); // Deserialize
 		data.postDeserialize();
 		
 	    return (T) data;

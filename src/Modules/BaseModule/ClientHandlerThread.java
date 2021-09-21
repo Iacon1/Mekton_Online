@@ -51,7 +51,7 @@ public class ClientHandlerThread extends StatefulConnectionPairThread
 	@Override
 	public void onClose()
 	{
-		Logging.logNotice("Client " + socket_.getInetAddress() + " has disconnected.");
+		Logging.logNotice("Client " + socket.getInetAddress() + " has disconnected.");
 		ModuleManager.getHighestOfType(PlayerHandlerModule.class).sleepPlayer(getAccount());
 	}
 	

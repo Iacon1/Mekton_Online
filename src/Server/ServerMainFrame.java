@@ -40,7 +40,7 @@ import java.awt.GridLayout;
 @SuppressWarnings("serial")
 public class ServerMainFrame extends JFrame
 {	
-	private static GameServer server_;
+	private static GameServer server;
 	private DefaultTreeModel model;
 	private final Timer timer = new Timer();
 	private JPanel contentPane;
@@ -62,12 +62,12 @@ public class ServerMainFrame extends JFrame
 	
 	private class InstanceNode extends DefaultMutableTreeNode
 	{
-		private GameEntity instance_;
+		private GameEntity instance;
 		
 		public InstanceNode(GameEntity instance)
 		{
 			super(instance.getName());
-			instance_ = instance;
+			this.instance = instance;
 		}	
 	}
 	
@@ -113,11 +113,11 @@ public class ServerMainFrame extends JFrame
 				model.nodesWereRemoved(rootNode, removedIndices, removedObjects);
 				//i--; // Really evil, gets around the index shifting
 			}
-			else if (node != null && instance != null && instance == node.instance_) // We're on the same page here
+			else if (node != null && instance != null && instance == node.instance) // We're on the same page here
 				updateRecursively(instance, node);
 			else if (node != null && instance != null) // Swap out old node for a new one
 			{
-				node.instance_ = instance;
+				node.instance = instance;
 				updateRecursively(instance, node);
 				model.nodeChanged(node);
 			}
@@ -152,11 +152,11 @@ public class ServerMainFrame extends JFrame
 				model.nodesWereRemoved(rootNode, removedIndices, removedObjects);
 				//i--; // Really evil, gets around the index shifting
 			}
-			else if (node != null && instance != null && instance == node.instance_) // We're on the same page here
+			else if (node != null && instance != null && instance == node.instance) // We're on the same page here
 				updateRecursively(instance, node);
 			else if (node != null && instance != null) // Swap out old node for a new one
 			{
-				node.instance_ = instance;
+				node.instance = instance;
 				updateRecursively(instance, node);
 				model.nodeChanged(node);
 			}
@@ -164,7 +164,7 @@ public class ServerMainFrame extends JFrame
 	}
 	private void updatePlayersList()
 	{
-		ArrayList<Account> accounts = server_.getAccounts();
+		ArrayList<Account> accounts = server.getAccounts();
 		
 		playersPanel.removeAll();
 		
@@ -191,7 +191,7 @@ public class ServerMainFrame extends JFrame
 	
 	public static void main(GameServer server)
 	{
-		server_ = server;
+		this.server = server;
 		EventQueue.invokeLater(new Runnable()
 		{
 			public void run()
@@ -208,7 +208,7 @@ public class ServerMainFrame extends JFrame
 
 	public ServerMainFrame(GameServer server)
 	{
-		if (server != null) server_ = server;
+		if (server != null) this.server = server;
 		setTitle(MiscUtils.getProgramName() + " Server: Main Window");
 
 		setResizable(false);

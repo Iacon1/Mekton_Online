@@ -15,39 +15,39 @@ import GameEngine.Managers.GraphicsManager;
 
 public abstract class UtilCanvas extends JPanel
 {
-	public float scaleX_;
-	public float scaleY_;
+	public float scaleX;
+	public float scaleY;
 	// Scales the image; Must be integers
 	// 1x scale size is given by ConfigManager
 
-	Graphics g_; // TODO This is a hack so we don't have to juggle this in function calls;
+	Graphics g; // TODO This is a hack so we don't have to juggle this in function calls;
 	// Set it before drawing and clear before the next set
 	
 	public boolean setScale(float scaleX, float scaleY)
 	{
-		boolean changedSize = (scaleX_ != scaleX || scaleY_ != scaleY);
-		scaleX_ = scaleX;
-		scaleY_ = scaleY;
+		boolean changedSize = (scaleX != scaleX || scaleY != scaleY);
+		this.scaleX = scaleX;
+		this.scaleY = scaleY;
 		return changedSize;
 	}
 	public Point2D descale(Point2D point) // Converts a screen coord into a render coord
 	{
-		return new Point2D(Math.round(point.x / scaleX_), Math.round(point.y / scaleY_));
+		return new Point2D(Math.round(point.x / scaleX), Math.round(point.y / scaleY));
 	}
 
 	public void drawImageScaled(Image textureFile, Point2D pos, Point2D texturePos, Point2D textureSize)
 	{
-		int dx1s = (int) (pos.x * scaleX_);
-		int dy1s = (int) (pos.y * scaleY_);
-		int dx2s = (int) (dx1s + textureSize.x * scaleX_);
-		int dy2s = (int) (dy1s + textureSize.y * scaleY_);
+		int dx1s = (int) (pos.x * scaleX);
+		int dy1s = (int) (pos.y * scaleY);
+		int dx2s = (int) (dx1s + textureSize.x * scaleX);
+		int dy2s = (int) (dy1s + textureSize.y * scaleY);
 		
 		int sx1 = texturePos.x;
 		int sy1 = texturePos.y;
 		int sx2 = texturePos.x + textureSize.x;
 		int sy2 = texturePos.y + textureSize.y;
 		
-		g_.drawImage(textureFile, dx1s, dy1s, dx2s, dy2s, sx1, sy1, sx2, sy2, null);
+		g.drawImage(textureFile, dx1s, dy1s, dx2s, dy2s, sx1, sy1, sx2, sy2, null);
 	}
 	
 	public void drawImageScaled(String textureFile, Point2D pos, Point2D texturePos, Point2D textureSize)
@@ -57,15 +57,15 @@ public abstract class UtilCanvas extends JPanel
 	
 	public void drawText(String text, Font font, Color color, Point2D pos, int sizePixels)
 	{
-		Color oColor = g_.getColor();
-		int sx = (int) (pos.x * scaleX_);
-		int sy = (int) ((pos.y + sizePixels) * scaleY_);
-		int sSize = (int) (scaleY_ * sizePixels);
+		Color oColor = g.getColor();
+		int sx = (int) (pos.x * scaleX);
+		int sy = (int) ((pos.y + sizePixels) * scaleY);
+		int sSize = (int) (scaleY * sizePixels);
 		font = font.deriveFont(GraphicsManager.getFontSize(sSize));
-		g_.setFont(font);
-		g_.setColor(color);
-		g_.drawString(text, sx, sy);
-		g_.setColor(oColor); // reset color to before we used one for the text
+		g.setFont(font);
+		g.setColor(color);
+		g.drawString(text, sx, sy);
+		g.setColor(oColor); // reset color to before we used one for the text
 	}
 	
 	public void drawText(String text, String font, Color color, Point2D pos, int sizePixels)

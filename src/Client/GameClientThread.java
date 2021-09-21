@@ -15,50 +15,50 @@ import GameEngine.PacketTypes.ServerInfoPacket;
 
 public class GameClientThread extends StatefulConnectionPairThread
 {
-	private StateFactory stateFactory_; // Where we get our states
+	private StateFactory stateFactory; // Where we get our states
 	
-	private ServerInfoPacket serverInfo_; // The server info we received
+	private ServerInfoPacket serverInfo; // The server info we received
 	
-	private HashMap<String, Container> containers_; // All currently-open UI
+	private HashMap<String, Container> containers; // All currently-open UI
 
 	public GameClientThread()
 	{
 		super();
-		stateFactory_ = ModuleManager.getHighestOfType(StateGiverModule.class).clientFactory();
-		containers_ = new HashMap<String, Container>();
-		initState(stateFactory_.getState(0));
+		stateFactory = ModuleManager.getHighestOfType(StateGiverModule.class).clientFactory();
+		containers = new HashMap<String, Container>();
+		initState(stateFactory.getState(0));
 	}
 	
 	@Override
 	public void onClose()
 	{
-		if (containers_ != null) // Close all containers
+		if (containers != null) // Close all containers
 		{
-			for (String name : containers_.keySet())
+			for (String name : containers.keySet())
 			{
-				containers_.get(name).setVisible(false);
-				containers_.get(name).setEnabled(false);
+				containers.get(name).setVisible(false);
+				containers.get(name).setEnabled(false);
 			}
 		}
 	}
 	
 	public void setContainer(String name, Container container)
 	{
-		containers_.put(name, container);
+		containers.put(name, container);
 	}
 	
 	public Container getContainer(String name)
 	{
-		return containers_.get(name);
+		return containers.get(name);
 	}
 
 	public void setInfo(ServerInfoPacket serverInfo)
 	{
-		serverInfo_ = serverInfo;
+		this.serverInfo = serverInfo;
 	}
 	public ServerInfoPacket getInfo()
 	{
-		return serverInfo_;
+		return serverInfo;
 	}
 }
 

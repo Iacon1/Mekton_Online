@@ -12,33 +12,33 @@ public class HexConfigManager
 {
 	private static class HexConfig
 	{
-		protected int hexSize_ = 19;
+		protected int hexSize = 19;
 	}
-	private static HexConfig hexConfig_;
+	private static HexConfig hexConfig;
 	
 	public static void init(String server) // Loads from a server folder, or uses the defaults if no path is provided
 	{
 		String path = null;
-		hexConfig_ = null;
+		hexConfig = null;
 		if (server != null)
 		{
 			path = "Resources/Server Packs/" + server + "/HexConfig.json";
-			hexConfig_ = new HexConfig();
-			hexConfig_ = JSONManager.deserializeJSON(MiscUtils.readText(path), hexConfig_.getClass());
-			if (hexConfig_ == null) // Save the default into there
+			hexConfig = new HexConfig();
+			hexConfig = JSONManager.deserializeJSON(MiscUtils.readText(path), hexConfig.getClass());
+			if (hexConfig == null) // Save the default into there
 			{
 				Logging.logError("No hex config found for server " + server + ". Generating one...");
-				hexConfig_ = new HexConfig();
+				hexConfig = new HexConfig();
 				Logging.logError("Done.");
-				MiscUtils.saveText(path, JSONManager.serializeJSON(hexConfig_));
+				MiscUtils.saveText(path, JSONManager.serializeJSON(hexConfig));
 			}
 		}
-		else hexConfig_ = new HexConfig();
+		else hexConfig = new HexConfig();
 	}
 	
 	public static int getHexRadius() // Hex radius in pixels
 	{
-		return hexConfig_.hexSize_;
+		return hexConfig.hexSize;
 	}
 	public static int getHexWidth() // Hex width in pixels
 	{

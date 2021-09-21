@@ -13,18 +13,18 @@ import Utils.Logging;
 
 public class AdapterDelegator // Simply cleans up some of the code in CustomJAdapter by handling delegation
 {
-	private Gson gson_;
-	private TypeAdapterFactory factory_;
+	private Gson gson;
+	private TypeAdapterFactory factory;
 	
 	public AdapterDelegator(Gson gson, TypeAdapterFactory factory)
 	{
-		gson_ = gson;
-		factory_ = factory;
+		this.gson = gson;
+		this.factory = factory;
 	}
 	
 	public <J> TypeAdapter<J> getAdapter(TypeToken<J> type)
 	{
-		return gson_.getDelegateAdapter(factory_, type);
+		return gson.getDelegateAdapter(factory, type);
 	}
 	
 	public <J> TypeAdapter<J> getAdapter(String typeName)
@@ -33,7 +33,7 @@ public class AdapterDelegator // Simply cleans up some of the code in CustomJAda
 		{
 			TypeToken<J> type = (TypeToken<J>) TypeToken.get(Class.forName(typeName));
 
-			return gson_.getDelegateAdapter(factory_, type);
+			return gson.getDelegateAdapter(factory, type);
 		}
 		catch (Exception e) {Logging.logException(e); return null;}
 	}

@@ -9,12 +9,12 @@ import com.google.gson.reflect.TypeToken;
 
 public abstract class DelegatingAdapter<T> extends TypeAdapter<T>
 {
-	protected AdapterDelegator delegator_;
-	protected TypeToken<T> type_;
+	protected AdapterDelegator delegator;
+	protected TypeToken<T> type;
 	
 	public DelegatingAdapter(AdapterDelegator delegator, TypeToken<T> type)
 	{
-		delegator_ = delegator;
-		type_ = type;
+		this.delegator = delegator;
+		this.type = type;
 	}
 }

@@ -9,8 +9,8 @@ public interface Module
 {
 	public static class ModuleConfig
 	{
-		public String moduleName_; // Module's display name 
-		public String moduleVersion_; // Module's version
+		public String moduleName; // Module's display name 
+		public String moduleVersion; // Module's version
 	}
 	
 	public ModuleConfig getModuleConfig(); // Gives the config

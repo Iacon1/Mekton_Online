@@ -6,43 +6,43 @@ package Utils;
 
 public final class Logging
 {
-	private static volatile Logger logger_;
+	private static volatile Logger logger;
 	
 	public static void setLogger(Logger logger)
 	{
-		logger_ = logger;
+		Logging.logger = logger;
 	}
 	public static final Logger getLogger()
 	{
-		return logger_;
+		return logger;
 	}
 	
 	public static void logRaw(String reason, String text)
 	{
-		if (logger_ == null)
+		if (logger == null)
 			return;
 		else
-			logger_.logRaw(reason, text);
+			logger.logRaw(reason, text);
 	}
 	public static void logNotice(String text)
 	{
-		if (logger_ == null)
+		if (logger == null)
 			return;
 		else
-			logger_.logNotice(text);
+			logger.logNotice(text);
 	}
 	public static void logError(String error)
 	{
-		if (logger_ == null)
+		if (logger == null)
 			return;
 		else
-			logger_.logError(error);
+			logger.logError(error);
 	}
 	public static void logException(Exception exception)
 	{
-		if (logger_ == null)
+		if (logger == null)
 			return;
 		else
-			logger_.logException(exception);
+			logger.logException(exception);
 	}
 }

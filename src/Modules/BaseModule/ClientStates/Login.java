@@ -15,12 +15,12 @@ import Utils.MiscUtils;
 
 public class Login implements ThreadState<GameClientThread>
 {
-	private StateFactory factory_;
-	private boolean successful_;
+	private StateFactory factory;
+	private boolean successful;
 	
 	public Login(StateFactory factory)
 	{
-		factory_ = factory;
+		this.factory = factory;
 	}
 	
 	@Override
@@ -33,8 +33,8 @@ public class Login implements ThreadState<GameClientThread>
 	{
 		LoginFeedbackPacket packet = JSONManager.deserializeJSON(input, LoginFeedbackPacket.class);
 		
-		successful_ = packet.successful;
-		if (successful_)
+		successful = packet.successful;
+		if (successful)
 		{
 			LoginDialog dialog = (LoginDialog) parentThread.getContainer("login");
 			dialog.setVisible(false);
@@ -51,7 +51,7 @@ public class Login implements ThreadState<GameClientThread>
 	public String processOutput(GameClientThread parentThread, boolean mono)
 	{
 		LoginDialog dialog = (LoginDialog) parentThread.getContainer("login");
-		if (dialog.isVisible() == false && !successful_)
+		if (dialog.isVisible() == false && !successful)
 			parentThread.close();
 		LoginPacket packet = dialog.getPacket();
 		if (packet != null)
@@ -72,7 +72,7 @@ public class Login implements ThreadState<GameClientThread>
 	@Override
 	public StateFactory getFactory()
 	{
-		return factory_;
+		return factory;
 	}
 
 }

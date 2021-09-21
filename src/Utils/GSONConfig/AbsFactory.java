@@ -19,17 +19,17 @@ import Utils.GSONConfig.Delegation.AdapterDelegator;
 
 public class AbsFactory<T> implements TypeAdapterFactory
 {	
-	private Class<T> superClass_;
+	private Class<T> superClass;
 	
 	private class AbsAdapter<J> extends TypeAdapter<J>
 	{
-		private AdapterDelegator delegator_;
-		private TypeToken<J> type_;
+		private AdapterDelegator delegator;
+		private TypeToken<J> type;
 		
 		public AbsAdapter(AdapterDelegator delegator, TypeToken<J> type)
 		{
-			delegator_ = delegator;
-			type_ = type;
+			delegator = delegator;
+			type = type;
 		}
 
 		@Override
@@ -45,7 +45,7 @@ public class AbsFactory<T> implements TypeAdapterFactory
 				type = in.nextString();
 				break;
 			case "data":
-				TypeAdapter<?> adapter = delegator_.getAdapter(type);
+				TypeAdapter<?> adapter = delegator.getAdapter(type);
 				data = (J) adapter.read(in); // Deserialize
 				break;
 			}
@@ -58,7 +58,7 @@ public class AbsFactory<T> implements TypeAdapterFactory
 		public void write(JsonWriter out, J value) throws IOException
 		{
 			String type = MiscUtils.ClassToString(value.getClass());
-			String data = delegator_.getAdapter(type_).toJson(value); // Serialize
+			String data = delegator.getAdapter(type).toJson(value); // Serialize
 			
 			out.beginObject();
 			out.name("type").value(type);
@@ -69,7 +69,7 @@ public class AbsFactory<T> implements TypeAdapterFactory
 	
 	public AbsFactory(Class<T> superClass)
 	{
-		superClass_ = superClass;
+		superClass = superClass;
 	}
 	
 	public <J> TypeAdapter<J> create(Gson gson, TypeToken<J> type)
@@ -77,7 +77,7 @@ public class AbsFactory<T> implements TypeAdapterFactory
 		Class<J> inClass = (Class<J>) type.getRawType();
 		AdapterDelegator delegator = new AdapterDelegator(gson, this);
 		
-		if (!superClass_.isAssignableFrom(inClass)) // This adapter doesn't apply!
+		if (!superClass.isAssignableFrom(inClass)) // This adapter doesn't apply!
 			return null;
 		else
 		{

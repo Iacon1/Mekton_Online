@@ -35,9 +35,9 @@ public class GetServerFrame extends JFrame
 {
 	private static class SavedServer
 	{
-		public String name_;
-		public String ip_;
-		public int port_;
+		public String name;
+		public String ip;
+		public int port;
 	}
 	
 	private JPanel contentPane;
@@ -51,23 +51,23 @@ public class GetServerFrame extends JFrame
 	private final JButton saveServerButton = new JButton("Save server as...");
 	private final JButton removeServerButton = new JButton("Remove server...");
 	private final JButton connectServerButton = new JButton("Connect to server");
-	private ArrayList<SavedServer> savedServerArray_;
+	private ArrayList<SavedServer> savedServerArray;
 	// Functionality
 	
 	private void populateList() // Populates savedServerList from file
 	{
-		savedServerArray_ = (ArrayList<SavedServer>) JSONManager.deserializeCollectionJSONList(MiscUtils.readText("Local Data/Client/SavedServers.JSON"), ArrayList.class, SavedServer.class);
-		if (savedServerArray_ == null)
+		savedServerArray = (ArrayList<SavedServer>) JSONManager.deserializeCollectionJSONList(MiscUtils.readText("Local Data/Client/SavedServers.JSON"), ArrayList.class, SavedServer.class);
+		if (savedServerArray == null)
 		{
-			savedServerArray_ = new ArrayList<SavedServer>();
+			savedServerArray = new ArrayList<SavedServer>();
 			return;
 		}
 		
 		DefaultListModel<String> model = new DefaultListModel<String>();
 		
-		for (int i = 0; i < savedServerArray_.size(); ++i)
+		for (int i = 0; i < savedServerArray.size(); ++i)
 		{
-			model.addElement(savedServerArray_.get(i).name_);
+			model.addElement(savedServerArray.get(i).name);
 		}
 		
 		savedServerList.setModel(model);
@@ -76,33 +76,33 @@ public class GetServerFrame extends JFrame
 	public void saveServer(String name) // Saves current server w/ provided name
 	{
 		SavedServer server = new SavedServer();
-		server.name_ = name;
-		server.ip_ = serverIPBox.getText();
-		server.port_ = (Integer) portSpinner.getValue();
+		server.name = name;
+		server.ip = serverIPBox.getText();
+		server.port = (Integer) portSpinner.getValue();
 		
 		boolean foundServer = false;
-		for (int i = 0; i < savedServerArray_.size(); ++i)
+		for (int i = 0; i < savedServerArray.size(); ++i)
 		{
-			if (savedServerArray_.get(i).name_.equals(server.name_))
+			if (savedServerArray.get(i).name.equals(server.name))
 			{
-				savedServerArray_.set(i, server);
+				savedServerArray.set(i, server);
 				foundServer = true;
 			}
 		}
-		if (!foundServer) savedServerArray_.add(server);
+		if (!foundServer) savedServerArray.add(server);
 		
-		String serialized = JSONManager.serializeJSON(savedServerArray_);
+		String serialized = JSONManager.serializeJSON(savedServerArray);
 		MiscUtils.saveText("Local Data/Client/SavedServers.JSON", serialized);
 		populateList();
 	}
 	public void removeServer(String name) // Removes selected server
 	{
-		for (int i = 0; i < savedServerArray_.size(); ++i)
+		for (int i = 0; i < savedServerArray.size(); ++i)
 		{
-			if (savedServerArray_.get(i).name_.equals(name))
+			if (savedServerArray.get(i).name.equals(name))
 			{
-				savedServerArray_.remove(i);
-				MiscUtils.saveText("Local Data/Client/SavedServers.JSON", JSONManager.serializeJSON(savedServerArray_));
+				savedServerArray.remove(i);
+				MiscUtils.saveText("Local Data/Client/SavedServers.JSON", JSONManager.serializeJSON(savedServerArray));
 				populateList();
 				return;
 			}
@@ -125,12 +125,12 @@ public class GetServerFrame extends JFrame
 	}
 	private void onSelect() // When a saved server is selected
 	{
-		for (int i = 0; i < savedServerArray_.size(); ++i)
+		for (int i = 0; i < savedServerArray.size(); ++i)
 		{
-			if (savedServerArray_.get(i).name_.equals(savedServerList.getSelectedValue()))
+			if (savedServerArray.get(i).name.equals(savedServerList.getSelectedValue()))
 			{
-				serverIPBox.setText(savedServerArray_.get(i).ip_);
-				portSpinner.setValue(savedServerArray_.get(i).port_);
+				serverIPBox.setText(savedServerArray.get(i).ip);
+				portSpinner.setValue(savedServerArray.get(i).port);
 			}
 		}
 	}

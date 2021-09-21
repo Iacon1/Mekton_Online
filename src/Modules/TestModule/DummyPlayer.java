@@ -7,15 +7,11 @@ package Modules.TestModule;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.MektonCore.MapEntity;
 import Modules.MektonCore.MektonMap;
-import Utils.Logging;
-import Utils.SimpleTimer;
 
 import java.awt.event.KeyEvent;
 
 import GameEngine.GameInfo;
 import GameEngine.Point2D;
-import GameEngine.ScreenCanvas;
-import GameEngine.EntityTypes.Alignable;
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.InputGetter;
 
@@ -107,8 +103,8 @@ public class DummyPlayer extends MapEntity implements InputGetter, CommandRunner
 			switch (params[0])
 			{
 			case "moveMouse":
-					AxialHexCoord3D target = new AxialHexCoord3D(Integer.valueOf(params[1]), Integer.valueOf(params[2]), hexPos_.z);
-					movePath(mapToken.get().pathfind(hexPos_, target), 2);
+					AxialHexCoord3D target = new AxialHexCoord3D(Integer.valueOf(params[1]), Integer.valueOf(params[2]), hexPos.z);
+					movePath(mapToken.get().pathfind(hexPos, target), 2);
 			case "move": // TODO objects with MA
 				switch (params[1])
 				{

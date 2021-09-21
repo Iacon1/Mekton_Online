@@ -15,15 +15,15 @@ import Utils.MiscUtils;
 
 public class Login implements ThreadState<ClientHandlerThread>
 {
-	boolean send_;
-	private StateFactory factory_;
-	LoginFeedbackPacket loginFeedback_;
+	boolean send;
+	private StateFactory factory;
+	LoginFeedbackPacket loginFeedback;
 	public Login(StateFactory factory)
 	{
-		factory_ = factory;
+		this.factory = factory;
 		
-		loginFeedback_ = new LoginFeedbackPacket();
-		send_ = false;
+		loginFeedback = new LoginFeedbackPacket();
+		send = false;
 	}
 	
 	@Override
@@ -31,7 +31,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 
 	public void processInput(String input, ClientHandlerThread parentThread, boolean mono)
 	{
-		if (send_) return; // Don't take more packets while still giving feedback on one
+		if (send) return; // Don't take more packets while still giving feedback on one
 		
 		LoginPacket packet = JSONManager.deserializeJSON(input, LoginPacket.class);
 		
@@ -42,8 +42,8 @@ public class Login implements ThreadState<ClientHandlerThread>
 		if (packet.newUser)
 		{
 			if (parentThread.getParent().getAccount(packet.username) != null) return; // Don't overwrite an old account!
-			loginFeedback_.successful = parentThread.getParent().addAccount(account);
-			if (loginFeedback_.successful)
+			loginFeedback.successful = parentThread.getParent().addAccount(account);
+			if (loginFeedback.successful)
 			{
 				parentThread.setUsername(account.username);
 				Logging.logNotice("Client " + parentThread.getSocket().getInetAddress() + " has made account \"" + parentThread.getUsername() + "\".");
@@ -53,8 +53,8 @@ public class Login implements ThreadState<ClientHandlerThread>
 		}
 		else
 		{
-			loginFeedback_.successful = parentThread.getParent().login(packet.username, packet.myPassword);
-			if (loginFeedback_.successful)
+			loginFeedback.successful = parentThread.getParent().login(packet.username, packet.myPassword);
+			if (loginFeedback.successful)
 			{
 				parentThread.setUsername(account.username);
 				Logging.logNotice("Client " + parentThread.getSocket().getInetAddress() + " has logged in as account \"" + parentThread.getUsername() + "\".");
@@ -63,16 +63,16 @@ public class Login implements ThreadState<ClientHandlerThread>
 			}
 		}
 		
-		send_ = true;
+		send = true;
 	}
 	
 	public String processOutput(ClientHandlerThread parentThread, boolean mono)
 	{
-		if (send_)
+		if (send)
 		{
-			send_ = false;
-			if (loginFeedback_.successful) parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(MainScreen.class)));
-			return JSONManager.serializeJSON(loginFeedback_);
+			send = false;
+			if (loginFeedback.successful) parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(MainScreen.class)));
+			return JSONManager.serializeJSON(loginFeedback);
 		}
 		else return null;
 	}
@@ -90,6 +90,6 @@ public class Login implements ThreadState<ClientHandlerThread>
 	@Override
 	public StateFactory getFactory()
 	{
-		return factory_;
+		return factory;
 	}
 }

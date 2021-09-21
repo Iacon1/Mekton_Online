@@ -8,12 +8,12 @@ import GameEngine.Server.GameServer;
 
 public class ServerWindow
 {
-	private static GameServer server_;
+	private static GameServer server;
 	private JFrame frame;
 
 	public static void main(GameServer server)
 	{
-		server_ = server;
+		ServerWindow.server = server;
 		EventQueue.invokeLater(new Runnable()
 		{
 			public void run()
@@ -35,7 +35,7 @@ public class ServerWindow
 	 */
 	public ServerWindow()
 	{
-		frame = new ServerMainFrame(server_);
+		frame = new ServerMainFrame(server);
 		frame.setVisible(true);
 	}
 

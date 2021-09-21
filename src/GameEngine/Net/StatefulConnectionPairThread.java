@@ -7,58 +7,58 @@ package GameEngine.Net;
 public abstract class StatefulConnectionPairThread extends ConnectionPairThread
 {
 
-	private volatile ThreadState currentState_; // The state we're currently on
-	private volatile ThreadState nextState_; // The state we are switching to; Null if we're not switching right now
+	private volatile ThreadState currentState; // The state we're currently on
+	private volatile ThreadState nextState; // The state we are switching to; Null if we're not switching right now
 
 	public void initState(ThreadState state)
 	{
-		currentState_ = state;
-		currentState_.onEnter(this);
+		currentState = state;
+		currentState.onEnter(this);
 	}
 
 	public void queueStateChange(ThreadState nextState) // Queues a state change. We'll get to that when we can!
 	{
-		nextState_ = nextState;
+		this.nextState = nextState;
 	}
 	public void changeState() // Changes the state
 	{
-		runningI_ = false;
-		runningO_ = false;
+		runningI = false;
+		runningO = false;
 		while (isInputRunning());
 		while (isOutputRunning());
-		currentState_ = nextState_;
-		currentState_.onEnter(this);
-		runningI_ = true;
-		runningO_ = true;
+		currentState = nextState;
+		currentState.onEnter(this);
+		runningI = true;
+		runningO = true;
 	}
 
 	public ThreadState getCurrentState()
 	{
-		return currentState_;
+		return currentState;
 	}
 	
 	@Override
 	public void runFunc()
 	{
 		super.runFunc();
-		if (nextState_ != null)
+		if (nextState != null)
 		{
 			changeState();
-			nextState_ = null;
+			nextState = null;
 		}
 	}
 
 	@Override
 	public void processInput(String input)
 	{
-		if (mono_) currentState_.processInputMono(input, this);
-		else currentState_.processInputTrio(input, this);
+		if (mono) currentState.processInputMono(input, this);
+		else currentState.processInputTrio(input, this);
 	}
 
 	@Override
 	public String processOutput()
 	{
-		if (mono_) return currentState_.processOutputMono(this);
-		else return currentState_.processOutputTrio(this);
+		if (mono) return currentState.processOutputMono(this);
+		else return currentState.processOutputTrio(this);
 	}
 }

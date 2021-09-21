@@ -14,30 +14,30 @@ public class PathfindingGraph
 	{
 		public int cost(int a, int b);
 	}
-	private Cost costFunc_;
+	private Cost costFunc;
 	
 	protected static interface Distance
 	{
 		public int cost(int a, int b);
 	}
-	private Distance distFunc_;
+	private Distance distFunc;
 	
 	private static class Node
 	{	
-		public HashSet<Integer> neighbors_;
+		public HashSet<Integer> neighbors;
 		
 		public Node()
 		{
-			neighbors_ = new HashSet<Integer>();
+			neighbors = new HashSet<Integer>();
 		}
 		
 		public void addNeighbor(int neighbor)
 		{
-			neighbors_.add(neighbor);
+			neighbors.add(neighbor);
 		}
 		public void removeNeighbor(int neighbor)
 		{
-			neighbors_.remove(neighbor);
+			neighbors.remove(neighbor);
 		}
 	}
 	
@@ -45,8 +45,8 @@ public class PathfindingGraph
 	
 	public PathfindingGraph(Cost costFunc, Distance distFunc)
 	{
-		costFunc_ = costFunc;
-		distFunc_ = distFunc;
+		this.costFunc = costFunc;
+		this.distFunc = distFunc;
 		nodes_ = new ArrayList<Node>();
 	}
 	
@@ -96,7 +96,7 @@ public class PathfindingGraph
 	public ArrayList<Integer> getNeighbors(int node)
 	{
 		ArrayList<Integer> neighbors = new ArrayList<Integer>();
-		neighbors.addAll(nodes_.get(node).neighbors_);
+		neighbors.addAll(nodes_.get(node).neighbors);
 		return neighbors;
 	}
 	
@@ -107,7 +107,7 @@ public class PathfindingGraph
 	 */
 	public int getCost(int a, int b)
 	{
-		return costFunc_.cost(a, b);
+		return costFunc.cost(a, b);
 	}
 	
 	/** Distance, a seperate form of cost for farther-away nodes
@@ -117,6 +117,6 @@ public class PathfindingGraph
 	 */
 	public int getDist(int a, int b)
 	{
-		return distFunc_.cost(a, b);
+		return distFunc.cost(a, b);
 	}
 }

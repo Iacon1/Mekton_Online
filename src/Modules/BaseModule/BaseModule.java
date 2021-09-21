@@ -12,14 +12,14 @@ import Modules.BaseModule.HandlerStates.HandlerStateFactory;
 
 public class BaseModule implements Module, StateGiverModule
 {
-	private ModuleConfig config_;
+	private ModuleConfig config;
 	
 	@Override
 	public ModuleConfig getModuleConfig()
 	{
-		config_ = new ModuleConfig();
+		config = new ModuleConfig();
 
-		return config_;
+		return config;
 	}
 
 	@Override

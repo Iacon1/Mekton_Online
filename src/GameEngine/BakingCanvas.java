@@ -13,7 +13,7 @@ import GameEngine.Configurables.ConfigManager;
 @SuppressWarnings("serial")
 public class BakingCanvas extends UtilCanvas
 {
-	private DrawFunc func_;
+	private DrawFunc func;
 
 	public static interface DrawFunc
 	{
@@ -24,10 +24,10 @@ public class BakingCanvas extends UtilCanvas
 	public void printComponent(Graphics g)
 	{
 		super.printComponent(g);
-		g_ = g;
-		func_.draw(this);
-		g_ = null;
-		func_ = null;
+		this.g = g;
+		func.draw(this);
+		this.g = null;
+		func = null;
 	}
 	public Image bake(DrawFunc func)
 	{
@@ -35,10 +35,10 @@ public class BakingCanvas extends UtilCanvas
 		int h = ConfigManager.getScreenHeight();
 		int type = BufferedImage.TYPE_4BYTE_ABGR;
 		BufferedImage image = new BufferedImage(w, h, type);
-		g_ = image.createGraphics();
+		g = image.createGraphics();
 		
-		func_ = func;
-		this.print(g_);
+		func = func;
+		this.print(g);
 		
 		return image;
 	}

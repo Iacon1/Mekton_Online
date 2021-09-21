@@ -28,7 +28,7 @@ public class RemoveServerDialog extends JDialog
 	private final JLabel warningLabel = new JLabel("<html>Warning: This cannot be undone.");
 	private final JTextField nameBox = new JTextField();
 	private final JLabel nameLabel = new JLabel("Server name:");
-	private GetServerFrame caller_;
+	private GetServerFrame caller;
 	
 	// Run this
 	public static void main(GetServerFrame caller)
@@ -36,7 +36,7 @@ public class RemoveServerDialog extends JDialog
 		try
 		{
 			RemoveServerDialog dialog = new RemoveServerDialog();
-			dialog.caller_ = caller;
+			dialog.caller = caller;
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		}
@@ -48,7 +48,7 @@ public class RemoveServerDialog extends JDialog
 		String serverName = nameBox.getText();
 		if (serverName != null)
 		{
-			caller_.removeServer(serverName);
+			caller.removeServer(serverName);
 			this.setVisible(false);
 			this.dispose();
 		}

@@ -14,11 +14,11 @@ import Utils.JSONManager;
 
 public class MainScreen implements ThreadState<GameClientThread>
 {
-	private StateFactory factory_;
+	private StateFactory factory;
 	
 	public MainScreen(StateFactory factory)
 	{
-		factory_ = factory;
+		this.factory = factory;
 	}
 	
 	@Override
@@ -56,7 +56,7 @@ public class MainScreen implements ThreadState<GameClientThread>
 	@Override
 	public StateFactory getFactory()
 	{
-		return factory_;
+		return factory;
 	}
 
 }

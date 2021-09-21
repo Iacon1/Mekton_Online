@@ -15,14 +15,14 @@ import Utils.MiscUtils;
 
 public class CheckClient implements ThreadState<ClientHandlerThread>
 {
-	boolean sent_;
-	private StateFactory factory_;
+	boolean sent;
+	private StateFactory factory;
 	
 	public CheckClient(StateFactory factory)
 	{
-		factory_ = factory;
+		this.factory = factory;
 		
-		sent_ = false;
+		sent = false;
 	}
 	
 	@Override
@@ -30,7 +30,7 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 
 	public void processInput(String input, ClientHandlerThread parentThread, boolean mono)
 	{
-		if (sent_)
+		if (sent)
 		{
 			ClientInfoPacket packet = JSONManager.deserializeJSON(input, ClientInfoPacket.class);
 			if (packet == null || !packet.version.equals(MiscUtils.getVersion())) // We don't actually care about this client anymore
@@ -49,7 +49,7 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 
 	public String processOutput(ClientHandlerThread parentThread, boolean mono)
 	{
-		if (!sent_)
+		if (!sent)
 		{
 			ServerInfoPacket packet = new ServerInfoPacket();
 			packet.serverName = parentThread.getParent().getName();
@@ -62,7 +62,7 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 				parentThread.close(); // We don't need this connection any more
 			}
 			else packet.note = ServerInfoPacket.Note.good;
-			sent_ = true;
+			sent = true;
 			
 			Logging.logNotice("Sent info to " + parentThread.getSocket().getInetAddress());
 			return JSONManager.serializeJSON(packet);
@@ -83,6 +83,6 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 	@Override
 	public StateFactory getFactory()
 	{
-		return factory_;
+		return factory;
 	}
 }

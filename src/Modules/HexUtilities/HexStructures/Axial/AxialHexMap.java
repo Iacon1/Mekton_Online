@@ -11,10 +11,10 @@ import Modules.HexUtilities.HexStructures.HexMap;
 
 public abstract class AxialHexMap<T> implements HexMap<AxialHexCoord, T>
 {
-	private ArrayList<ArrayList<T>> hexes_;
+	private ArrayList<ArrayList<T>> hexes;
 	
-	private int columns_; // Size of array
-	private int rows_;
+	private int columns; // Size of array
+	private int rows;
 	
 	/** Sets the columns & rows of the map; Clears the map!
 	 * 
@@ -23,26 +23,26 @@ public abstract class AxialHexMap<T> implements HexMap<AxialHexCoord, T>
 	 */
 	public void setDimensions(int columns, int rows) // Sets new dimensions for map
 	{
-		columns_ = columns;
-		rows_ = rows;
+		this.columns = columns;
+		this.rows = rows;
 		
-		hexes_ = new ArrayList<ArrayList<T>>();
+		hexes = new ArrayList<ArrayList<T>>();
 		for (int i = 0; i < columns; ++i)
 		{
-			hexes_.add(new ArrayList<T>());
+			hexes.add(new ArrayList<T>());
 			for (int j = 0; j < rows; ++j)
 			{
-				hexes_.get(i).add(null); // !
+				hexes.get(i).add(null); // !
 			}
 		}
 	}
 	public int getColumns()
 	{
-		return columns_;
+		return columns;
 	}
 	public int getRows()
 	{
-		return columns_;
+		return columns;
 	}
 
 	/** Returns the first valid r-value for a given q-value
@@ -54,13 +54,13 @@ public abstract class AxialHexMap<T> implements HexMap<AxialHexCoord, T>
 	 * 
 	 *  @param q Column we're looking at.
 	 */
-	public int lastRow(int q) {return (rows_ - 1) + firstRow(q);}
+	public int lastRow(int q) {return (rows - 1) + firstRow(q);}
 	
 	public boolean inBounds(AxialHexCoord coord)
 	{
 		if (coord.r < firstRow(coord.q) || coord.r > lastRow(coord.q)) // OOB r
 			return false;
-		else if (coord.q < 0 || coord.q >= columns_) // OOB q
+		else if (coord.q < 0 || coord.q >= columns) // OOB q
 			return false;
 		else return true;
 	}
@@ -70,7 +70,7 @@ public abstract class AxialHexMap<T> implements HexMap<AxialHexCoord, T>
 		else
 		{
 			int r = coord.r - firstRow(coord.q);
-			hexes_.get(coord.q).set(r, t);
+			hexes.get(coord.q).set(r, t);
 		}
 	}
 	public T getHex(AxialHexCoord coord)
@@ -79,7 +79,7 @@ public abstract class AxialHexMap<T> implements HexMap<AxialHexCoord, T>
 		else
 		{
 			int r = coord.r - firstRow(coord.q);
-			return hexes_.get(coord.q).get(r);
+			return hexes.get(coord.q).get(r);
 		}
 	}
 }

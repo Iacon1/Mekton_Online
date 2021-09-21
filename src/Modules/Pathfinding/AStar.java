@@ -14,13 +14,13 @@ public class AStar implements PathfindingAlgorithm // https://www.redblobgames.c
 {
 	private static class PriNode
 	{
-		public int node_;
-		public int pri_;
+		public int node;
+		public int pri;
 		
 		public PriNode(int node, int pri)
 		{
-			node_ = node;
-			pri_ = pri;
+			this.node = node;
+			this.pri = pri;
 		}
 	}
 	@Override
@@ -29,7 +29,7 @@ public class AStar implements PathfindingAlgorithm // https://www.redblobgames.c
 		HashMap<Integer, Integer> prevNode = new HashMap<Integer, Integer>(); // -1 -> no node
 		HashMap<Integer, Integer> bestCost = new HashMap<Integer, Integer>(); 
 		
-		PriorityQueue<PriNode> queue = new PriorityQueue<PriNode>(1, (x, y) -> x.pri_ - y.pri_); // Init
+		PriorityQueue<PriNode> queue = new PriorityQueue<PriNode>(1, (x, y) -> x.pri - y.pri); // Init
 		queue.add(new PriNode(a, 0));
 		prevNode.put(a, -1);
 		bestCost.put(a, 0);
@@ -38,7 +38,7 @@ public class AStar implements PathfindingAlgorithm // https://www.redblobgames.c
 		
 		while (!queue.isEmpty()) // While more to look at
 		{
-			int node = queue.poll().node_; // Grab the next one
+			int node = queue.poll().node; // Grab the next one
 			if (node == b)
 			{
 				found = true;

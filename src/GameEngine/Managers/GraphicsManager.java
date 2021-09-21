@@ -16,25 +16,25 @@ import Utils.MiscUtils;
 
 public final class GraphicsManager
 {
-	private static HashMap<String, Image> images_;
-	private static HashMap<String, Font> fonts_;
+	private static HashMap<String, Image> images;
+	private static HashMap<String, Font> fonts;
 	
 	public static void init()
 	{
-		images_ = new HashMap<String, Image>();
-		fonts_ = new HashMap<String, Font>();
+		images = new HashMap<String, Image>();
+		fonts = new HashMap<String, Font>();
 	}
 	
 	public static Image getImage(String path) // Gets an image from path
 	{
-		Image image = images_.get(path);
+		Image image = images.get(path);
 		if (image == null)
 		{
 			Logging.logError("Have not loaded image @ " + path + ". Loading...");
 			image = Toolkit.getDefaultToolkit().getImage(MiscUtils.getAbsolute(path));
 			if (image == null) Logging.logError("Could not load image @ " + path);
 			else Logging.logError("Loading done");
-			images_.put(path, image);
+			images.put(path, image);
 		}
 	
 		return image;
@@ -42,7 +42,7 @@ public final class GraphicsManager
 	
 	public static Font getFont(String path) // Gets an image from path
 	{
-		Font font = fonts_.get(path);
+		Font font = fonts.get(path);
 		if (font == null)
 		{
 			Logging.logError("Have not loaded font @ " + path + ". Loading...");
@@ -50,7 +50,7 @@ public final class GraphicsManager
 			catch (Exception e) {Logging.logException(e);}
 			if (font == null) Logging.logError("Could not load font @ " + path);
 			else Logging.logError("Loading done");
-			fonts_.put(path, font);
+			fonts.put(path, font);
 		}
 	
 		return font;

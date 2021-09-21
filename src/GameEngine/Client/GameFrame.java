@@ -26,8 +26,8 @@ import Utils.MiscUtils;
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame
 {
-	private ScreenCanvas canvas_;
-	private boolean queueUpdateRes_;
+	private ScreenCanvas canvas;
+	private boolean queueUpdateRes;
 	
 	public void checkScale()
 	{
@@ -44,54 +44,54 @@ public class GameFrame extends JFrame
 				scaleX = scaleY; // Lengthen to match
 		}
 
-		canvas_.setScale(scaleX, scaleY);
+		canvas.setScale(scaleX, scaleY);
 		int newResX = (int) (ConfigManager.getScreenWidth() * scaleX);
 		int newResY = (int) (ConfigManager.getScreenHeight() * scaleY);
 		// Resize neccessary
 		if (getContentPane().getWidth() != newResX || getContentPane().getHeight() != newResY)
 		{
 			getContentPane().setBounds(0, 0, newResX, newResY);
-			queueUpdateRes_ = true;
+			queueUpdateRes = true;
 		}
-		else if (queueUpdateRes_)
+		else if (queueUpdateRes)
 		{
 			getContentPane().setBounds(0, 0, newResX, newResY);
-			canvas_.setBounds(getContentPane().getBounds());
+			canvas.setBounds(getContentPane().getBounds());
 			
-			queueUpdateRes_ = false;
+			queueUpdateRes = false;
 		}
 	}
 	public void updateUIStuff() // Updates UI stuff
 	{	
 		checkScale();
-		canvas_.repaint();
+		canvas.repaint();
 	}
 	
 	private class EntityInputListener implements KeyListener, MouseListener
 	{
-		private int worldHash_; // TODO stupid way to keep up-to-date
+		private int worldHash; // TODO stupid way to keep up-to-date
 		
 		private boolean hasUpdated()
 		{
-			if (GameInfo.getWorld() == null || GameInfo.getWorld().hashCode() == worldHash_) return false;
+			if (GameInfo.getWorld() == null || GameInfo.getWorld().hashCode() == worldHash) return false;
 			else
 			{
-				worldHash_ = GameInfo.getWorld().hashCode();
+				worldHash = GameInfo.getWorld().hashCode();
 				return true;
 			}
 		}
 		
-		private ArrayList<InputGetter> inputGetters_;
+		private ArrayList<InputGetter> inputGetters;
 		private void findInputGetters() // Finds all input getters
 		{
 			if (!hasUpdated()) return; // Don't want to call this often
 			else
 			{
 				ArrayList<GameEntity> entities = GameInfo.getWorld().getEntities();
-				inputGetters_.clear();
+				inputGetters.clear();
 				for (int i = 0; i < entities.size(); ++i)
 				{
-					if (InputGetter.class.isAssignableFrom(entities.get(i).getClass())) inputGetters_.add((InputGetter) entities.get(i));
+					if (InputGetter.class.isAssignableFrom(entities.get(i).getClass())) inputGetters.add((InputGetter) entities.get(i));
 				}
 			}
 		}
@@ -102,20 +102,20 @@ public class GameFrame extends JFrame
 			findInputGetters();
 			
 			Point2D point = new Point2D(e.getX(), e.getY());
-			int mX = canvas_.descale(point).x;
-			int mY = canvas_.descale(point).y;
+			int mX = canvas.descale(point).x;
+			int mY = canvas.descale(point).y;
 				
 			switch (e.getButton())
 			{
 			case MouseEvent.NOBUTTON: return;
 			case MouseEvent.BUTTON1:
-				for (int i = 0; i < inputGetters_.size(); ++i) inputGetters_.get(i).onMouseClick(mX, mY, 0);
+				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMouseClick(mX, mY, 0);
 				break;
 			case MouseEvent.BUTTON2:
-				for (int i = 0; i < inputGetters_.size(); ++i) inputGetters_.get(i).onMouseClick(mX, mY, 1);
+				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMouseClick(mX, mY, 1);
 				break;
 			case MouseEvent.BUTTON3:
-				for (int i = 0; i < inputGetters_.size(); ++i) inputGetters_.get(i).onMouseClick(mX, mY, 2);
+				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMouseClick(mX, mY, 2);
 				break;
 			}
 		}
@@ -125,20 +125,20 @@ public class GameFrame extends JFrame
 			findInputGetters();
 			
 			Point2D point = new Point2D(e.getX(), e.getY());
-			int mX = canvas_.descale(point).x;
-			int mY = canvas_.descale(point).y;
+			int mX = canvas.descale(point).x;
+			int mY = canvas.descale(point).y;
 			
 			switch (e.getButton())
 			{
 			case MouseEvent.NOBUTTON: return;
 			case MouseEvent.BUTTON1:
-				for (int i = 0; i < inputGetters_.size(); ++i) inputGetters_.get(i).onMousePress(mX, mY, 0);
+				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMousePress(mX, mY, 0);
 				break;
 			case MouseEvent.BUTTON2:
-				for (int i = 0; i < inputGetters_.size(); ++i) inputGetters_.get(i).onMousePress(mX, mY, 1);
+				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMousePress(mX, mY, 1);
 				break;
 			case MouseEvent.BUTTON3:
-				for (int i = 0; i < inputGetters_.size(); ++i) inputGetters_.get(i).onMousePress(mX, mY, 2);
+				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMousePress(mX, mY, 2);
 				break;
 			}
 		}
@@ -148,20 +148,20 @@ public class GameFrame extends JFrame
 			findInputGetters();
 			
 			Point2D point = new Point2D(e.getX(), e.getY());
-			int mX = canvas_.descale(point).x;
-			int mY = canvas_.descale(point).y;
+			int mX = canvas.descale(point).x;
+			int mY = canvas.descale(point).y;
 				
 			switch (e.getButton())
 			{
 			case MouseEvent.NOBUTTON: return;
 			case MouseEvent.BUTTON1:
-				for (int i = 0; i < inputGetters_.size(); ++i) inputGetters_.get(i).onMouseRelease(mX, mY, 0);
+				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMouseRelease(mX, mY, 0);
 				break;
 			case MouseEvent.BUTTON2:
-				for (int i = 0; i < inputGetters_.size(); ++i) inputGetters_.get(i).onMouseRelease(mX, mY, 1);
+				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMouseRelease(mX, mY, 1);
 				break;
 			case MouseEvent.BUTTON3:
-				for (int i = 0; i < inputGetters_.size(); ++i) inputGetters_.get(i).onMouseRelease(mX, mY, 2);
+				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMouseRelease(mX, mY, 2);
 				break;
 			}
 		}
@@ -182,7 +182,7 @@ public class GameFrame extends JFrame
 		{
 //			findInputGetters();
 //				
-//			for (int i = 0; i < inputGetters_.size(); ++i) inputGetters_.get(i).onKeyPress(e.getKeyCode());
+//			for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onKeyPress(e.getKeyCode());
 		}
 			
 		@Override
@@ -190,21 +190,21 @@ public class GameFrame extends JFrame
 		{
 			findInputGetters();
 				
-			for (int i = 0; i < inputGetters_.size(); ++i) inputGetters_.get(i).onKeyPress(e.getKeyCode());
+			for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onKeyPress(e.getKeyCode());
 		}
 		@Override
 		public void keyReleased(KeyEvent e)
 		{
 			findInputGetters();
 
-			for (int i = 0; i < inputGetters_.size(); ++i) inputGetters_.get(i).onKeyRelease(e.getKeyCode());
+			for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onKeyRelease(e.getKeyCode());
 		}
 		
 		
 		public EntityInputListener()
 		{
-			worldHash_ = 0;
-			inputGetters_ = new ArrayList<InputGetter>();
+			worldHash = 0;
+			inputGetters = new ArrayList<InputGetter>();
 		}
 	}
 	public void registerInputListener()
@@ -218,7 +218,7 @@ public class GameFrame extends JFrame
 	public GameFrame()
 	{		
 		GameInfo.setFrame(this);
-		queueUpdateRes_ = false;
+		queueUpdateRes = false;
 		setTitle(MiscUtils.getProgramName() + " Client: Game Window");
 		
 		setIconImages(MiscUtils.getIcons(true));
@@ -230,9 +230,9 @@ public class GameFrame extends JFrame
 		
 		getContentPane().setPreferredSize(new Dimension(ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight()));
 		
-		canvas_ = new ScreenCanvas();
-		canvas_.setBounds(0, 0, ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight());
-		getContentPane().add(canvas_);
+		canvas = new ScreenCanvas();
+		canvas.setBounds(0, 0, ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight());
+		getContentPane().add(canvas);
 		
 		pack();
 		

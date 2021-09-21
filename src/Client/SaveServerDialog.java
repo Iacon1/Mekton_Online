@@ -27,7 +27,7 @@ public class SaveServerDialog extends JDialog
 	private final JLabel warningLabel = new JLabel("<html>Warning: This will overwrite any pre-existing server<br>with the same name.");
 	private final JTextField nameBox = new JTextField();
 	private final JLabel nameLabel = new JLabel("Server name:");
-	private GetServerFrame caller_;
+	private GetServerFrame caller;
 	
 	// Run this
 	public static void main(GetServerFrame caller)
@@ -35,7 +35,7 @@ public class SaveServerDialog extends JDialog
 		try
 		{
 			SaveServerDialog dialog = new SaveServerDialog();
-			dialog.caller_ = caller;
+			dialog.caller = caller;
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e)
@@ -49,7 +49,7 @@ public class SaveServerDialog extends JDialog
 		String serverName = nameBox.getText();
 		if (serverName != null)
 		{
-			caller_.saveServer(serverName);
+			caller.saveServer(serverName);
 			this.setVisible(false);
 			this.dispose();
 		}
