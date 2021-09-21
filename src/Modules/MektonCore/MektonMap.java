@@ -174,7 +174,7 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	 */
 	public Point2D toPixel(AxialHexCoord3D coord)
 	{
-		return toPixel(coord, getLastCameraPos());
+		return toPixel(coord, ScreenCanvas.getCamera());
 	}
 	/** Converts a screen coord to a hex coordinate, accounting for camera pos.
 	 * 
@@ -196,7 +196,7 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	 */
 	public AxialHexCoord3D fromPixel(Point2D coord)
 	{
-		return fromPixel(coord, getLastCameraPos());
+		return fromPixel(coord, ScreenCanvas.getCamera());
 	}
 	
 	/** Finds the highest hex at a position below a certain threshold, if one exists, and
@@ -268,7 +268,6 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	}
 	public void render(ScreenCanvas canvas, Point2D camera, int z)
 	{
-		super.render(canvas, camera);
 		if (map == null || map.getColumns() == 0 || map.getRows() == 0 || map.getLevels() == 0) return;
 		int hexWidth = HexConfigManager.getHexWidth(); // Hex width
 		int hexHeight = HexConfigManager.getHexHeight(); // Hex height	

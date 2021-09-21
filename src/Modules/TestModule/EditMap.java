@@ -6,6 +6,7 @@ package Modules.TestModule;
 
 import GameEngine.GameInfo;
 import GameEngine.Point2D;
+import GameEngine.ScreenCanvas;
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.InputGetter;
 
@@ -38,7 +39,7 @@ public class EditMap extends MektonMap implements InputGetter, CommandRunner
 		if (button == 2) // Right click
 		{
 			AxialHexCoord coord = new AxialHexCoord(0, 0);
-			coord = coord.fromPixel(new Point2D(mX, mY).add(getLastCameraPos()));
+			coord = coord.fromPixel(new Point2D(mX, mY).add(ScreenCanvas.getCamera()));
 			
 			GameInfo.setCommand("@" + this.getId() + " " + coord.q + " " + coord.r);
 		}

@@ -18,9 +18,7 @@ public abstract class GameEntity
 	protected ArrayList<Integer> childrenIds; // Children object indices
 
 	private String owner; // Owner account
-	
-	private Point2D lastCameraPos; // Last camera position
-	
+
 	public int getId()
 	{
 		return ourId;
@@ -110,14 +108,6 @@ public abstract class GameEntity
 		return owner.equals(name);
 	}
 	
-	/** Returns the last camera position known.
-	 * 
-	 */
-	public Point2D getLastCameraPos()
-	{
-		return lastCameraPos.clone();
-	}
-	
 	public abstract String getName(); // Gets object name
 	public abstract void update(); // Updates regularly
 	/**
@@ -126,8 +116,5 @@ public abstract class GameEntity
 	* 
 	* @param  canvas Canvas to draw to.
 	*/
-	public void render(ScreenCanvas canvas, Point2D camera)
-	{
-		lastCameraPos = camera.clone();
-	}
+	public abstract void render(ScreenCanvas canvas, Point2D camera);
 }

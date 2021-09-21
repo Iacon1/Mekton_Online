@@ -13,13 +13,14 @@ import javax.swing.JPanel;
 
 import GameEngine.Managers.GraphicsManager;
 
+@SuppressWarnings("serial")
 public abstract class UtilCanvas extends JPanel
 {
-	public float scaleX;
-	public float scaleY;
+	public float scaleX = 1f;
+	public float scaleY = 1f;
 	// Scales the image; Must be integers
 	// 1x scale size is given by ConfigManager
-
+	
 	Graphics g; // TODO This is a hack so we don't have to juggle this in function calls;
 	// Set it before drawing and clear before the next set
 	
@@ -34,7 +35,7 @@ public abstract class UtilCanvas extends JPanel
 	{
 		return new Point2D(Math.round(point.x / scaleX), Math.round(point.y / scaleY));
 	}
-
+	
 	public void drawImageScaled(Image textureFile, Point2D pos, Point2D texturePos, Point2D textureSize)
 	{
 		int dx1s = (int) (pos.x * scaleX);

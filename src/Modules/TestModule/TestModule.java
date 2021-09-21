@@ -6,6 +6,8 @@ package Modules.TestModule;
 
 import GameEngine.ScreenCanvas;
 import GameEngine.GameInfo;
+import GameEngine.Point2D;
+import GameEngine.Configurables.ConfigManager;
 import GameEngine.Configurables.ModuleTypes.GraphicsHandlerModule;
 import GameEngine.Configurables.ModuleTypes.Module;
 import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
@@ -60,7 +62,8 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	{
 		if (GameInfo.getWorld() == null) return;
 		HexEntity<AxialHexCoord3D> possessee = (HexEntity<AxialHexCoord3D>) GameInfo.getWorld().getEntity(GameInfo.getPossessee());
-		((MektonMap) GameInfo.getWorld().getRootEntities().get(0)).render(canvas, GameInfo.getCamera(), possessee.getHexPos().z);
+		ScreenCanvas.setCamera(possessee.getPos().subtract(new Point2D(ConfigManager.getScreenWidth() / 2, ConfigManager.getScreenHeight() / 2)));
+		((MektonMap) GameInfo.getWorld().getRootEntities().get(0)).render(canvas, ScreenCanvas.getCamera(), possessee.getHexPos().z);
 	}
 
 	@Override
