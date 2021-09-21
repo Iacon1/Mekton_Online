@@ -4,6 +4,9 @@
 
 package Modules.HexUtilities;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 import GameEngine.Point2D;
 import GameEngine.EntityTypes.SpriteEntity;
 import Modules.HexUtilities.HexStructures.HexCoord;
@@ -14,9 +17,13 @@ public abstract class HexEntity<T extends HexCoord> extends SpriteEntity // T is
 	private T targetHexPos_;
 	private HexDirection facing_;
 	
+	private LinkedList<T> path;
+	private int baseSpeed;
+	
 	public HexEntity()
 	{
 		super();
+		path = new LinkedList<T>();
 	}
 	public HexEntity(String owner)
 	{
@@ -48,7 +55,18 @@ public abstract class HexEntity<T extends HexCoord> extends SpriteEntity // T is
 	public void moveTargetHex(T target, int speed)
 	{
 		targetHexPos_ = target;
-		moveTargetSpeed(target.toPixel(), speed);
+		
+		setDirection(this.hexPos_.getDirectionTo(targetHexPos_));
+		
+		float speedFactor = 1f;
+		switch (facing_)
+		{
+		case northWest: case northEast: case southWest: case southEast:
+			speedFactor = 5f / 3f; break; // No math basis, just a rough adjustment to fix a mysterious speed difference between diagonal and straight
+		default: break;
+		}
+		baseSpeed = speed;
+		moveTargetSpeed(target.toPixel(), (int) (speed * speedFactor));
 	}
 	/**
 	* Move in 2D hexes at a set speed.
@@ -67,15 +85,8 @@ public abstract class HexEntity<T extends HexCoord> extends SpriteEntity // T is
 	{
 		T delta = hexPos_.getUnitVector(dir).rMultiply(distance);
 		setDirection(dir);
-
-		float speedFactor = 1f;
-		switch (dir)
-		{
-		case northWest: case northEast: case southWest: case southEast:
-			speedFactor = 5f / 3f; break; // No math basis, just a rough adjustment to fix a mysterious speed difference between diagonal and straight
-		default: break;
-		}
-		moveDeltaHex(delta, (int) (speedFactor * (float) speed));
+		
+		moveDeltaHex(delta, speed);
 	}
 	
 	public boolean isPresentAt(T pos)
@@ -83,8 +94,6 @@ public abstract class HexEntity<T extends HexCoord> extends SpriteEntity // T is
 		return hexPos_ == pos;
 	}
 
-	
-	
 	public void setDirection(HexDirection dir)
 	{
 		int mult = 0;
@@ -104,10 +113,21 @@ public abstract class HexEntity<T extends HexCoord> extends SpriteEntity // T is
 		facing_ = dir;
 	}
 	
+	public void movePath(LinkedList<T> path, int speed)
+	{
+		this.path = path;
+		moveTargetHex(path.getFirst(), speed);
+	}
+			
 	@Override
 	public void onStop()
 	{
 		hexPos_ = targetHexPos_;
-//		alignCoords();
+		if (this.path != null)
+		{
+			this.path.remove();
+			if (this.path.isEmpty()) this.path = null;
+			else moveTargetHex(path.getFirst(), baseSpeed);
+		}
 	}
 }

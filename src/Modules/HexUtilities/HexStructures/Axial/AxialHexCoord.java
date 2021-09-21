@@ -55,21 +55,39 @@ public class AxialHexCoord implements HexCoord
 		case southEast: return new AxialHexCoord(1, 0);
 		default: return null;
 		}
-	}	
+	}
+	
+	@Override
+	public HexDirection getDirectionTo(HexCoord target)
+	{
+		if (target.toPixel().y <= toPixel().y) // North
+		{
+			if (target.toPixel().x < toPixel().x) return HexDirection.northWest; // West
+			else if (target.toPixel().x > toPixel().x) return HexDirection.northEast; // East
+			else return HexDirection.north; // North
+		}
+		else // South
+		{
+			if (target.toPixel().x < toPixel().x) return HexDirection.southWest; // West
+			else if (target.toPixel().x > toPixel().x) return HexDirection.southEast; // East
+			else return HexDirection.south; // South
+		}
+	}
+	
 	@Override
 	public AxialHexCoord getNeighbor(HexDirection dir) // https://www.redblobgames.com/grids/hexagons/#neighbors-axial
 	{
 		AxialHexCoord delta = getUnitVector(dir);
 		return rAdd(delta);
 	}
-
+	
 	@Override
 	public int distance(HexCoord target) // https://www.redblobgames.com/grids/hexagons/#distances-cube
 	{	
 		AxialHexCoord targetAxial = HexCoordConverter.convert(target, target.getClass(), AxialHexCoord.class);
-		int dQ = q - targetAxial.q;
-		int dR = r - targetAxial.r;
-		int dS = s() - targetAxial.s();
+		int dQ = Math.abs(q - targetAxial.q);
+		int dR = Math.abs(r - targetAxial.r);
+		int dS = Math.abs(s() - targetAxial.s());
 		return MiscUtils.multiMax(dQ, dR, dS);
 	}
 	
@@ -136,5 +154,4 @@ public class AxialHexCoord implements HexCoord
 		Logging.logNotice("R: " + coord.toPixel().x + " " + coord.toPixel().y);
 		return coord;
 	}
-
 }

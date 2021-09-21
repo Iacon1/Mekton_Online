@@ -11,17 +11,22 @@
 package Modules.MektonCore;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.function.Supplier;
 
 import Modules.HexUtilities.HexConfigManager;
+import Modules.HexUtilities.HexDirection;
 import Modules.HexUtilities.HexEntity;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexMapRectangle;
-import Utils.Logging;
+import Modules.Pathfinding.AStar;
+import Modules.Pathfinding.PathfindingAdapter;
 import Modules.HexUtilities.HexStructures.HexMap;
 import Modules.HexUtilities.HexStructures.Axial.AxialHex3DMap;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord;
 import GameEngine.ScreenCanvas;
+import GameEngine.GameInfo;
 import GameEngine.Point2D;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.GameEntity;
@@ -33,6 +38,29 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	private String tileset_; // Tileset
 	private String zFog_; // A translucent image the same size as the screen that renders between Z-levels
 	private AxialHex3DMap<AxialHexMapRectangle<MektonHex>, MektonHex> map_;
+
+	private int hexCost(AxialHexCoord3D a, AxialHexCoord3D b) // Cost of coord
+	{
+		return getHex(b).getCost();
+	}
+	private int hexDist(AxialHexCoord3D a, AxialHexCoord3D b) // Cost of coord
+	{
+		return a.distance(b);
+	}
+	private ArrayList<AxialHexCoord3D> neighbors(AxialHexCoord3D coord) // Cost of coord
+	{
+		ArrayList<AxialHexCoord3D> list = new ArrayList<AxialHexCoord3D>();
+		list.add(coord.getNeighbor(HexDirection.north));
+		list.add(coord.getNeighbor(HexDirection.northWest));
+		list.add(coord.getNeighbor(HexDirection.northEast));
+
+		list.add(coord.getNeighbor(HexDirection.south));
+		list.add(coord.getNeighbor(HexDirection.southWest));
+		list.add(coord.getNeighbor(HexDirection.southEast));
+		
+		return list;
+	}
+	private transient PathfindingAdapter<AxialHexCoord3D, AStar> pathfinder;
 	
 	public MektonMap(String tileset, String zFog)
 	{
@@ -42,6 +70,12 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 		
 		tileset_ = tileset;
 		zFog_ = zFog;
+		
+		pathfinder = new PathfindingAdapter<AxialHexCoord3D, AStar>(
+				(AxialHexCoord3D a, AxialHexCoord3D b) -> hexCost(a, b),
+				(AxialHexCoord3D a, AxialHexCoord3D b) -> hexDist(a, b),
+				(AxialHexCoord3D coord) -> neighbors(coord),
+				() -> new AStar());
 	}
 	public MektonMap()
 	{
@@ -51,6 +85,12 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 		
 		tileset_ = null;
 		zFog_ = null;
+		
+		pathfinder = new PathfindingAdapter<AxialHexCoord3D, AStar>(
+				(AxialHexCoord3D a, AxialHexCoord3D b) -> hexCost(a, b),
+				(AxialHexCoord3D a, AxialHexCoord3D b) -> hexDist(a, b),
+				(AxialHexCoord3D coord) -> neighbors(coord),
+				() -> new AStar());
 	}
 	
 	/** Sets the width, length, and height of the map; Clears the map!
@@ -79,6 +119,29 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 		setDimensions(columns, rows, levels, null);
 	}
 	
+	/** Returns the optimal path from a to b
+	 * 
+	 *  @param a First coordinate.
+	 *  @param b Second coordinate.
+	 *  
+	 *  @return Path.
+	 */
+	public LinkedList<AxialHexCoord3D> pathfind(AxialHexCoord3D a, AxialHexCoord3D b)
+	{
+		if (a.z != b.z) return null;
+		
+		ArrayList<AxialHexCoord3D> layer = new ArrayList<AxialHexCoord3D>();
+		
+		for (int i = 0; i < map_.getColumns(); ++i) // Generate the list of hex coords
+		{
+			for (int j = map_.firstRow(i); j <= map_.lastRow(i); ++j)
+			{
+				layer.add(new AxialHexCoord3D(i, j, a.z));
+			}
+		}
+
+		return pathfinder.findOptimalPath(layer, a, b);
+	}
 	
 	public boolean inBounds(AxialHexCoord3D coord)
 	{

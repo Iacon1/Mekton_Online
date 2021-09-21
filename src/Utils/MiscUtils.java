@@ -158,7 +158,7 @@ public final class MiscUtils
 		int y;
 		if (X.length > 1)
 		{
-			int[] sX = Arrays.copyOfRange(X, 1, X.length - 1);
+			int[] sX = Arrays.copyOfRange(X, 1, X.length);
 			y = multiMax(X[0], sX);
 		}
 		else y = X[0];

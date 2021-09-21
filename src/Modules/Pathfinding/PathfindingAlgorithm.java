@@ -5,6 +5,7 @@
 package Modules.Pathfinding;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public interface PathfindingAlgorithm
 {
@@ -14,5 +15,5 @@ public interface PathfindingAlgorithm
 	 *  @param a Starting point.
 	 *  @param b Ending point.
 	 */
-	public ArrayList<Integer> findOptimalPath(PathfindingGraph g, int a, int b);
+	public LinkedList<Integer> findOptimalPath(PathfindingGraph g, int a, int b);
 }

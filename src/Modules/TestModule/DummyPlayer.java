@@ -5,6 +5,7 @@
 package Modules.TestModule;
 
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
+import Modules.MektonCore.MektonMap;
 import Utils.Logging;
 import Utils.SimpleTimer;
 
@@ -63,6 +64,7 @@ public class DummyPlayer extends HexEntity<AxialHexCoord3D> implements InputGett
 	@Override
 	public void onMousePress(int mX, int mY, int button)
 	{
+		if (button == 0) GameInfo.setCommand("moveMouse " + (mX + getLastCameraPos().x) + " " + (mY + getLastCameraPos().y));
 		// TODO Auto-generated method stub
 		
 	}
@@ -113,6 +115,11 @@ public class DummyPlayer extends HexEntity<AxialHexCoord3D> implements InputGett
 		{
 			switch (params[0])
 			{
+			case "moveMouse":
+					Point2D mousePos = new Point2D(Integer.valueOf(params[1]), Integer.valueOf(params[2]));
+					AxialHexCoord3D target = hexPos_.fromPixel(mousePos);
+					MektonMap map = (MektonMap) GameInfo.getWorld().getEntity(0);
+					movePath(map.pathfind(hexPos_, target), 2);
 			case "move": // TODO objects with MA
 				switch (params[1])
 				{

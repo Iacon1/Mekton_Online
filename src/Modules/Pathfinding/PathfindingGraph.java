@@ -1,6 +1,7 @@
 // By Iacon1
 // Created 09/15/2021
 // Graph for storing pathfinding data
+// If cost is -1 then assume blocked
 
 package Modules.Pathfinding;
 

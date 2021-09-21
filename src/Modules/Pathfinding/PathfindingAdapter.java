@@ -5,58 +5,66 @@
 package Modules.Pathfinding;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.function.Supplier;
+
+import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 
 public class PathfindingAdapter<T, A extends PathfindingAlgorithm>
 {
-	private static interface Cost<T>
+	public static interface Cost<T>
 	{
 		public int cost(T a, T b);
 	}
-	private Cost<T> costFunc_;
-	private static interface Distance<T>
+	protected Cost<T> costFunc;
+	public static interface Distance<T>
 	{
 		public int cost(T a, T b);
 	}
-	private Distance<T> distFunc_;
-	private static interface Neighbors<T>
+	protected Distance<T> distFunc;
+	public static interface Neighbors<T>
 	{
 		public ArrayList<T> neighbors(T value);
 	}
-	private Neighbors<T> nearFunc_;
-	private Supplier<A> supplier_;
+	protected Neighbors<T> nearFunc;
+	
+	private Supplier<A> supplier;
 	
 	public PathfindingAdapter(Cost<T> costFunc, Distance<T> distFunc, Neighbors<T> nearFunc, Supplier<A> supplier)
 	{
-		costFunc_ = costFunc;
-		distFunc_ = distFunc;
-		nearFunc_ = nearFunc;
-		supplier_ = supplier;
+		this.costFunc = costFunc;
+		this.distFunc = distFunc;
+		this.nearFunc = nearFunc;
+		this.supplier = supplier;
 	}
 	
-	public ArrayList<T> findOptimalPath(ArrayList<T> list, T a, T b)
+	public LinkedList<T> findOptimalPath(ArrayList<T> list, T a, T b)
 	{
 		PathfindingGraph graph = new PathfindingGraph(
-				(x, y) -> (costFunc_.cost(list.get(x), list.get(y))),
-				(x, y) -> (distFunc_.cost(list.get(x), list.get(y)))
+				(x, y) -> (costFunc.cost(list.get(x), list.get(y))),
+				(x, y) -> (distFunc.cost(list.get(x), list.get(y)))
 				);
 		
 		graph.setSize(list.size());
 		for (int i = 0; i < list.size(); ++i)
 		{
-			ArrayList<T> neighbors = nearFunc_.neighbors(list.get(i));
+			ArrayList<T> neighbors = nearFunc.neighbors(list.get(i));
 			for (int j = 0; j < neighbors.size(); ++j)
 			{
-				graph.addLink(i, list.indexOf((neighbors.get(j))));
+				int jIndex = list.indexOf(neighbors.get(j));
+				if (jIndex == -1) continue;
+				else graph.addLink(i, jIndex);
 			}
 		}
 		
-		A algo = supplier_.get();
-		ArrayList<Integer> path = algo.findOptimalPath(graph, list.indexOf(a), list.indexOf(b));
-		ArrayList<T> pathValue = new ArrayList<T>();
+		A algo = supplier.get();
+		LinkedList<Integer> path = algo.findOptimalPath(graph, list.indexOf(a), list.indexOf(b));
+		if (path == null) return null;
+		LinkedList<T> pathValue = new LinkedList<T>();
 		for (int i = path.size() - 1; i >= 0; --i)
 		{
-			pathValue.add(list.get(path.get(i)));
+			pathValue.add(list.get(path.getFirst()));
+			path.remove();
 		}
 		
 		return pathValue;

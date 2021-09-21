@@ -48,6 +48,16 @@ public class AxialHexCoord3D extends AxialHexCoord
 			default: return convertAxial(super.getUnitVector(dir), 0);
 			}
 		}
+		
+		@Override
+		public HexDirection getDirectionTo(HexCoord target)
+		{
+			AxialHexCoord3D target3D = HexCoordConverter.convert(target, target.getClass(), AxialHexCoord3D.class);
+			if (target3D.z < z) return HexDirection.down;
+			else if (target3D.z > z) return HexDirection.up;
+			else return super.getDirectionTo(target);
+		}
+		
 		@Override
 		public AxialHexCoord3D getNeighbor(HexDirection dir)
 		{
@@ -85,5 +95,21 @@ public class AxialHexCoord3D extends AxialHexCoord
 		public AxialHexCoord3D fromPixel(Point2D point)
 		{
 			return convertAxial(super.fromPixel(point), 0);
+		}
+		
+		@Override
+		public boolean equals(Object obj)
+		{
+			if (obj.getClass() != AxialHexCoord3D.class) return false;
+			else
+			{
+				AxialHexCoord3D coord = (AxialHexCoord3D) obj;
+				return q == coord.q && r == coord.r && z == coord.z;
+			}
+		}
+		@Override
+		public int hashCode()
+		{
+			return new String(q + " " + r + " " + z).hashCode();
 		}
 	}

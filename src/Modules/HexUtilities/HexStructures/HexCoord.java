@@ -24,11 +24,18 @@ public interface HexCoord
 	 * @param factor Factor to multiply by.
 	 */
 	public <T extends HexCoord> T rMultiply(int factor);
+	
 	/** Gets the unit vector for a particular direction.
 	 *  
 	 * @param dir Direction to get.
 	 */
 	public <T extends HexCoord> T getUnitVector(HexDirection dir);
+	
+	/** Gets the direction relative to this coord that a target is in.
+	 * 
+	 *  @Param target Target to point towards.
+	 */
+	public <T extends HexCoord> HexDirection getDirectionTo(HexCoord target);
 	
 	/** Gets our neighbor in a particular direction.
 	 *  

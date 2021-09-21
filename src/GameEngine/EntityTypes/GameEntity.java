@@ -128,6 +128,6 @@ public abstract class GameEntity
 	*/
 	public void render(ScreenCanvas canvas, Point2D camera)
 	{
-		lastCameraPos = camera;
+		lastCameraPos = camera.clone() ;
 	}
 }
