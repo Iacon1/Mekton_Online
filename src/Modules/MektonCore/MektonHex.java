@@ -15,27 +15,29 @@ public class MektonHex
 	// Game properties
 	public enum TerrainType
 	{
-		open, // X1 MA cost
-		rough, // X2 MA cost
-		restrictive, // X3 MA cost
-		solid, // X-Inf MA cost (cannot move through)
-		deepWater, // Deep enough to swim in
-		magma,
+		open(1, 0), // X1 MA cost
+		rough(2, 0), // X2 MA cost
+		restrictive(3, 0), // X3 MA cost
+		solid(-1, 0), // Cannot move through
+		deepWater(-1, 0), // Deep enough to swim in
+		magma(-1, 1) // Causes damage
+		;
+		
+		private int moveCost; //-1 for impassible
+		private int damage; // How many hits per round (2 seconds) this causes, applied to all locations
+		private TerrainType(int moveCost, int damage)
+		{
+			this.moveCost = moveCost;
+			this.damage = damage;
+		}
+		
+		
 	}
 	public TerrainType type = TerrainType.open;
 	
 	public static int getCost(TerrainType type) // Gets cost of moving through for pathfinding; TODO swimming mecha and magma-meks
 	{
-		switch (type)
-		{
-		case open: return 1;
-		case rough: return 2;
-		case restrictive: return 3;
-		case solid: return -1;
-		case deepWater: return -1;
-		case magma: return -1;
-		default: return 999;
-		}
+		return type.moveCost;
 	}
 	
 	public int getCost()
