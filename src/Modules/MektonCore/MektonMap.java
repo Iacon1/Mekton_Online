@@ -156,6 +156,50 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 		return map_.getHex(coord);
 	}
 	
+	/** Converts a hex coord to a *screen* coordinate, i. e. accounting for camera pos.
+	 * 
+	 * @param coord Coordinate to convert.
+	 * @param camera Camera coordinates.
+	 * 
+	 * @return Corresponding screen coordinate.
+	 */
+	public Point2D toPixel(AxialHexCoord3D coord, Point2D camera)
+	{
+		return coord.toPixel().subtract(camera);
+	}
+	/** Converts a hex coord to a *screen* coordinate, i. e. accounting for last camera pos.
+	 * 
+	 * @param coord Coordinate to convert.
+	 * 
+	 * @return Corresponding screen coordinate.
+	 */
+	public Point2D toPixel(AxialHexCoord3D coord)
+	{
+		return toPixel(coord, getLastCameraPos());
+	}
+	/** Converts a screen coord to a hex coordinate, accounting for camera pos.
+	 * 
+	 * @param coord Coordinate to convert.
+	 * @param camera Camera coordinates.
+	 * 
+	 * @return Corresponding hex coordinate.
+	 */
+	public AxialHexCoord3D fromPixel(Point2D coord, Point2D camera)
+	{
+		return new AxialHexCoord3D(0, 0, 0).fromPixel(coord.add(camera));
+	}
+	/** Converts a screen coord to a hex coordinate, accounting for last camera pos.
+	 * 
+	 * @param coord Coordinate to convert.
+	 * @param camera Camera coordinates.
+	 * 
+	 * @return Corresponding hex coordinate.
+	 */
+	public AxialHexCoord3D fromPixel(Point2D coord)
+	{
+		return fromPixel(coord, getLastCameraPos());
+	}
+	
 	/** Finds the highest hex at a position below a certain threshold, if one exists, and
 	 *  returns its z-value (or -1 if none found).
 	 * 
@@ -209,10 +253,9 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 				if (k != findHighestHex(new AxialHexCoord(i, j), cameraZ)) continue;
 				
 				AxialHexCoord3D hexCoord = new AxialHexCoord3D(i, j, k);
-				Point2D pixelCoord = hexCoord.toPixel();
 				MektonHex hex = getHex(hexCoord);
-				canvas.drawImageScaled(tileset_, pixelCoord.subtract(camera), new Point2D(hex.texturePos_.x * hexWidth, hex.texturePos_.y * hexHeight), new Point2D(hexWidth, hexHeight));
-				canvas.drawText(hexCoord.q + ", " + hexCoord.r, GraphicsManager.getFont("MicrogrammaNormalFix.TTF"), Color.white, pixelCoord.subtract(camera), 16);
+				canvas.drawImageScaled(tileset_, toPixel(hexCoord, camera), new Point2D(hex.texturePos_.x * hexWidth, hex.texturePos_.y * hexHeight), new Point2D(hexWidth, hexHeight));
+				canvas.drawText(hexCoord.q + ", " + hexCoord.r, GraphicsManager.getFont("MicrogrammaNormalFix.TTF"), Color.white, toPixel(hexCoord, camera), 16);
 			}
 	}
 	private void drawChildren(ScreenCanvas canvas, Point2D camera, int k)

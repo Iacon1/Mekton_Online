@@ -146,12 +146,9 @@ public class AxialHexCoord implements HexCoord
 	public AxialHexCoord fromPixel(Point2D point)
 	{
 		AxialHexCoord coord = new AxialHexCoord(0, 0);
-		coord.q = point.x /  ((3 * HexConfigManager.getHexWidth()) / 4 + 1); // Just invert to-pixel
+		coord.q = (point.x - HexConfigManager.getHexWidth() / 2) /  ((3 * HexConfigManager.getHexWidth()) / 4 + 1); // Just invert to-pixel
 		// x = (3 / 2 * q * size) = (3 * width) / 4 * q
-		coord.r = (point.y - (HexConfigManager.getHexHeight() / 2) * coord.q) / HexConfigManager.getHexHeight();
-		Logging.logNotice("O: " + point.x + " " + point.y);
-		Logging.logNotice("T: " + coord.q + " " + coord.r);
-		Logging.logNotice("R: " + coord.toPixel().x + " " + coord.toPixel().y);
+		coord.r = ((point.y - HexConfigManager.getHexHeight() / 2) - (HexConfigManager.getHexHeight() / 2) * coord.q) / HexConfigManager.getHexHeight();
 		return coord;
 	}
 }

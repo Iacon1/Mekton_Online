@@ -5,6 +5,7 @@
 package Modules.TestModule;
 
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
+import Modules.MektonCore.MapEntity;
 import Modules.MektonCore.MektonMap;
 import Utils.Logging;
 import Utils.SimpleTimer;
@@ -20,29 +21,18 @@ import GameEngine.EntityTypes.InputGetter;
 
 import Modules.HexUtilities.HexConfigManager;
 import Modules.HexUtilities.HexDirection;
-import Modules.HexUtilities.HexEntity;
 
-public class DummyPlayer extends HexEntity<AxialHexCoord3D> implements InputGetter, CommandRunner
+public class DummyPlayer extends MapEntity implements InputGetter, CommandRunner
 {	
-	private int testMenu1 = -1;
-	private int testMenu2 = -1;
-	
 	public DummyPlayer()
 	{
 		super();
 		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight());
 	}
-	public DummyPlayer(String owner)
+	public DummyPlayer(String owner, MektonMap map)
 	{
-		super(owner);
+		super(owner, map);
 		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight());
-
-		if (!GameInfo.isClient())
-		{
-			testMenu1 = new TestMenu(getOwner()).getId();
-			testMenu2 = new TestMenu(getOwner()).getId();
-			((Alignable) getEntity(testMenu2)).align(Alignable.AlignmentPoint.northEast, ((Alignable) getEntity(testMenu1)), Alignable.AlignmentPoint.southWest);
-		}
 	}
 	
 	@Override
@@ -64,7 +54,8 @@ public class DummyPlayer extends HexEntity<AxialHexCoord3D> implements InputGett
 	@Override
 	public void onMousePress(int mX, int mY, int button)
 	{
-		if (button == 0) GameInfo.setCommand("moveMouse " + (mX + getLastCameraPos().x) + " " + (mY + getLastCameraPos().y));
+		AxialHexCoord3D point = mapToken.get().fromPixel(new Point2D(mX, mY));
+		if (button == 0) GameInfo.setCommand("moveMouse " + point.q + " " + point.r + " " + point.z);
 		// TODO Auto-generated method stub
 		
 	}
@@ -116,10 +107,8 @@ public class DummyPlayer extends HexEntity<AxialHexCoord3D> implements InputGett
 			switch (params[0])
 			{
 			case "moveMouse":
-					Point2D mousePos = new Point2D(Integer.valueOf(params[1]), Integer.valueOf(params[2]));
-					AxialHexCoord3D target = hexPos_.fromPixel(mousePos);
-					MektonMap map = (MektonMap) GameInfo.getWorld().getEntity(0);
-					movePath(map.pathfind(hexPos_, target), 2);
+					AxialHexCoord3D target = new AxialHexCoord3D(Integer.valueOf(params[1]), Integer.valueOf(params[2]), hexPos_.z);
+					movePath(mapToken.get().pathfind(hexPos_, target), 2);
 			case "move": // TODO objects with MA
 				switch (params[1])
 				{
@@ -153,13 +142,5 @@ public class DummyPlayer extends HexEntity<AxialHexCoord3D> implements InputGett
 				break;
 			}
 		}
-	}
-
-	@Override
-	public void render(ScreenCanvas canvas, Point2D camera)
-	{
-		super.render(canvas, camera);
-		if (getEntity(testMenu1) != null) GameInfo.getWorld().getEntity(testMenu1).render(canvas, camera);
-		if (getEntity(testMenu2) != null) GameInfo.getWorld().getEntity(testMenu2).render(canvas, camera);
 	}
 }
