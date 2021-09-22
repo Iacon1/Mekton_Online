@@ -16,8 +16,8 @@ public abstract class HexEntity<T extends HexCoord> extends SpriteEntity // T is
 	private HexDirection facing;
 	
 	private boolean paused = false;
-	private LinkedList<T> path;
-	private int baseSpeed;
+	protected LinkedList<T> path;
+	protected int baseSpeed;
 	
 	public HexEntity()
 	{

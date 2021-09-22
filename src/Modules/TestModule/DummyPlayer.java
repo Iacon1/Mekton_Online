@@ -112,30 +112,30 @@ public class DummyPlayer extends MektonActor implements InputGetter, CommandRunn
 				switch (params[1])
 				{
 				case "north": case "no": case "n":
-					moveDirectional(HexDirection.north, 1, 2);
+					moveDirectionalAct(HexDirection.north, 1, 2);
 					break;
 				case "northwest": case "nw":
-					moveDirectional(HexDirection.northWest, 1, 2);
+					moveDirectionalAct(HexDirection.northWest, 1, 2);
 					break;
 				case "northeast": case "ne":
-					moveDirectional(HexDirection.northEast, 1, 2);
+					moveDirectionalAct(HexDirection.northEast, 1, 2);
 					break;
 					
 				case "south": case "so": case "s":
-					moveDirectional(HexDirection.south, 1, 2);
+					moveDirectionalAct(HexDirection.south, 1, 2);
 					break;
 				case "southwest": case "sw":
-					moveDirectional(HexDirection.southWest, 1, 2);
+					moveDirectionalAct(HexDirection.southWest, 1, 2);
 					break;
 				case "southeast": case "se":
-					moveDirectional(HexDirection.southEast, 1, 2);
+					moveDirectionalAct(HexDirection.southEast, 1, 2);
 					break;
 					
 				case "up":
-					moveDirectional(HexDirection.up, 1, 2);
+					moveDirectionalAct(HexDirection.up, 1, 2);
 					break;
 				case "down": case "do":
-					moveDirectional(HexDirection.down, 1, 2);
+					moveDirectionalAct(HexDirection.down, 1, 2);
 					break;
 				}
 				break;
