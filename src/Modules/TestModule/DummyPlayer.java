@@ -5,20 +5,23 @@
 package Modules.TestModule;
 
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
-import Modules.MektonCore.MapEntity;
 import Modules.MektonCore.MektonMap;
+import Modules.MektonCore.EntityTypes.MapEntity;
+import Modules.MektonCore.EntityTypes.MektonActor;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 
 import GameEngine.GameInfo;
 import GameEngine.Point2D;
+import GameEngine.ScreenCanvas;
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.InputGetter;
 
 import Modules.HexUtilities.HexConfigManager;
 import Modules.HexUtilities.HexDirection;
 
-public class DummyPlayer extends MapEntity implements InputGetter, CommandRunner
+public class DummyPlayer extends MektonActor implements InputGetter, CommandRunner
 {	
 	public DummyPlayer()
 	{
@@ -138,5 +141,19 @@ public class DummyPlayer extends MapEntity implements InputGetter, CommandRunner
 				break;
 			}
 		}
+	}
+
+	@Override
+	public void render(ScreenCanvas canvas, Point2D camera)
+	{
+		super.render(canvas, camera);
+		
+		if (isPossessee()) canvas.drawText("Action points: " + remainingActions(), "MicrogrammaNormalFix.TTF", Color.red, new Point2D(0, 0), 50);
+	}
+	@Override
+	public void onPause()
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -19,6 +19,10 @@ public abstract class GameEntity
 
 	private String owner; // Owner account
 
+	public boolean isPossessee()
+	{
+		return ourId == GameInfo.getPossessee();
+	}
 	public int getId()
 	{
 		return ourId;

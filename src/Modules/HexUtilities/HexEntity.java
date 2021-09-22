@@ -15,6 +15,7 @@ public abstract class HexEntity<T extends HexCoord> extends SpriteEntity // T is
 	private T targetHexPos;
 	private HexDirection facing;
 	
+	private boolean paused = false;
 	private LinkedList<T> path;
 	private int baseSpeed;
 	
@@ -111,21 +112,47 @@ public abstract class HexEntity<T extends HexCoord> extends SpriteEntity // T is
 		facing = dir;
 	}
 	
+	/** Called when motion paused.*/
+	public abstract void onPause();
+	/** Called when motion unpaused.*/
+	public abstract void onResume();
+	
+	public void pause()
+	{
+		paused = true;
+		onPause();
+	}
+	
+	public void resume()
+	{
+		paused = false;
+		onResume();
+	}
+	
+	
 	public void movePath(LinkedList<T> path, int speed)
 	{
 		this.path = path;
 		moveTargetHex(path.getFirst(), speed);
 	}
-			
-	@Override
-	public void onStop()
+	/** Sets course to the next coord in the path. */
+	public void updatePath()
 	{
-		hexPos = targetHexPos;
-		if (this.path != null)
+		if (this.path != null && this.hexPos == this.path.getFirst()) // Ready for next step of path
 		{
 			this.path.remove();
 			if (this.path.isEmpty()) this.path = null;
 			else moveTargetHex(path.getFirst(), baseSpeed);
 		}
+		else if (this.path != null)
+		{
+			moveTargetHex(path.getFirst(), baseSpeed);
+		}
+	}
+	@Override
+	public void onStop()
+	{
+		hexPos = targetHexPos;
+		if (!paused) updatePath();
 	}
 }
