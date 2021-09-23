@@ -20,6 +20,9 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 
+/** The dialog for when you want to remove a server.
+ * 
+ */
 @SuppressWarnings("serial")
 public class RemoveServerDialog extends JDialog
 {
@@ -30,7 +33,10 @@ public class RemoveServerDialog extends JDialog
 	private final JLabel nameLabel = new JLabel("Server name:");
 	private GetServerFrame caller;
 	
-	// Run this
+	/** Runs the dialog.
+	 * 
+	 *  @param caller The frame that called this.
+	 */
 	public static void main(GetServerFrame caller)
 	{
 		try
@@ -54,7 +60,9 @@ public class RemoveServerDialog extends JDialog
 		}
 	}
 	
-	// Creates the dialog
+	/** Constructor.
+	 * 
+	 */
 	public RemoveServerDialog()
 	{
 		setIconImages(MiscUtils.getIcons(true));

@@ -13,6 +13,9 @@ import GameEngine.Net.StateFactory;
 import GameEngine.Net.StatefulConnectionPairThread;
 import GameEngine.PacketTypes.ServerInfoPacket;
 
+/** Thread that the client uses to communicate with the server and run the game.
+ * 
+ */
 public class GameClientThread extends StatefulConnectionPairThread
 {
 	private StateFactory stateFactory; // Where we get our states
@@ -21,6 +24,9 @@ public class GameClientThread extends StatefulConnectionPairThread
 	
 	private HashMap<String, Container> containers; // All currently-open UI
 
+	/** Constructor
+	 * 
+	 */
 	public GameClientThread()
 	{
 		super();
@@ -42,20 +48,39 @@ public class GameClientThread extends StatefulConnectionPairThread
 		}
 	}
 	
+	/** Stores a container.
+	 * 
+	 *  @param name Name to store the container under.
+	 *  @param container Container to store.
+	 */
 	public void setContainer(String name, Container container)
 	{
 		containers.put(name, container);
 	}
 	
+	/** Gets a stored container if possible, returning null otherwise.
+	 * 
+	 *  @param name Name to search for.
+	 * 
+	 *  @return Either the container listed as name or null if no such container exists.
+	 */
 	public Container getContainer(String name)
 	{
 		return containers.get(name);
 	}
 
+	/** Stores the server's info packet.
+	 * 
+	 *  @param serverInfo the received packet.
+	 */
 	public void setInfo(ServerInfoPacket serverInfo)
 	{
 		this.serverInfo = serverInfo;
 	}
+	/** Gets the stored info packet.
+	 * 
+	 *  @return The stored packet, or null if no packet is stored.
+	 */
 	public ServerInfoPacket getInfo()
 	{
 		return serverInfo;

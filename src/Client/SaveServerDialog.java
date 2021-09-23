@@ -19,6 +19,9 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 
+/** The dialog for when you want to save a server.
+ * 
+ */
 @SuppressWarnings("serial")
 public class SaveServerDialog extends JDialog
 {
@@ -29,7 +32,10 @@ public class SaveServerDialog extends JDialog
 	private final JLabel nameLabel = new JLabel("Server name:");
 	private GetServerFrame caller;
 	
-	// Run this
+	/** Runs the dialog.
+	 *  
+	 *  @param caller The frame that called this.
+	 */
 	public static void main(GetServerFrame caller)
 	{
 		try
@@ -55,7 +61,9 @@ public class SaveServerDialog extends JDialog
 		}
 	}
 	
-	// Creates the dialog
+	/** Constructor.
+	 *  
+	 */
 	public SaveServerDialog()
 	{
 		setIconImages(MiscUtils.getIcons(true));

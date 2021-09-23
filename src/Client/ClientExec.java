@@ -14,9 +14,16 @@ import Utils.Logging;
 
 import javax.swing.UIManager;
 
+/** Runs the client side.
+ *
+ */
 public class ClientExec
 {
 	
+	/** Runs the client.
+	 *
+	 *  @param args Not used.
+	 */
 	public static void main(String[] args)
 	{
 		Logging.setLogger(new DebugLogger());

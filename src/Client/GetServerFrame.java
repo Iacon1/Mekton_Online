@@ -30,6 +30,9 @@ import javax.swing.border.BevelBorder;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
+/** The frame for getting the server.
+ * 
+ */
 @SuppressWarnings("serial")
 public class GetServerFrame extends JFrame
 {
@@ -73,6 +76,10 @@ public class GetServerFrame extends JFrame
 		savedServerList.setModel(model);
 	}
 	
+	/** Saves the currently-defined server to the saved server list.
+	 * 
+	 *  @param name Name to save the server under.
+	 */
 	public void saveServer(String name) // Saves current server w/ provided name
 	{
 		SavedServer server = new SavedServer();
@@ -95,6 +102,10 @@ public class GetServerFrame extends JFrame
 		MiscUtils.saveText("Local Data/Client/SavedServers.JSON", serialized);
 		populateList();
 	}
+	/** Removes a server from the saved server list.
+	 * 
+	 *  @param name Name of the server to remove.
+	 */
 	public void removeServer(String name) // Removes selected server
 	{
 		for (int i = 0; i < savedServerArray.size(); ++i)
@@ -135,7 +146,10 @@ public class GetServerFrame extends JFrame
 		}
 	}
 	
-	// Launch as app
+	/** Runs the frame.
+	 * 
+	 *  @param args Not used.
+	 */
 	public static void main(String[] args)
 	{
 		EventQueue.invokeLater(new Runnable()
@@ -152,7 +166,9 @@ public class GetServerFrame extends JFrame
 		});
 	}
 
-	// Create frame
+	/** Constructor.
+	 * 
+	 */
 	public GetServerFrame()
 	{
 		setIconImages(MiscUtils.getIcons(true));
