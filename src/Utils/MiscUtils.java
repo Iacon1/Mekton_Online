@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -144,15 +145,6 @@ public final class MiscUtils
 		return sClass.getName();
 	}
 	
-	public static int divCeil(int a, int b)
-	{
-		return (int) (((float) a) / ((float) b));
-	}
-	public static int divFloor(int a, int b)
-	{
-		return (int) (((float) a) / ((float) b));
-	}
-	
 	public static int multiMax(int x, int... X)
 	{
 		int y;
@@ -184,5 +176,15 @@ public final class MiscUtils
 	public static int forceMult(double a, double b)
 	{
 		return (int) (Math.floor(a / b) * b);
+	}
+	
+	public static String floatPrecise(float value, int digits)
+	{
+		if (digits > 0)
+		{
+			DecimalFormat format = new DecimalFormat("#." + "#".repeat(digits));
+			return format.format(value);
+		}
+		else return Integer.toString(Math.round(value));
 	}
 }

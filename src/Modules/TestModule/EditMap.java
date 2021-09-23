@@ -29,7 +29,7 @@ public class EditMap extends MektonMap implements InputGetter, CommandRunner
 		coord.r = Integer.valueOf(params[1]);
 		MektonHex data = new MektonHex();
 		data.texturePos.x = 1;
-		data.type = MektonHex.TerrainType.rough;
+		data.type = MektonHex.TerrainType.solid;
 		setHex(coord, data);
 	}
 
