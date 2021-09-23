@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import Modules.HexUtilities.HexDirection;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.MektonCore.MektonMap;
+import Utils.MiscUtils;
 import Utils.SimpleTimer;
 
 public abstract class MektonActor extends MapEntity
@@ -50,9 +51,9 @@ public abstract class MektonActor extends MapEntity
 	}
 	public boolean takeAction(float cost)
 	{
-		if (actionPoints >= cost)
+		if (actionPoints >= cost - MiscUtils.floatTolerance) // Float accuracy seems to get weird here
 		{
-			actionPoints -= cost;
+			actionPoints = Math.max(actionPoints - cost, 0);
 			return true;
 		}
 		else return false;

@@ -15,10 +15,12 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
-
+import java.math.RoundingMode;
 
 public final class MiscUtils
 {
+	public static float floatTolerance = 0.015625f; // = 2^-6, which can be handled precisely by floats
+	
 	private static <C> void addItemsToFit(ArrayList<C> array, int newSize)
 	{
 		while (array.size() < newSize)
@@ -183,8 +185,9 @@ public final class MiscUtils
 		if (digits > 0)
 		{
 			DecimalFormat format = new DecimalFormat("#." + "#".repeat(digits));
+			format.setRoundingMode(RoundingMode.HALF_UP);
 			return format.format(value);
 		}
-		else return Integer.toString(Math.round(value));
+		else return Integer.toString((int) Math.floor(value));
 	}
 }

@@ -5,6 +5,7 @@
 package GameEngine.Net;
 
 import Utils.Logging;
+import Utils.SimpleTimer;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -141,13 +142,19 @@ public abstract class ConnectionPairThread extends Thread
 		
 		if (mono)
 		{
+			SimpleTimer timer = new SimpleTimer();
+			timer.start();
 			if (runningI) inputRun(false);
 			if (runningO) outputRun(false);
 			if (ConfigManager.getCheckCapM() != 0)
 			{
-				try {Thread.sleep(1000 / ConfigManager.getCheckCapM());}
+				try
+				{
+					Thread.sleep(Math.max(0, 1000 / ConfigManager.getCheckCapM() - timer.stopTime())); // Accounts for lag in an effort to maintain consistent framerate.
+				}
 				catch (Exception e) {Logging.logException(e);}
 			}
+			else timer.stopTime();
 		}
 		else
 		{
