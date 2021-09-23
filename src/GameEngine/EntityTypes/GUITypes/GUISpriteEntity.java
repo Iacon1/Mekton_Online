@@ -23,6 +23,6 @@ public abstract class GUISpriteEntity extends SpriteEntity
 	@Override
 	public void render(ScreenCanvas canvas, Point2D camera) 
 	{
-		canvas.drawImageScaled(texturePath, pos, texturePos, textureSize);
+		canvas.drawImage(texturePath, pos, texturePos, textureSize);
 	}
 }

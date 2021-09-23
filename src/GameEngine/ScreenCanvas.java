@@ -27,8 +27,8 @@ public class ScreenCanvas extends UtilCanvas
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		this.g = g;
+		resetImage();
 		ModuleManager.getHighestOfType(GraphicsHandlerModule.class).drawWorld(this);
-		this.g = null;
+		renderImage(g);
 	}
 }

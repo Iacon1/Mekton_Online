@@ -261,6 +261,6 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	@Override
 	public void render(ScreenCanvas canvas, Point2D camera) 
 	{
-		canvas.drawImageScaled(texturePath, pos.subtract(camera), texturePos, textureSize);
+		canvas.drawImage(texturePath, pos.subtract(camera), texturePos, textureSize);
 	}
 }

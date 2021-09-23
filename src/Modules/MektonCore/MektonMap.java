@@ -240,7 +240,7 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	
 	private void drawZFog(ScreenCanvas canvas, int hexWidth, int hexHeight)
 	{
-		canvas.drawImageScaled(GraphicsManager.getImage(zFog), new Point2D(0, 0), new Point2D(0, 0), new Point2D(ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight()));
+		canvas.drawImage(GraphicsManager.getImage(zFog), new Point2D(0, 0), new Point2D(0, 0), new Point2D(ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight()));
 	}
 	private void drawHexes(ScreenCanvas canvas, Point2D camera, int k, int cameraZ, int hexWidth, int hexHeight)
 	{
@@ -253,7 +253,7 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 				
 				AxialHexCoord3D hexCoord = new AxialHexCoord3D(i, j, k);
 				MektonHex hex = getHex(hexCoord);
-				canvas.drawImageScaled(tileset, toPixel(hexCoord, camera), new Point2D(hex.texturePos.x * hexWidth, hex.texturePos.y * hexHeight), new Point2D(hexWidth, hexHeight));
+				canvas.drawImage(tileset, toPixel(hexCoord, camera), new Point2D(hex.texturePos.x * hexWidth, hex.texturePos.y * hexHeight), new Point2D(hexWidth, hexHeight));
 				canvas.drawText(hexCoord.q + ", " + hexCoord.r, GraphicsManager.getFont("MicrogrammaNormalFix.TTF"), Color.white, toPixel(hexCoord, camera), 16);
 			}
 	}
