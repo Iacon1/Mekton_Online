@@ -28,12 +28,14 @@ public class DummyPlayer extends MektonActor implements InputGetter, CommandRunn
 	public DummyPlayer()
 	{
 		super();
-		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight());
+		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
+		setBounds(HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight(), 0, -HexConfigManager.getHexHeight());
 	}
 	public DummyPlayer(String owner, MektonMap map)
 	{
 		super(owner, map);
-		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight());
+		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
+		setBounds(HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight(), 0, -HexConfigManager.getHexHeight());
 	}
 	
 	@Override

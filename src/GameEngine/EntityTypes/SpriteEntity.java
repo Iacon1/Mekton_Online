@@ -17,7 +17,9 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	protected String texturePath; // Image path
 
 	protected Point2D pos; // Position on screen
+	protected Point2D boundSize; // Size of hitbox
 	
+	protected Point2D spriteOff; // Texture offset
 	protected Point2D texturePos; // Offset on texture sheet
 	protected Point2D textureSize; // Width, height on texture sheet
 
@@ -39,9 +41,14 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 		super();
 		
 		pos = new Point2D(0, 0);
+		boundSize = new Point2D(0, 0);
+		
+		spriteOff = new Point2D(0, 0);
 		texturePos = new Point2D(0, 0);
 		textureSize = new Point2D(0, 0);
+
 		targetPos = new Point2D(-1, -1);
+		
 		animTimer = new SimpleTimer();
 	}
 	
@@ -52,36 +59,71 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 		super(owner);
 		
 		pos = new Point2D(0, 0);
+		boundSize = new Point2D(0, 0);
+		
+		spriteOff = new Point2D(0, 0);
 		texturePos = new Point2D(0, 0);
 		textureSize = new Point2D(0, 0);
+		
 		targetPos = new Point2D(-1, -1);
+		
 		animTimer = new SimpleTimer();
 	}
 
 	/** Sets the sprite.
-	 *  If any value is null then that value will not be update.
+	 *  If any value is null then that value will not be updated.
 	 *  Good for animations or changing specific offsets.
 	 *  
 	 *  @param texturePath Texture sheet to load
-	 *  
+	 *
 	 *  @param textureX    X coordinate of top-left corner of texture.
 	 *  @param textureY    Y coordinate of top-left corner of texture.
+	 *  
 	 *  @param width       Width of texture.
 	 *  @param height      Height of texture.
 	 */
 	public void setSprite(String texturePath, Integer textureX, Integer textureY, Integer width, Integer height) // If any input is null then don't change
 	{
 		if (texturePath != null) this.texturePath = texturePath;
+
 		if (textureX != null) texturePos.x = textureX;
 		if (textureY != null) texturePos.y = textureY;
+		
 		if (width != null) textureSize.x = width;
 		if (height != null) textureSize.y = height;
+	}
+	
+	/** Sets the hitbox and sprite offset relative to said hitbox.
+	 *  If any value is null then that value will not be updated.
+	 *  Good for animations or changing specific offsets.
+	 *  
+	 *  @param texturePath Texture sheet to load
+	 *  
+	 *  @param boundSizeX  Width of the hitbox.
+	 *  @param boundSizeY  Height of the hitbox.
+	 *  
+	 *  @param spriteOffX  X coordinate of the top-left corner of the sprite, relative to position.
+	 *  @param spriteOffY  X coordinate of the top-left corner of the sprite, relative to position.
+	 */
+	public void setBounds(Integer boundSizeX, Integer boundSizeY, Integer spriteOffX, Integer spriteOffY)
+	{
+		
+		if (boundSizeX != null) boundSize.x = boundSizeX;
+		if (boundSizeY != null) boundSize.y = boundSizeY;
+		
+		if (spriteOffX != null) spriteOff.x = spriteOffX;
+		if (spriteOffY != null) spriteOff.y = spriteOffY;
 	}
 	
 	public void setPos(Point2D pos)
 	{
 		this.pos = pos;
 	}
+	public void setPos(int x, int y)
+	{
+		setPos(new Point2D(x, y));
+	}
+	
 	public Point2D getPos()
 	{
 		return pos;
@@ -261,6 +303,6 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	@Override
 	public void render(ScreenCanvas canvas, Point2D camera) 
 	{
-		canvas.drawImage(texturePath, pos.subtract(camera), texturePos, textureSize);
+		canvas.drawImage(texturePath, pos.subtract(camera).add(spriteOff), texturePos, textureSize);
 	}
 }
