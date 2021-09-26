@@ -6,6 +6,7 @@ package Modules.TestModule;
 
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.MektonCore.MektonMap;
+import Modules.MektonCore.EntityTypes.Human;
 import Modules.MektonCore.EntityTypes.MapEntity;
 import Modules.MektonCore.EntityTypes.MektonActor;
 
@@ -23,7 +24,7 @@ import Modules.HexUtilities.HexDirection;
 
 import Utils.MiscUtils;
 
-public class DummyPlayer extends MektonActor implements InputGetter, CommandRunner
+public class DummyPlayer extends Human implements InputGetter, CommandRunner
 {	
 	public DummyPlayer()
 	{
@@ -152,7 +153,14 @@ public class DummyPlayer extends MektonActor implements InputGetter, CommandRunn
 	{
 		super.render(canvas, camera);
 		
-		if (isPossessee()) canvas.drawText("Action points: " + MiscUtils.floatPrecise(remainingActions(), 2), "MicrogrammaNormalFix.TTF", Color.red, new Point2D(0, 0), 50);
+		if (isPossessee())
+		{
+			String text =
+					"Action points: " + MiscUtils.floatPrecise(remainingActions(), 2) + "\n" +
+					statSummary();
+					
+			canvas.drawText(text, "MicrogrammaNormalFix.TTF", Color.red, new Point2D(0, 0), 50);
+		}
 	}
 	@Override
 	public void onPause()

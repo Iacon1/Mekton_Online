@@ -9,48 +9,50 @@ import java.util.HashMap;
 
 public class HumanStats
 {
-	// TODO some uneccessary?
-	/* Stats
-	 * Int - Intelligence
-	 * Edu - Education
-	 * Col - Cool
-	 * Ref - Reflexes
-	 * Att - Attractiveness
-	 * Emp - Empathy
-	 * Tec - Tech Ability
-	 * Luk - Luck
-	 * Mov - MA
-	 * Bod - Body
-	 * Psi - Psionics
-	 */
-	private HashMap<String, Integer> stats;
-	private void initStats()
+	public enum Stat
 	{
-		stats.put("int", 0);
-//		stats.put("edu", 0);
-//		stats.put("col", 0);
-		stats.put("ref", 0);
-//		stats.put("att", 0);
-//		stats.put("emp", 0);
-		stats.put("tec", 0);
-		stats.put("luk", 0);
-		stats.put("mov", 0);
-		stats.put("bod", 0);
-		stats.put("psi", 0);
+		intelligence,
+		education,
+		cool,
+		reflexes,
+		attractiveness,
+		empathy,
+		techAbility,
+		luck,
+		movementAbility,
+		body,
+		psionics
 	}
 	
-	/*
-	 * 
-	 */
+	private HashMap<Stat, Integer> stats;
+	
+	public HumanStats()
+	{
+		this.stats = new HashMap<Stat, Integer>();
+		initStats(0);
+	}
+	public void initStats(int baseline)
+	{
+		stats.put(Stat.intelligence, baseline);
+		stats.put(Stat.education, baseline);
+		stats.put(Stat.cool, baseline);
+		stats.put(Stat.reflexes, baseline);
+		stats.put(Stat.attractiveness, baseline);
+		stats.put(Stat.empathy, baseline);
+		stats.put(Stat.techAbility, baseline);
+		stats.put(Stat.luck, baseline);
+		stats.put(Stat.movementAbility, baseline);
+		stats.put(Stat.body, baseline);
+		stats.put(Stat.psionics, baseline);
+	}
 	
 	/** Returns the value of a stat, either at base or with modifiers.
 	 * 
 	 * @param stat Stat to change.
-	 * @param value Value to set to.
+	 * @param base Whether to check the base or overall (i. e. buffed or debuffed) value. 
 	 */
-	public int getStat(String stat, boolean base)
+	public int getStat(Stat stat, boolean base)
 	{
-		stat = stat.toLowerCase().substring(0, 3);
 		if (base) return stats.get(stat);
 		else return stats.get(stat); // TODO
 	}
@@ -60,18 +62,17 @@ public class HumanStats
 	 * @param stat Stat to change.
 	 * @param value Value to set to.
 	 */
-	public void setStat(String stat, int value)
+	public void setStat(Stat stat, int value)
 	{
-		stat = stat.toLowerCase().substring(0, 3);
 		if (stats.get(stat) != null) stats.put(stat, value);
 	}
 	
 	public int getStatTotal()
 	{
 		int sum = 0;
-		for (int i = 0; i < stats.values().size(); ++i)
+		for (int i = 0; i < Stat.values().length; ++i)
 		{
-			sum += ((Integer[]) stats.values().toArray())[i];
+			sum += getStat(Stat.values()[i], true);
 		}
 		return sum;
 	}

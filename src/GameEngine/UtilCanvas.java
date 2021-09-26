@@ -70,7 +70,9 @@ public abstract class UtilCanvas extends JPanel
 		
 		g.setFont(font);
 		g.setColor(color);
-		g.drawString(text, sx, sy);
+		
+		String[] lines = text.split("\n");
+		for (int i = 0; i < lines.length; ++i) g.drawString(lines[i], sx, sy + i * sizePixels + 1);
 		g.setColor(oColor); // reset color to before we used one for the text
 		g.dispose();
 	}
