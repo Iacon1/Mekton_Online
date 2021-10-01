@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 
 import GameEngine.GameInfo;
+import GameEngine.ImageSprite;
 import GameEngine.Point2D;
 import GameEngine.ScreenCanvas;
 import GameEngine.EntityTypes.CommandRunner;
@@ -29,13 +30,15 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 	public DummyPlayer()
 	{
 		super();
-		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
+		setSprite(new ImageSprite("Resources/Server Packs/Default/DummyPlayer.PNG"));
+		setSpriteParams(0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
 		setBounds(HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight(), 0, -HexConfigManager.getHexHeight());
 	}
 	public DummyPlayer(String owner, MektonMap map)
 	{
 		super(owner, map);
-		setSprite("Resources/Server Packs/Default/DummyPlayer.PNG", 0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
+		setSprite(new ImageSprite("Resources/Server Packs/Default/DummyPlayer.PNG"));
+		setSpriteParams(0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
 		setBounds(HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight(), 0, -HexConfigManager.getHexHeight());
 	}
 	

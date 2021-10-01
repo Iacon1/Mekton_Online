@@ -5,6 +5,7 @@
 package GameEngine.EntityTypes;
 
 import GameEngine.Animation;
+import GameEngine.Sprite;
 import GameEngine.Client.GameFrame;
 import GameEngine.Point2D;
 import GameEngine.ScreenCanvas;
@@ -14,14 +15,12 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 {
 	// Basic sprite variables
 	
-	protected String texturePath; // Image path
+	protected Sprite sprite;
 
 	protected Point2D pos; // Position on screen
 	protected Point2D boundSize; // Size of hitbox
 	
 	protected Point2D spriteOff; // Texture offset
-	protected Point2D texturePos; // Offset on texture sheet
-	protected Point2D textureSize; // Width, height on texture sheet
 
 	// Kinetic variables
 	
@@ -44,8 +43,6 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 		boundSize = new Point2D(0, 0);
 		
 		spriteOff = new Point2D(0, 0);
-		texturePos = new Point2D(0, 0);
-		textureSize = new Point2D(0, 0);
 
 		targetPos = new Point2D(-1, -1);
 		
@@ -62,35 +59,24 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 		boundSize = new Point2D(0, 0);
 		
 		spriteOff = new Point2D(0, 0);
-		texturePos = new Point2D(0, 0);
-		textureSize = new Point2D(0, 0);
 		
 		targetPos = new Point2D(-1, -1);
 		
 		animTimer = new SimpleTimer();
 	}
 
-	/** Sets the sprite.
-	 *  If any value is null then that value will not be updated.
-	 *  Good for animations or changing specific offsets.
+	/** Sets the sprite used for this object.
 	 *  
-	 *  @param texturePath Texture sheet to load
-	 *
-	 *  @param textureX    X coordinate of top-left corner of texture.
-	 *  @param textureY    Y coordinate of top-left corner of texture.
-	 *  
-	 *  @param width       Width of texture.
-	 *  @param height      Height of texture.
+	 *  @param sprite Sprite to use.
 	 */
-	public void setSprite(String texturePath, Integer textureX, Integer textureY, Integer width, Integer height) // If any input is null then don't change
+	public void setSprite(Sprite sprite)
 	{
-		if (texturePath != null) this.texturePath = texturePath;
-
-		if (textureX != null) texturePos.x = textureX;
-		if (textureY != null) texturePos.y = textureY;
-		
-		if (width != null) textureSize.x = width;
-		if (height != null) textureSize.y = height;
+		this.sprite = sprite;
+	}
+	
+	public void setSpriteParams(Integer textureX, Integer textureY, Integer width, Integer height)
+	{
+		sprite.setBasicParams(textureX, textureY, width, height);
 	}
 	
 	/** Sets the hitbox and sprite offset relative to said hitbox.
@@ -208,7 +194,7 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	
 	private void setFrame(int offset) // In height multiples
 	{
-		setSprite(null, null, textureSize.y * offset, null, null);
+		setSpriteParams(null, sprite.getSize().y * offset, null, null);
 	}
 	public void startAnimation(Animation animation)
 	{
@@ -258,20 +244,20 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 		switch (point)
 		{
 		case northWest: break;
-		case north: offset.x = textureSize.x / 2; break;
-		case northEast: offset.x = textureSize.x - 1; break;
+		case north: offset.x = sprite.getSize().x / 2; break;
+		case northEast: offset.x = sprite.getSize().x - 1; break;
 		
-		case west: offset.y = textureSize.y / 2; break;
-		case center: offset.x = textureSize.x / 2;
-			offset.y = textureSize.y / 2; break;
-		case east: offset.x = textureSize.x - 1; 
-			offset.y = textureSize.y / 2; break;
+		case west: offset.y = sprite.getSize().y / 2; break;
+		case center: offset.x = sprite.getSize().x / 2;
+			offset.y = sprite.getSize().y / 2; break;
+		case east: offset.x = sprite.getSize().x - 1; 
+			offset.y = sprite.getSize().y / 2; break;
 			
-		case southWest: offset.y = textureSize.y - 1; break;
-		case south: offset.x = textureSize.x / 2; 
-			offset.y = textureSize.y - 1; break;
-		case southEast: offset.x = textureSize.x - 1; 
-			offset.y = textureSize.y - 1; break;
+		case southWest: offset.y = sprite.getSize().y - 1; break;
+		case south: offset.x = sprite.getSize().x / 2; 
+			offset.y = sprite.getSize().y - 1; break;
+		case southEast: offset.x = sprite.getSize().x - 1; 
+			offset.y = sprite.getSize().y - 1; break;
 			
 		default: return null;
 		}
@@ -303,6 +289,6 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	@Override
 	public void render(ScreenCanvas canvas, Point2D camera) 
 	{
-		canvas.drawImage(texturePath, pos.subtract(camera).add(spriteOff), texturePos, textureSize);
+		sprite.render(canvas, pos.subtract(camera).add(spriteOff));
 	}
 }

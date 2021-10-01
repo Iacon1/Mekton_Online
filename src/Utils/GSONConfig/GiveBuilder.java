@@ -6,6 +6,7 @@ package Utils.GSONConfig;
 
 import com.google.gson.GsonBuilder;
 
+import GameEngine.Sprite;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.GSONModule;
 import GameEngine.EntityTypes.GameEntity;
@@ -19,7 +20,7 @@ public final class GiveBuilder
 
 		builder.registerTypeAdapterFactory(new AbsFactory<GameEntity>(GameEntity.class));
 		builder.registerTypeAdapterFactory(new AbsFactory<Account>(Account.class));
-		
+		builder.registerTypeAdapterFactory(new AbsFactory<Sprite>(Sprite.class));
 		builder.registerTypeAdapterFactory(new TransSerializableAdapter.Factory());
 		
 		GSONModule module = ModuleManager.getHighestOfType(GSONModule.class);

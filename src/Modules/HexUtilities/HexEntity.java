@@ -108,7 +108,7 @@ public abstract class HexEntity<T extends HexCoord> extends SpriteEntity // T is
 		default: return;
 		}
 		
-		texturePos.x = textureSize.x * mult;
+		setSpriteParams(sprite.getSize().x * mult, null, null, null);
 		facing = dir;
 	}
 	
