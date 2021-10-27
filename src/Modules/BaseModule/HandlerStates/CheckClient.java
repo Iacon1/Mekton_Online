@@ -4,24 +4,25 @@
 
 package Modules.BaseModule.HandlerStates;
 
+import GameEngine.Net.StateFactory;
+import GameEngine.Net.ThreadState;
 import GameEngine.PacketTypes.ClientInfoPacket;
 import GameEngine.PacketTypes.ServerInfoPacket;
 import Modules.BaseModule.ClientHandlerThread;
-import Net.StateFactory;
-import Net.ThreadState;
+import Utils.JSONManager;
 import Utils.Logging;
 import Utils.MiscUtils;
 
 public class CheckClient implements ThreadState<ClientHandlerThread>
 {
-	boolean sent_;
-	private StateFactory factory_;
+	boolean sent;
+	private StateFactory factory;
 	
 	public CheckClient(StateFactory factory)
 	{
-		factory_ = factory;
+		this.factory = factory;
 		
-		sent_ = false;
+		sent = false;
 	}
 	
 	@Override
@@ -29,10 +30,9 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 
 	public void processInput(String input, ClientHandlerThread parentThread, boolean mono)
 	{
-		if (sent_)
+		if (sent)
 		{
-			ClientInfoPacket packet = new ClientInfoPacket();
-			packet = (ClientInfoPacket) packet.fromJSON(input);
+			ClientInfoPacket packet = JSONManager.deserializeJSON(input, ClientInfoPacket.class);
 			if (packet == null || !packet.version.equals(MiscUtils.getVersion())) // We don't actually care about this client anymore
 			{
 				if (packet == null) Logging.logError("Client " + parentThread.getSocket().getInetAddress() + " tried to connect<br> but failed to send a info packet.");
@@ -42,14 +42,14 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 			else
 			{
 				Logging.logNotice("Client " + parentThread.getSocket().getInetAddress() + " has connected.");
-				parentThread.queueStateChange(getFactory().getState(Login.class.getCanonicalName())); // They're good, let's login	
+				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class))); // They're good, let's login	
 			}
 		}
 	}
 
 	public String processOutput(ClientHandlerThread parentThread, boolean mono)
 	{
-		if (!sent_)
+		if (!sent)
 		{
 			ServerInfoPacket packet = new ServerInfoPacket();
 			packet.serverName = parentThread.getParent().getName();
@@ -62,10 +62,10 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 				parentThread.close(); // We don't need this connection any more
 			}
 			else packet.note = ServerInfoPacket.Note.good;
-			sent_ = true;
+			sent = true;
 			
 			Logging.logNotice("Sent info to " + parentThread.getSocket().getInetAddress());
-			return packet.toJSON();
+			return JSONManager.serializeJSON(packet);
 		}
 		else return null; // We have nothing to say to them
 	}
@@ -83,6 +83,6 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 	@Override
 	public StateFactory getFactory()
 	{
-		return factory_;
+		return factory;
 	}
 }

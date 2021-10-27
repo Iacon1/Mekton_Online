@@ -4,9 +4,10 @@
 
 package Modules.BaseModule.ClientStates;
 
-import Net.ThreadState;
+import Utils.MiscUtils;
 import Client.GameClientThread;
-import Net.StateFactory;
+import GameEngine.Net.StateFactory;
+import GameEngine.Net.ThreadState;
 
 public class ClientStateFactory implements StateFactory
 {
@@ -25,12 +26,12 @@ public class ClientStateFactory implements StateFactory
 	}
 
 	@Override
-	public ThreadState<GameClientThread> getState(String canonicalName)
+	public ThreadState<GameClientThread> getState(String className)
 	{
-		if (canonicalName.equals(CheckServer.class.getCanonicalName())) return new CheckServer(this);
-		else if (canonicalName.equals(BadServer.class.getCanonicalName())) return new BadServer(this);
-		else if (canonicalName.equals(Login.class.getCanonicalName())) return new Login(this);
-		else if (canonicalName.equals(MainScreen.class.getCanonicalName())) return new MainScreen(this);
+		if (className.equals(MiscUtils.ClassToString(CheckServer.class))) return new CheckServer(this);
+		else if (className.equals(MiscUtils.ClassToString(BadServer.class))) return new BadServer(this);
+		else if (className.equals(MiscUtils.ClassToString(Login.class))) return new Login(this);
+		else if (className.equals(MiscUtils.ClassToString(MainScreen.class))) return new MainScreen(this);
 		else return new CheckServer(this);
 	}
 

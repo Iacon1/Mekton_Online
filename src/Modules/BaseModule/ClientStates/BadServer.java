@@ -6,17 +6,17 @@ package Modules.BaseModule.ClientStates;
 
 import Client.ConnectFailDialog;
 import Client.GameClientThread;
-import Net.StateFactory;
-import Net.ThreadState;
+import GameEngine.Net.StateFactory;
+import GameEngine.Net.ThreadState;
 import Utils.MiscUtils;
 
 public class BadServer implements ThreadState<GameClientThread>
 {
-	private StateFactory factory_;
+	private StateFactory factory;
 	
 	public BadServer(StateFactory factory)
 	{
-		factory_ = factory;
+		this.factory = factory;
 	}
 	
 	@Override
@@ -47,7 +47,7 @@ public class BadServer implements ThreadState<GameClientThread>
 	@Override
 	public StateFactory getFactory()
 	{
-		return factory_;
+		return factory;
 	}
 
 }

@@ -4,12 +4,14 @@
 
 package Modules.BaseModule;
 
-import Utils.*;
-import GameEngine.GameEntity;
 import GameEngine.Configurables.ModuleManager;
-import Net.StateFactory;
-import Net.StatefulConnectionPairThread;
-import Server.Account;
+import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
+import GameEngine.Configurables.ModuleTypes.StateGiverModule;
+import GameEngine.EntityTypes.GameEntity;
+import GameEngine.Net.StateFactory;
+import GameEngine.Net.StatefulConnectionPairThread;
+import GameEngine.Server.Account;
+import Utils.Logging;
 
 public class ClientHandlerThread extends StatefulConnectionPairThread
 {
@@ -23,31 +25,36 @@ public class ClientHandlerThread extends StatefulConnectionPairThread
 	}
 	protected GameEntity getUserEntity()
 	{
-		return GameEntity.getEntity(parent_.gameWorld_, parent_.getAccount(username_).possessee);
+		return GameEntity.getEntity(parent_.getAccount(username_).possessee);
 	}
 	
-	@SuppressWarnings("rawtypes")
 	protected static volatile BaseServer parent_;
 	
 	public ClientHandlerThread()
 	{
 		super();
-		stateFactory_ = ModuleManager.handlerFactory();
+		stateFactory_ = ModuleManager.getHighestOfType(StateGiverModule.class).handlerFactory();
 		initState(stateFactory_.getState(0));
 	}
-	@SuppressWarnings("rawtypes")
 	public void setParent(BaseServer parent)
 	{
 		parent_ = parent;
 	}
 	
 	@Override
-	public void onClose()
+	public void runFunc()
 	{
-		Logging.logNotice("Client " + socket_.getInetAddress() + " has disconnected.");
+		parent_.update();
+		super.runFunc();
 	}
 	
-	@SuppressWarnings("rawtypes")
+	@Override
+	public void onClose()
+	{
+		Logging.logNotice("Client " + socket.getInetAddress() + " has disconnected.");
+		ModuleManager.getHighestOfType(PlayerHandlerModule.class).sleepPlayer(getAccount());
+	}
+	
 	public BaseServer getParent()
 	{
 		return parent_;

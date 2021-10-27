@@ -1,22 +1,23 @@
 package Modules.BaseModule.ClientStates;
 
 import Client.GameClientThread;
+import GameEngine.Net.StateFactory;
+import GameEngine.Net.ThreadState;
 import GameEngine.PacketTypes.ClientInfoPacket;
 import GameEngine.PacketTypes.ServerInfoPacket;
-import Net.StateFactory;
-import Net.ThreadState;
+import Utils.JSONManager;
 import Utils.MiscUtils;
 
 public class CheckServer implements ThreadState<GameClientThread>
 {
-	private StateFactory factory_;
-	private volatile int result_; // 0 - Waiting for result; 1 - Login; 2 - Bad Server; 3 - Done
+	private StateFactory factory;
+	private volatile int result; // 0 - Waiting for result; 1 - Login; 2 - Bad Server; 3 - Done
 	
 	public CheckServer(StateFactory factory)
 	{
-		factory_ = factory;
+		this.factory = factory;
 		
-		result_ = 0;
+		result = 0;
 	}
 	
 	@Override
@@ -25,88 +26,104 @@ public class CheckServer implements ThreadState<GameClientThread>
 	@Override
 	public void processInputTrio(String input, GameClientThread parentThread)
 	{
-		ServerInfoPacket packet = new ServerInfoPacket();
-		packet = (ServerInfoPacket) packet.fromJSON(input);
+		ServerInfoPacket packet = JSONManager.deserializeJSON(input, ServerInfoPacket.class);
 		
-		parentThread.setInfo(packet);
 		
-		if (parentThread.getSocket() == null || packet == null || !packet.version.equals(MiscUtils.getVersion()))
+		if (packet == null)
 		{
-			result_ = 2;
-			while (result_ != 3);
-			parentThread.queueStateChange(getFactory().getState(BadServer.class.getCanonicalName()));
+			result = 2;
+			while (result != 3);
+			parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(BadServer.class)));
 		}
 		else
 		{
-			result_ = 1;
-			while (result_ != 3);
-			parentThread.queueStateChange(getFactory().getState(Login.class.getCanonicalName()));
-		}
+			parentThread.setInfo(packet);
+			
+			if (parentThread.getSocket() == null || !packet.version.equals(MiscUtils.getVersion()))
+			{
+				result = 2;
+				while (result != 3);
+				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(BadServer.class)));
+			}
+			else
+			{
+				result = 1;
+				while (result != 3);
+				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class)));
+			}
+		}		
 	}	
 	@Override
 	public String processOutputTrio(GameClientThread parentThread)
 	{
-		while (result_ == 0);
+		while (result == 0);
 		
-		if (result_ == 1) // We decided to go forward!
+		if (result == 1) // We decided to go forward!
 		{
-			result_ = 3;
+			result = 3;
 			ClientInfoPacket packet = new ClientInfoPacket();
 			packet.version = MiscUtils.getVersion();
-			return packet.toJSON();
+			return JSONManager.serializeJSON(packet);
 		}
-		else if (result_ == 2)
+		else if (result == 2)
 		{
-			result_ = 3;
+			result = 3;
 			return null; // We have nothing to say to them
 		}
-		else if (result_ == 3) return null;
+		else if (result == 3) return null;
 		else return null; // ???
 	}
 	
 	@Override
 	public void processInputMono(String input, GameClientThread parentThread)
 	{
-		ServerInfoPacket packet = new ServerInfoPacket();
-		packet = (ServerInfoPacket) packet.fromJSON(input);
+		ServerInfoPacket packet = JSONManager.deserializeJSON(input, ServerInfoPacket.class);
 		
-		parentThread.setInfo(packet);
-		
-		if (parentThread.getSocket() == null || packet == null || !packet.version.equals(MiscUtils.getVersion()))
+		if (packet == null)
 		{
-			result_ = 2;
-			parentThread.queueStateChange(getFactory().getState(BadServer.class.getCanonicalName()));
+			result = 2;
+			parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(BadServer.class)));
 		}
 		else
 		{
-			result_ = 1;
-			parentThread.queueStateChange(getFactory().getState(Login.class.getCanonicalName()));
+			parentThread.setInfo(packet);
+			
+			if (parentThread.getSocket() == null || !packet.version.equals(MiscUtils.getVersion()))
+			{
+				result = 2;
+				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(BadServer.class)));
+			}
+			else
+			{
+				result = 1;
+				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class)));
+			}
 		}
 	}
 	@Override
 	public String processOutputMono(GameClientThread parentThread)
 	{
-		if (result_ == 0) return null;
+		if (result == 0) return null;
 		
-		if (result_ == 1) // We decided to go forward!
+		if (result == 1) // We decided to go forward!
 		{
-			result_ = 3;
+			result = 3;
 			ClientInfoPacket packet = new ClientInfoPacket();
 			packet.version = MiscUtils.getVersion();
-			return packet.toJSON();
+			return JSONManager.serializeJSON(packet);
 		}
-		else if (result_ == 2)
+		else if (result == 2)
 		{
-			result_ = 3;
+			result = 3;
 			return null; // We have nothing to say to them
 		}
-		else if (result_ == 3) return null;
+		else if (result == 3) return null;
 		else return null; // ???
 	}
 	
 	@Override
 	public StateFactory getFactory()
 	{
-		return factory_;
+		return factory;
 	}
 }

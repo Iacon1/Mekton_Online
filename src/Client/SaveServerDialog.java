@@ -19,6 +19,9 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 
+/** The dialog for when you want to save a server.
+ * 
+ */
 @SuppressWarnings("serial")
 public class SaveServerDialog extends JDialog
 {
@@ -27,15 +30,18 @@ public class SaveServerDialog extends JDialog
 	private final JLabel warningLabel = new JLabel("<html>Warning: This will overwrite any pre-existing server<br>with the same name.");
 	private final JTextField nameBox = new JTextField();
 	private final JLabel nameLabel = new JLabel("Server name:");
-	private GetServerFrame caller_;
+	private GetServerFrame caller;
 	
-	// Run this
+	/** Runs the dialog.
+	 *  
+	 *  @param caller The frame that called this.
+	 */
 	public static void main(GetServerFrame caller)
 	{
 		try
 		{
 			SaveServerDialog dialog = new SaveServerDialog();
-			dialog.caller_ = caller;
+			dialog.caller = caller;
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e)
@@ -49,13 +55,15 @@ public class SaveServerDialog extends JDialog
 		String serverName = nameBox.getText();
 		if (serverName != null)
 		{
-			caller_.saveServer(serverName);
+			caller.saveServer(serverName);
 			this.setVisible(false);
 			this.dispose();
 		}
 	}
 	
-	// Creates the dialog
+	/** Constructor.
+	 *  
+	 */
 	public SaveServerDialog()
 	{
 		setIconImages(MiscUtils.getIcons(true));

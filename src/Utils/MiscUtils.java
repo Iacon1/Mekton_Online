@@ -9,15 +9,18 @@ import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
-
+import java.math.RoundingMode;
 
 public final class MiscUtils
 {
+	public static float floatTolerance = 0.015625f; // = 2^-6, which can be handled precisely by floats
+	
 	private static <C> void addItemsToFit(ArrayList<C> array, int newSize)
 	{
 		while (array.size() < newSize)
@@ -134,11 +137,57 @@ public final class MiscUtils
 		return string;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static <T> String arrayToString(ArrayList<T> array, String sep)
 	{
 		return arrayToString((T[]) array.toArray(), sep);
 	}
 	
+	public static <T> String ClassToString(Class<T> sClass)
+	{
+		return sClass.getName();
+	}
 	
+	public static int multiMax(int x, int... X)
+	{
+		int y;
+		if (X.length > 1)
+		{
+			int[] sX = Arrays.copyOfRange(X, 1, X.length);
+			y = multiMax(X[0], sX);
+		}
+		else y = X[0];
+		
+		return Math.max(x, y);
+	}
+	
+	/** I forgot what lerp does
+	 * 
+	 * @ param a
+	 * @ param b
+	 * @ param t
+	 */
+	public static float lerp(float a, float b, float t)
+	{
+		return a + (b - a) * t;
+	}
+	
+	public static int forceMult(float a, float b)
+	{
+		return (int) (Math.floor(a / b) * b);
+	}
+	public static int forceMult(double a, double b)
+	{
+		return (int) (Math.floor(a / b) * b);
+	}
+	
+	public static String floatPrecise(float value, int digits)
+	{
+		if (digits > 0)
+		{
+			DecimalFormat format = new DecimalFormat("#." + "#".repeat(digits));
+			format.setRoundingMode(RoundingMode.HALF_UP);
+			return format.format(value);
+		}
+		else return Integer.toString((int) Math.floor(value));
+	}
 }

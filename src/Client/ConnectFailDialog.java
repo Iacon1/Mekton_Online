@@ -19,6 +19,9 @@ import javax.swing.SpringLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+/** The dialog that shows when the client failed to connect.
+*
+*/
 @SuppressWarnings("serial")
 public class ConnectFailDialog extends JDialog
 {
@@ -27,7 +30,10 @@ public class ConnectFailDialog extends JDialog
 	private final JLabel failureLabel = new JLabel("Could not connect to server!");
 	private final JLabel errorLabel = new JLabel("New label");
 	
-	// Run this
+	/** Shows the dialog.
+	 *
+	 *  @param reason Reason it failed to connect.
+	 */
 	public static void main(String reason)
 	{
 		try
@@ -47,7 +53,9 @@ public class ConnectFailDialog extends JDialog
 		GetServerFrame.main(null);
 	}
 	
-	// Creates the dialog
+	/** Constructor.
+	 * 
+	 */
 	public ConnectFailDialog()
 	{
 		setIconImages(MiscUtils.getIcons(true));

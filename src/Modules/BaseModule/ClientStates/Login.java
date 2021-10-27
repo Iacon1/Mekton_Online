@@ -5,20 +5,22 @@
 package Modules.BaseModule.ClientStates;
 
 import Client.GameClientThread;
-import GameEngine.PacketTypes.LoginFeedbackPacket;
-import GameEngine.PacketTypes.LoginPacket;
+import GameEngine.Net.StateFactory;
+import GameEngine.Net.ThreadState;
 import Modules.BaseModule.ClientFrames.LoginDialog;
-import Net.StateFactory;
-import Net.ThreadState;
+import Modules.BaseModule.PacketTypes.LoginFeedbackPacket;
+import Modules.BaseModule.PacketTypes.LoginPacket;
+import Utils.JSONManager;
+import Utils.MiscUtils;
 
 public class Login implements ThreadState<GameClientThread>
 {
-	private StateFactory factory_;
-	private boolean successful_;
+	private StateFactory factory;
+	private boolean successful;
 	
 	public Login(StateFactory factory)
 	{
-		factory_ = factory;
+		this.factory = factory;
 	}
 	
 	@Override
@@ -29,15 +31,15 @@ public class Login implements ThreadState<GameClientThread>
 
 	public void processInput(String input, GameClientThread parentThread, boolean mono)
 	{
-		LoginFeedbackPacket packet = new LoginFeedbackPacket();
-		packet = (LoginFeedbackPacket) packet.fromJSON(input);
-		successful_ = packet.successful;
-		if (successful_)
+		LoginFeedbackPacket packet = JSONManager.deserializeJSON(input, LoginFeedbackPacket.class);
+		
+		successful = packet.successful;
+		if (successful)
 		{
 			LoginDialog dialog = (LoginDialog) parentThread.getContainer("login");
 			dialog.setVisible(false);
 			dialog.dispose();
-			parentThread.queueStateChange(getFactory().getState(MainScreen.class.getCanonicalName()));
+			parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(MainScreen.class)));
 		}
 		else
 		{
@@ -49,11 +51,11 @@ public class Login implements ThreadState<GameClientThread>
 	public String processOutput(GameClientThread parentThread, boolean mono)
 	{
 		LoginDialog dialog = (LoginDialog) parentThread.getContainer("login");
-		if (dialog.isVisible() == false && !successful_)
+		if (dialog.isVisible() == false && !successful)
 			parentThread.close();
 		LoginPacket packet = dialog.getPacket();
 		if (packet != null)
-			return packet.toJSON();
+			return JSONManager.serializeJSON(packet);
 		else return null;
 	}
 
@@ -70,7 +72,7 @@ public class Login implements ThreadState<GameClientThread>
 	@Override
 	public StateFactory getFactory()
 	{
-		return factory_;
+		return factory;
 	}
 
 }

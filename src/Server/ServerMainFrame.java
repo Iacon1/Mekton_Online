@@ -4,6 +4,7 @@
 
 package Server;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
@@ -11,8 +12,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import GameEngine.GameEntity;
+import GameEngine.GameInfo;
 import GameEngine.Configurables.ConfigManager;
+import GameEngine.EntityTypes.GameEntity;
+import GameEngine.Server.Account;
+import GameEngine.Server.GameServer;
 import Utils.Logging;
 import Utils.MiscUtils;
 
@@ -29,12 +33,12 @@ import java.util.Timer;
 import javax.swing.SpringLayout;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.GridLayout;
 
 @SuppressWarnings("serial")
 public class ServerMainFrame extends JFrame
 {	
-	@SuppressWarnings("rawtypes")
-	private static GameServer server_;
+	private static GameServer server;
 	private DefaultTreeModel model;
 	private final Timer timer = new Timer();
 	private JPanel contentPane;
@@ -53,16 +57,15 @@ public class ServerMainFrame extends JFrame
 	private final JSplitPane splitPane = new JSplitPane();
 	private final JTree objectTree = new JTree();
 	private final JPanel playersPanel = new JPanel();
-	private final JLabel playersLabel = new JLabel("New label");
 	
 	private class InstanceNode extends DefaultMutableTreeNode
 	{
-		private GameEntity instance_;
+		private GameEntity instance;
 		
 		public InstanceNode(GameEntity instance)
 		{
 			super(instance.getName());
-			instance_ = instance;
+			this.instance = instance;
 		}	
 	}
 	
@@ -108,11 +111,11 @@ public class ServerMainFrame extends JFrame
 				model.nodesWereRemoved(rootNode, removedIndices, removedObjects);
 				//i--; // Really evil, gets around the index shifting
 			}
-			else if (node != null && instance != null && instance == node.instance_) // We're on the same page here
+			else if (node != null && instance != null && instance == node.instance) // We're on the same page here
 				updateRecursively(instance, node);
 			else if (node != null && instance != null) // Swap out old node for a new one
 			{
-				node.instance_ = instance;
+				node.instance = instance;
 				updateRecursively(instance, node);
 				model.nodeChanged(node);
 			}
@@ -121,12 +124,12 @@ public class ServerMainFrame extends JFrame
 	private void updateObjectsTree() // Updates objectTree
 	{
 		DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) model.getRoot();
-		for (int i = 0; i < Math.max(rootNode.getChildCount(), server_.gameWorld_.getRootEntities().size()); ++i)
+		for (int i = 0; i < Math.max(rootNode.getChildCount(), GameInfo.getWorld().getRootEntities().size()); ++i)
 		{
 			GameEntity instance;
 			InstanceNode node;
 			
-			try {instance = server_.gameWorld_.getRootEntities().get(i);}
+			try {instance = GameInfo.getWorld().getRootEntities().get(i);}
 			catch (Exception e) {instance = null;}
 			try {node = (InstanceNode) rootNode.getChildAt(i);}
 			catch (Exception e) {node = null;}
@@ -147,29 +150,33 @@ public class ServerMainFrame extends JFrame
 				model.nodesWereRemoved(rootNode, removedIndices, removedObjects);
 				//i--; // Really evil, gets around the index shifting
 			}
-			else if (node != null && instance != null && instance == node.instance_) // We're on the same page here
+			else if (node != null && instance != null && instance == node.instance) // We're on the same page here
 				updateRecursively(instance, node);
 			else if (node != null && instance != null) // Swap out old node for a new one
 			{
-				node.instance_ = instance;
+				node.instance = instance;
 				updateRecursively(instance, node);
 				model.nodeChanged(node);
 			}
 		}
 	}
-	@SuppressWarnings("unchecked")
 	private void updatePlayersList()
 	{
-		String text = "<html>";
-		ArrayList<Account> accounts = server_.getAccounts();
+		ArrayList<Account> accounts = server.getAccounts();
 		
+		playersPanel.removeAll();
+		
+		boolean color = false;
 		for (int i = 0; i < accounts.size(); ++i)
 		{
-			text = text + accounts.get(i).username + "<br><br>";
+			playersPanel.add(accounts.get(i).serverPanel());
+			if (color) playersPanel.setBackground(Color.LIGHT_GRAY);
+			else playersPanel.setBackground(Color.GRAY);
 		}
 		
-		playersLabel.setText(text);
+		
 	}
+	
 	private class UpdateTask extends TimerTask // Updates the display
 	{
 		public void run() // Updates the display
@@ -180,10 +187,9 @@ public class ServerMainFrame extends JFrame
 		}
 	}
 	
-	@SuppressWarnings("rawtypes")
 	public static void main(GameServer server)
 	{
-		server_ = server;
+		ServerMainFrame.server = server;
 		EventQueue.invokeLater(new Runnable()
 		{
 			public void run()
@@ -198,10 +204,9 @@ public class ServerMainFrame extends JFrame
 		});
 	}
 
-	@SuppressWarnings("rawtypes")
 	public ServerMainFrame(GameServer server)
 	{
-		if (server != null) server_ = server;
+		if (server != null) ServerMainFrame.server = server;
 		setTitle(MiscUtils.getProgramName() + " Server: Main Window");
 
 		setResizable(false);
@@ -253,12 +258,7 @@ public class ServerMainFrame extends JFrame
 		splitPane.setLeftComponent(objectTree);
 		
 		tabbedPane.addTab("Players", null, playersPanel, null);
-		SpringLayout sl_playersPanel = new SpringLayout();
-		sl_playersPanel.putConstraint(SpringLayout.NORTH, playersLabel, 10, SpringLayout.NORTH, playersPanel);
-		sl_playersPanel.putConstraint(SpringLayout.WEST, playersLabel, 10, SpringLayout.WEST, playersPanel);
-		playersPanel.setLayout(sl_playersPanel);
-		
-		playersPanel.add(playersLabel);
+		playersPanel.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		tabbedPane.addTab("Overview", null, overviewPanel, null);
 		SpringLayout sl_overviewPanel = new SpringLayout();

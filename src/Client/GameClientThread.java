@@ -7,70 +7,83 @@ package Client;
 import java.awt.Container;
 import java.util.HashMap;
 
-import GameEngine.GameWorld;
 import GameEngine.Configurables.ModuleManager;
+import GameEngine.Configurables.ModuleTypes.StateGiverModule;
+import GameEngine.Net.StateFactory;
+import GameEngine.Net.StatefulConnectionPairThread;
 import GameEngine.PacketTypes.ServerInfoPacket;
-import Net.StateFactory;
-import Net.StatefulConnectionPairThread;
 
+/** Thread that the client uses to communicate with the server and run the game.
+ * 
+ */
 public class GameClientThread extends StatefulConnectionPairThread
 {
-	private StateFactory stateFactory_; // Where we get our states
+	private StateFactory stateFactory; // Where we get our states
 	
-	private ServerInfoPacket serverInfo_; // The server info we received
+	private ServerInfoPacket serverInfo; // The server info we received
 	
-	private HashMap<String, Container> containers_; // All currently-open UI
-	
-//	private GameWorld gameWorld_;
-	
+	private HashMap<String, Container> containers; // All currently-open UI
+
+	/** Constructor
+	 * 
+	 */
 	public GameClientThread()
 	{
 		super();
-		stateFactory_ = ModuleManager.clientFactory();
-		containers_ = new HashMap<String, Container>();
-		initState(stateFactory_.getState(0));
+		stateFactory = ModuleManager.getHighestOfType(StateGiverModule.class).clientFactory();
+		containers = new HashMap<String, Container>();
+		initState(stateFactory.getState(0));
 	}
 	
 	@Override
 	public void onClose()
 	{
-		if (containers_ != null) // Close all containers
+		if (containers != null) // Close all containers
 		{
-			for (String name : containers_.keySet())
+			for (String name : containers.keySet())
 			{
-				containers_.get(name).setVisible(false);
-				containers_.get(name).setEnabled(false);
+				containers.get(name).setVisible(false);
+				containers.get(name).setEnabled(false);
 			}
 		}
 	}
 	
+	/** Stores a container.
+	 * 
+	 *  @param name Name to store the container under.
+	 *  @param container Container to store.
+	 */
 	public void setContainer(String name, Container container)
 	{
-		containers_.put(name, container);
+		containers.put(name, container);
 	}
 	
+	/** Gets a stored container if possible, returning null otherwise.
+	 * 
+	 *  @param name Name to search for.
+	 * 
+	 *  @return Either the container listed as name or null if no such container exists.
+	 */
 	public Container getContainer(String name)
 	{
-		return containers_.get(name);
+		return containers.get(name);
 	}
 
+	/** Stores the server's info packet.
+	 * 
+	 *  @param serverInfo the received packet.
+	 */
 	public void setInfo(ServerInfoPacket serverInfo)
 	{
-		serverInfo_ = serverInfo;
+		this.serverInfo = serverInfo;
 	}
+	/** Gets the stored info packet.
+	 * 
+	 *  @return The stored packet, or null if no packet is stored.
+	 */
 	public ServerInfoPacket getInfo()
 	{
-		return serverInfo_;
+		return serverInfo;
 	}
-	
-/*	public void setWorld(GameWorld world)
-	{
-		gameWorld_ = world;
-	}
-	public GameWorld getWorld()
-	{
-		return gameWorld_;
-	}
-*/
 }
 

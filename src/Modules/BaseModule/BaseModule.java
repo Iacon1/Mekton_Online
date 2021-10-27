@@ -4,98 +4,26 @@
 
 package Modules.BaseModule;
 
-import GameEngine.GameCanvas;
-import GameEngine.GameEntity;
-import GameEngine.GameWorld;
-import GameEngine.Configurables.Module;
+import GameEngine.Configurables.ModuleTypes.Module;
+import GameEngine.Configurables.ModuleTypes.StateGiverModule;
+import GameEngine.Net.StateFactory;
 import Modules.BaseModule.ClientStates.ClientStateFactory;
 import Modules.BaseModule.HandlerStates.HandlerStateFactory;
-import Net.StateFactory;
-import Server.Account;
-import Server.GameServer;
 
-public class BaseModule implements Module
+public class BaseModule implements Module, StateGiverModule
 {
-	private ModuleConfig config_;
+	private ModuleConfig config;
 	
 	@Override
-	public ModuleConfig getConfig()
+	public ModuleConfig getModuleConfig()
 	{
-		config_ = new ModuleConfig();
-		
-		config_.doesImplement_.put("makeServer", false);
-		config_.doesImplement_.put("setup", false);
-		config_.doesImplement_.put("loadWorld", false);
-		
-		config_.doesImplement_.put("drawWorld", false);
-		
-		config_.doesImplement_.put("makePlayer", false);
-		config_.doesImplement_.put("wakePlayer", false);
-		config_.doesImplement_.put("sleepPlayer", false);
-		config_.doesImplement_.put("deletePlayer", false);
-		
-		config_.doesImplement_.put("clientFactory", true);
-		config_.doesImplement_.put("handlerFactory", true);
-		
-		return config_;
+		config = new ModuleConfig();
+
+		return config;
 	}
 
 	@Override
-	public void init() {}
-
-	@Override
-	public GameServer makeServer()
-	{
-		return null;
-	}
-	@Override
-	public GameWorld setup()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public GameWorld loadWorld(String server)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void drawWorld(GameWorld world, GameCanvas canvas)
-	{
-		// TODO Auto-generated method stub
-		return;
-	}
-	
-	@SuppressWarnings("rawtypes")
-	@Override
-	public GameEntity makePlayer(GameServer server, Account account)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@SuppressWarnings("rawtypes")
-	@Override
-	public GameEntity wakePlayer(GameServer server, Account account)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@SuppressWarnings("rawtypes")
-	@Override
-	public GameEntity sleepPlayer(GameServer server, Account account)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@SuppressWarnings("rawtypes")
-	@Override
-	public GameEntity deletePlayer(GameServer server, Account account)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public void initModule() {}
 	
 	@Override
 	public StateFactory clientFactory()

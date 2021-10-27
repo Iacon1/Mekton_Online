@@ -20,6 +20,9 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 
+/** The dialog for when you want to remove a server.
+ * 
+ */
 @SuppressWarnings("serial")
 public class RemoveServerDialog extends JDialog
 {
@@ -28,15 +31,18 @@ public class RemoveServerDialog extends JDialog
 	private final JLabel warningLabel = new JLabel("<html>Warning: This cannot be undone.");
 	private final JTextField nameBox = new JTextField();
 	private final JLabel nameLabel = new JLabel("Server name:");
-	private GetServerFrame caller_;
+	private GetServerFrame caller;
 	
-	// Run this
+	/** Runs the dialog.
+	 * 
+	 *  @param caller The frame that called this.
+	 */
 	public static void main(GetServerFrame caller)
 	{
 		try
 		{
 			RemoveServerDialog dialog = new RemoveServerDialog();
-			dialog.caller_ = caller;
+			dialog.caller = caller;
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		}
@@ -48,13 +54,15 @@ public class RemoveServerDialog extends JDialog
 		String serverName = nameBox.getText();
 		if (serverName != null)
 		{
-			caller_.removeServer(serverName);
+			caller.removeServer(serverName);
 			this.setVisible(false);
 			this.dispose();
 		}
 	}
 	
-	// Creates the dialog
+	/** Constructor.
+	 * 
+	 */
 	public RemoveServerDialog()
 	{
 		setIconImages(MiscUtils.getIcons(true));

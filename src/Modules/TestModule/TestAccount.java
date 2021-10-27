@@ -4,53 +4,47 @@
 
 package Modules.TestModule;
 
-import GameEngine.GameWorld;
-import GameEngine.PhysicalObject;
-import Server.Account;
+import javax.swing.JPanel;
+
+import GameEngine.GameInfo;
+import GameEngine.Point2D;
+import GameEngine.Configurables.ConfigManager;
+import GameEngine.EntityTypes.CommandRunner;
+import GameEngine.EntityTypes.GameEntity;
+import GameEngine.Server.Account;
+import Modules.BaseModule.CommandParser;
+import Modules.HexUtilities.HexEntity;
 
 public class TestAccount extends Account
 {
 
 	@Override
-	public void runCommand(GameWorld world, String[] params)
+	public void runCommand(String[] params)
 	{
+		CommandParser.ParsedCommand command = CommandParser.parseCommand(params);
+		if (command.target == -1) command.target = possessee;
+		GameEntity entity = GameInfo.getWorld().getEntity(command.target);
+		if (CommandRunner.class.isAssignableFrom(entity.getClass()))
 		{
-			switch (params[0])
-			{
-			case "move": // TODO objects with MA
-				PhysicalObject physObject = (PhysicalObject) world.getEntities().get(possessee);
-				switch (params[1])
-				{
-				case "north": case "no": case "n":
-					physObject.move(PhysicalObject.Direction.north, 1);
-					break;
-				case "northwest": case "nw":
-					physObject.move(PhysicalObject.Direction.northWest, 1);
-					break;
-				case "northeast": case "ne":
-					physObject.move(PhysicalObject.Direction.northEast, 1);
-					break;
-					
-				case "south": case "so": case "s":
-					physObject.move(PhysicalObject.Direction.south, 1);
-					break;
-				case "southwest": case "sw":
-					physObject.move(PhysicalObject.Direction.southWest, 1);
-					break;
-				case "southeast": case "se":
-					physObject.move(PhysicalObject.Direction.southEast, 1);
-					break;
-					
-				case "up":
-					physObject.move(PhysicalObject.Direction.up, 1);
-					break;
-				case "down":
-					physObject.move(PhysicalObject.Direction.down, 1);
-					break;
-				}
-				break;
-			}
+			((CommandRunner) entity).runCommand(command.params);
 		}
+	}
+
+	@Override
+	public Point2D getCamera()
+	{
+		HexEntity hexObject = (HexEntity) getPossessee();
+//		return new Point2D(0, 0);
+		return hexObject.getPos().subtract(new Point2D(ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight()).divide(2));
+	}
+
+	@Override
+	public JPanel serverPanel()
+	{
+		String status = null;
+		if (loggedIn == true) status = "Online";
+		else status = "Offline";
+		return new AccountPanel(username, status);
 	}
 
 }

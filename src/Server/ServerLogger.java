@@ -7,7 +7,8 @@ package Server;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
 
 import Utils.Logger;
 
@@ -15,11 +16,11 @@ public class ServerLogger implements Logger
 {
 	private static class LogEntry
 	{
-		public Date date_;
-		public String category_;
-		public String text_;
+		public Date date;
+		public String category;
+		public String text;
 	}
-	private volatile ArrayList<LogEntry> log_;
+	private volatile ArrayList<LogEntry> log;
 	
 	private static String getCaller() // Returns calling function & line
 	{
@@ -28,18 +29,18 @@ public class ServerLogger implements Logger
 	}
 	public ServerLogger()
 	{
-		log_ = new ArrayList<LogEntry>();
+		log = new ArrayList<LogEntry>();
 	}
 	
 	@Override
 	public void logRaw(String reason, String text)
 	{
 		LogEntry entry = new LogEntry();
-		entry.date_ = Date.from(Instant.now());
-		entry.text_ = text;
-		entry.category_ = reason;
+		entry.date = Date.from(Instant.now());
+		entry.text = text;
+		entry.category = reason;
 		
-		log_.add(entry);
+		log.add(entry);
 	}
 
 	@Override
@@ -67,11 +68,11 @@ public class ServerLogger implements Logger
 	public final String buildLabelText(String category) // Builds a string holding a category of log; If category is null then shows all
 	{
 		String log = "<html>";
-		for (int i = 0; i < log_.size(); ++i)
+		for (int i = 0; i < this.log.size(); ++i)
 		{
-			LogEntry entry = log_.get(i);
-			if (entry.category_ == category || category == null)
-				log = log + "(" + entry.date_.toString() + ") [" + entry.category_ + "]: " + entry.text_ + "<br>";
+			LogEntry entry = this.log.get(i);
+			if (entry.category == category || category == null)
+				log = log + "(" + entry.date.toString() + ") [" + entry.category + "]: " + entry.text + "<br>";
 		}
 		
 		return log;

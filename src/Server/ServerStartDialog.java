@@ -9,6 +9,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import GameEngine.Configurables.ModuleManager;
+import GameEngine.Configurables.ModuleTypes.ServerMakingModule;
+import GameEngine.Server.GameServer;
 import Utils.Logging;
 import Utils.MiscUtils;
 
@@ -37,13 +39,12 @@ public class ServerStartDialog extends JDialog
 		catch (Exception e) {Logging.logException(e);}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void onClickOK() // When OK is pressed
 	{
 		Integer value = (Integer) portSpinner.getValue();
 		if (value != null)
 		{
-			GameServer server = ModuleManager.makeServer();
+			GameServer server = ModuleManager.getHighestOfType(ServerMakingModule.class).makeServer();
 			server.start(value); // TODO changeable
 
 			ServerWindow.main(server);

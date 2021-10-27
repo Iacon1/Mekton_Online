@@ -10,7 +10,7 @@ import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
 import Client.GameClientThread;
-import GameEngine.PacketTypes.LoginPacket;
+import Modules.BaseModule.PacketTypes.LoginPacket;
 import Utils.Logging;
 import Utils.MiscUtils;
 import javax.swing.SpringLayout;
@@ -31,19 +31,19 @@ public class LoginDialog extends JDialog
 	private final JLabel passwordLabel = new JLabel("Password");
 	private final JLabel serverLabel = new JLabel("Login to ");
 
-	private boolean send_ = false;
+	private boolean send = false;
 	private final JLabel errorLabel = new JLabel("");
 
 	public LoginPacket getPacket()
 	{
-		if (!send_) return null;
+		if (!send) return null;
 		
 		LoginPacket packet = new LoginPacket();
 		packet.username = usernameBox.getText();
-		packet.setHash(new String(passwordBox.getPassword())); // TODO is this the most secure way?
+		packet.myPassword = new String(passwordBox.getPassword()); // TODO is this the most secure way?
 		packet.newUser = newUserBox.isSelected();
 		
-		send_ = false;
+		send = false;
 		
 		return packet;
 	}
@@ -54,11 +54,11 @@ public class LoginDialog extends JDialog
 		
 		errorLabel.setText(reason);
 		
-		send_ = false;
+		send = false;
 	}
 	private void onClickOK() // When OK is pressed
 	{
-		if (usernameBox.getText() != null && passwordBox.getPassword().length != 0) send_ = true;
+		if (usernameBox.getText() != null && passwordBox.getPassword().length != 0) send = true;
 	}
 	
 	public static void main(GameClientThread thread)

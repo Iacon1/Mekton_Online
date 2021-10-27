@@ -11,32 +11,21 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import GameEngine.GameCanvas;
-import GameEngine.GameEntity;
-import GameEngine.GameWorld;
-import Net.StateFactory;
-import Server.Account;
-import Server.GameServer;
+import GameEngine.Configurables.ModuleTypes.Module;
 import Utils.Logging;
 import Utils.MiscUtils;
 
 public final class ModuleManager
 {
-	private static HashMap<String, Module> modules_; // The actual modules, by file name
-	private static HashMap<String, Module> highestImplementer_; // The highest-priority module to implement a function
+	private static HashMap<String, Module> modules; // The actual modules, by file name
+	private static ArrayList<String> modulePriorities; // The module names by priority
+
+	public static <T> boolean doesImplement(Module module, Class<T> moduleType) // Does module implement that module type? 
+	{
+		return moduleType.isAssignableFrom(module.getClass());
+	}
 	
-	public static void attemptRegister(String function, Module module)
-	{
-		if (highestImplementer_.get(function) == null) highestImplementer_.put(function, module);
-	}
-	public static boolean checkDoesImplement(String function, Module module) 
-	{
-		boolean check = module.getConfig().doesImplement_.get(function);
-		if (check) attemptRegister(function, module);
-		
-		return check;
-	}
-	// Checks if module implements function. If it does, and if nothing else has yet, then sets highestImplementer_ of function to module
+	// Checks if module implements function. If it does, and if nothing else has yet, then sets highestImplementer of function to module
 	// Functions are listed in Module.java
 	
 	private static ArrayList<String> getModules(String path) // Lists all modules
@@ -48,14 +37,14 @@ public final class ModuleManager
 		
 		moduleList = new ArrayList<String>();
 		moduleList.add("BaseModule");
+		moduleList.add("HexUtilities");
 		moduleList.add("MektonCore");
 		moduleList.add("TestModule");
 		
 		return moduleList;
 	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static void loadModule(String path, String moduleFile, int pri) throws Exception
+
+	private static void loadModule(String path, String moduleFile) throws Exception
 	{
 		// TODO this doesn't actually work?
 		String moduleFolderPath = path + moduleFile + "/";
@@ -70,26 +59,12 @@ public final class ModuleManager
 		//Class moduleClass = loader.loadClass(moduleFile + "." + moduleFile);
 		Class moduleClass = loader.loadClass("Modules." + moduleFile + "." + moduleFile); // TODO
 		Module module = (Module) moduleClass.getDeclaredConstructor().newInstance();
+
+		modules.put(moduleFile, module);
+		modulePriorities.add(moduleFile);
 		
-		module.getConfig().priority_ = pri;
-		
-		checkDoesImplement("makeServer", module);
-		checkDoesImplement("setup", module);
-		checkDoesImplement("loadWorld", module);
-		
-		checkDoesImplement("drawWorld", module);
-		
-		checkDoesImplement("makePlayer", module);
-		checkDoesImplement("wakePlayer", module);
-		checkDoesImplement("sleepPlayer", module);
-		checkDoesImplement("deletePlayer", module);
-		
-		checkDoesImplement("clientFactory", module);
-		checkDoesImplement("handlerFactory", module);
-		
-		modules_.put(moduleFile, module);
 		Logging.logNotice("Loaded module " + moduleFile);
-		module.init();
+		module.initModule();
 		loader.close();
 	}
 	
@@ -99,12 +74,12 @@ public final class ModuleManager
 		
 		ArrayList<String> moduleList = getModules(path);
 		
-		modules_ = new HashMap<String, Module>();
-		highestImplementer_ = new HashMap<String, Module>();
+		modules = new HashMap<String, Module>();
+		modulePriorities = new ArrayList<String>();
 		
 		for (int i = 0; i < moduleList.size(); ++i) // From highest priority to lowest
 		{			
-			try {loadModule(path, moduleList.get(i), i);}
+			try {loadModule(path, moduleList.get(i));}
 			catch (Exception e) {Logging.logException(e);}
 		}
 		
@@ -113,58 +88,22 @@ public final class ModuleManager
 
 	public static Module getModule(String fileName) // In case you need a specific module
 	{
-		return modules_.get(fileName);
-	}
-	public static Module getHighestImplementer(String function) // Default access to highest-priority functions
-	{
-		return highestImplementer_.get(function);
-	}
-	@SuppressWarnings("rawtypes")
-	public static GameServer makeServer() // Sets up the server (not what's in the server!)
-	{
-		return getHighestImplementer("makeServer").makeServer();
+		return modules.get(fileName);
 	}
 
-	public static GameWorld setup()
+	public static <T> T getHighestOfType(Class<T> moduleType, Module delegate) // Get highest implementer of a moduleType, ignoring result delegate if not null; Please make sure T is a module type!
 	{
-		return getHighestImplementer("setup").setup();
-	}
-	public static GameWorld loadWorld(String server)
-	{
-		return getHighestImplementer("loadWorld").loadWorld(server);
-	}
-	
-	public static void drawWorld(GameWorld world, GameCanvas canvas)
-	{
-		getHighestImplementer("drawWorld").drawWorld(world, canvas);
-	}
-
-	public static GameEntity makePlayer(GameServer server, Account account)
-	{
-		return getHighestImplementer("makePlayer").makePlayer(server, account);
-	}
-	@SuppressWarnings("rawtypes")
-	public static GameEntity wakePlayer(GameServer server, Account account)
-	{
-		return getHighestImplementer("wakePlayer").wakePlayer(server, account);
-	}
-	@SuppressWarnings("rawtypes")
-	public static GameEntity sleepPlayer(GameServer server, Account account)
-	{
-		return getHighestImplementer("sleepPlayer").sleepPlayer(server, account);
-	}
-	@SuppressWarnings("rawtypes")
-	public static GameEntity deletePlayer(GameServer server, Account account)
-	{
-		return getHighestImplementer("deletePlayer").deletePlayer(server, account);
+		for (int i = modulePriorities.size() - 1; i >= 0; --i)
+		{
+			Module module = modules.get(modulePriorities.get(i));
+			if (doesImplement(module, moduleType) && (delegate == null || module != delegate)) return (T) module;
+		}
+		
+		return null;
 	}
 	
-	public static StateFactory clientFactory() // Client factory
+	public static <T> T getHighestOfType(Class<T> moduleType) // Get highest implementer of a moduleType; Please make sure T is a module type!
 	{
-		return getHighestImplementer("clientFactory").clientFactory();
-	}
-	public static StateFactory handlerFactory() // Handler factory
-	{
-		return getHighestImplementer("handlerFactory").handlerFactory();
+		return getHighestOfType(moduleType, null);
 	}
 }

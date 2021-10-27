@@ -4,19 +4,20 @@
 
 package Modules.BaseModule.HandlerStates;
 
-import GameEngine.PacketTypes.GameDataPacket;
+import GameEngine.Net.StateFactory;
+import GameEngine.Net.ThreadState;
 import Modules.BaseModule.ClientHandlerThread;
-import Net.StateFactory;
-import Net.ThreadState;
+import Modules.BaseModule.PacketTypes.GameDataPacket;
+import Utils.JSONManager;
 import Utils.Logging;
 
 public class MainScreen implements ThreadState<ClientHandlerThread>
 {
-	private StateFactory factory_;
+	private StateFactory factory;
 	
 	public MainScreen(StateFactory factory)
 	{
-		factory_ = factory;
+		this.factory = factory;
 	}
 	
 	@Override
@@ -32,9 +33,8 @@ public class MainScreen implements ThreadState<ClientHandlerThread>
 	}
 	public String processOutput(ClientHandlerThread parentThread, boolean mono)
 	{
-		GameDataPacket packet = new GameDataPacket();
-		packet.viewWorld(parentThread.getParent().gameWorld_);
-		return packet.toJSON();
+		GameDataPacket packet = new GameDataPacket(parentThread.getAccount());
+		return JSONManager.serializeJSON(packet);
 	}
 
 	@Override
@@ -50,6 +50,6 @@ public class MainScreen implements ThreadState<ClientHandlerThread>
 	@Override
 	public StateFactory getFactory()
 	{
-		return factory_;
+		return factory;
 	}
 }
