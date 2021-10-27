@@ -14,6 +14,7 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.math.RoundingMode;
 
@@ -21,28 +22,34 @@ public final class MiscUtils
 {
 	public static float floatTolerance = 0.015625f; // = 2^-6, which can be handled precisely by floats
 	
-	private static <C> void addItemsToFit(ArrayList<C> array, int newSize)
+	/** Adds items to a list until it reaches a certain size.
+	 * 
+	 *  @param list List to add to.
+	 *  @param newSize Size to add until.
+	 */
+	private static <C> void addItemsToFit(List<C> list, int newSize)
 	{
-		while (array.size() < newSize)
-			array.add(null);
+		while (list.size() < newSize)
+			list.add(null);
 	}
 	
-	public static <C> ArrayList<C> resizeArrayList(ArrayList<C> array, int newSize) // Makes a resized version of the array
+	/** Adds items to a list or removes them until it has a certain size.
+	 * 
+	 *  @param list List to add to.
+	 *  @param newSize Size to set to.
+	 */
+	public static <C> void resizeList(List<C> list, int newSize)
 	{
-		ArrayList<C> newArray = new ArrayList<C>();
-		
-		addItemsToFit(newArray, newSize);
-		
-		for (int i = 0; i < Math.min(newSize, array.size()); ++i)
-			newArray.set(i, array.get(i));
-		
-		newArray.trimToSize(); // Cuts down to min(newSize, array.size()), then...
-		addItemsToFit(newArray, newSize); // Makes sure to lengthen back out if array.size() was smaller than newSize
-		
-		return newArray;
+		if (list.size() < newSize) addItemsToFit(list, newSize);
+		else while (list.size() > newSize) list.remove(list.size() - 1);
 	}
 	
-	public static ArrayList<Image> getIcons(boolean forClient) // Returns all versions of the icon for either client or server
+	/** Returns all versions of the icon for either client or server
+	 * 
+	 *  @param forClient whether it's for the client or server.
+	 *  @return List of icons.
+	 */
+	public static List<Image> getIcons(boolean forClient) // Returns all versions of the icon for either client or server
 	{
 		ArrayList<Image> icons = new ArrayList<Image>();
 		String pathPrefix;
@@ -55,25 +62,42 @@ public final class MiscUtils
 		
 		return icons;
 	}
+	
+	/** Returns the program version.
+	 *  @return The version of the program.
+	 */
 	public static String getVersion() // Gets version
 	{
 		return "V0.X";
 	}
+	/** Returns the program name.
+	 *  @return The program's name.
+	 */
 	public static String getProgramName() // What is this program (inc. version)?
 	{
 		return "Mekton Online " + getVersion();
 	}
+	/** Returns the absolute path of the filename.
+	 *  
+	 *  @param name The filename.
+	 *  @return The corresponding absolute path.
+	 */
 	public static String getAbsolute(String name)
 	{
 		return new File(name).getAbsolutePath();
 	}
 	
-	public static void saveText(String path, String text) // Saves text to file
+	/** Saves text to a file.
+	 *  
+	 *  @param name The filename / path to save to.
+	 *  @param text The text to save.
+	 */
+	public static void saveText(String name, String text) // Saves text to file
 	{
 		FileWriter writer = null;
 		try
 		{
-			writer = new FileWriter(getAbsolute(path), false);
+			writer = new FileWriter(getAbsolute(name), false);
 			writer.write(text);
 		}
 		catch (Exception e) {Logging.logException(e);}
@@ -86,7 +110,12 @@ public final class MiscUtils
 			}
 		}
 	}
-	public static String readText(String path) // Reads text from file
+	/** Reads text from a file.
+	 *  
+	 *  @param name The filename / path to read from.
+	 *  @return The read text.
+	 */
+	public static String readText(String name) // Reads text from file
 	
 	{
 		Scanner scanner = null;
@@ -95,7 +124,7 @@ public final class MiscUtils
 		{
 			try
 			{
-				File fileObj = new File(getAbsolute(path));
+				File fileObj = new File(getAbsolute(name));
 				
 				scanner = new Scanner(fileObj);
 
@@ -109,6 +138,10 @@ public final class MiscUtils
 		catch (Exception e) {Logging.logException(e); return null;}
 	}
 
+	/** Returns the computer's external IP.
+	 * 
+	 *  @return The computer's external IP.
+	 */
 	public static String getExIp() // Gets external IP https://stackoverflow.com/questions/2939218/getting-the-external-ip-address-in-java
 	{
 		BufferedReader in = null;
@@ -130,56 +163,105 @@ public final class MiscUtils
 		return ip;
 	}
 	
+	/** Converts an array of values into a string,
+	 *  using their toString functions.
+	 *  
+	 *  @param array The array of values.
+	 *  @param sep A seperator to put between their strings.
+	 *  
+	 *  @return The string made from the array.
+	 */
 	public static <T> String arrayToString(T[] array, String sep)
 	{
 		String string = new String();
 		for (int i = 0; i < array.length; ++i) string = string + array[i].toString() + sep;
 		return string;
 	}
-	
-	public static <T> String arrayToString(ArrayList<T> array, String sep)
+	/** Converts a list of values into a string,
+	 *  using their toString functions.
+	 *  
+	 *  @param list The list of values.
+	 *  @param sep A seperator to put between their strings.
+	 *  
+	 *  @return The string made from the list.
+	 */
+	public static <T> String arrayToString(List<T> list, String sep)
 	{
-		return arrayToString((T[]) array.toArray(), sep);
+		return arrayToString((T[]) list.toArray(), sep);
 	}
 	
+	/** Returns the class name.
+	 * 
+	 *  @param sClass class to return the name of.
+	 *  @return The name of the class.
+	 */
+	// Really simple, but a few ways to do it. This wrapper is used
+	// to maintain consistency between a few classes that need this,
+	// in case I change how I do it later.
 	public static <T> String ClassToString(Class<T> sClass)
 	{
 		return sClass.getName();
 	}
 	
-	public static int multiMax(int x, int... X)
+	// Hidden because the documentation wouldn't have made sense.
+	private static int multiMaxRecursive(int x, int... X)
 	{
 		int y;
 		if (X.length > 1)
 		{
 			int[] sX = Arrays.copyOfRange(X, 1, X.length);
-			y = multiMax(X[0], sX);
+			y = multiMaxRecursive(X[0], sX);
 		}
 		else y = X[0];
 		
 		return Math.max(x, y);
 	}
 	
+	/** Returns the largest of the provided values.
+	 * 
+	 *  @param X A list of integers to sort between.
+	 *  @return The largest of them.
+	 */
+	public static int multiMax(int... X)
+	{
+		if (X.length <= 0) return -1;
+		else return multiMaxRecursive(X[0], X);
+	}
+	
 	/** I forgot what lerp does
 	 * 
-	 * @ param a
-	 * @ param b
-	 * @ param t
+	 *  @param a
+	 *  @param b
+	 *  @param t
+	 *  @return ???
 	 */
 	public static float lerp(float a, float b, float t)
 	{
 		return a + (b - a) * t;
 	}
 	
+	/** Forces a to be a multiple of b.
+	 * 
+	 *  @param a The float to force.
+	 *  @param b The float to force it to be a multiple of.
+	 *  @return The forced version of a.
+	 */
 	public static int forceMult(float a, float b)
 	{
 		return (int) (Math.floor(a / b) * b);
 	}
+	/** Forces a to be a multiple of b.
+	 * 
+	 *  @param a The double to force.
+	 *  @param b The double to force it to be a multiple of.
+	 *  @return The forced version of a.
+	 */
 	public static int forceMult(double a, double b)
 	{
 		return (int) (Math.floor(a / b) * b);
 	}
 	
+	// TODO remember what this does.
 	public static String floatPrecise(float value, int digits)
 	{
 		if (digits > 0)
