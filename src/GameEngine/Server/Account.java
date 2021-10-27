@@ -19,6 +19,7 @@ public abstract class Account implements CommandRunner
 	protected boolean loggedIn; // Am I logged in?
 	private int hash;
 	
+	// TODO rework how these are stored; Global list needed for searching and stuff
 	
 	public Account()
 	{
@@ -50,5 +51,5 @@ public abstract class Account implements CommandRunner
 	public abstract Point2D getCamera();
 	
 	@Override
-	public abstract void runCommand(String[] params); // Commands that a player can type
+	public abstract boolean runCommand(String... params); // Commands that a player can type
 }

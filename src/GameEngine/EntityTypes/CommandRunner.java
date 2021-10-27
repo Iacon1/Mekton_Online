@@ -7,5 +7,10 @@ package GameEngine.EntityTypes;
 public interface CommandRunner
 {
 
-	public void runCommand(String[] params);
+	/** Runs a command.
+	 * 
+	 *  @param params The command and its parameters.
+	 *  @return Whether the command was recognized.
+	 */
+	public boolean runCommand(String... params);
 }

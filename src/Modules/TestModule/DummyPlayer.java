@@ -108,7 +108,7 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 	}
 
 	@Override
-	public void runCommand(String[] params)
+	public boolean runCommand(String[] params)
 	{
 		{
 			switch (params[0])

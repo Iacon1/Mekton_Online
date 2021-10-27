@@ -19,7 +19,7 @@ public class TestAccount extends Account
 {
 
 	@Override
-	public void runCommand(String[] params)
+	public boolean runCommand(String[] params)
 	{
 		CommandParser.ParsedCommand command = CommandParser.parseCommand(params);
 		if (command.target == -1) command.target = possessee;
