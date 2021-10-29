@@ -41,10 +41,18 @@ public abstract class RoleAccount extends Account
 	@Override
 	public boolean runCommand(String... params)
 	{
-		if (params[0] == "addRole")
+		if (params[0] == "addRole") // addRole X Y: Adds role X to user Y
 		{
-//			RoleAccount target = params[2]; TODO add username search to account class.
-//			if (hasPermission("Add role + " params[1] + " to " + params[i]))
+			RoleAccount target = (RoleAccount) server.getAccount(params[2]);
+			
+			boolean hasPermission = false;
+			for (int i = 0; i < target.roles.size(); ++i) // We need to check if they have any roles we can give this role to
+				if (hasPermission("Add role " + params[1] + " to " + target.roles.get(i).getName()))
+					hasPermission = true;
+			if (hasPermission)
+			{
+				
+			}
 		}
 		
 		return false;

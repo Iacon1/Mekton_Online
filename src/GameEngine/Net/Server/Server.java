@@ -10,7 +10,6 @@ import GameEngine.Net.ConnectionPairThread;
 import Utils.Logging;
 import Utils.MiscUtils;
 
-// TODO these are all dummy values
 public abstract class Server<T extends ConnectionPairThread>
 {
 	private ServerThread<T> serverThread;

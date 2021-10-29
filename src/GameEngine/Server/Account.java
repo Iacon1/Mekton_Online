@@ -18,8 +18,8 @@ public abstract class Account implements CommandRunner
 	
 	protected boolean loggedIn; // Am I logged in?
 	private int hash;
-	
-	// TODO rework how these are stored; Global list needed for searching and stuff
+		
+	protected transient GameServer server; // TODO needed a reference to master list of accounts, this is bad hack and damages coupling
 	
 	public Account()
 	{
@@ -28,6 +28,10 @@ public abstract class Account implements CommandRunner
 		hash = -1;
 	}
 	
+	public void setServer(GameServer server)
+	{
+		this.server = server;
+	}
 	public void setHash(String password) // Sets the hash
 	{
 		hash = password.hashCode(); // More secure probably possible
