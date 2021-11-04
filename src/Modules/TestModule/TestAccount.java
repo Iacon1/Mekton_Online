@@ -19,15 +19,14 @@ public class TestAccount extends Account
 {
 
 	@Override
-	public boolean runCommand(String[] params)
+	public boolean runCommand(String... params)
 	{
 		CommandParser.ParsedCommand command = CommandParser.parseCommand(params);
 		if (command.target == -1) command.target = possessee;
 		GameEntity entity = GameInfo.getWorld().getEntity(command.target);
 		if (CommandRunner.class.isAssignableFrom(entity.getClass()))
-		{
-			((CommandRunner) entity).runCommand(command.params);
-		}
+			return ((CommandRunner) entity).runCommand(command.params);
+		else return false;
 	}
 
 	@Override

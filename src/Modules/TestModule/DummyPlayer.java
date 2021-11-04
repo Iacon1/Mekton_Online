@@ -108,7 +108,7 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 	}
 
 	@Override
-	public boolean runCommand(String[] params)
+	public boolean runCommand(String... params)
 	{
 		{
 			switch (params[0])
@@ -116,37 +116,38 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 			case "moveMouse":
 					AxialHexCoord3D target = new AxialHexCoord3D(Integer.valueOf(params[1]), Integer.valueOf(params[2]), hexPos.z);
 					movePath(mapToken.get().pathfind(hexPos, target), 2);
+					return true;
 			case "move": // TODO objects with MA
 				switch (params[1])
 				{
 				case "north": case "no": case "n":
 					moveDirectionalAct(HexDirection.north, 1, 2);
-					break;
+					return true;
 				case "northwest": case "nw":
 					moveDirectionalAct(HexDirection.northWest, 1, 2);
-					break;
+					return true;
 				case "northeast": case "ne":
 					moveDirectionalAct(HexDirection.northEast, 1, 2);
-					break;
+					return true;
 					
 				case "south": case "so": case "s":
 					moveDirectionalAct(HexDirection.south, 1, 2);
-					break;
+					return true;
 				case "southwest": case "sw":
 					moveDirectionalAct(HexDirection.southWest, 1, 2);
-					break;
+					return true;
 				case "southeast": case "se":
 					moveDirectionalAct(HexDirection.southEast, 1, 2);
-					break;
+					return true;
 					
 				case "up":
 					moveDirectionalAct(HexDirection.up, 1, 2);
-					break;
+					return true;
 				case "down": case "do":
 					moveDirectionalAct(HexDirection.down, 1, 2);
-					break;
+					return true;
 				}
-				break;
+			default: return false;
 			}
 		}
 	}

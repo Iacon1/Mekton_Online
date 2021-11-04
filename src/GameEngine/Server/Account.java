@@ -53,7 +53,4 @@ public abstract class Account implements CommandRunner
 	public abstract JPanel serverPanel();
 	
 	public abstract Point2D getCamera();
-	
-	@Override
-	public abstract boolean runCommand(String... params); // Commands that a player can type
 }

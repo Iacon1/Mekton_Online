@@ -31,6 +31,8 @@ public class EditMap extends MektonMap implements InputGetter, CommandRunner
 		data.texturePos.x = 1;
 		data.type = MektonHex.TerrainType.solid;
 		setHex(coord, data);
+		
+		return true;
 	}
 
 	@Override

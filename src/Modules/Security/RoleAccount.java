@@ -30,7 +30,6 @@ public abstract class RoleAccount extends Account
 		if (!this.roles.contains(role)) return false;
 		else return true;
 	}
-	
 	public boolean hasPermission(String action)
 	{
 		for (int i = 0; i < roles.size(); ++i) if (roles.get(i).hasPermission(action)) return true;
