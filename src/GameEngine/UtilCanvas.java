@@ -38,6 +38,22 @@ public abstract class UtilCanvas extends JPanel
 		return new Point2D(Math.round(point.x / scaleX), Math.round(point.y / scaleY));
 	}
 	
+	public void drawRectangle(Color color, Point2D pos, Point2D size)
+	{
+		Graphics2D g = image.createGraphics();
+		Color oColor = image.getGraphics().getColor();
+		int dx1s = (int) (pos.x);
+		int dy1s = (int) (pos.y);
+		int dx2s = (int) (dx1s + size.x);
+		int dy2s = (int) (dy1s + size.y);
+		
+		g.setColor(color);
+		
+		g.fillRect(dx1s, dy1s, dx2s, dy2s);
+		g.setColor(oColor); // reset color to before we used one for the text
+		g.dispose();
+	}
+	
 	public void drawImage(Image textureFile, Point2D pos, Point2D texturePos, Point2D textureSize)
 	{
 		Graphics2D g = image.createGraphics();
@@ -60,25 +76,46 @@ public abstract class UtilCanvas extends JPanel
 		drawImage(GraphicsManager.getImage(textureFile), pos, texturePos, textureSize);
 	}
 	
-	public void drawText(String text, Font font, Color color, Point2D pos, int sizePixels)
+	public void drawText(String text, Font font, Color color, Point2D pos, int heightPixels)
 	{
 		Graphics2D g = image.createGraphics();
 		Color oColor = image.getGraphics().getColor();
 		int sx = (int) pos.x;
-		int sy = (int) pos.y + sizePixels;
-		font = font.deriveFont(GraphicsManager.getFontSize(sizePixels));
+		int sy = (int) pos.y + heightPixels;
+		font = font.deriveFont(GraphicsManager.getFontSize(heightPixels));
 		
 		g.setFont(font);
 		g.setColor(color);
 		
 		String[] lines = text.split("\n");
-		for (int i = 0; i < lines.length; ++i) g.drawString(lines[i], sx, sy + i * sizePixels + 1);
+		for (int i = 0; i < lines.length; ++i) g.drawString(lines[i], sx, sy + i * heightPixels + 1);
 		g.setColor(oColor); // reset color to before we used one for the text
 		g.dispose();
 	}
-	public void drawText(String text, String font, Color color, Point2D pos, int sizePixels)
+	public void drawText(String text, String font, Color color, Point2D pos, int heightPixels)
 	{
-		drawText(text, GraphicsManager.getFont(font), color, pos, sizePixels);
+		drawText(text, GraphicsManager.getFont(font), color, pos, heightPixels);
+	}
+	public Point2D textSize(String text, Font font, int heightPixels)
+	{
+		Graphics2D g = image.createGraphics();
+		font = font.deriveFont(GraphicsManager.getFontSize(heightPixels));
+		
+		g.setFont(font);
+
+		String[] lines = text.split("\n");
+		
+		int sizeX = 0;
+		for (int i = 0; i < lines.length; ++i) sizeX = Math.max(sizeX, g.getFontMetrics().stringWidth(lines[i]));
+		g.dispose();
+		
+		int sizeY = lines.length * heightPixels;
+		
+		return new Point2D(sizeX, sizeY);
+	}
+	public Point2D textSize(String text, String font, int heightPixels)
+	{
+		return textSize(text, GraphicsManager.getFont(font), heightPixels);
 	}
 	
 	protected void resetImage()

@@ -162,8 +162,11 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 			String text =
 					"Action points: " + MiscUtils.floatPrecise(remainingActions(), 2) + "\n" +
 					statSummary();
-					
-			canvas.drawText(text, "MicrogrammaNormalFix.TTF", Color.red, new Point2D(0, 0), 50);
+			
+			int fontSize = 20;
+			Point2D textSize = canvas.textSize(text, "MicrogrammaNormalFix.TTF", fontSize);
+			canvas.drawRectangle(Color.black, new Point2D(0, 0), textSize);
+			canvas.drawText(text, "MicrogrammaNormalFix.TTF", Color.red, new Point2D(0, 0), fontSize);
 		}
 	}
 	@Override
