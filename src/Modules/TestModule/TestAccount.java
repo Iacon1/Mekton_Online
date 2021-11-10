@@ -21,12 +21,13 @@ public class TestAccount extends Account
 	@Override
 	public boolean runCommand(String... params)
 	{
-		CommandParser.ParsedCommand command = CommandParser.parseCommand(params);
+/*		CommandParser.ParsedCommand command = CommandParser.parseCommand(params);
 		if (command.target == -1) command.target = possessee;
 		GameEntity entity = GameInfo.getWorld().getEntity(command.target);
 		if (CommandRunner.class.isAssignableFrom(entity.getClass()))
 			return ((CommandRunner) entity).runCommand(command.params);
-		else return false;
+		else return false; */
+		return false;
 	}
 
 	@Override

@@ -20,7 +20,7 @@ public class HexUtilities implements Module
 	@Override
 	public void initModule()
 	{
-		HexConfigManager.init("default");
+		HexConfigManager.init();
 	}
 
 }

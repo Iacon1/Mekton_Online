@@ -14,6 +14,7 @@ import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.MektonCore.MektonHex;
 import Modules.MektonCore.MektonMap;
+import Modules.MektonCore.Enums.TerrainType;
 
 public class EditMap extends MektonMap implements InputGetter, CommandRunner
 {	
@@ -29,7 +30,7 @@ public class EditMap extends MektonMap implements InputGetter, CommandRunner
 		coord.r = Integer.valueOf(params[1]);
 		MektonHex data = new MektonHex();
 		data.texturePos.x = 1;
-		data.type = MektonHex.TerrainType.solid;
+		data.type = TerrainType.solid;
 		setHex(coord, data);
 		
 		return true;

@@ -28,7 +28,6 @@ public abstract class Server<T extends ConnectionPairThread>
 	}
 	
 	public abstract String getName();
-	public abstract String getResourceFolder();
 	public abstract int currentPlayers();
 	public abstract int maxPlayers();
 

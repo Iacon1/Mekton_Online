@@ -6,6 +6,7 @@ package Server;
 
 import javax.swing.UIManager;
 
+import GameEngine.GameInfo;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.WorldMakingModule;
@@ -21,8 +22,9 @@ public class ServerExec
 		
 		try
 		{
-			ConfigManager.init(null);
-			ModuleManager.init("Default");
+			ConfigManager.init();
+			GameInfo.setServerPack("Default");
+			ModuleManager.init();
 			ModuleManager.getHighestOfType(WorldMakingModule.class).newWorld(); // TODO loading
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			ServerStartDialog.main(null);

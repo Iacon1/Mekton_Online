@@ -54,7 +54,7 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 			ServerInfoPacket packet = new ServerInfoPacket();
 			packet.serverName = parentThread.getParent().getName();
 			packet.version = MiscUtils.getVersion();
-			packet.resourceFolder = parentThread.getParent().getResourceFolder();
+			packet.resourceFolder = "Default"; // TODO Set this
 			
 			if (parentThread.getParent().currentPlayers() >= parentThread.getParent().maxPlayers()) // We're full
 			{
