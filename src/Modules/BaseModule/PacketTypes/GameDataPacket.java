@@ -18,7 +18,7 @@ public class GameDataPacket extends Packet implements TransSerializable
 	public int possesseeId; // Player's index
 	
 	public GameInfo.GameWorld ourView; // Game world, but only contains the data we need
-	public Point2D camera;
+//	public Point2D camera;
 
 	private boolean isNeccessary(GameEntity instance) // Do we need to record this?
 	{
@@ -38,7 +38,7 @@ public class GameDataPacket extends Packet implements TransSerializable
 		currentLocationId = 0; // TODO determine location
 		
 		possesseeId = player.possessee;
-		camera = player.getCamera();
+//		camera = player.getCamera();
 	}
 	@Override
 	public void preSerialize()
@@ -51,7 +51,7 @@ public class GameDataPacket extends Packet implements TransSerializable
 	{
 		GameInfo.setWorld(ourView);
 		GameInfo.setPossessee(possesseeId);
-		GameInfo.setCamera(camera);
+//		GameInfo.setCamera(camera);
 //		Camera.gui = (GUIPin) GameInfo.getWorld().getEntity(ourGUI);
 	}
 }

@@ -6,7 +6,6 @@ package GameEngine.EntityTypes;
 
 public interface CommandRunner
 {
-
 	/** Runs a command.
 	 * 
 	 *  @param params The command and its parameters.

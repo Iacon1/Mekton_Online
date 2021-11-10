@@ -2,19 +2,19 @@
 // Created 09/16/2021
 // Consumes special header params
 
-package Modules.BaseModule;
+package Modules.BaseModule.Commands;
 
 import java.util.Arrays;
 
 public class CommandParser
-{
+{	
 	public static class ParsedCommand
 	{
-		public int target = -1;
-		public String[] params;
+		HashMap<String, String> params;
 	}
 	
-	public static ParsedCommand parseCommand(String[] params)
+	
+	public static ParsedCommand parseCommand(String format, String... params)
 	{
 		ParsedCommand command = new ParsedCommand();
 		int offset = 0;

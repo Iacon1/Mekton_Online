@@ -48,7 +48,7 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	public void newWorld()
 	{
 		GameInfo.setWorld(new GameInfo.GameWorld());
-		MektonMap map = new EditMap("Resources/Server Packs/Default/Tilesets/DummyTileset.PNG", "Resources/Server Packs/Default/Tilesets/ZFog.PNG");
+		MektonMap map = new EditMap(GameInfo.getServerPackResource("Tilesets/DummyTileset.PNG"), GameInfo.getServerPackResource("Default/Tilesets/ZFog.PNG"));
 		map.setDimensions(18, 9, 1, new MektonHex());
 	}
 	@Override

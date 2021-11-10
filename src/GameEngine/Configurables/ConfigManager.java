@@ -4,6 +4,7 @@
 
 package GameEngine.Configurables;
 
+import GameEngine.GameInfo;
 import Utils.JSONManager;
 import Utils.Logging;
 import Utils.MiscUtils;
@@ -29,18 +30,18 @@ public final class ConfigManager
 	}
 	private static Config config;
 	
-	public static void init(String server) // Loads from a server folder, or uses the defaults if no path is provided
+	public static void init() // Loads from a server folder, or uses the defaults if no path is provided
 	{
 		String path = null;
 		config = null;
-		if (server != null)
+		if (GameInfo.hasServerPack())
 		{
-			path = "Resources/Server Packs/" + server + "/BaseConfig.json";
+			path = GameInfo.getServerPackResource("BaseConfig.json");
 			config = new Config();
 			config = JSONManager.deserializeJSON(MiscUtils.readText(path), config.getClass());
 			if (config == null) // Save the default into there
 			{
-				Logging.logError("No config found for server " + server + ". Generating one...");
+				Logging.logError("No config found. Generating one...");
 				config = new Config();
 				Logging.logError("Done.");
 				MiscUtils.saveText(path, JSONManager.serializeJSON(config));

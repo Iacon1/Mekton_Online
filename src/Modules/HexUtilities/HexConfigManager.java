@@ -4,6 +4,7 @@
 
 package Modules.HexUtilities;
 
+import GameEngine.GameInfo;
 import Utils.JSONManager;
 import Utils.Logging;
 import Utils.MiscUtils;
@@ -16,18 +17,18 @@ public class HexConfigManager
 	}
 	private static HexConfig hexConfig;
 	
-	public static void init(String server) // Loads from a server folder, or uses the defaults if no path is provided
+	public static void init() // Loads from a server folder, or uses the defaults if no path is provided
 	{
 		String path = null;
 		hexConfig = null;
-		if (server != null)
+		if (GameInfo.hasServerPack())
 		{
-			path = "Resources/Server Packs/" + server + "/HexConfig.json";
+			path = GameInfo.getServerPackResource("HexConfig.json");
 			hexConfig = new HexConfig();
 			hexConfig = JSONManager.deserializeJSON(MiscUtils.readText(path), hexConfig.getClass());
 			if (hexConfig == null) // Save the default into there
 			{
-				Logging.logError("No hex config found for server " + server + ". Generating one...");
+				Logging.logError("No hex config found. Generating one...");
 				hexConfig = new HexConfig();
 				Logging.logError("Done.");
 				MiscUtils.saveText(path, JSONManager.serializeJSON(hexConfig));

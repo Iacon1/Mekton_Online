@@ -30,9 +30,9 @@ public final class GraphicsManager
 		Image image = images.get(path);
 		if (image == null)
 		{
-			Logging.logError("Have not loaded image @ " + path + ". Loading...");
+			Logging.logError("Have not loaded image " + path + ". Loading...");
 			image = Toolkit.getDefaultToolkit().getImage(MiscUtils.getAbsolute(path));
-			if (image == null) Logging.logError("Could not load image @ " + path);
+			if (image == null) Logging.logError("Could not load image " + path);
 			else Logging.logError("Loading done");
 			images.put(path, image);
 		}
@@ -45,10 +45,10 @@ public final class GraphicsManager
 		Font font = fonts.get(path);
 		if (font == null)
 		{
-			Logging.logError("Have not loaded font @ " + path + ". Loading...");
+			Logging.logError("Have not loaded font " + path + ". Loading...");
 			try {font = Font.createFont(Font.TRUETYPE_FONT, new File(MiscUtils.getAbsolute(path)));}
 			catch (Exception e) {Logging.logException(e);}
-			if (font == null) Logging.logError("Could not load font @ " + path);
+			if (font == null) Logging.logError("Could not load font " + path);
 			else Logging.logError("Loading done");
 			fonts.put(path, font);
 		}

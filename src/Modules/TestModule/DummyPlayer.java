@@ -30,14 +30,14 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 	public DummyPlayer()
 	{
 		super();
-		setSprite(new ImageSprite("Resources/Server Packs/Default/DummyPlayer.PNG"));
+		setSprite(new ImageSprite(GameInfo.getServerPackResource("DummyPlayer.PNG")));
 		setSpriteParams(0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
 		setBounds(HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight(), 0, -HexConfigManager.getHexHeight());
 	}
 	public DummyPlayer(String owner, MektonMap map)
 	{
 		super(owner, map);
-		setSprite(new ImageSprite("Resources/Server Packs/Default/DummyPlayer.PNG"));
+		setSprite(new ImageSprite(GameInfo.getServerPackResource("DummyPlayer.PNG")));
 		setSpriteParams(0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
 		setBounds(HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight(), 0, -HexConfigManager.getHexHeight());
 	}

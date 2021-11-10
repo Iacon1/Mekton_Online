@@ -11,6 +11,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import GameEngine.GameInfo;
 import GameEngine.Configurables.ModuleTypes.Module;
 import Utils.Logging;
 import Utils.MiscUtils;
@@ -68,9 +69,9 @@ public final class ModuleManager
 		loader.close();
 	}
 	
-	public static void init(String server) // Loads all modules from a server pack
+	public static void init() // Loads all modules from the server pack in GameInfo
 	{
-		String path = "Resources/Server Packs/" + server + "/Modules/";
+		String path = GameInfo.getServerPackResource("Modules/");
 		
 		ArrayList<String> moduleList = getModules(path);
 		

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import GameEngine.Client.GameFrame;
 import GameEngine.EntityTypes.GameEntity;
 import Utils.GappyArrayList;
+import Utils.MiscUtils;
 
 public class GameInfo
 {
@@ -74,7 +75,8 @@ public class GameInfo
 	private static transient boolean isClient; // On if client
 	private static transient String command;
 	private static transient int possessee; // Client's current player form
-	private static transient Point2D camera;
+//	private static transient Point2D camera;
+	private static transient String serverPackPrefix; // Server pack's path
 
 	private GameInfo() // Static class, do not call
 	{
@@ -142,12 +144,26 @@ public class GameInfo
 		return possessee;
 	}
 
-	public static void setCamera(Point2D camera)
+/*	public static void setCamera(Point2D camera)
 	{
 		GameInfo.camera = camera;
 	}
 	public static Point2D getCamera()
 	{
 		return camera;
+	}
+*/
+	
+	public static void setServerPack(String serverPack)
+	{
+		GameInfo.serverPackPrefix = "Resources/Server Packs/" + serverPack + "/";
+	}
+	public static boolean hasServerPack()
+	{
+		return serverPackPrefix != null;
+	}
+	public static String getServerPackResource(String resourceName)
+	{
+		return MiscUtils.getAbsolute(serverPackPrefix + "/" + resourceName);
 	}
 }

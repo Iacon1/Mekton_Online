@@ -21,12 +21,7 @@ public class BaseServer<A extends Account> extends GameServer<A, ClientHandlerTh
 	{
 		return null;
 	}
-	
-	public String getResourceFolder() // Get path for resources
-	{
-		return "Resources/Server Packs/Default";
-	}
-	
+
 	public int currentPlayers()
 	{
 		return 0;

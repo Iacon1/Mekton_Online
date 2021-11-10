@@ -1,6 +1,6 @@
 // By Iacon1
 // Created 06/17/2021
-// Basic functionality
+// Basic functionality & utilities not covered by the engine (i. e. might be changed by more unusual applications of the engine)
 
 package Modules.BaseModule;
 

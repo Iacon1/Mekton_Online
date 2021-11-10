@@ -12,7 +12,7 @@ import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.Server.Account;
-import Modules.BaseModule.CommandParser;
+import Modules.BaseModule.Commands.CommandParser;
 import Modules.HexUtilities.HexEntity;
 
 public class TestAccount extends Account
