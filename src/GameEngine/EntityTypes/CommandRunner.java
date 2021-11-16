@@ -8,8 +8,8 @@ public interface CommandRunner
 {
 	/** Runs a command.
 	 * 
-	 *  @param params The command and its parameters.
+	 *  @param params The command name, followed by any parameters, values, or flags.
 	 *  @return Whether the command was recognized.
 	 */
-	public boolean runCommand(String... params);
+	public boolean runCommand(String... words);
 }

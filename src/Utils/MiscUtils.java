@@ -261,7 +261,10 @@ public final class MiscUtils
 		return (int) (Math.floor(a / b) * b);
 	}
 	
-	// TODO remember what this does.
+	/** Returns a string representation of a float, up to a specified precision.
+	 *  @param value  The float to represent.
+	 *  @param digits The precision to represent it at.
+	 */
 	public static String floatPrecise(float value, int digits)
 	{
 		if (digits > 0)
