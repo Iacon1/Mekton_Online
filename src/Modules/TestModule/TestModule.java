@@ -21,6 +21,7 @@ import Modules.HexUtilities.HexEntity;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.MektonCore.MektonHex;
 import Modules.MektonCore.MektonMap;
+import Modules.MektonCore.Enums.EnvironmentType;
 
 public class TestModule implements Module, WorldMakingModule, ServerMakingModule, GraphicsHandlerModule, PlayerHandlerModule
 {
@@ -48,7 +49,7 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	public void newWorld()
 	{
 		GameInfo.setWorld(new GameInfo.GameWorld());
-		MektonMap map = new EditMap(GameInfo.getServerPackResource("Tilesets/DummyTileset.PNG"), GameInfo.getServerPackResource("Default/Tilesets/ZFog.PNG"));
+		MektonMap map = new EditMap(GameInfo.getServerPackResource("Tilesets/DummyTileset.PNG"), GameInfo.getServerPackResource("Default/Tilesets/ZFog.PNG"), EnvironmentType.clear);
 		map.setDimensions(18, 9, 1, new MektonHex());
 	}
 	@Override

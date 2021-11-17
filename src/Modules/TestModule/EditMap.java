@@ -14,13 +14,14 @@ import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.MektonCore.MektonHex;
 import Modules.MektonCore.MektonMap;
+import Modules.MektonCore.Enums.EnvironmentType;
 import Modules.MektonCore.Enums.TerrainType;
 
 public class EditMap extends MektonMap implements InputGetter, CommandRunner
 {	
-	public EditMap(String tileset, String zFog)
+	public EditMap(String tileset, String zFog, EnvironmentType environmentType)
 	{
-		super(tileset, zFog);
+		super(tileset, zFog, environmentType);
 	}
 	@Override
 	public boolean runCommand(String[] params)

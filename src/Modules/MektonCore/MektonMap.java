@@ -15,16 +15,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.function.Supplier;
 
-import Modules.HexUtilities.HexConfigManager;
-import Modules.HexUtilities.HexDirection;
-import Modules.HexUtilities.HexEntity;
-import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
-import Modules.HexUtilities.HexStructures.Axial.AxialHexMapRectangle;
-import Modules.Pathfinding.AStar;
-import Modules.Pathfinding.PathfindingAdapter;
-import Modules.HexUtilities.HexStructures.HexMap;
-import Modules.HexUtilities.HexStructures.Axial.AxialHex3DMap;
-import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord;
 import GameEngine.ScreenCanvas;
 import GameEngine.Point2D;
 import GameEngine.Configurables.ConfigManager;
@@ -32,12 +22,27 @@ import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.SpriteEntity;
 import GameEngine.Managers.GraphicsManager;
 
+import Modules.HexUtilities.HexConfigManager;
+import Modules.HexUtilities.HexDirection;
+import Modules.HexUtilities.HexEntity;
+import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
+import Modules.HexUtilities.HexStructures.Axial.AxialHexMapRectangle;
+import Modules.HexUtilities.HexStructures.HexMap;
+import Modules.HexUtilities.HexStructures.Axial.AxialHex3DMap;
+import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord;
+
+import Modules.Pathfinding.AStar;
+import Modules.Pathfinding.PathfindingAdapter;
+
+import Modules.MektonCore.Enums.EnvironmentType;
+
 public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, MektonHex>
 {	
 	private String tileset; // Tileset
 	private String zFog; // A translucent image the same size as the screen that renders between Z-levels
 	private AxialHex3DMap<AxialHexMapRectangle<MektonHex>, MektonHex> map;
-
+	private EnvironmentType environmentType;
+	
 	private int hexCost(AxialHexCoord3D a, AxialHexCoord3D b) // Cost of coord
 	{
 		return getHex(b).getCost();
@@ -61,7 +66,7 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	}
 	private transient PathfindingAdapter<AxialHexCoord3D, AStar> pathfinder;
 	
-	public MektonMap(String tileset, String zFog)
+	public MektonMap(String tileset, String zFog, EnvironmentType environmentType)
 	{
 		super();
 		Supplier<AxialHexMapRectangle<MektonHex>> supplier = () -> new AxialHexMapRectangle<MektonHex>();
@@ -69,6 +74,7 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 		
 		this.tileset = tileset;
 		this.zFog = zFog;
+		this.environmentType = environmentType;
 		
 		pathfinder = new PathfindingAdapter<AxialHexCoord3D, AStar>(
 				(AxialHexCoord3D a, AxialHexCoord3D b) -> hexCost(a, b),
@@ -84,6 +90,7 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 		
 		tileset = null;
 		zFog = null;
+		environmentType = null;
 		
 		pathfinder = new PathfindingAdapter<AxialHexCoord3D, AStar>(
 				(AxialHexCoord3D a, AxialHexCoord3D b) -> hexCost(a, b),
@@ -154,7 +161,10 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	{
 		return map.getHex(coord);
 	}
-	
+	public EnvironmentType getEnvironmentType()
+	{
+		return environmentType;
+	}
 	/** Converts a hex coord to a *screen* coordinate, i. e. accounting for camera pos.
 	 * 
 	 * @param coord Coordinate to convert.
