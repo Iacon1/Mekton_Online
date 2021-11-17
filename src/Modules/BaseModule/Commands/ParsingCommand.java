@@ -47,13 +47,13 @@ public class ParsingCommand
 		{
 			this.parameters.add(new LinkedList<String>());
 			
-			for (int j = 0; j < parameters.length; ++j) this.parameters.get(i).add(parameters[i][j]);
+			for (int j = 0; j < parameters[i].length; ++j) this.parameters.get(i).add(parameters[i][j]);
 		}
 		for (int i = 0; i < flags.length; ++i)
 		{
 			this.flags.add(new LinkedList<String>());
 			
-			for (int j = 0; j < flags.length; ++j) this.flags.get(i).add(flags[i][j]);
+			for (int j = 0; j < flags[i].length; ++j) this.flags.get(i).add(flags[i][j]);
 		}
 	}
 	
@@ -78,11 +78,11 @@ public class ParsingCommand
 			parameters.put(this.parameters.get(i).get(0), null);
 			for (int j = 0; j < this.parameters.get(i).size(); ++j) // Search to see if any of the parameter's aliases are there
 			{
-				int index = Arrays.asList(words).indexOf(tagChar + this.flags.get(i).get(j));
+				int index = Arrays.asList(words).indexOf(tagChar + this.parameters.get(i).get(j));
 				
 				if (index != -1) // Found an alias
 				{
-					parameters.put(this.flags.get(i).get(0), words[index + 1]); // TODO what if no index + 1, or what if next value is a tag itself?
+					parameters.put(this.parameters.get(i).get(0), words[index + 1]); // TODO what if no index + 1, or what if next value is a tag itself?
 					break;
 				}
 				else continue;

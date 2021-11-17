@@ -10,7 +10,7 @@ import java.util.Map;
 
 public abstract class ParsingCommandAccount extends Account
 {
-	private ParsingCommandBank commandBank;
+	private transient ParsingCommandBank commandBank;
 	
 	public ParsingCommandAccount()
 	{
@@ -31,7 +31,7 @@ public abstract class ParsingCommandAccount extends Account
 				new String[][]{
 					new String[]{"command", "c"}
 				},
-				null,
+				new String[][] {},
 				(Object caller, Map<String, String> params, Map<String, Boolean> flags) -> {});
 		commandBank.registerCommand(helpCommand);
 	}
@@ -39,7 +39,12 @@ public abstract class ParsingCommandAccount extends Account
 	@Override
 	public boolean runCommand(String... words)
 	{
-		if (commandBank.recognizes(words[0])) return true;
+		if (commandBank.recognizes(words[0]))
+		{
+			commandBank.execute(this, words);
+			return true;
+			
+		}
 		else if (CommandRunner.class.isAssignableFrom(getPossessee().getClass())) return ((CommandRunner) getPossessee()).runCommand(words);
 		else return false;
 	}

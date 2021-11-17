@@ -5,19 +5,22 @@
 package Modules.MektonCore.EntityTypes;
 
 import java.util.LinkedList;
+import java.util.Map;
 
 import Utils.MiscUtils;
 import Utils.SimpleTimer;
 
 import GameEngine.Animation;
-
+import GameEngine.EntityTypes.CommandRunner;
+import Modules.BaseModule.Commands.ParsingCommand;
+import Modules.BaseModule.Commands.ParsingCommandBank;
 import Modules.HexUtilities.HexDirection;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 
 import Modules.MektonCore.MektonMap;
 import Modules.MektonCore.StatsStuff.DamageTypes.Damage;
 
-public abstract class MektonActor extends MapEntity
+public abstract class MektonActor extends MapEntity implements CommandRunner
 {
 	public enum Scale
 	{
@@ -29,6 +32,7 @@ public abstract class MektonActor extends MapEntity
 	
 	private float actionPoints;
 	private transient SimpleTimer actionTimer;
+	protected transient ParsingCommandBank commandBank;
 	
 	protected enum ActorAnim // Animations
 	{
@@ -50,23 +54,71 @@ public abstract class MektonActor extends MapEntity
 		
 		public Animation animation;
 	}
+	// Commands
+	private void moveFunction(Object caller, Map<String, String> parameters, Map<String, Boolean> flags)
+	{
+		if (caller != this) return; // The only thing that should run *our* moveFunction is *us*
+			
+		if (parameters.get("q") != null && parameters.get("r") != null)
+		{
+			AxialHexCoord3D target = new AxialHexCoord3D(Integer.valueOf(parameters.get("q")), Integer.valueOf(parameters.get("r")), hexPos.z);
+			movePath(mapToken.get().pathfind(hexPos, target), 2);
+		}
+		else
+		{
+			if (flags.get("north") && flags.get("west")) moveDirectionalAct(HexDirection.northWest, 1, 2);
+			else if (flags.get("north") && flags.get("east")) moveDirectionalAct(HexDirection.northEast, 1, 2);
+			else if (flags.get("north")) moveDirectionalAct(HexDirection.north, 1, 2);
+
+			else if (flags.get("south") && flags.get("west")) moveDirectionalAct(HexDirection.southWest, 1, 2);
+			else if (flags.get("south") && flags.get("east")) moveDirectionalAct(HexDirection.southEast, 1, 2);
+			else if (flags.get("south")) moveDirectionalAct(HexDirection.south, 1, 2);
+			
+			if (flags.get("up")) moveDirectionalAct(HexDirection.up, 1, 2);
+			if (flags.get("down")) moveDirectionalAct(HexDirection.down, 1, 2);
+		}
+	}
+
+	protected void registerCommands()
+	{
+		ParsingCommand moveCommand = new ParsingCommand(
+				new String[] {"move", "Move"},
+				"", // TODO
+				new String[][] {new String[] {"q"}, new String[] {"r"}},
+				new String[][] {
+					new String[]{"north", "North", "n"},
+					new String[]{"west", "West", "w"},
+					new String[]{"east", "East", "e"},
+					new String[]{"south", "South", "s"},
+					new String[]{"up", "Up", "u"},
+					new String[]{"down", "Down", "d"}},
+				(caller, parameters, flags) -> {moveFunction(caller, parameters, flags);});
+		commandBank.registerCommand(moveCommand);
+	}
+		
 	// Protected abstracts
-	
-	protected abstract int getMA(); // Speed in human hexes
-	
+		
+	protected abstract int getMA(); // Speed in human hexes	
+		
 	// Constructor
 	
 	public MektonActor()
 	{
 		super();
 		actionPoints = 0f;
+		commandBank = new ParsingCommandBank();
+		
+		registerCommands();
 	}
 	public MektonActor(String owner, MektonMap map)
 	{
 		super(owner, map);
 		actionTimer = new SimpleTimer();
+		commandBank = new ParsingCommandBank();
 		
 		resetActionPoints();
+		
+		registerCommands();
 	}
 
 	// Actions system
@@ -101,7 +153,7 @@ public abstract class MektonActor extends MapEntity
 	
 	public void moveTargetHexAct(AxialHexCoord3D target, int speed)
 	{
-		float moveCost = ((float) hexPos.distance(target)) / (float) getMA(); // TODO assumes walking
+		float moveCost = Math.abs((float) hexPos.distance(target)) / (float) getMA(); // TODO assumes walking
 		if (takeAction(moveCost)) super.moveTargetHex(target, speed);
 		else pause();
 	}
@@ -156,5 +208,17 @@ public abstract class MektonActor extends MapEntity
 		{
 			resetActionPoints();
 		}
+	}
+	
+	@Override
+	public boolean runCommand(String... words)
+	{
+		if (commandBank.recognizes(words[0]))
+		{
+			commandBank.execute(this, words);
+			return true;
+			
+		}
+		else return false;
 	}
 }

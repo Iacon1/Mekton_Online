@@ -9,23 +9,15 @@ import javax.swing.JPanel;
 import GameEngine.Point2D;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.Server.Account;
+import Modules.BaseModule.Commands.ParsingCommandAccount;
 import Modules.HexUtilities.HexEntity;
 
-public class TestAccount extends Account
+public class TestAccount extends ParsingCommandAccount
 {
-
-	@Override
-	public boolean runCommand(String... params)
+	public TestAccount()
 	{
-/*		CommandParser.ParsedCommand command = CommandParser.parseCommand(params);
-		if (command.target == -1) command.target = possessee;
-		GameEntity entity = GameInfo.getWorld().getEntity(command.target);
-		if (CommandRunner.class.isAssignableFrom(entity.getClass()))
-			return ((CommandRunner) entity).runCommand(command.params);
-		else return false; */
-		return false;
+		super();
 	}
-
 	@Override
 	public Point2D getCamera()
 	{

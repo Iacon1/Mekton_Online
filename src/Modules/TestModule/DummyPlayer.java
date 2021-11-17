@@ -7,8 +7,6 @@ package Modules.TestModule;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.MektonCore.MektonMap;
 import Modules.MektonCore.EntityTypes.Human;
-import Modules.MektonCore.EntityTypes.MapEntity;
-import Modules.MektonCore.EntityTypes.MektonActor;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
@@ -21,7 +19,6 @@ import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.InputGetter;
 
 import Modules.HexUtilities.HexConfigManager;
-import Modules.HexUtilities.HexDirection;
 
 import Utils.MiscUtils;
 
@@ -62,9 +59,7 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 	public void onMousePress(int mX, int mY, int button)
 	{
 		AxialHexCoord3D point = mapToken.get().fromPixel(new Point2D(mX, mY));
-		if (button == 0) GameInfo.setCommand("moveMouse " + point.q + " " + point.r + " " + point.z);
-		// TODO Auto-generated method stub
-		
+		if (button == 0) GameInfo.setCommand("move -q " + point.q + " -r " + point.r);
 	}
 
 	@Override
@@ -79,14 +74,14 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 	{
 		switch (code)
 		{
-		case KeyEvent.VK_Q: GameInfo.setCommand("move nw"); break;
-		case KeyEvent.VK_W: GameInfo.setCommand("move no"); break;
-		case KeyEvent.VK_E: GameInfo.setCommand("move ne"); break;
-		case KeyEvent.VK_A: GameInfo.setCommand("move sw"); break;
-		case KeyEvent.VK_S: GameInfo.setCommand("move so"); break;
-		case KeyEvent.VK_D: GameInfo.setCommand("move se"); break;
-		case KeyEvent.VK_SPACE: GameInfo.setCommand("move up"); break;
-		case KeyEvent.VK_SHIFT: GameInfo.setCommand("move do"); break;
+		case KeyEvent.VK_Q: GameInfo.setCommand("move -n -w"); break;
+		case KeyEvent.VK_E: GameInfo.setCommand("move -n -e"); break;
+		case KeyEvent.VK_W: GameInfo.setCommand("move -n"); break;
+		case KeyEvent.VK_A: GameInfo.setCommand("move -s -w"); break;
+		case KeyEvent.VK_D: GameInfo.setCommand("move -s -e"); break;
+		case KeyEvent.VK_S: GameInfo.setCommand("move -s"); break;
+		case KeyEvent.VK_SPACE: GameInfo.setCommand("move -u"); break;
+		case KeyEvent.VK_SHIFT: GameInfo.setCommand("move -d"); break;
 		}
 	}
 
@@ -105,51 +100,6 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 	public void onStop()
 	{
 		super.onStop();
-	}
-
-	@Override
-	public boolean runCommand(String... params)
-	{
-		{
-			switch (params[0])
-			{
-			case "moveMouse":
-					AxialHexCoord3D target = new AxialHexCoord3D(Integer.valueOf(params[1]), Integer.valueOf(params[2]), hexPos.z);
-					movePath(mapToken.get().pathfind(hexPos, target), 2);
-					return true;
-			case "move": // TODO objects with MA
-				switch (params[1])
-				{
-				case "north": case "no": case "n":
-					moveDirectionalAct(HexDirection.north, 1, 2);
-					return true;
-				case "northwest": case "nw":
-					moveDirectionalAct(HexDirection.northWest, 1, 2);
-					return true;
-				case "northeast": case "ne":
-					moveDirectionalAct(HexDirection.northEast, 1, 2);
-					return true;
-					
-				case "south": case "so": case "s":
-					moveDirectionalAct(HexDirection.south, 1, 2);
-					return true;
-				case "southwest": case "sw":
-					moveDirectionalAct(HexDirection.southWest, 1, 2);
-					return true;
-				case "southeast": case "se":
-					moveDirectionalAct(HexDirection.southEast, 1, 2);
-					return true;
-					
-				case "up":
-					moveDirectionalAct(HexDirection.up, 1, 2);
-					return true;
-				case "down": case "do":
-					moveDirectionalAct(HexDirection.down, 1, 2);
-					return true;
-				}
-			default: return false;
-			}
-		}
 	}
 
 	@Override

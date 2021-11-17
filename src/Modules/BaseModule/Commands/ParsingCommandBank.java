@@ -38,12 +38,10 @@ public class ParsingCommandBank
 	/** Executes the command, if it exists.
 	 * 
 	 *  @param caller The object calling this.
-	 *  @param command The command to run.
+	 *  @param words The command, parameters, values, and flags to run.
 	 */
-	public void execute(Object caller, String command)
+	public void execute(Object caller, String[] words)
 	{
-		String[] words = command.split(" ");
-		
 		for (int i = 0; i < commands.size(); ++i)
 		{
 			if (commands.get(i).hasAlias(words[0]))
@@ -52,5 +50,17 @@ public class ParsingCommandBank
 				return;
 			}
 		}
+	}
+	
+	/** Executes the command, if it exists.
+	 * 
+	 *  @param caller The object calling this.
+	 *  @param command The command to run.
+	 */
+	public void execute(Object caller, String command)
+	{
+		String[] words = command.split(" ");
+		
+		execute(caller, words);
 	}
 }
