@@ -51,7 +51,7 @@ public final class MiscUtils
 	 */
 	public static List<Image> getIcons(boolean forClient) // Returns all versions of the icon for either client or server
 	{
-		ArrayList<Image> icons = new ArrayList<Image>();
+		List<Image> icons = new ArrayList<Image>();
 		String pathPrefix;
 		if (forClient) pathPrefix = "Resources/Icons/Client Icons/";
 		else pathPrefix = "Resources/Icons/Server Icons/"; // For the server

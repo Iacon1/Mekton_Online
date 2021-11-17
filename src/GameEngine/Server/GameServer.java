@@ -6,6 +6,7 @@ package GameEngine.Server;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -58,9 +59,9 @@ public abstract class GameServer<A extends Account, T extends ConnectionPairThre
 	{
 		return (A) accounts.get(username);
 	}
-	public ArrayList<A> getAccounts()
+	public List<A> getAccounts()
 	{
-		ArrayList<A> accountList = new ArrayList<A>();
+		List<A> accountList = new ArrayList<A>();
 		
 		for (Map.Entry<String, Account> entry : accounts.entrySet())
 		{

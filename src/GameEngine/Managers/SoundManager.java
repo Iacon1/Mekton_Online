@@ -7,6 +7,7 @@ package GameEngine.Managers;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.AudioInputStream;
@@ -16,8 +17,8 @@ import Utils.Logging;
 
 public final class SoundManager
 {
-	private static HashMap<String, Clip> sounds;
-	private static HashMap<String, Clip> music;
+	private static Map<String, Clip> sounds;
+	private static Map<String, Clip> music;
 	
 	public static void init()
 	{

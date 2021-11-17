@@ -6,6 +6,7 @@ package Modules.Pathfinding;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class PathfindingAdapter<T, A extends PathfindingAlgorithm>
@@ -22,7 +23,7 @@ public class PathfindingAdapter<T, A extends PathfindingAlgorithm>
 	protected Distance<T> distFunc;
 	public static interface Neighbors<T>
 	{
-		public ArrayList<T> neighbors(T value);
+		public List<T> neighbors(T value);
 	}
 	protected Neighbors<T> nearFunc;
 	
@@ -36,7 +37,7 @@ public class PathfindingAdapter<T, A extends PathfindingAlgorithm>
 		this.supplier = supplier;
 	}
 	
-	public LinkedList<T> findOptimalPath(ArrayList<T> list, T a, T b)
+	public LinkedList<T> findOptimalPath(List<T> list, T a, T b)
 	{
 		PathfindingGraph graph = new PathfindingGraph(
 				(x, y) -> (costFunc.cost(list.get(x), list.get(y))),
@@ -46,7 +47,7 @@ public class PathfindingAdapter<T, A extends PathfindingAlgorithm>
 		graph.setSize(list.size());
 		for (int i = 0; i < list.size(); ++i)
 		{
-			ArrayList<T> neighbors = nearFunc.neighbors(list.get(i));
+			List<T> neighbors = nearFunc.neighbors(list.get(i));
 			for (int j = 0; j < neighbors.size(); ++j)
 			{
 				int jIndex = list.indexOf(neighbors.get(j));

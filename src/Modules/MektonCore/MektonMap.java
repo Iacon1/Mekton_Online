@@ -13,6 +13,7 @@ package Modules.MektonCore;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import GameEngine.ScreenCanvas;
@@ -51,9 +52,9 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	{
 		return a.distance(b);
 	}
-	private ArrayList<AxialHexCoord3D> neighbors(AxialHexCoord3D coord) // Cost of coord
+	private List<AxialHexCoord3D> neighbors(AxialHexCoord3D coord) // Cost of coord
 	{
-		ArrayList<AxialHexCoord3D> list = new ArrayList<AxialHexCoord3D>();
+		List<AxialHexCoord3D> list = new ArrayList<AxialHexCoord3D>();
 		list.add(coord.getNeighbor(HexDirection.north));
 		list.add(coord.getNeighbor(HexDirection.northWest));
 		list.add(coord.getNeighbor(HexDirection.northEast));
@@ -136,7 +137,7 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	{
 		if (a.z != b.z) return null;
 		
-		ArrayList<AxialHexCoord3D> layer = new ArrayList<AxialHexCoord3D>();
+		List<AxialHexCoord3D> layer = new ArrayList<AxialHexCoord3D>();
 		
 		for (int i = 0; i < map.getColumns(); ++i) // Generate the list of hex coords
 		{

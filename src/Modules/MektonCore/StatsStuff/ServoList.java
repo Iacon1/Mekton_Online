@@ -6,16 +6,18 @@ package Modules.MektonCore.StatsStuff;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import Modules.MektonCore.StatsStuff.ServoLocation.ServoSide;
 import Modules.MektonCore.StatsStuff.ServoLocation.ServoType;
 
 public class ServoList<T extends Servo>
 {	
-	private ArrayList<T> servos; // List of servos
+	private List<T> servos; // List of servos
 	
-	private HashMap<ServoType, ArrayList<Integer>> byType; // List of servos by category
-	private HashMap<ServoSide, ArrayList<Integer>> bySide; // List of servos by side
+	private Map<ServoType, List<Integer>> byType; // List of servos by category
+	private Map<ServoSide, List<Integer>> bySide; // List of servos by side
 	
 	private ServoType getCategory(int servo)
 	{
@@ -40,9 +42,9 @@ public class ServoList<T extends Servo>
 		return null;
 	}
 	
-	private ArrayList<Integer> byTypeAndSide(ServoType category, ServoSide side)
+	private List<Integer> byTypeAndSide(ServoType category, ServoSide side)
 	{
-		ArrayList<Integer> list = new ArrayList<Integer>();
+		List<Integer> list = new ArrayList<Integer>();
 		
 		for (int i = 0; i < servos.size(); ++i)
 		{

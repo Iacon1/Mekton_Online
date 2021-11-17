@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -81,13 +82,13 @@ public class GameFrame extends JFrame
 			}
 		}
 		
-		private ArrayList<InputGetter> inputGetters;
+		private List<InputGetter> inputGetters;
 		private void findInputGetters() // Finds all input getters
 		{
 			if (!hasUpdated()) return; // Don't want to call this often
 			else
 			{
-				ArrayList<GameEntity> entities = GameInfo.getWorld().getEntities();
+				List<GameEntity> entities = GameInfo.getWorld().getEntities();
 				inputGetters.clear();
 				for (int i = 0; i < entities.size(); ++i)
 				{

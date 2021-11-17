@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.SpringLayout;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.SwingConstants;
 import javax.swing.JSpinner;
@@ -54,7 +55,7 @@ public class GetServerFrame extends JFrame
 	private final JButton saveServerButton = new JButton("Save server as...");
 	private final JButton removeServerButton = new JButton("Remove server...");
 	private final JButton connectServerButton = new JButton("Connect to server");
-	private ArrayList<SavedServer> savedServerArray;
+	private List<SavedServer> savedServerArray;
 	// Functionality
 	
 	private void populateList() // Populates savedServerList from file

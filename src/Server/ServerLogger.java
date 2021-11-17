@@ -9,6 +9,7 @@ import java.io.StringWriter;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import Utils.Logger;
 
@@ -20,7 +21,7 @@ public class ServerLogger implements Logger
 		public String category;
 		public String text;
 	}
-	private volatile ArrayList<LogEntry> log;
+	private volatile List<LogEntry> log;
 	
 	private static String getCaller() // Returns calling function & line
 	{

@@ -5,6 +5,7 @@
 package GameEngine.EntityTypes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import GameEngine.ScreenCanvas;
 import GameEngine.GameInfo;
@@ -15,7 +16,7 @@ public abstract class GameEntity
 {
 	private int parentId; // Parent object index; -1 means none
 	private int ourId;
-	protected ArrayList<Integer> childrenIds; // Children object indices
+	protected List<Integer> childrenIds; // Children object indices
 
 	private String owner; // Owner account
 
@@ -77,9 +78,9 @@ public abstract class GameEntity
 	{
 		return getEntity(childrenIds.get(i));
 	}
-	public ArrayList<GameEntity> getChildren()
+	public List<GameEntity> getChildren()
 	{
-		ArrayList<GameEntity> children = new ArrayList<GameEntity>();
+		List<GameEntity> children = new ArrayList<GameEntity>();
 		for (int i = 0; i < childrenIds.size(); ++i)
 		{
 			children.add(getEntity(childrenIds.get(i)));

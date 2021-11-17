@@ -31,7 +31,7 @@ public class MekServo extends Servo
 	}
 	
 	private int maxSpace = 0;
-	private GappyArrayList<Integer> spaceTakers;
+	private GappyArrayList<Integer> spaceTakers; // Important to note because it has functions a normal ArrayList doesn't
 	private int cost = 0;
 	private float weight = 0;
 	

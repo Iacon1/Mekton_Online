@@ -5,13 +5,14 @@
 package Modules.HexUtilities.HexStructures.Axial;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import Modules.HexUtilities.HexStructures.HexMap;
 
 public class AxialHex3DMap<M extends AxialHexMap<T>, T> implements HexMap<AxialHexCoord3D, T>
 {
-	private ArrayList<M> maps;
+	private List<M> maps;
 	private transient Supplier<M> supplier; // Should be OK to transient
 	
 	private int columns; // Size of any one map

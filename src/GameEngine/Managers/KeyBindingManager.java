@@ -6,12 +6,13 @@ package GameEngine.Managers;
 
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.Map;
 
 import Utils.Logging;
 
 public final class KeyBindingManager
 {
-	private static HashMap<String, Integer> bindings;
+	private static Map<String, Integer> bindings;
 	
 	public static void init()
 	{

@@ -6,6 +6,7 @@ package Client;
 
 import java.awt.Container;
 import java.util.HashMap;
+import java.util.Map;
 
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.StateGiverModule;
@@ -22,7 +23,7 @@ public class GameClientThread extends StatefulConnectionPairThread
 	
 	private ServerInfoPacket serverInfo; // The server info we received
 	
-	private HashMap<String, Container> containers; // All currently-open UI
+	private Map<String, Container> containers; // All currently-open UI
 
 	/** Constructor
 	 * 

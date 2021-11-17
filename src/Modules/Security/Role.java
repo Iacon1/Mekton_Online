@@ -5,11 +5,12 @@
 package Modules.Security;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Role
 {
 	private String name;
-	private ArrayList<String> permissions; // Things it is allowed to do
+	private List<String> permissions; // Things it is allowed to do
 	
 	public Role(String name)
 	{

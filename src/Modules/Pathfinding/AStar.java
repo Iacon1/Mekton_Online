@@ -7,6 +7,8 @@ package Modules.Pathfinding;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 public class AStar implements PathfindingAlgorithm // https://www.redblobgames.com/pathfinding/a-star/introduction.html#astar
@@ -25,8 +27,8 @@ public class AStar implements PathfindingAlgorithm // https://www.redblobgames.c
 	@Override
 	public LinkedList<Integer> findOptimalPath(PathfindingGraph g, int a, int b)
 	{
-		HashMap<Integer, Integer> prevNode = new HashMap<Integer, Integer>(); // -1 -> no node
-		HashMap<Integer, Integer> bestCost = new HashMap<Integer, Integer>(); 
+		Map<Integer, Integer> prevNode = new HashMap<Integer, Integer>(); // -1 -> no node
+		Map<Integer, Integer> bestCost = new HashMap<Integer, Integer>(); 
 		
 		PriorityQueue<PriNode> queue = new PriorityQueue<PriNode>(1, (x, y) -> x.pri - y.pri); // Init
 		queue.add(new PriNode(a, 0));
@@ -44,7 +46,7 @@ public class AStar implements PathfindingAlgorithm // https://www.redblobgames.c
 				break; // We found the target!
 			}
 			
-			ArrayList<Integer> neighbors = g.getNeighbors(node);
+			List<Integer> neighbors = g.getNeighbors(node);
 			for (int i = 0; i < neighbors.size(); ++i) // Look at its neighbors
 			{
 				int ind = neighbors.get(i);

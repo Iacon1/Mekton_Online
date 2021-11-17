@@ -6,12 +6,13 @@
 package Modules.HexUtilities.HexStructures.Axial;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import Modules.HexUtilities.HexStructures.HexMap;
 
 public abstract class AxialHexMap<T> implements HexMap<AxialHexCoord, T>
 {
-	private ArrayList<ArrayList<T>> hexes;
+	private List<ArrayList<T>> hexes;
 	
 	private int columns; // Size of array
 	private int rows;

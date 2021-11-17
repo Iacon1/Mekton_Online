@@ -5,6 +5,7 @@
 package GameEngine.Managers;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import Utils.JSONManager;
 import Utils.Logging;
@@ -12,16 +13,16 @@ import Utils.MiscUtils;
 
 public final class StringManager
 {
-	private static HashMap<String, HashMap<String, String>> stringBanks;
+	private static Map<String, Map<String, String>> stringBanks;
 	
 	public static void init()
 	{
-		stringBanks = new HashMap<String, HashMap<String, String>>();
+		stringBanks = new HashMap<String, Map<String, String>>();
 	}
 	
 	public static String getString(String path, String name) // Gets a string from a string bank
 	{
-		HashMap<String, String> stringBank = stringBanks.get(path);
+		Map<String, String> stringBank = stringBanks.get(path);
 		if (stringBank == null)
 		{
 			Logging.logError("Have not loaded string bank " + path + ". Loading...");

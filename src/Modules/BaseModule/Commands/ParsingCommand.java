@@ -17,10 +17,10 @@ public class ParsingCommand
 		public void execute(Object caller, Map<String, String> parameters, Map<String, Boolean> flags);
 	}
 	
-	private LinkedList<String> names;
+	private List<String> names;
 	private String usage;
-	private LinkedList<LinkedList<String>> parameters;
-	private LinkedList<LinkedList<String>> flags;
+	private List<List<String>> parameters;
+	private List<List<String>> flags;
 	private static char tagChar = '-'; // Denotes a tag, i. e. a parameter or flag
 	
 	private CommandFunction commandFunction;
@@ -37,8 +37,8 @@ public class ParsingCommand
 	{
 		this.names = new LinkedList<String>();
 		this.usage = usage;
-		this.parameters = new LinkedList<LinkedList<String>>();
-		this.flags = new LinkedList<LinkedList<String>>();
+		this.parameters = new LinkedList<List<String>>();
+		this.flags = new LinkedList<List<String>>();
 		this.commandFunction = commandFunction;
 		
 		for (int i = 0; i < names.length; ++i) this.names.add(names[i]);
@@ -72,7 +72,7 @@ public class ParsingCommand
 	
 	private Map<String, String> parseParameters(String[] words) // Parses out all parameters
 	{
-		HashMap<String, String> parameters = new HashMap<String, String>();
+		Map<String, String> parameters = new HashMap<String, String>();
 		for (int i = 0; i < this.parameters.size(); ++i)
 		{
 			parameters.put(this.parameters.get(i).get(0), null);
@@ -93,7 +93,7 @@ public class ParsingCommand
 	}
 	private Map<String, Boolean> parseFlags(String[] words) // Parses out all flags
 	{
-		HashMap<String, Boolean> flags = new HashMap<String, Boolean>();
+		Map<String, Boolean> flags = new HashMap<String, Boolean>();
 		
 		for (int i = 0; i < this.flags.size(); ++i)
 		{

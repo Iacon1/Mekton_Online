@@ -5,6 +5,7 @@
 package GameEngine.Managers;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -16,8 +17,8 @@ import Utils.MiscUtils;
 
 public final class GraphicsManager
 {
-	private static HashMap<String, Image> images;
-	private static HashMap<String, Font> fonts;
+	private static Map<String, Image> images;
+	private static Map<String, Font> fonts;
 	
 	public static void init()
 	{

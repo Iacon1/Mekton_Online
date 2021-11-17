@@ -5,6 +5,7 @@
 package Modules.HexUtilities.HexStructures.Axial;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import GameEngine.Point2D;
 import Modules.HexUtilities.HexConfigManager;
@@ -91,10 +92,10 @@ public class AxialHexCoord implements HexCoord
 	}
 	
 	@Override
-	public ArrayList<AxialHexCoord> straightLine(HexCoord target) // https://www.redblobgames.com/grids/hexagons/#line-drawing
+	public List<AxialHexCoord> straightLine(HexCoord target) // https://www.redblobgames.com/grids/hexagons/#line-drawing
 	{
 		AxialHexCoord targetAxial = HexCoordConverter.convert(target, target.getClass(), AxialHexCoord.class);
-		ArrayList<AxialHexCoord> line = new ArrayList<AxialHexCoord>();
+		List<AxialHexCoord> line = new ArrayList<AxialHexCoord>();
 		
 		int dist = distance(targetAxial);
 		
@@ -114,9 +115,9 @@ public class AxialHexCoord implements HexCoord
 		return line;
 	}
 	@Override
-	public ArrayList<AxialHexCoord> withinDistance(int r) // https://www.redblobgames.com/grids/hexagons/#range
+	public List<AxialHexCoord> withinDistance(int r) // https://www.redblobgames.com/grids/hexagons/#range
 	{
-		ArrayList<AxialHexCoord> within = new ArrayList<AxialHexCoord>();
+		List<AxialHexCoord> within = new ArrayList<AxialHexCoord>();
 		
 		for (int i = -r; i <= r; ++i)
 			for (int j = Math.max(-r, -(i + r)); j <= Math.min(r, r - i); ++j)

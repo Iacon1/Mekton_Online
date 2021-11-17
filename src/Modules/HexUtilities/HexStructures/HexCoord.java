@@ -5,6 +5,7 @@
 package Modules.HexUtilities.HexStructures;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import GameEngine.Point2D;
 import Modules.HexUtilities.HexDirection;
@@ -51,13 +52,13 @@ public interface HexCoord
 	 *  
 	 * @param target Coord to go to.
 	 */
-	public <T extends HexCoord> ArrayList<T> straightLine(HexCoord target);
+	public <T extends HexCoord> List<T> straightLine(HexCoord target);
 
 	/** Gets all hexes within a certain distance of us.
 	 *
 	 * @param r Radius.
 	 */
-	public <T extends HexCoord> ArrayList<T> withinDistance(int r);
+	public <T extends HexCoord> List<T> withinDistance(int r);
 	
 	/** Converts to a pixel coordinate. Should return the top-left corner for a hex-shaped sprite,
 	 *  which is actually *outside* the hex.

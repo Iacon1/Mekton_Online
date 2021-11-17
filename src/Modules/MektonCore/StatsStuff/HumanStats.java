@@ -6,6 +6,7 @@
 package Modules.MektonCore.StatsStuff;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class HumanStats
 {
@@ -24,7 +25,7 @@ public class HumanStats
 		psionics
 	}
 	
-	private HashMap<Stat, Integer> stats;
+	private Map<Stat, Integer> stats;
 	
 	public HumanStats()
 	{

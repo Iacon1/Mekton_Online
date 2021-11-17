@@ -5,6 +5,7 @@
 package GameEngine;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import GameEngine.Client.GameFrame;
 import GameEngine.EntityTypes.GameEntity;
@@ -16,7 +17,7 @@ public class GameInfo
 	// Things that might need to be communicated
 	public static class GameWorld
 	{
-		protected GappyArrayList<GameEntity> instances; // List of game instances
+		protected GappyArrayList<GameEntity> instances; // List of game instances; Important that we note it to be a gappy array list and not a normal one.
 		public GameWorld()
 		{
 			instances = new GappyArrayList<GameEntity>();
@@ -45,9 +46,9 @@ public class GameInfo
 			
 		}
 		
-		public ArrayList<GameEntity> getRootEntities() // Returns every instance with no parent
+		public List<GameEntity> getRootEntities() // Returns every instance with no parent
 		{
-			ArrayList<GameEntity> array = new ArrayList<GameEntity>();
+			List<GameEntity> array = new ArrayList<GameEntity>();
 			for (int i = 0; i < instances.size(); ++i)
 			{
 				GameEntity instance = instances.get(i);
@@ -61,7 +62,7 @@ public class GameInfo
 		/** Returns the list of instances.
 		 *  No guarantee that any one entity *isn't* null!
 		 */
-		public ArrayList<GameEntity> getEntities() // Shows every instance instead of just our children; GameWorld.children ought be empty
+		public List<GameEntity> getEntities() // Shows every instance instead of just our children; GameWorld.children ought be empty
 		{
 			return instances;
 		}

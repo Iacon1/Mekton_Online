@@ -5,6 +5,7 @@
 package Modules.HexUtilities;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import GameEngine.EntityTypes.SpriteEntity;
 import Modules.HexUtilities.HexStructures.HexCoord;
@@ -16,7 +17,7 @@ public abstract class HexEntity<T extends HexCoord> extends SpriteEntity // T is
 	private HexDirection facing;
 	
 	private boolean paused = false;
-	protected LinkedList<T> path;
+	protected LinkedList<T> path; // Important that it is a LinkedList
 	protected int baseSpeed;
 	
 	public HexEntity()

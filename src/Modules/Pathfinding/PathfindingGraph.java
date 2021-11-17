@@ -7,6 +7,7 @@ package Modules.Pathfinding;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class PathfindingGraph
 {
@@ -41,7 +42,7 @@ public class PathfindingGraph
 		}
 	}
 	
-	private ArrayList<Node> nodes_;
+	private List<Node> nodes_;
 	
 	public PathfindingGraph(Cost costFunc, Distance distFunc)
 	{
@@ -93,9 +94,9 @@ public class PathfindingGraph
 	 * 
 	 * @param node The node to get neighbors of.
 	 */
-	public ArrayList<Integer> getNeighbors(int node)
+	public List<Integer> getNeighbors(int node)
 	{
-		ArrayList<Integer> neighbors = new ArrayList<Integer>();
+		List<Integer> neighbors = new ArrayList<Integer>();
 		neighbors.addAll(nodes_.get(node).neighbors);
 		return neighbors;
 	}

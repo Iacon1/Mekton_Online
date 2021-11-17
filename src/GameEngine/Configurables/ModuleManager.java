@@ -10,6 +10,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import GameEngine.GameInfo;
 import GameEngine.Configurables.ModuleTypes.Module;
@@ -18,8 +20,8 @@ import Utils.MiscUtils;
 
 public final class ModuleManager
 {
-	private static HashMap<String, Module> modules; // The actual modules, by file name
-	private static ArrayList<String> modulePriorities; // The module names by priority
+	private static Map<String, Module> modules; // The actual modules, by file name
+	private static List<String> modulePriorities; // The module names by priority
 
 	public static <T> boolean doesImplement(Module module, Class<T> moduleType) // Does module implement that module type? 
 	{
@@ -29,9 +31,9 @@ public final class ModuleManager
 	// Checks if module implements function. If it does, and if nothing else has yet, then sets highestImplementer of function to module
 	// Functions are listed in Module.java
 	
-	private static ArrayList<String> getModules(String path) // Lists all modules
+	private static List<String> getModules(String path) // Lists all modules
 	{
-		ArrayList<String> moduleList;
+		List<String> moduleList;
 		/*java.lang.reflect.Type listType = new TypeToken<ArrayList<String>>(){}.getType();
 		moduleList = JSONManager.deserializeArrayJSON(MiscUtils.readText(path + "ModuleList.json"), listType); // Open up the list of files
 		*/
@@ -73,7 +75,7 @@ public final class ModuleManager
 	{
 		String path = GameInfo.getServerPackResource("Modules/");
 		
-		ArrayList<String> moduleList = getModules(path);
+		List<String> moduleList = getModules(path);
 		
 		modules = new HashMap<String, Module>();
 		modulePriorities = new ArrayList<String>();

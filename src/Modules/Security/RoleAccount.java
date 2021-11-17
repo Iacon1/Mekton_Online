@@ -5,6 +5,7 @@
 package Modules.Security;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -13,7 +14,7 @@ import GameEngine.Server.Account;
 
 public abstract class RoleAccount extends Account
 {
-	private ArrayList<Role> roles;
+	private List<Role> roles;
 
 	public RoleAccount()
 	{

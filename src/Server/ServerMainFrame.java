@@ -29,6 +29,7 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.util.TimerTask;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import javax.swing.SpringLayout;
 import javax.swing.tree.DefaultTreeModel;
@@ -162,7 +163,7 @@ public class ServerMainFrame extends JFrame
 	}
 	private void updatePlayersList()
 	{
-		ArrayList<Account> accounts = server.getAccounts();
+		List<Account> accounts = server.getAccounts();
 		
 		playersPanel.removeAll();
 		
