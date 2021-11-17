@@ -5,7 +5,6 @@
 package Modules.BaseModule.PacketTypes;
 
 import GameEngine.GameInfo;
-import GameEngine.Point2D;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.TransSerializable;
 
@@ -37,7 +36,7 @@ public class GameDataPacket extends Packet implements TransSerializable
 		
 		currentLocationId = 0; // TODO determine location
 		
-		possesseeId = player.possessee;
+		possesseeId = player.getPossessee().getId();
 //		camera = player.getCamera();
 	}
 	@Override

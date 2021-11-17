@@ -73,8 +73,7 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 		account.setLogged(true);
 		DummyPlayer player = new DummyPlayer(account.username, (MektonMap) GameInfo.getWorld().getRootEntities().get(0)); // Adds a guy to the map
 
-		account.possessee = player.getId();
-		GameInfo.setPossessee(account.possessee);
+		account.possess(player);
 		GameInfo.getWorld().getRootEntities().get(0).addChild(player);
 		player.setHexPos(new AxialHexCoord3D(2, 2, 0));
 		
@@ -84,21 +83,21 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	public GameEntity wakePlayer(Account account)
 	{
 		account.setLogged(true);
-		if (account.possessee != -1) return null;
+		if (account.hasPossessee()) return null;
 		else return makePlayer(account);
 	}
 	@Override
 	public GameEntity sleepPlayer(Account account)
 	{
 		account.setLogged(false);
-		GameInfo.getWorld().removeEntity(account.possessee, true);
+		GameInfo.getWorld().removeEntity(account.getPossessee(), true);
 		return null;
 	}
 	@Override
 	public GameEntity deletePlayer(Account account)
 	{
 		account.setLogged(false);
-		GameInfo.getWorld().removeEntity(account.possessee, true);
+		GameInfo.getWorld().removeEntity(account.getPossessee(), true);
 		return null;
 	}	
 }

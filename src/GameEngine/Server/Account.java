@@ -14,13 +14,11 @@ import GameEngine.EntityTypes.GameEntity;
 public abstract class Account implements CommandRunner
 {
 	public String username;
-	public int possessee; // Entity our user is possessing
+	private int possessee; // Entity our user is possessing
 	
 	protected boolean loggedIn; // Am I logged in?
 	private int hash;
-		
-	protected transient GameServer server; // TODO needed a reference to master list of accounts, this is bad hack and damages coupling
-	
+
 	public Account()
 	{
 		username = null;
@@ -28,10 +26,6 @@ public abstract class Account implements CommandRunner
 		hash = -1;
 	}
 	
-	public void setServer(GameServer server)
-	{
-		this.server = server;
-	}
 	public void setHash(String password) // Sets the hash
 	{
 		hash = password.hashCode(); // More secure probably possible
@@ -39,6 +33,15 @@ public abstract class Account implements CommandRunner
 	public boolean eqHash(String password) // Is the given password equal to our hash?
 	{
 		return (password.hashCode() == hash);
+	}
+	public void possess(GameEntity entity)
+	{
+		entity.setOwner(username);
+		possessee = entity.getId();
+	}
+	public boolean hasPossessee()
+	{
+		return possessee != -1;
 	}
 	public GameEntity getPossessee()
 	{

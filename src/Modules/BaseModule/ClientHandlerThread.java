@@ -25,7 +25,7 @@ public class ClientHandlerThread extends StatefulConnectionPairThread
 	}
 	protected GameEntity getUserEntity()
 	{
-		return GameEntity.getEntity(parent_.getAccount(username_).possessee);
+		return parent_.getAccount(username_).getPossessee();
 	}
 	
 	protected static volatile BaseServer parent_;

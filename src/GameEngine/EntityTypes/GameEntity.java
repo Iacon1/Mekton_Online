@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import GameEngine.ScreenCanvas;
+import GameEngine.Server.Account;
 import GameEngine.GameInfo;
 import GameEngine.Point2D;
 
@@ -104,13 +105,17 @@ public abstract class GameEntity
 	{
 		setOwner(null);
 	}
-	public String getOwner()
+	public String getOwnerName()
 	{
 		return owner;
 	}
 	public boolean isOwner(String name)
 	{
 		return owner.equals(name);
+	}
+	public Account getOwner()
+	{
+		return GameInfo.getAccount(owner);
 	}
 	
 	public abstract String getName(); // Gets object name

@@ -40,7 +40,7 @@ public class ParsingCommandBank
 	 *  @param caller The object calling this.
 	 *  @param words The command, parameters, values, and flags to run.
 	 */
-	public void execute(Object caller, String[] words)
+	public void execute(Object caller, String[] words) throws Exception
 	{
 		for (int i = 0; i < commands.size(); ++i)
 		{
@@ -57,7 +57,7 @@ public class ParsingCommandBank
 	 *  @param caller The object calling this.
 	 *  @param command The command to run.
 	 */
-	public void execute(Object caller, String command)
+	public void execute(Object caller, String command) throws Exception
 	{
 		String[] words = command.split(" ");
 		

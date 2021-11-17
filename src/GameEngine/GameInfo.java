@@ -9,6 +9,8 @@ import java.util.List;
 
 import GameEngine.Client.GameFrame;
 import GameEngine.EntityTypes.GameEntity;
+import GameEngine.Server.Account;
+import GameEngine.Server.GameServer;
 import Utils.GappyArrayList;
 import Utils.MiscUtils;
 
@@ -45,6 +47,10 @@ public class GameInfo
 			instances.remove(id);
 			
 		}
+		public void removeEntity(GameEntity entity, boolean recurse)
+		{
+			removeEntity(entity.getId(), recurse);
+		}
 		
 		public List<GameEntity> getRootEntities() // Returns every instance with no parent
 		{
@@ -79,6 +85,9 @@ public class GameInfo
 //	private static transient Point2D camera;
 	private static transient String serverPackPrefix; // Server pack's path
 
+	// Server-side
+	private static transient GameServer server;
+	
 	private GameInfo() // Static class, do not call
 	{
 		world = new GameWorld();
@@ -115,6 +124,18 @@ public class GameInfo
 		return isClient;
 	}
 	
+	public static void setServer(GameServer server)
+	{
+		GameInfo.server = server;
+	}
+	public static GameServer getServer()
+	{
+		return server;
+	}
+	public static Account getAccount(String username)
+	{
+		return server.getAccount(username);
+	}
 	public static void resetCommand() // Resets all input elements
 	{
 		GameInfo.command = null;

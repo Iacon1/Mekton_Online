@@ -5,13 +5,17 @@
 package Modules.MektonCore.EntityTypes;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+import Utils.Logging;
 import Utils.MiscUtils;
 import Utils.SimpleTimer;
 
 import GameEngine.Animation;
+import GameEngine.GameInfo;
 import GameEngine.EntityTypes.CommandRunner;
+import GameEngine.Server.Account;
 import Modules.BaseModule.Commands.ParsingCommand;
 import Modules.BaseModule.Commands.ParsingCommandBank;
 import Modules.HexUtilities.HexDirection;
@@ -19,8 +23,11 @@ import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 
 import Modules.MektonCore.MektonMap;
 import Modules.MektonCore.StatsStuff.DamageTypes.Damage;
+import Modules.Security.Role;
+import Modules.Security.RoleAccount;
+import Modules.Security.RoleHolder;
 
-public abstract class MektonActor extends MapEntity implements CommandRunner
+public abstract class MektonActor extends MapEntity implements CommandRunner, RoleHolder
 {
 	public enum Scale
 	{
@@ -211,11 +218,31 @@ public abstract class MektonActor extends MapEntity implements CommandRunner
 	}
 	
 	@Override
+	public void addRole(Role role) {} // Might be security loophole to set through here
+	
+	@Override
+	public boolean hasRole(Role role)
+	{
+		if (RoleAccount.class.isAssignableFrom(getOwner().getClass()))
+			return ((RoleAccount) getOwner()).hasRole(role);
+		else return false;
+	}
+	
+	@Override
+	public List<Role> getRoles()
+	{
+		if (RoleAccount.class.isAssignableFrom(getOwner().getClass()))
+			return ((RoleAccount) getOwner()).getRoles();
+		else return null;
+	}
+	
+	@Override
 	public boolean runCommand(String... words)
 	{
 		if (commandBank.recognizes(words[0]))
 		{
-			commandBank.execute(this, words);
+			try {commandBank.execute(this, words);}
+			catch (Exception e) {Logging.logException(e);}
 			return true;
 			
 		}

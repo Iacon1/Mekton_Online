@@ -6,6 +6,8 @@ package Modules.BaseModule.Commands;
 
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.Server.Account;
+import Utils.Logging;
+
 import java.util.Map;
 
 public abstract class ParsingCommandAccount extends Account
@@ -41,9 +43,9 @@ public abstract class ParsingCommandAccount extends Account
 	{
 		if (commandBank.recognizes(words[0]))
 		{
-			commandBank.execute(this, words);
-			return true;
-			
+			try {commandBank.execute(this, words);}
+			catch (Exception e) {Logging.logException(e);}
+			return true;	
 		}
 		else if (CommandRunner.class.isAssignableFrom(getPossessee().getClass())) return ((CommandRunner) getPossessee()).runCommand(words);
 		else return false;

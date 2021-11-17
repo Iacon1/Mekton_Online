@@ -14,7 +14,7 @@ public class ParsingCommand
 {
 	public static interface CommandFunction
 	{
-		public void execute(Object caller, Map<String, String> parameters, Map<String, Boolean> flags);
+		public void execute(Object caller, Map<String, String> parameters, Map<String, Boolean> flags) throws InvalidParameterException;
 	}
 	
 	private List<String> names;
@@ -70,7 +70,7 @@ public class ParsingCommand
 		return usage;
 	}
 	
-	private Map<String, String> parseParameters(String[] words) // Parses out all parameters
+	private Map<String, String> parseParameters(String[] words) throws InvalidParameterException // Parses out all parameters
 	{
 		Map<String, String> parameters = new HashMap<String, String>();
 		for (int i = 0; i < this.parameters.size(); ++i)
@@ -82,6 +82,11 @@ public class ParsingCommand
 				
 				if (index != -1) // Found an alias
 				{
+					if (index + 1 >= words.length)
+						throw new InvalidParameterException(this.parameters.get(i).get(0), "Null");
+					else if (words[index + 1].charAt(0) == tagChar)
+						throw new InvalidParameterException(this.parameters.get(i).get(0), words[index + 1]);		
+					
 					parameters.put(this.parameters.get(i).get(0), words[index + 1]); // TODO what if no index + 1, or what if next value is a tag itself?
 					break;
 				}
@@ -119,7 +124,7 @@ public class ParsingCommand
 	 *  @param caller The object calling this command.
 	 *  @param words The command, parameters, and flags that were called - In no particular order.
 	 */
-	public void execute(Object caller, String[] words)
+	public void execute(Object caller, String[] words) throws Exception
 	{	
 		Map<String, String> parameters = parseParameters(words);
 		Map<String, Boolean> flags = parseFlags(words);

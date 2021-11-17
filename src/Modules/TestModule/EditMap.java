@@ -24,7 +24,7 @@ public class EditMap extends MektonMap implements InputGetter, CommandRunner
 		super(tileset, zFog, environmentType);
 	}
 	@Override
-	public boolean runCommand(String[] params)
+	public boolean runCommand(String... params)
 	{
 		AxialHexCoord3D coord = new AxialHexCoord3D(0, 0, 0);
 		coord.q = Integer.valueOf(params[0]);

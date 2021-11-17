@@ -29,8 +29,6 @@ public abstract class GameServer<A extends Account, T extends ConnectionPairThre
 		accounts = (HashMap<String, Account>) JSONManager.deserializeCollectionJSONList(MiscUtils.readText("Local Data/Server/Accounts.json"), HashMap.class, String.class, Account.class);
 
 		if (accounts == null) accounts = new HashMap<String, Account>();
-		
-		for (String username : accounts.keySet()) accounts.get(username).setServer(this);
 	}
 	private void saveAccounts()
 	{
@@ -50,7 +48,6 @@ public abstract class GameServer<A extends Account, T extends ConnectionPairThre
 	
 	public boolean addAccount(A account) // Returns true if successful
 	{
-		account.setServer(this);
 		accounts.put(account.username, account);
 		saveAccounts();
 		return true; // TODO whitelist / blacklist

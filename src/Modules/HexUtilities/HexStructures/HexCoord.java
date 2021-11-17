@@ -4,7 +4,6 @@
 
 package Modules.HexUtilities.HexStructures;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import GameEngine.Point2D;
