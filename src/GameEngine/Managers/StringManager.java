@@ -7,6 +7,7 @@ package GameEngine.Managers;
 import java.util.HashMap;
 import java.util.Map;
 
+import GameEngine.GameInfo;
 import Utils.JSONManager;
 import Utils.Logging;
 import Utils.MiscUtils;
@@ -20,7 +21,7 @@ public final class StringManager
 		stringBanks = new HashMap<String, Map<String, String>>();
 	}
 	
-	public static String getString(String path, String name) // Gets a string from a string bank
+	public static String getStringPath(String path, String name) // Gets a string from a string bank
 	{
 		Map<String, String> stringBank = stringBanks.get(path);
 		if (stringBank == null)
@@ -35,5 +36,10 @@ public final class StringManager
 		if (string == null) Logging.logError("Could not find string " + name + " in string bank " + path);
 
 		return string;
+	}
+	
+	public static String getString(String bank, String name)
+	{
+		return getStringPath(GameInfo.getServerPackResource("/Strings/" + bank + ".JSON"), name);
 	}
 }

@@ -15,7 +15,6 @@ public class ParsingCommandDocumentation
 	private List<String> flagDescriptions;
 	
 	
-	
 	public String getDocumentation(List<String> names, List<List<String>> parameters, List<List<String>> flags)
 	{
 		String documentation =

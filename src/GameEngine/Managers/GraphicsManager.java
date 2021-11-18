@@ -6,6 +6,9 @@ package GameEngine.Managers;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import GameEngine.GameInfo;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -26,7 +29,7 @@ public final class GraphicsManager
 		fonts = new HashMap<String, Font>();
 	}
 	
-	public static Image getImage(String path) // Gets an image from path
+	public static Image getImagePath(String path) // Gets an image from path
 	{
 		Image image = images.get(path);
 		if (image == null)
@@ -41,7 +44,7 @@ public final class GraphicsManager
 		return image;
 	}
 	
-	public static Font getFont(String path) // Gets an image from path
+	public static Font getFontPath(String path) // Gets an image from path
 	{
 		Font font = fonts.get(path);
 		if (font == null)
@@ -57,6 +60,15 @@ public final class GraphicsManager
 		return font;
 	}
 	
+	public static Image getImage(String name)
+	{
+		return getImagePath(GameInfo.getServerPackResource("/Graphics/" + name + ".PNG"));
+	}
+	
+	public static Font getFont(String name)
+	{
+		return getFontPath(GameInfo.getServerPackResource("/Fonts/" + name + ".TTF"));
+	}
 	public static Color getColor(int r, int g, int b)
 	{
 		return new Color(r, g, b);

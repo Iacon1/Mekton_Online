@@ -13,6 +13,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.Clip;
 
+import GameEngine.GameInfo;
 import Utils.Logging;
 
 public final class SoundManager
@@ -26,7 +27,7 @@ public final class SoundManager
 		music = new HashMap<String, Clip>();
 	}
 	
-	public static void playSound(String path) // Gets an image from path
+	public static void playSoundPath(String path) // Gets an image from path
 	{
 		Clip sound = sounds.get(path);
 		AudioInputStream stream;
@@ -56,5 +57,10 @@ public final class SoundManager
 		}
 	
 		sound.start();
+	}
+	
+	public static void playSound(String name)
+	{
+		playSound(GameInfo.getServerPackResource("/Sounds/SFX/" + name + ".WAV"));
 	}
 }
