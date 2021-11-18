@@ -4,21 +4,27 @@
 
 package Modules.BaseModule.Commands;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ParsingCommandBank
 {
-	private List<ParsingCommand> commands;
+	private Map<String, ParsingCommand> commands;
 	
 	public ParsingCommandBank()
 	{
-		commands = new ArrayList<ParsingCommand>();
+		commands = new HashMap<String, ParsingCommand>();
 	}
 	
+	/** Registers a command.
+	 *  If the command's primary name (i. e. The first of its aliases) is already registered,
+	 *  this will override the previously registered command.
+	 *  
+	 *  @param command The command to register.
+	 */
 	public void registerCommand(ParsingCommand command)
 	{
-		commands.add(command);
+		commands.put(command.getNames().get(0), command);
 	}
 	
 	/** Returns whether the command is recognized or not.
@@ -29,8 +35,8 @@ public class ParsingCommandBank
 	public boolean recognizes(String command)
 	{
 		String[] words = command.split(" ");
-		for (int i = 0; i < commands.size(); ++i)
-			if (commands.get(i).hasAlias(words[0])) return true;
+		for (String name : commands.keySet())
+			if (commands.get(name).hasAlias(words[0])) return true;
 		
 		return false;
 	}
@@ -42,11 +48,11 @@ public class ParsingCommandBank
 	 */
 	public void execute(Object caller, String[] words) throws Exception
 	{
-		for (int i = 0; i < commands.size(); ++i)
+		for (String name : commands.keySet())
 		{
-			if (commands.get(i).hasAlias(words[0]))
+			if (commands.get(name).hasAlias(words[0]))
 			{
-				commands.get(i).execute(caller, words);
+				commands.get(name).execute(caller, words);
 				return;
 			}
 		}

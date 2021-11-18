@@ -69,6 +69,10 @@ public class ParsingCommand
 	{
 		return usage;
 	}
+	public String getDocumentation()
+	{
+		return null;
+	}
 	
 	private Map<String, String> parseParameters(String[] words) throws InvalidParameterException // Parses out all parameters
 	{
