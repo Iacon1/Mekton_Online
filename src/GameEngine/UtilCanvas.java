@@ -73,7 +73,7 @@ public abstract class UtilCanvas extends JPanel
 	
 	public void drawImage(String textureFile, Point2D pos, Point2D texturePos, Point2D textureSize)
 	{
-		drawImage(GraphicsManager.getImagePath(textureFile), pos, texturePos, textureSize);
+		drawImage(GraphicsManager.getImage(textureFile), pos, texturePos, textureSize);
 	}
 	
 	public void drawText(String text, Font font, Color color, Point2D pos, int heightPixels)
@@ -94,7 +94,7 @@ public abstract class UtilCanvas extends JPanel
 	}
 	public void drawText(String text, String font, Color color, Point2D pos, int heightPixels)
 	{
-		drawText(text, GraphicsManager.getFontPath(font), color, pos, heightPixels);
+		drawText(text, GraphicsManager.getFont(font), color, pos, heightPixels);
 	}
 	public Point2D textSize(String text, Font font, int heightPixels)
 	{
@@ -115,7 +115,7 @@ public abstract class UtilCanvas extends JPanel
 	}
 	public Point2D textSize(String text, String font, int heightPixels)
 	{
-		return textSize(text, GraphicsManager.getFontPath(font), heightPixels);
+		return textSize(text, GraphicsManager.getFont(font), heightPixels);
 	}
 	
 	protected void resetImage()

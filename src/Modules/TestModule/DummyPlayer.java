@@ -27,14 +27,14 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 	public DummyPlayer()
 	{
 		super();
-		setSprite(new ImageSprite(GameInfo.getServerPackResource("DummyPlayer.PNG")));
+		setSprite(new ImageSprite("DummyPlayer"));
 		setSpriteParams(0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
 		setBounds(HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight(), 0, -HexConfigManager.getHexHeight());
 	}
 	public DummyPlayer(String owner, MektonMap map)
 	{
 		super(owner, map);
-		setSprite(new ImageSprite(GameInfo.getServerPackResource("DummyPlayer.PNG")));
+		setSprite(new ImageSprite("DummyPlayer"));
 		setSpriteParams(0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
 		setBounds(HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight(), 0, -HexConfigManager.getHexHeight());
 	}
@@ -114,9 +114,9 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 					statSummary();
 			
 			int fontSize = 20;
-			Point2D textSize = canvas.textSize(text, "MicrogrammaNormalFix.TTF", fontSize);
+			Point2D textSize = canvas.textSize(text, "MicrogrammaNormalFix", fontSize);
 			canvas.drawRectangle(Color.black, new Point2D(0, 0), textSize);
-			canvas.drawText(text, "MicrogrammaNormalFix.TTF", Color.red, new Point2D(0, 0), fontSize);
+			canvas.drawText(text, "MicrogrammaNormalFix", Color.red, new Point2D(0, 0), fontSize);
 		}
 	}
 	@Override
