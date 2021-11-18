@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 
 import GameEngine.Point2D;
 import GameEngine.Configurables.ConfigManager;
-import GameEngine.Server.Account;
 import Modules.BaseModule.Commands.ParsingCommandAccount;
 import Modules.HexUtilities.HexEntity;
 

@@ -13,9 +13,7 @@ import Utils.MiscUtils;
 import Utils.SimpleTimer;
 
 import GameEngine.Animation;
-import GameEngine.GameInfo;
 import GameEngine.EntityTypes.CommandRunner;
-import GameEngine.Server.Account;
 import Modules.BaseModule.Commands.ParsingCommand;
 import Modules.BaseModule.Commands.ParsingCommandBank;
 import Modules.HexUtilities.HexDirection;
@@ -23,19 +21,12 @@ import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 
 import Modules.MektonCore.MektonMap;
 import Modules.MektonCore.StatsStuff.DamageTypes.Damage;
-import Modules.Security.Role;
 import Modules.Security.RoleAccount;
 import Modules.Security.RoleHolder;
 
 public abstract class MektonActor extends MapEntity implements CommandRunner, RoleHolder
 {
-	public enum Scale
-	{
-		human,
-		striker,
-		mek,
-		ship
-	}
+	
 	
 	private float actionPoints;
 	private transient SimpleTimer actionTimer;
@@ -218,10 +209,10 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 	}
 	
 	@Override
-	public void addRole(Role role) {} // Might be security loophole to set through here
+	public void addRole(String role) {} // Might be security loophole to set through here
 	
 	@Override
-	public boolean hasRole(Role role)
+	public boolean hasRole(String role)
 	{
 		if (RoleAccount.class.isAssignableFrom(getOwner().getClass()))
 			return ((RoleAccount) getOwner()).hasRole(role);
@@ -229,7 +220,7 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 	}
 	
 	@Override
-	public List<Role> getRoles()
+	public List<String> getRoles()
 	{
 		if (RoleAccount.class.isAssignableFrom(getOwner().getClass()))
 			return ((RoleAccount) getOwner()).getRoles();

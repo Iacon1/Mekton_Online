@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface RoleHolder
 {
-	public void addRole(Role role);
-	public boolean hasRole(Role role);
-	public List<Role> getRoles();
+	public void addRole(String role);
+	public boolean hasRole(String role);
+	public List<String> getRoles();
 }

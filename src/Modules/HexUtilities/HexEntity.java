@@ -5,7 +5,6 @@
 package Modules.HexUtilities;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import GameEngine.EntityTypes.SpriteEntity;
 import Modules.HexUtilities.HexStructures.HexCoord;

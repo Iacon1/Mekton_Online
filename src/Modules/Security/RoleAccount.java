@@ -11,27 +11,27 @@ import Modules.BaseModule.Commands.ParsingCommandAccount;
 
 public abstract class RoleAccount extends ParsingCommandAccount implements RoleHolder
 {
-	private List<Role> roles;
+	private List<String> roles;
 
 	public RoleAccount()
 	{
 		super();
-		roles = new ArrayList<Role>();
+		roles = new ArrayList<String>();
 	}
 	
 	@Override
-	public void addRole(Role role)
+	public void addRole(String role)
 	{
 		if (!hasRole(role)) roles.add(role);
 	}
 	@Override
-	public boolean hasRole(Role role)
+	public boolean hasRole(String role)
 	{
 		if (!this.roles.contains(role)) return false;
 		else return true;
 	}
 	@Override
-	public List<Role> getRoles()
+	public List<String> getRoles()
 	{
 		return roles;
 	}
