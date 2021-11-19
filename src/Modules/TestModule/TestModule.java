@@ -20,7 +20,7 @@ import Modules.BaseModule.BaseServer;
 import Modules.HexUtilities.HexEntity;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.MektonCore.MektonHex;
-import Modules.MektonCore.MektonMap;
+import Modules.MektonCore.EntityTypes.MektonMap;
 import Modules.MektonCore.Enums.EnvironmentType;
 
 public class TestModule implements Module, WorldMakingModule, ServerMakingModule, GraphicsHandlerModule, PlayerHandlerModule

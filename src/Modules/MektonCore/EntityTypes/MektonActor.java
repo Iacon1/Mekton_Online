@@ -18,8 +18,6 @@ import Modules.BaseModule.Commands.ParsingCommand;
 import Modules.BaseModule.Commands.ParsingCommandBank;
 import Modules.HexUtilities.HexDirection;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
-
-import Modules.MektonCore.MektonMap;
 import Modules.MektonCore.StatsStuff.DamageTypes.Damage;
 import Modules.Security.RoleAccount;
 import Modules.Security.RoleHolder;

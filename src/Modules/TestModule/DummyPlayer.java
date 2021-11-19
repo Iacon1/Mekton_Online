@@ -5,8 +5,8 @@
 package Modules.TestModule;
 
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
-import Modules.MektonCore.MektonMap;
 import Modules.MektonCore.EntityTypes.Human;
+import Modules.MektonCore.EntityTypes.MektonMap;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;

@@ -4,7 +4,6 @@
 
 package Modules.MektonCore.EntityTypes;
 
-import Modules.MektonCore.MektonMap;
 import Modules.MektonCore.StatsStuff.HumanStats;
 import Modules.MektonCore.StatsStuff.DamageTypes.Damage;
 import Modules.MektonCore.StatsStuff.HumanStats.Stat;

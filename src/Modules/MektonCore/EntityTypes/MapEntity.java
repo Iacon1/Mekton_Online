@@ -7,7 +7,6 @@ package Modules.MektonCore.EntityTypes;
 import GameEngine.EntityToken;
 import Modules.HexUtilities.HexEntity;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
-import Modules.MektonCore.MektonMap;
 
 public abstract class MapEntity extends HexEntity<AxialHexCoord3D>
 {

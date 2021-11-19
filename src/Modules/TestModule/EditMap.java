@@ -13,7 +13,7 @@ import GameEngine.EntityTypes.InputGetter;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.MektonCore.MektonHex;
-import Modules.MektonCore.MektonMap;
+import Modules.MektonCore.EntityTypes.MektonMap;
 import Modules.MektonCore.Enums.EnvironmentType;
 import Modules.MektonCore.Enums.TerrainType;
 
