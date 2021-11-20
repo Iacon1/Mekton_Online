@@ -139,9 +139,10 @@ public class ParsingCommand
 						break;
 					}
 				}
-				else if (!parameters[i].optional) throw new InvalidParameterException(parameters[i].name() + " must have a value.");
 				else continue;
 			}
+			if (parameterValues.get(parameters[i].name()) == null && !parameters[i].optional)
+				throw new InvalidParameterException(parameters[i].name() + " must have a value.");
 		}
 		
 		return parameterValues;

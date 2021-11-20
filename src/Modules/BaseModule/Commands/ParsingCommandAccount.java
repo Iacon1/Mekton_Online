@@ -23,21 +23,35 @@ public abstract class ParsingCommandAccount extends Account
 
 		possess(newPossessee);
 	}
+	private void registerCommand(ParsingCommand command)
+	{
+		commandBank.registerCommand(command);
+	}
 	
 	/** Registers the list of commands the account has available.
 	 * 
 	 */
 	protected void registerCommands()
 	{
-/*		ParsingCommand helpCommand = new ParsingCommand(
-				new String[]{"help", "Help"},
-				new ParsingCommandDocumentation(
-						"Gives info on a command or lists all commands",
-						new String[] {"The command to request info on; Optional."})
-				new String[][]{new String[]{"command", "c"}},
-				new String[][] {},
-				(Object caller, Map<String, String> params, Map<String, Boolean> flags) -> {});
-		commandBank.registerCommand(helpCommand);*/
+		ParsingCommand helpCommand = new ParsingCommand(
+				new String[] {"help", "Help"},
+				"Lists all commands or gives info on one command.",
+				new ParsingCommand.Parameter[] {
+						new ParsingCommand.Parameter(new String[] {"command", "c"}, "The command to get info on.", true)},
+				new ParsingCommand.Flag[] {},
+				(Object caller, Map<String, String> parameters, Map<String, Boolean> flags) -> {helpFunction(caller, parameters, flags);}
+				);
+		registerCommand(helpCommand);
+		
+		ParsingCommand possessCommand = new ParsingCommand(
+				new String[] {"possess", "Possess"},
+				"Possesses a different entity.",
+				new ParsingCommand.Parameter[] {
+						new ParsingCommand.Parameter(new String[] {"target", "id"}, "The target to possess.", false)},
+				new ParsingCommand.Flag[] {},
+				(Object caller, Map<String, String> parameters, Map<String, Boolean> flags) -> {possessFunction(caller, parameters, flags);}
+				);
+		registerCommand(possessCommand);
 	}
 	
 	public ParsingCommandAccount()

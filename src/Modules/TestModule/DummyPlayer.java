@@ -82,6 +82,7 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 		case KeyEvent.VK_S: GameInfo.setCommand("move -s"); break;
 		case KeyEvent.VK_SPACE: GameInfo.setCommand("move -u"); break;
 		case KeyEvent.VK_SHIFT: GameInfo.setCommand("move -d"); break;
+		case KeyEvent.VK_P: GameInfo.setCommand("possess -id 0");
 		}
 	}
 

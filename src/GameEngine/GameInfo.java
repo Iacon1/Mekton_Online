@@ -42,7 +42,7 @@ public class GameInfo
 		public void removeEntity(int id, boolean recurse) // Removes an entity and, if needed, its children
 		{
 			GameEntity entity = getEntity(id);
-			entity.getParent().removeChild(entity, false);
+			if (entity.getParent() != null) entity.getParent().removeChild(entity, false);
 			entity.clearChildren(true);
 			instances.remove(id);
 			
