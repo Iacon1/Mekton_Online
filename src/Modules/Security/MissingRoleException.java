@@ -12,10 +12,10 @@ import Utils.MiscUtils;
 @SuppressWarnings("serial")
 public class MissingRoleException extends Exception
 {	
-	private static String roleSetsToString(String commandName, List<List<String>> roleSets)
+	private static String roleSetsToString(String commandName, String[][] roleSets)
 	{
 		List<String> roleSetStrings = new ArrayList<String>();
-		for (int i = 0; i < roleSets.size(); ++i) roleSetStrings.add(MiscUtils.arrayToString(roleSets.get(i), ", "));
+		for (int i = 0; i < roleSets.length; ++i) roleSetStrings.add(MiscUtils.arrayToString(roleSets[i], ", "));
 		
 		return "Needs one of the following rolesets to execute " + commandName + ": ("  + MiscUtils.arrayToString(roleSetStrings, "), (") + ").";
 	}
@@ -25,7 +25,7 @@ public class MissingRoleException extends Exception
 		super(message);
 	}
 	
-	public MissingRoleException(String commandName, List<List<String>> roleSets)
+	public MissingRoleException(String commandName, String[][] roleSets)
 	{
 		super(roleSetsToString(commandName, roleSets));
 	}

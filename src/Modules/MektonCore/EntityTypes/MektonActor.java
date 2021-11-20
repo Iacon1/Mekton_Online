@@ -78,16 +78,19 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 	protected void registerCommands()
 	{
 		ParsingCommand moveCommand = new ParsingCommand(
-				new String[] {"move", "Move"},
+				new String[]{"move", "Move"},
 				"", // TODO
-				new String[][] {new String[] {"q"}, new String[] {"r"}},
-				new String[][] {
-					new String[]{"north", "North", "n"},
-					new String[]{"west", "West", "w"},
-					new String[]{"east", "East", "e"},
-					new String[]{"south", "South", "s"},
-					new String[]{"up", "Up", "u"},
-					new String[]{"down", "Down", "d"}},
+				new ParsingCommand.Parameter[]{
+						new ParsingCommand.Parameter(new String[] {"q"}, "Q position to move to.", true),
+						new ParsingCommand.Parameter(new String[] {"r"}, "R position to move to.", true)},
+				new ParsingCommand.Flag[]{
+						new ParsingCommand.Flag(new String[] {"north", "n"}, "Denotes moving north."),
+						new ParsingCommand.Flag(new String[] {"west", "w"}, "Denotes moving west."),
+						new ParsingCommand.Flag(new String[] {"east", "e"}, "Denotes moving east."),
+						new ParsingCommand.Flag(new String[] {"south", "s"}, "Denotes moving south."),
+						new ParsingCommand.Flag(new String[] {"up", "u"}, "Denotes moving up."),
+						new ParsingCommand.Flag(new String[] {"down", "d"}, "Denotes moving down."),
+				},
 				(caller, parameters, flags) -> {moveFunction(caller, parameters, flags);});
 		commandBank.registerCommand(moveCommand);
 	}

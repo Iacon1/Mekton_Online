@@ -8,10 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Modules.BaseModule.Commands.ParsingCommand;
+import Modules.BaseModule.Commands.ParsingCommand.CommandFunction;
+import Modules.BaseModule.Commands.ParsingCommand.Flag;
+import Modules.BaseModule.Commands.ParsingCommand.Parameter;
 
 public class RoleCommand extends ParsingCommand
 {
-	private List<List<String>> permittedRoleSets;
+	private String[][] permittedRoleSets;
 	
 	/** Constructor.
 	 * 
@@ -23,29 +26,22 @@ public class RoleCommand extends ParsingCommand
 	 *    any of these sets in its entirety then the command will run, else it will throw a MissingRoleException.
 	 *  @param commandFunction the function that runs when this command is executed.
 	 */
-	public RoleCommand(String[] names, String usage, String[][] parameters, String[][] flags,
-			String[][] permittedRoleSets, CommandFunction commandFunction)
+	public RoleCommand(String[] aliases, String usage, Parameter[] parameters, Flag[] flags, CommandFunction commandFunction, String[][] permittedRoleSets)
 	{
-		super(names, usage, parameters, flags, commandFunction);
-		this.permittedRoleSets = new ArrayList<List<String>>();
-		
-		for (int i = 0; i < permittedRoleSets.length; ++i)
-		{
-			this.permittedRoleSets.add(new ArrayList<String>());
-			for (int j = 0; j < permittedRoleSets[i].length; ++j) this.permittedRoleSets.get(i).add(permittedRoleSets[i][j]); 
-		}
+		super(aliases, usage, parameters, flags, commandFunction);
+		this.permittedRoleSets = permittedRoleSets;
 	}
 
 	private boolean hasPermission(RoleHolder holder) // Whether the holder has permission to run this command
 	{
-		for (int i = 0; i < permittedRoleSets.size(); ++i)
+		for (int i = 0; i < permittedRoleSets.length; ++i)
 		{
-			if (permittedRoleSets.get(i).size() == 0) continue;
+			if (permittedRoleSets[i].length == 0) continue;
 			
 			boolean match = true;
-			for (int j = 0; j < permittedRoleSets.get(i).size(); ++j)
+			for (int j = 0; j < permittedRoleSets[i].length; ++j)
 			{
-				if (!holder.hasRole(permittedRoleSets.get(i).get(j)))
+				if (!holder.hasRole(permittedRoleSets[i][j]))
 				{
 					match = false;
 					break;
@@ -65,7 +61,7 @@ public class RoleCommand extends ParsingCommand
 		if (RoleHolder.class.isAssignableFrom(caller.getClass()))
 		{
 			if (hasPermission((RoleHolder) caller)) super.execute(caller, words);
-			else throw new MissingRoleException(this.getNames().get(0), this.permittedRoleSets);
+			else throw new MissingRoleException(getName(), this.permittedRoleSets);
 		}
 		else throw new MissingRoleException("Class " + caller.getClass() + " cannot hold roles.");
 	}

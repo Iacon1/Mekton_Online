@@ -24,7 +24,7 @@ public class ParsingCommandBank
 	 */
 	public void registerCommand(ParsingCommand command)
 	{
-		commands.put(command.getNames().get(0), command);
+		commands.put(command.getName(), command);
 	}
 	
 	/** Returns whether the command is recognized or not.

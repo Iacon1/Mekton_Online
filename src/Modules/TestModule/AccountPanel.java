@@ -8,6 +8,7 @@ import javax.swing.SpringLayout;
 public class AccountPanel extends JPanel
 {
 
+	
 	/**
 	 * Create the panel.
 	 */
@@ -35,5 +36,7 @@ public class AccountPanel extends JPanel
 		springLayout.putConstraint(SpringLayout.EAST, usernameLabel, 0, SpringLayout.EAST, StatusLabel);
 		springLayout.putConstraint(SpringLayout.NORTH, StatusLabel, 0, SpringLayout.NORTH, statusLabelLabel);
 		add(StatusLabel);
+		
+		
 	}
 }

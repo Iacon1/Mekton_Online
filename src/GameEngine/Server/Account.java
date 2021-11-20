@@ -34,10 +34,14 @@ public abstract class Account implements CommandRunner
 	{
 		return (password.hashCode() == hash);
 	}
+	public void possess(int id)
+	{
+//		entity.setOwner(username);
+		possessee = id;
+	}
 	public void possess(GameEntity entity)
 	{
-		entity.setOwner(username);
-		possessee = entity.getId();
+		possess(entity.getId());
 	}
 	public boolean hasPossessee()
 	{

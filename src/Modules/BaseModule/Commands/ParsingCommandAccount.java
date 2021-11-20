@@ -14,6 +14,32 @@ public abstract class ParsingCommandAccount extends Account
 {
 	private transient ParsingCommandBank commandBank;
 	
+	// Command functions
+	private void helpFunction(Object caller, Map<String, String> parameters, Map<String, Boolean> flags)
+	{}
+	private void possessFunction(Object caller, Map<String, String> parameters, Map<String, Boolean> flags)
+	{
+		int newPossessee = Integer.parseInt(parameters.get("target"));
+
+		possess(newPossessee);
+	}
+	
+	/** Registers the list of commands the account has available.
+	 * 
+	 */
+	protected void registerCommands()
+	{
+/*		ParsingCommand helpCommand = new ParsingCommand(
+				new String[]{"help", "Help"},
+				new ParsingCommandDocumentation(
+						"Gives info on a command or lists all commands",
+						new String[] {"The command to request info on; Optional."})
+				new String[][]{new String[]{"command", "c"}},
+				new String[][] {},
+				(Object caller, Map<String, String> params, Map<String, Boolean> flags) -> {});
+		commandBank.registerCommand(helpCommand);*/
+	}
+	
 	public ParsingCommandAccount()
 	{
 		super();
@@ -22,21 +48,7 @@ public abstract class ParsingCommandAccount extends Account
 		registerCommands();
 	}
 
-	/** Registers the list of commands the account has available.
-	 * 
-	 */
-	protected void registerCommands()
-	{
-		ParsingCommand helpCommand = new ParsingCommand(
-				new String[]{"Help", "help"},
-				"Gives info on a command or lists all commands",
-				new String[][]{
-					new String[]{"command", "c"}
-				},
-				new String[][] {},
-				(Object caller, Map<String, String> params, Map<String, Boolean> flags) -> {});
-		commandBank.registerCommand(helpCommand);
-	}
+	
 	
 	@Override
 	public boolean runCommand(String... words)
