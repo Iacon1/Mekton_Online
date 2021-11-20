@@ -17,15 +17,14 @@ import GameEngine.Net.Server.Server;
 import Utils.JSONManager;
 import Utils.MiscUtils;
 
-public abstract class GameServer<A extends Account, T extends ConnectionPairThread> extends Server<T>
+public abstract class GameServer<T extends ConnectionPairThread> extends Server<T>
 {
-	private HashMap<String, Account> accounts;
+	private Map<String, Account> accounts;
 
 	private void loadAccounts()
 	{
 		accounts = new HashMap<String, Account>();
-		accounts = JSONManager.deserializeJSON(MiscUtils.readText("Local Data/Server/Accounts.json"), accounts.getClass());
-
+		accounts = (HashMap<String, Account>) JSONManager.deserializeJSON(MiscUtils.readText("Local Data/Server/Accounts.json"), accounts.getClass());
 		accounts = (HashMap<String, Account>) JSONManager.deserializeCollectionJSONList(MiscUtils.readText("Local Data/Server/Accounts.json"), HashMap.class, String.class, Account.class);
 
 		if (accounts == null) accounts = new HashMap<String, Account>();
@@ -46,23 +45,23 @@ public abstract class GameServer<A extends Account, T extends ConnectionPairThre
 		loadAccounts();
 	}
 	
-	public boolean addAccount(A account) // Returns true if successful
+	public boolean addAccount(Account account) // Returns true if successful
 	{
 		accounts.put(account.username, account);
 		saveAccounts();
 		return true; // TODO whitelist / blacklist
 	}
-	public A getAccount(String username)
+	public Account getAccount(String username)
 	{
-		return (A) accounts.get(username);
+		return accounts.get(username);
 	}
-	public List<A> getAccounts()
+	public List<Account> getAccounts()
 	{
-		List<A> accountList = new ArrayList<A>();
+		List<Account> accountList = new ArrayList<Account>();
 		
 		for (Map.Entry<String, Account> entry : accounts.entrySet())
 		{
-			accountList.add((A) entry.getValue());
+			accountList.add(entry.getValue());
 		}
 		
 		return accountList;

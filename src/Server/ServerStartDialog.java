@@ -66,9 +66,9 @@ public class ServerStartDialog extends JDialog
 		SpringLayout sl_contentPanel = new SpringLayout();
 		
 		sl_contentPanel.putConstraint(SpringLayout.VERTICAL_CENTER, portLabel, 0, SpringLayout.VERTICAL_CENTER, portSpinner);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, portLabel, -20, SpringLayout.WEST, portSpinner);
+		sl_contentPanel.putConstraint(SpringLayout.EAST, portLabel, -10, SpringLayout.WEST, portSpinner);
 		
-		sl_contentPanel.putConstraint(SpringLayout.HORIZONTAL_CENTER, portSpinner, 50, SpringLayout.HORIZONTAL_CENTER, contentPanel);
+		sl_contentPanel.putConstraint(SpringLayout.HORIZONTAL_CENTER, portSpinner, 70, SpringLayout.HORIZONTAL_CENTER, contentPanel);
 		sl_contentPanel.putConstraint(SpringLayout.VERTICAL_CENTER, portSpinner, 0, SpringLayout.VERTICAL_CENTER, contentPanel);
 		
 		contentPanel.setLayout(sl_contentPanel);

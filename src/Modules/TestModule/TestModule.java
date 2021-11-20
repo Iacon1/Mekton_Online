@@ -41,7 +41,7 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	@Override
 	public GameServer makeServer()
 	{
-		BaseServer<TestAccount> server = new BaseServer<TestAccount>();
+		BaseServer server = new BaseServer();
 		return server;
 	}
 	

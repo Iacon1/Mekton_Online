@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.SpringLayout;
 
+@SuppressWarnings("serial")
 public class AccountPanel extends JPanel
 {
 

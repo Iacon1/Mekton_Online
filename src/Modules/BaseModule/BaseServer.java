@@ -4,10 +4,9 @@
 
 package Modules.BaseModule;
 
-import GameEngine.Server.Account;
 import GameEngine.Server.GameServer;
 
-public class BaseServer<A extends Account> extends GameServer<A, ClientHandlerThread>
+public class BaseServer extends GameServer<ClientHandlerThread>
 {	
 	public BaseServer()
 	{	
