@@ -30,6 +30,9 @@ public class GameFrame extends JFrame
 	private ScreenCanvas canvas;
 	private boolean queueUpdateRes;
 	
+	/** Updates the scale of the screen.
+	 * 
+	 */
 	public void checkScale()
 	{
 		float scaleX = getWidth() / ConfigManager.getScreenWidth();
@@ -62,6 +65,10 @@ public class GameFrame extends JFrame
 			queueUpdateRes = false;
 		}
 	}
+	
+	/** Updates the UI
+	 * 
+	 */
 	public void updateUIStuff() // Updates UI stuff
 	{	
 		checkScale();
@@ -208,7 +215,8 @@ public class GameFrame extends JFrame
 			inputGetters = new ArrayList<InputGetter>();
 		}
 	}
-	public void registerInputListener()
+
+	private void registerInputListener()
 	{
 		EntityInputListener listener = new EntityInputListener();
 		
