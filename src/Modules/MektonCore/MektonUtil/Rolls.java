@@ -6,6 +6,7 @@ package Modules.MektonCore.MektonUtil;
 
 import java.util.Random;
 
+import Modules.MektonCore.StatsStuff.ServoList;
 import Modules.MektonCore.StatsStuff.ServoLocation;
 
 public class Rolls
@@ -39,7 +40,7 @@ public class Rolls
 		else return roll;
 	}
 
-	public static ServoLocation hitChart()
+	public static ServoLocation hitChart(ServoList servos)
 	{
 		return null; // TODO
 	}

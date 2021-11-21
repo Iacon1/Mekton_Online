@@ -49,9 +49,9 @@ public class ServoLocation
 		powerplantOverload
 	}
 
-	ServoType type;
-	ServoSide side;
-	Special special;
-	Cinematic cinematic;
-	int number; // In case multiple things occupy the same slot
+	public ServoType type;
+	public ServoSide side;
+	public Special special;
+	public Cinematic cinematic;
+	public int number; // In case multiple things occupy the same slot
 }

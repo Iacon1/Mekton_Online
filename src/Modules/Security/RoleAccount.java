@@ -6,13 +6,33 @@ package Modules.Security;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import Modules.BaseModule.Commands.ParsingCommand;
 import Modules.BaseModule.Commands.ParsingCommandAccount;
 
 public abstract class RoleAccount extends ParsingCommandAccount implements RoleHolder
 {
 	private List<String> roles;
 
+	@Override
+	protected void registerCommands()
+	{
+		super.registerCommands();
+		
+		ParsingCommand possessCommand = new RoleCommand(
+				new String[] {"possess", "Possess"},
+				"Possesses a different entity.",
+				new ParsingCommand.Parameter[] {
+						new ParsingCommand.Parameter(new String[] {"target", "id"}, "The target to possess.", false)},
+				new ParsingCommand.Flag[] {},
+				(Object caller, Map<String, String> parameters, Map<String, Boolean> flags) -> {possessFunction(caller, parameters, flags);},
+				new String[][] {
+					new String[]{"admin"},
+					new String[]{"moderator"}}); // TODO IDK lol
+		registerCommand(possessCommand);
+	}
+	
 	public RoleAccount()
 	{
 		super();

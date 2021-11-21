@@ -12,6 +12,11 @@ public class InvalidParameterException extends Exception
 		super(message);
 	}
 	
+	/** Constructor. Message is: [parameter] can't have value [value].
+	 *  
+	 *  @param parameter The parameter that is invalid.
+	 *  @param value The invalid value it has.
+	 */
 	public InvalidParameterException(String parameter, String value)
 	{
 		super(parameter + " can't have value " + value + ".");

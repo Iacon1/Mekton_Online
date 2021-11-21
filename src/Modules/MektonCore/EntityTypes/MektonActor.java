@@ -14,10 +14,13 @@ import Utils.SimpleTimer;
 
 import GameEngine.Animation;
 import GameEngine.EntityTypes.CommandRunner;
+import Modules.BaseModule.Commands.InvalidParameterException;
 import Modules.BaseModule.Commands.ParsingCommand;
 import Modules.BaseModule.Commands.ParsingCommandBank;
 import Modules.HexUtilities.HexDirection;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
+import Modules.MektonCore.MektonUtil.Rolls;
+import Modules.MektonCore.StatsStuff.ServoLocation;
 import Modules.MektonCore.StatsStuff.DamageTypes.Damage;
 import Modules.Security.RoleAccount;
 import Modules.Security.RoleHolder;
@@ -74,7 +77,38 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 			if (flags.get("down")) moveDirectionalAct(HexDirection.down, 1, 2);
 		}
 	}
-	private void registerCommand(ParsingCommand command)
+	private void attackFunction(Object caller, Map<String, String> parameters, Map<String, Boolean> flags) throws InvalidParameterException
+	{
+		if (caller != this) return; // The only thing that should run *our* moveFunction is *us*
+		
+		int targetID = Integer.valueOf(parameters.get("target"));
+		int weaponID = Integer.valueOf(parameters.get("weapon"));
+		String locationName = parameters.get("location");
+		
+		ServoLocation location = new ServoLocation();
+		
+		if (locationName != null)
+		{
+			try {location.type = ServoLocation.ServoType.valueOf(locationName);}
+			catch (Exception e1)
+			{
+				try {location.special = ServoLocation.Special.valueOf(locationName);}
+				catch (Exception e2)
+				{
+					try {location.cinematic = ServoLocation.Cinematic.valueOf(locationName);}
+					catch (Exception e3) {throw new InvalidParameterException("location", locationName);}
+				}
+			}
+		}
+		else
+		{
+			location = Rolls.hitChart(null);
+		}
+		
+		// TODO
+	}
+
+	protected void registerCommand(ParsingCommand command)
 	{
 		commandBank.registerCommand(command);
 	}
@@ -83,7 +117,7 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 	{
 		ParsingCommand moveCommand = new ParsingCommand(
 				new String[]{"move", "Move"},
-				"", // TODO
+				"Moves the actor.",
 				new ParsingCommand.Parameter[]{
 						new ParsingCommand.Parameter(new String[] {"q"}, "Q position to move to.", true),
 						new ParsingCommand.Parameter(new String[] {"r"}, "R position to move to.", true)},
@@ -95,6 +129,17 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 						new ParsingCommand.Flag(new String[] {"up", "u"}, "Denotes moving up."),
 						new ParsingCommand.Flag(new String[] {"down", "d"}, "Denotes moving down."),
 				},
+				(caller, parameters, flags) -> {moveFunction(caller, parameters, flags);});
+		registerCommand(moveCommand);
+		
+		ParsingCommand attackCommand = new ParsingCommand(
+				new String[]{"attack", "Attack"},
+				"Attacks the target with the weapon.",
+				new ParsingCommand.Parameter[]{
+						new ParsingCommand.Parameter(new String[] {"target", "t"}, "Target entity to attack.", false),
+						new ParsingCommand.Parameter(new String[] {"weapon", "w"}, "ID of weapon to use.", false),
+						new ParsingCommand.Parameter(new String[] {"location", "l"}, "Location to aim for.", true),},
+				new ParsingCommand.Flag[]{},
 				(caller, parameters, flags) -> {moveFunction(caller, parameters, flags);});
 		registerCommand(moveCommand);
 	}
@@ -171,8 +216,6 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 		
 		moveDeltaHexAct(delta, speed);
 	}
-	
-	
 	
 	// Overridden functions
 	

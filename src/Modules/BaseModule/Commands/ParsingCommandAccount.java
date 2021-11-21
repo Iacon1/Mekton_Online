@@ -15,15 +15,15 @@ public abstract class ParsingCommandAccount extends Account
 	private transient ParsingCommandBank commandBank;
 	
 	// Command functions
-	private void helpFunction(Object caller, Map<String, String> parameters, Map<String, Boolean> flags)
+	protected void helpFunction(Object caller, Map<String, String> parameters, Map<String, Boolean> flags)
 	{}
-	private void possessFunction(Object caller, Map<String, String> parameters, Map<String, Boolean> flags)
+	protected void possessFunction(Object caller, Map<String, String> parameters, Map<String, Boolean> flags)
 	{
-		int newPossessee = Integer.parseInt(parameters.get("target"));
+		int newPossessee = Integer.valueOf(parameters.get("target"));
 
 		possess(newPossessee);
 	}
-	private void registerCommand(ParsingCommand command)
+	protected void registerCommand(ParsingCommand command)
 	{
 		commandBank.registerCommand(command);
 	}
