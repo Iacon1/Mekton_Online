@@ -28,7 +28,7 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 	
 	private float actionPoints;
 	private transient SimpleTimer actionTimer;
-	protected transient ParsingCommandBank commandBank;
+	private transient ParsingCommandBank commandBank;
 	
 	protected enum ActorAnim // Animations
 	{
@@ -74,7 +74,11 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 			if (flags.get("down")) moveDirectionalAct(HexDirection.down, 1, 2);
 		}
 	}
-
+	private void registerCommand(ParsingCommand command)
+	{
+		commandBank.registerCommand(command);
+	}
+	
 	protected void registerCommands()
 	{
 		ParsingCommand moveCommand = new ParsingCommand(
@@ -92,7 +96,7 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 						new ParsingCommand.Flag(new String[] {"down", "d"}, "Denotes moving down."),
 				},
 				(caller, parameters, flags) -> {moveFunction(caller, parameters, flags);});
-		commandBank.registerCommand(moveCommand);
+		registerCommand(moveCommand);
 	}
 		
 	// Protected abstracts
