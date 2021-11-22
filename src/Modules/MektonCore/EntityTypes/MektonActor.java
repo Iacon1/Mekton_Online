@@ -86,7 +86,7 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 		int weaponID = Integer.valueOf(parameters.get("weapon"));
 		String locationName = parameters.get("location");
 		
-		MektonActor opponent;
+		MektonActor opponent = null;
 		ServoList opponentServos = null;
 		HitLocation location = new HitLocation(null, null, null, null, 0);
 		
@@ -152,8 +152,12 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 				new ParsingCommand.Parameter[]{
 						new ParsingCommand.Parameter(new String[] {"target", "t"}, "Target entity to attack.", false),
 						new ParsingCommand.Parameter(new String[] {"weapon", "w"}, "ID of weapon to use.", false),
-						new ParsingCommand.Parameter(new String[] {"location", "l"}, "Location to aim for.", true),},
-				new ParsingCommand.Flag[]{},
+						new ParsingCommand.Parameter(new String[] {"location", "l"}, "Location to aim for.", true),
+						new ParsingCommand.Parameter(new String[] {"index", "i"}, "Index of the part in the specified location to aim for.", true)},
+				new ParsingCommand.Flag[] {
+						new ParsingCommand.Flag(new String[] {"left", "l"}, "Target the left side of the opponent."),
+						new ParsingCommand.Flag(new String[] {"middle", "m"}, "Target the middle of the opponent."),
+						new ParsingCommand.Flag(new String[] {"right", "r"}, "Target the right side of the opponent."),},
 				(caller, parameters, flags) -> {moveFunction(caller, parameters, flags);});
 		registerCommand(moveCommand);
 	}

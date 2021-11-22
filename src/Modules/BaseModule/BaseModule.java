@@ -23,7 +23,10 @@ public class BaseModule implements Module, StateGiverModule
 	}
 
 	@Override
-	public void initModule() {}
+	public void initModule()
+	{
+		ChatLog.init();
+	}
 	
 	@Override
 	public StateFactory clientFactory()
