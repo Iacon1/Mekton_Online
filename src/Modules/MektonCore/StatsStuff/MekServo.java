@@ -9,7 +9,7 @@
 
 package Modules.MektonCore.StatsStuff;
 
-import Modules.MektonCore.StatsStuff.ServoLocation.ServoType;
+import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
 import Utils.GappyArrayList;
 
 public class MekServo extends Servo

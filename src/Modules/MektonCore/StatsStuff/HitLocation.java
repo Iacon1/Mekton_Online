@@ -4,7 +4,7 @@
 
 package Modules.MektonCore.StatsStuff;
 
-public class ServoLocation
+public class HitLocation
 {
 	public enum ServoType // Servo type
 	{
@@ -54,4 +54,12 @@ public class ServoLocation
 	public Special special;
 	public Cinematic cinematic;
 	public int number; // In case multiple things occupy the same slot
+	
+	public HitLocation(ServoType type, ServoSide side, Special special, Cinematic cinematic, int number)
+	{
+		this.type = type;
+		this.side = side;
+		this.special = special;
+		this.cinematic = cinematic;
+	}
 }

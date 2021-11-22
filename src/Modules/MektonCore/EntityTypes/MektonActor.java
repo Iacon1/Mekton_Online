@@ -20,7 +20,8 @@ import Modules.BaseModule.Commands.ParsingCommandBank;
 import Modules.HexUtilities.HexDirection;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.MektonCore.MektonUtil.Rolls;
-import Modules.MektonCore.StatsStuff.ServoLocation;
+import Modules.MektonCore.StatsStuff.HitLocation;
+import Modules.MektonCore.StatsStuff.ServoList;
 import Modules.MektonCore.StatsStuff.DamageTypes.Damage;
 import Modules.Security.RoleAccount;
 import Modules.Security.RoleHolder;
@@ -85,27 +86,40 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 		int weaponID = Integer.valueOf(parameters.get("weapon"));
 		String locationName = parameters.get("location");
 		
-		ServoLocation location = new ServoLocation();
+		MektonActor opponent;
+		ServoList opponentServos = null;
+		HitLocation location = new HitLocation(null, null, null, null, 0);
 		
 		if (locationName != null)
 		{
-			try {location.type = ServoLocation.ServoType.valueOf(locationName);}
-			catch (Exception e1)
+			try // Is a servo?
 			{
-				try {location.special = ServoLocation.Special.valueOf(locationName);}
-				catch (Exception e2)
+				location.type = HitLocation.ServoType.valueOf(locationName);
+				
+				if (flags.get("left")) location.side = HitLocation.ServoSide.left;
+				else if (flags.get("middle")) location.side = HitLocation.ServoSide.middle;
+				else if (flags.get("right")) location.side = HitLocation.ServoSide.right;
+				else location.side = Rolls.rollSide(opponentServos, location.type);
+				
+				if (parameters.get("index") != null) location.number = Integer.valueOf(parameters.get("index")) - 1; // -1 is because humans start counting at one
+				else location.number = Rolls.rollXDY(1, opponentServos.servoCount(location.type, location.side)) - 1;
+				
+				if (opponentServos.getServo(location) == null) // Has the player not picked a valid location?
+					location = Rolls.mechaHitChart(opponentServos, true); // TODO error message?
+			}
+			catch (Exception e1) // Is a special?
+			{
+				try {location.special = HitLocation.Special.valueOf(locationName);}
+				catch (Exception e2) // Is a cinematic?
 				{
-					try {location.cinematic = ServoLocation.Cinematic.valueOf(locationName);}
+					try {location.cinematic = HitLocation.Cinematic.valueOf(locationName);}
 					catch (Exception e3) {throw new InvalidParameterException("location", locationName);}
 				}
 			}
 		}
-		else
-		{
-			location = Rolls.hitChart(null);
-		}
+		else location = Rolls.mechaHitChart(opponentServos, true);
 		
-		// TODO
+		attack(opponent, location);
 	}
 
 	protected void registerCommand(ParsingCommand command)
@@ -194,8 +208,8 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 	// Public abstracts
 	
 	public abstract void takeDamage(Damage damage);
-	public abstract void defend(MektonActor aggressor);
-	public abstract void attack(MektonActor defender);
+	public abstract void defend(MektonActor aggressor, HitLocation location);
+	public abstract void attack(MektonActor defender, HitLocation location);
 	
 	// Conscious movement
 	

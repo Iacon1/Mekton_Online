@@ -7,6 +7,7 @@ package Modules.MektonCore.EntityTypes;
 import Modules.MektonCore.StatsStuff.HumanStats;
 import Modules.MektonCore.StatsStuff.DamageTypes.Damage;
 import Modules.MektonCore.StatsStuff.HumanStats.Stat;
+import Modules.MektonCore.StatsStuff.HitLocation;
 
 public class Human extends MektonActor
 {
@@ -67,8 +68,8 @@ public class Human extends MektonActor
 	public void takeDamage(Damage damage) {}
 
 	@Override
-	public void defend(MektonActor aggressor) {}
+	public void defend(MektonActor aggressor, HitLocation location) {}
 
 	@Override
-	public void attack(MektonActor defender) {}
+	public void attack(MektonActor defender, HitLocation location) {}
 }

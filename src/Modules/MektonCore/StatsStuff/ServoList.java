@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import Modules.MektonCore.StatsStuff.ServoLocation.ServoSide;
-import Modules.MektonCore.StatsStuff.ServoLocation.ServoType;
+import Modules.MektonCore.StatsStuff.HitLocation.ServoSide;
+import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
 
 public class ServoList<T extends Servo>
 {	
@@ -81,8 +81,40 @@ public class ServoList<T extends Servo>
 		return servos.get(index);
 	}
 	
-	public T getServo(ServoLocation location)
+	public T getServo(HitLocation location)
 	{
 		return getServo(location.type, location.side, location.number);
+	}
+	
+	/** Returns the amount of servos in the given category.
+	 * 
+	 *  @param category The category of servo to count.
+	 *  
+	 *  @return The amount of servos with that category.
+	 */
+	public int servoCount(ServoType category)
+	{
+		return byType.get(category).size();
+	}
+	/** Returns the amount of servos in the given side.
+	 * 
+	 *  @param side The side to count.
+	 *  
+	 *  @return The amount of servos with that side.
+	 */
+	public int servoCount(ServoSide side)
+	{
+		return bySide.get(side).size();
+	}
+	/** Returns the amount of servos in the given category & side.
+	 * 
+	 *  @param category The category of servo to count.
+	 *  @param side The side to count on.
+	 *  
+	 *  @return The amount of servos with that combination of category & side.
+	 */
+	public int servoCount(ServoType category, ServoSide side)
+	{
+		return byTypeAndSide(category, side).size();
 	}
 }
