@@ -57,13 +57,21 @@ public class AbsFactory<T> implements TypeAdapterFactory
 		@Override
 		public void write(JsonWriter out, J value) throws IOException
 		{
-			String type = MiscUtils.ClassToString(value.getClass());
-			String data = delegator.getAdapter(this.type).toJson(value); // Serialize
+			if (value != null)
+			{
+				String type = MiscUtils.ClassToString(value.getClass());
+				String data = delegator.getAdapter(this.type).toJson(value); // Serialize
 			
-			out.beginObject();
-			out.name("type").value(type);
-			out.name("data").jsonValue(data);
-			out.endObject();
+				out.beginObject();
+				out.name("type").value(type);
+				out.name("data").jsonValue(data);
+				out.endObject();
+			}
+			else
+			{
+				out.beginObject();
+				out.endObject();
+			}
 		}
 	}
 	

@@ -15,15 +15,19 @@ import GameEngine.GameInfo;
 import GameEngine.ImageSprite;
 import GameEngine.Point2D;
 import GameEngine.ScreenCanvas;
+import GameEngine.EntityTypes.Alignable;
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.InputGetter;
-
+import GameEngine.EntityTypes.SpriteEntity;
+import GameEngine.Managers.GraphicsManager;
+import Modules.BaseModule.ChatBox;
 import Modules.HexUtilities.HexConfigManager;
 
 import Utils.MiscUtils;
 
 public class DummyPlayer extends Human implements InputGetter, CommandRunner
 {	
+	int chatBoxID;
 	public DummyPlayer()
 	{
 		super();
@@ -37,6 +41,11 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 		setSprite(new ImageSprite("DummyPlayer"));
 		setSpriteParams(0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
 		setBounds(HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight(), 0, -HexConfigManager.getHexHeight());
+		
+		ChatBox chatBox = new ChatBox(getOwnerName(), "MicrogrammaNormalFix", Color.red, 20);
+		chatBoxID = chatBox.getId();
+		chatBox.align(AlignmentPoint.west, null, AlignmentPoint.west);
+		addChild(chatBox);
 	}
 	
 	@Override
@@ -96,18 +105,13 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 	public void onStart()
 	{
 	}
-	@Override
-	public void onStop()
-	{
-		super.onStop();
-	}
 
 	@Override
 	public void render(ScreenCanvas canvas, Point2D camera)
 	{
 		super.render(canvas, camera);
 		
-		if (isPossessee())
+		if (false)//isPossessee())
 		{
 			String text =
 					"Action points: " + MiscUtils.floatPrecise(remainingActions(), 2) + "\n" +
@@ -118,6 +122,8 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 			canvas.drawRectangle(Color.black, new Point2D(0, 0), textSize);
 			canvas.drawText(text, "MicrogrammaNormalFix", Color.red, new Point2D(0, 0), fontSize);
 		}
+		((SpriteEntity) GameInfo.getWorld().getEntity(chatBoxID)).setPos(0, 0);
+		GameInfo.getWorld().getEntity(chatBoxID).render(canvas, camera);
 	}
 	@Override
 	public void onPause()

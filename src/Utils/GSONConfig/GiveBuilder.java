@@ -4,6 +4,8 @@
 
 package Utils.GSONConfig;
 
+import java.awt.Color;
+
 import com.google.gson.GsonBuilder;
 
 import GameEngine.Sprite;
@@ -22,6 +24,7 @@ public final class GiveBuilder
 		builder.registerTypeAdapterFactory(new AbsFactory<Account>(Account.class));
 		builder.registerTypeAdapterFactory(new AbsFactory<Sprite>(Sprite.class));
 		builder.registerTypeAdapterFactory(new TransSerializableAdapter.Factory());
+		builder.registerTypeAdapter(Color.class, new ColorAdapter());
 		
 		GSONModule module = ModuleManager.getHighestOfType(GSONModule.class);
 		if (module != null) module.addToBuilder(builder);

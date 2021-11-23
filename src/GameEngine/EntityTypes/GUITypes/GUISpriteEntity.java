@@ -23,6 +23,6 @@ public abstract class GUISpriteEntity extends SpriteEntity
 	@Override
 	public void render(ScreenCanvas canvas, Point2D camera) 
 	{
-		sprite.render(canvas, pos.add(spriteOff));
+		if (sprite != null) sprite.render(canvas, pos.add(spriteOff));
 	}
 }

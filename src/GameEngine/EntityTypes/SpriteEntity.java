@@ -240,6 +240,7 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	
 	private Point2D getAlignmentOffset(AlignmentPoint point) // Gets the offset instead of the point
 	{
+		if (sprite == null) return new Point2D(0, 0);
 		Point2D offset = new Point2D(0, 0);
 		switch (point)
 		{
