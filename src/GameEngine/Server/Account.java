@@ -13,6 +13,7 @@ import GameEngine.EntityTypes.GameEntity;
 
 public abstract class Account implements CommandRunner
 {
+	public int id;
 	public String username;
 	private int possessee; // Entity our user is possessing
 	

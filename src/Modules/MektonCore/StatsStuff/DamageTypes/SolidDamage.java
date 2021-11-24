@@ -39,17 +39,26 @@ public class SolidDamage implements Damage
 		try {servo.setCurrentArmor(scale, newArmor);}
 		catch (ExcessArmorException e) {Logging.logException(e);}
 	}
-	
-	@Override
-	public void apply(Mek recipient, HitLocation location)
+
+	protected void apply(Mek recipient, MekServo servo)
 	{
-		MekServo servo = recipient.getServo(location);
-		
 		double delta = getDamage(scale) - servo.getCurrentArmor(scale); // How much damage is left after armor
 		
 		if (servo.getDC(scale) == 0) {applyDirect(servo, delta, getDamage(scale));} // Ablative
 		else if (servo.getDC(scale) <= getDamage(scale)) {applyDirect(servo, delta, -1);} // Not ablative, armor chipped
 		else applyDirect(servo, delta, 0); // Not ablative, no armor damage
+	}
+	
+	@Override
+	public void apply(Mek recipient, HitLocation location)
+	{
+		if (location.type != null) apply(recipient, recipient.getServo(location));
+		else if (location.special != null)
+		{
+			
+		}
+		
+		
 	}
 
 	@Override

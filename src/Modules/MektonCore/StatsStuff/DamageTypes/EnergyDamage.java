@@ -15,7 +15,8 @@ public class EnergyDamage extends SolidDamage
 	{
 		MekServo servo = recipient.getServo(location);
 		
-		double delta = getDamage(scale) - servo.getCurrentArmor(scale) / 2; // How much damage is left after armor
+		double delta = (1 - servo.getRAMReduction()) * getDamage(scale) - servo.getCurrentArmor(scale);  // How much damage is left after armor
+		double newEnergy = servo.getRAMReduction() * getDamage(scale); // TODO
 		
 		if (servo.getDC(scale) == 0) {applyDirect(servo, delta, getDamage(scale));} // Ablative
 		else if (servo.getDC(scale) <= getDamage(scale)) {applyDirect(servo, delta, -1);} // Not ablative, armor chipped

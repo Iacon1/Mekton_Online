@@ -15,12 +15,12 @@ import GameEngine.Point2D;
 
 public abstract class GameEntity
 {
-	private int parentId; // Parent object index; -1 means none
+	private int parentID; // Parent object index; -1 means none
 	private int ourId;
 	protected List<Integer> childrenIds; // Children object indices
 
-	private String owner; // Owner account
-
+	private int possessorID;
+	
 	public boolean isPossessee()
 	{
 		return ourId == GameInfo.getPossessee();
@@ -34,16 +34,8 @@ public abstract class GameEntity
 	{
 		if (GameInfo.getWorld() != null) ourId = GameInfo.getWorld().addEntity(this);
 		// This seems dumb, but note if it's ever null then it will likely be replaced by a new world that already contains us
-		parentId = -1;
-		owner = null;
-		childrenIds = new ArrayList<Integer>();
-	}
-	public GameEntity(String owner)
-	{
-		if (GameInfo.getWorld() != null) ourId = GameInfo.getWorld().addEntity(this);
-		// This seems dumb, but note if it's ever null then it will likely be replaced by a new world that already contains us
-		parentId = -1;
-		this.owner = owner;
+		parentID = -1;
+		possessorID = -1;
 		childrenIds = new ArrayList<Integer>();
 	}
 	
@@ -54,13 +46,13 @@ public abstract class GameEntity
 	
 	public GameEntity getParent() // Gets parent object; Returns null if none
 	{
-		if (parentId == -1) return null;
-		else return getEntity(parentId);
+		if (parentID == -1) return null;
+		else return getEntity(parentID);
 	}
 	
 	public void removeChild(GameEntity child, boolean recurse)
 	{
-		child.parentId = -1;
+		child.parentID = -1;
 		if (recurse) child.clearChildren(true);
 		this.childrenIds.remove(Integer.valueOf(child.getId()));
 	}
@@ -70,9 +62,9 @@ public abstract class GameEntity
 	}
 	public void addChild(GameEntity child) // Adds a new child, replacing its old parent if needed
 	{
-		if (child.parentId != -1)
+		if (child.parentID != -1)
 			child.getParent().removeChild(child, false);
-		child.parentId = this.getId();
+		child.parentID = this.getId();
 		childrenIds.add(child.getId());
 	}
 	public GameEntity getChild(int i) // Gets child #i
@@ -97,25 +89,9 @@ public abstract class GameEntity
 	 * 
 	 * @return None.
 	 */
-	public void setOwner(String owner)
+	public void setPossessor(int possessorID)
 	{
-		this.owner = owner;
-	}
-	public void clearOwner()
-	{
-		setOwner(null);
-	}
-	public String getOwnerName()
-	{
-		return owner;
-	}
-	public boolean isOwner(String name)
-	{
-		return owner.equals(name);
-	}
-	public Account getOwner()
-	{
-		return GameInfo.getAccount(owner);
+		this.possessorID = possessorID;
 	}
 	
 	public abstract String getName(); // Gets object name
