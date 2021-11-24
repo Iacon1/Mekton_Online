@@ -1,128 +1,129 @@
 // By Iacon1
 // Created 09/16/2021
-// Servo for meks
+// Servo for meks, roadstrikers, ships, etc.
+// Remember that pods always have zero health
 // TODO:
 /* Kill sacrificing
  * Throw range
  * Melee+
+ * 
+ * Redo space occupation
  */
 
 package Modules.MektonCore.StatsStuff;
 
+import Modules.MektonCore.Enums.ArmorType;
+import Modules.MektonCore.Enums.LevelRAM;
+import Modules.MektonCore.Enums.Scale;
+import Modules.MektonCore.Enums.ServoClass;
+import Modules.MektonCore.ExceptionTypes.DidntFitException;
+import Modules.MektonCore.ExceptionTypes.ExcessArmorException;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
 import Utils.GappyArrayList;
 
-public class MekServo extends Servo
+public class MekServo extends System
 {
-	
-	public enum ServoClass
-	{
-		superLight,
-		lightWeight,
-		striker,
-		mediumStriker,
-		heavyStriker,
-		mediumWeight,
-		lightHeavy,
-		mediumHeavy,
-		armoredHeavy,
-		superHeavy,
-		megaHeavy
-	}
-	
-	private int maxSpace = 0;
 	private GappyArrayList<Integer> spaceTakers; // Important to note because it has functions a normal ArrayList doesn't
-	private int cost = 0;
-	private float weight = 0;
 	
-	private void setValues(int cost, int maxSpace, int kills, float weight)
+	private ServoClass servoClass;
+	private ServoClass armorClass;
+	private ServoType servoType;
+	private ArmorType armorType;
+	private LevelRAM levelRAM;
+	
+	private double armor = 0;
+	
+	/** Copy constructor */
+	public MekServo(MekServo mekServo)
 	{
-		setMaxKills(kills);
-		setCurrentKills(kills);
-		this.cost = cost;
-		this.weight = weight;
-		this.maxSpace = maxSpace;
+		super(mekServo);
+		this.servoClass = mekServo.servoClass;
+		this.armorClass = mekServo.armorClass;
+		this.servoType = mekServo.servoType;
+		this.armorType = mekServo.armorType;
+		this.levelRAM = mekServo.levelRAM;
+		
+		this.spaceTakers = new GappyArrayList<Integer>();
+		
+		for (int i = 0; i < mekServo.spaceTakers.size(); ++i)
+		{
+			if (mekServo.spaceTakers.get(i) != null)
+				this.spaceTakers.add((int) mekServo.spaceTakers.get(i));
+			else this.spaceTakers.add(null);
+		}
 	}
 	
-	public void setClass(ServoClass servoClass, ServoType servoType)
+	public MekServo()
+	{
+		super();
+		this.servoClass = null;
+		this.armorClass = null;
+		this.servoType = null;
+		this.armorType = null;
+		this.levelRAM = null;
+		
+		this.spaceTakers = new GappyArrayList<Integer>();
+	}
+	public MekServo(Scale scale, ServoClass servoClass, ServoClass armorClass, ServoType servoType, ArmorType armorType, LevelRAM levelRAM)
+	{
+		super(scale);
+		this.servoClass = servoClass;
+		this.armorClass = armorClass;
+		this.servoType = servoType;
+		this.armorType = armorType;
+		this.levelRAM = levelRAM;
+		
+		this.spaceTakers = new GappyArrayList<Integer>();
+	}
+	
+	public int getMaxSpace() // The servo's max spaces, accounting for servo class and type
 	{
 		switch (servoType)
 		{
-		case torso:
-			switch (servoClass)
-			{
-			case superLight: setValues(2, 2, 2, 1.0f); break;
-			case lightWeight: setValues(4, 4, 4, 2.0f); break;
-			case striker: setValues(6, 6, 6, 3.0f); break;
-			case mediumStriker: setValues(8, 8, 8, 4.0f); break;
-			case heavyStriker: setValues(10, 10, 10, 5.0f); break;
-			case mediumWeight: setValues(12, 12, 12, 6.0f); break;
-			case lightHeavy: setValues(14, 14, 14, 7.0f); break;
-			case mediumHeavy: setValues(16, 16, 16, 8.0f); break;
-			case armoredHeavy: setValues(18, 18, 18, 9.0f); break;
-			case superHeavy: setValues(20, 20, 20, 10.0f); break;
-			case megaHeavy: setValues(22, 22, 22, 11.0f); break;
-			} break;
-		case arm: case leg:
-			switch (servoClass)
-			{
-			case superLight: setValues(2, 2, 2, 0.5f); break;
-			case lightWeight: setValues(3, 3, 3, 1.0f); break;
-			case striker: setValues(4, 4, 4, 1.5f); break;
-			case mediumStriker: setValues(5, 5, 5, 2.0f); break;
-			case heavyStriker: setValues(6, 6, 6, 2.5f); break;
-			case mediumWeight: setValues(7, 7, 7, 3.0f); break;
-			case lightHeavy: setValues(8, 8, 8, 3.5f); break;
-			case mediumHeavy: setValues(9, 9, 9, 4.0f); break;
-			case armoredHeavy: setValues(10, 10, 10, 4.5f); break;
-			case superHeavy: setValues(11, 11, 11, 5.0f); break;
-			case megaHeavy: setValues(12, 12, 12, 5.5f); break;
-			} break;
-		case head: case wing: case tail:
-			switch (servoClass)
-			{
-			case superLight: setValues(1, 1, 1, 0.5f); break;
-			case lightWeight: setValues(2, 2, 2, 1.0f); break;
-			case striker: setValues(3, 3, 3, 1.5f); break;
-			case mediumStriker: setValues(4, 4, 4, 2.0f); break;
-			case heavyStriker: setValues(5, 5, 5, 2.5f); break;
-			case mediumWeight: setValues(6, 6, 6, 3.0f); break;
-			case lightHeavy: setValues(7, 7, 7, 3.5f); break;
-			case mediumHeavy: setValues(8, 8, 8, 4.0f); break;
-			case armoredHeavy: setValues(9, 9, 9, 4.5f); break;
-			case superHeavy: setValues(10, 10, 10, 5.0f); break;
-			case megaHeavy: setValues(11, 11, 11, 5.5f); break;
-			} break;
-		case pod:
-			switch (servoClass)
-			{
-			case superLight: setValues(1, 2, 0, 0.0f); break;
-			case lightWeight: setValues(2, 4, 0, 0.0f); break;
-			case striker: setValues(3, 6, 0, 0.0f); break;
-			case mediumStriker: setValues(4, 8, 0, 0.0f); break;
-			case heavyStriker: setValues(5, 10, 0, 0.0f); break;
-			case mediumWeight: setValues(6, 12, 0, 0.0f); break;
-			case lightHeavy: setValues(7, 14, 0, 0.0f); break;
-			case mediumHeavy: setValues(8, 16, 0, 0.0f); break;
-			case armoredHeavy: setValues(9, 18, 0, 0.0f); break;
-			case superHeavy: setValues(10, 20, 0, 0.0f); break;
-			case megaHeavy: setValues(11, 22, 0, 0.0f); break;
-			} break;
+		case torso: case pod: return servoClass.level() * 2;
+		case arm: case leg: return servoClass.level() + 1;
+		case head: case wing: case tail: return servoClass.level();
+		default: return 0;
 		}
 	}
-	public MekServo(ServoClass servoClass, ServoType servoType)
+
+	@Override
+	public double getMaxHealth(Scale scale)
 	{
-		this.spaceTakers = new GappyArrayList<Integer>();
-		setClass(servoClass, servoType);
+		switch (servoType)
+		{
+		case pod: return 0;
+		default: return scale.getDamageScale() * getMaxSpace();
+		}
 	}
 	
-	public int getMaxSpace()
+	/** Gets max armor.
+	 *  @param scale Scale to return in.
+	 */
+	public double getMaxArmor(Scale scale) {return scale.getDamageScale() * armorClass.level()  * levelRAM.penalty();}
+	/** Gets max armor in the servo's native scale. */
+	public double getMaxArmor() {return getMaxArmor(scale);}
+	/** Gets the cost in CP, accounting for armor and the scale of the servo. */
+	public double getCost()
 	{
-		return maxSpace;
+		double baseCost = 0;
+		switch (servoType)
+		{
+		case pod: baseCost = servoClass.level(); break; // Pods are the only type that costs less than their max space
+		default: baseCost = getMaxSpace(); break;
+		}
+		return scale.getCostScale() * (baseCost + (armorType.costMult() + levelRAM.costMult()) * armorClass.level());
 	}
+	/** Gets the weight in tons, accounting for armor and the scale of the servo. 
+	 */
+	public double getWeight()
+	{
+		return getMaxHealth() / 2 + getMaxArmor() / 2;
+	}
+	
 	public int getEmptySpace()
 	{
-		int emptySpace = maxSpace;
+		int emptySpace = getMaxSpace();
 		
 		for (int i = 0; i < spaceTakers.size(); ++i)
 		{
@@ -131,15 +132,13 @@ public class MekServo extends Servo
 		
 		return emptySpace;
 	}
-	
-	/** Occupies a given space if possible, returning the spacetaker id
-	 * if it fit or -1 if it didn't.
+	/** Occupies a given space if possible, returning an ID for the spacetaker to keep track of for later indexing.
 	 * 
 	 * @param space Amount of space to occupy.
 	 * 
-	 * @return Spacetaker id or -1.
+	 * @return The spacetaker's ID.
 	 */
-	public int takeSpace(int space)
+	public int takeSpace(int space) throws DidntFitException
 	{
 		if (getEmptySpace() >= space)
 		{
@@ -147,10 +146,48 @@ public class MekServo extends Servo
 			spaceTakers.add(space);
 			return index;
 		}
-		else return -1; // Won't fit
+		else throw new DidntFitException(space, getEmptySpace(), getMaxSpace());
 	}
-	public int getCost()
+
+	/** Sets current armor.
+	 * 
+	 *  @param scale Scale of the incoming value.
+	 *  @param value Value to set to.
+	 *  
+	 *  @throws ExcessArmorException if you try to give it more armor than its maximum.
+	 */
+	public void setCurrentArmor(Scale scale, double value) throws ExcessArmorException
 	{
-		return cost;
+		if (value > getMaxHealth(scale)) throw new ExcessArmorException(getMaxArmor(scale), value);
+		armor = scale.getDamageScale() * value;
+	}
+	/** Sets current armor in the servo's native scale.
+	 * 
+	 *  @param value Value to set to.
+	 *  
+	 *  @throws ExcessArmorException if you try to give it more armor than its maximum.
+	 */
+	public void setCurrentArmor(double value) throws ExcessArmorException {setCurrentArmor(scale, value);}
+	/** Gets current armor.
+	 *  @param scale Scale to return in.
+	 */
+	public double getCurrentArmor(Scale scale) {return scale.getDamageScale() * armor;}
+	/** Gets current armor in the servo's native scale. */
+	public double getCurrentArmor() {return getCurrentArmor();}
+
+
+	/** Gets DC.
+	 * 
+	 *  @param scale Scale to return in.
+	 */
+	public double getDC(Scale scale) {return scale.getDamageScale() * armorType.DC();}
+	/** Gets DC in the servo's native scale. */
+	public double getDC() {return getDC(scale);}
+	/** Gets the RAM reduction factor. */
+	public double getRAMReduction() {return levelRAM.reduction();}
+
+	@Override
+	public void destroy()
+	{
 	}
 }

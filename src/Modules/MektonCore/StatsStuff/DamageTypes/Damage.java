@@ -4,9 +4,13 @@
 
 package Modules.MektonCore.StatsStuff.DamageTypes;
 
-import Modules.MektonCore.EntityTypes.MektonActor;
+import Modules.MektonCore.StatsStuff.MekServo;
 
 public interface Damage
 {
-	public void apply(MektonActor recipient);
+	/** Applies the damage to a mek's servo.
+	 * 
+	 *  @param recipient The servo to damage.
+	 */
+	public void apply(MekServo recipient);
 }

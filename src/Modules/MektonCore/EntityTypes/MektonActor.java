@@ -30,7 +30,7 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 {
 	
 	
-	private float actionPoints;
+	private double actionPoints;
 	private transient SimpleTimer actionTimer;
 	private transient ParsingCommandBank commandBank;
 	
@@ -191,19 +191,19 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 	
 	public void resetActionPoints()
 	{
-		actionPoints = 2f;
+		actionPoints = 2d;
 		actionTimer.start();
 		resume();
 	}
-	public float remainingActions()
+	public double remainingActions()
 	{
 		return actionPoints;
 	}
-	public boolean takeAction(float cost)
+	public boolean takeAction(double cost)
 	{
-		if (actionPoints >= cost - MiscUtils.floatTolerance) // Float accuracy seems to get weird here
+		if (actionPoints >= cost)
 		{
-			actionPoints = Math.max(actionPoints - cost, 0);
+			actionPoints = Double.valueOf(MiscUtils.floatPrecise((float) actionPoints - (float) cost, 4));
 			return true;
 		}
 		else return false;
@@ -215,11 +215,11 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 	public abstract void defend(MektonActor aggressor, HitLocation location);
 	public abstract void attack(MektonActor defender, HitLocation location);
 	
-	// Conscious movement
+	// Conscious movementw
 	
 	public void moveTargetHexAct(AxialHexCoord3D target, int speed)
 	{
-		float moveCost = Math.abs((float) hexPos.distance(target)) / (float) getMA(); // TODO assumes walking
+		double moveCost = Math.abs((float) hexPos.distance(target)) / (float) getMA(); // TODO assumes walking
 		if (takeAction(moveCost)) super.moveTargetHex(target, speed);
 		else pause();
 	}

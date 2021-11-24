@@ -111,10 +111,10 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 	{
 		super.render(canvas, camera);
 		
-		if (false)//isPossessee())
+		if (isPossessee())
 		{
 			String text =
-					"Action points: " + MiscUtils.floatPrecise(remainingActions(), 2) + "\n" +
+					"Action points: " + MiscUtils.floatPrecise((float) remainingActions(), 2) + "\n" +
 					statSummary();
 			
 			int fontSize = 20;

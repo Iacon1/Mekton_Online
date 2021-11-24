@@ -13,7 +13,8 @@ public class GappyArrayList<E> extends ArrayList<E>
 	/** Removes an element and does *not* shift,
 	 *  Instead leaving a gap
 	 */
-	@Override public E remove(int index)
+	@Override
+	public E remove(int index)
 	{
 		if (index >= size() || get(index) == null) return null;
 		E e = get(index);
@@ -22,7 +23,8 @@ public class GappyArrayList<E> extends ArrayList<E>
 	}
 	/** Removes an element and does *not* shift
 	 */
-	@Override public boolean remove(Object o)
+	@Override
+	public boolean remove(Object o)
 	{
 		int index = super.indexOf(o);
 		if (index != -1) {remove(index); return true;}
@@ -41,7 +43,8 @@ public class GappyArrayList<E> extends ArrayList<E>
 	
 	/** Adds an element *into any gap if available,* or to end if not
 	 */
-	@Override public boolean add(E e)
+	@Override
+	public boolean add(E e)
 	{
 		int index = getFirstGap();
 		if (index != size())

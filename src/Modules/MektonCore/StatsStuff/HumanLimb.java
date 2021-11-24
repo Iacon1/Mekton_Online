@@ -4,7 +4,23 @@
 
 package Modules.MektonCore.StatsStuff;
 
-public class HumanLimb extends Servo
+import Modules.MektonCore.Enums.Scale;
+
+public class HumanLimb extends System
 {
+
+	@Override
+	public double getMaxHealth(Scale scale)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void destroy()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 
 }

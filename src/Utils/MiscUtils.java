@@ -20,7 +20,7 @@ import java.math.RoundingMode;
 
 public final class MiscUtils
 {
-	public static float floatTolerance = 0.015625f; // = 2^-6, which can be handled precisely by floats
+//	public static float floatTolerance = 0.015625f; // = 2^-6, which can be handled precisely by floats
 	
 	/** Adds items to a list until it reaches a certain size.
 	 * 

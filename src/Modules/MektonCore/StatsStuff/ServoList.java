@@ -11,7 +11,7 @@ import java.util.Map;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoSide;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
 
-public class ServoList<T extends Servo>
+public class ServoList<T extends System>
 {	
 	private List<T> servos; // List of servos
 	
