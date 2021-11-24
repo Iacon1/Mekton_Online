@@ -13,6 +13,7 @@ import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.GSONModule;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.Server.Account;
+import Utils.GSONConfig.TransSerializables.TransSerializableAdapter;
 
 public final class GiveBuilder
 {

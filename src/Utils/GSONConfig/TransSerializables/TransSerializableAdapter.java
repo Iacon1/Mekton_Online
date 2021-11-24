@@ -3,7 +3,7 @@
 // For abstract classes that may be in lists
 // https://stackoverflow.com/questions/16872492/gson-and-abstract-superclasses-deserialization-issue
 
-package Utils.GSONConfig;
+package Utils.GSONConfig.TransSerializables;
 
 import java.io.IOException;
 
@@ -11,7 +11,6 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import GameEngine.EntityTypes.TransSerializable;
 import Utils.GSONConfig.Delegation.AdapterDelegator;
 import Utils.GSONConfig.Delegation.DelegatingAdapter;
 import Utils.GSONConfig.Delegation.DelegatingFactory;
@@ -42,7 +41,7 @@ public class TransSerializableAdapter<T> extends DelegatingAdapter<T>
 	public static class Factory extends DelegatingFactory<TransSerializable>
 	{
 
-		Factory()
+		public Factory()
 		{
 			super(TransSerializable.class);
 		}

@@ -3,10 +3,12 @@
 // preSerialize runs before serialization
 // postSerialize runs after deserialization
 
-package GameEngine.EntityTypes;
+package Utils.GSONConfig.TransSerializables;
 
 public interface TransSerializable
 {
+	/** Runs before serialization. */
 	public void preSerialize();
+	/** Runs after serialization. */
 	public void postDeserialize();
 }

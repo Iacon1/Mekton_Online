@@ -6,26 +6,39 @@ package Modules.MektonCore.StatsStuff;
 
 import Modules.MektonCore.Enums.Scale;
 import Modules.MektonCore.ExceptionTypes.ExcessHealthException;
+import Utils.GSONConfig.TransSerializables.SerializableDLListMember;
 
-public abstract class System
+public abstract class System<T extends SystemList> implements SerializableDLListMember<T>
 {
+	protected transient T listHolder;
+	
 	protected Scale scale;
 	private double health; // 1x scale
 
 	/** Copy constructor */
-	public System(System system)
+	public System(T listHolder, System<T> system)
 	{
+		this.listHolder = listHolder;
+		scale = system.scale;
+		health = system.health;
+	}
+	/** Copy constructor */
+	public System(System<T> system)
+	{
+		listHolder = null;
 		scale = system.scale;
 		health = system.health;
 	}
 	public System()
 	{
-		scale = Scale.mekton;
+		listHolder = null;
+		scale = Scale.mekton; // 1x
 		health = -1;
 	}
-	public System(Scale scale)
+	public System(T listHolder, Scale scale)
 	{
-		this.scale = scale; // 1x
+		this.listHolder = listHolder;
+		this.scale = scale;
 		health = -1;
 	}
 	
@@ -80,4 +93,11 @@ public abstract class System
 	
 	/** Destroys the system */
 	public abstract void destroy();
+	
+	/** Sets the list that this system belongs to. */
+	public void setListHolder(T listHolder) {this.listHolder = listHolder;}
+	@Override
+	public void cutLink() {listHolder = null;}
+	@Override
+	public void establishLink(T listHolder) {setListHolder(listHolder);}
 }
