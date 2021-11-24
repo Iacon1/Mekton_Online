@@ -8,7 +8,7 @@ package Modules.MektonCore.StatsStuff;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HumanStats
+public class HumanSheet extends ServoList
 {
 	public enum Stat
 	{
@@ -27,7 +27,7 @@ public class HumanStats
 	
 	private Map<Stat, Integer> stats;
 	
-	public HumanStats()
+	public HumanSheet()
 	{
 		this.stats = new HashMap<Stat, Integer>();
 		initStats(0);

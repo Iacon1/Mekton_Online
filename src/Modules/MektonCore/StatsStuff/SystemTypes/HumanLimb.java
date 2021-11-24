@@ -2,7 +2,7 @@
 // Created 09/16/2021
 // An organic servo, i. e. a limb
 
-package Modules.MektonCore.StatsStuff;
+package Modules.MektonCore.StatsStuff.SystemTypes;
 
 import Modules.MektonCore.Enums.Scale;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
@@ -38,13 +38,6 @@ public class HumanLimb extends System
 		case arm: case leg: return baseValue + Math.floor(baseValue / 2);
 		default: return 0;
 		}
-	}
-
-	@Override
-	public void destroy()
-	{
-		// TODO Auto-generated method stub
-		
 	}
 
 }

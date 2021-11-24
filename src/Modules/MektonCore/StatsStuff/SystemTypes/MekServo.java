@@ -10,20 +10,22 @@
  * Redo space occupation
  */
 
-package Modules.MektonCore.StatsStuff;
+package Modules.MektonCore.StatsStuff.SystemTypes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import Modules.MektonCore.Enums.ArmorType;
 import Modules.MektonCore.Enums.LevelRAM;
 import Modules.MektonCore.Enums.Scale;
 import Modules.MektonCore.Enums.ServoClass;
-import Modules.MektonCore.ExceptionTypes.DidntFitException;
+import Modules.MektonCore.ExceptionTypes.DoesntFitException;
 import Modules.MektonCore.ExceptionTypes.ExcessArmorException;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
-import Utils.GappyArrayList;
 
-public class MekServo extends System
+public class MekServo extends Servo
 {
-	private GappyArrayList<Integer> spaceTakers; // Important to note because it has functions a normal ArrayList doesn't
+	private List<Integer> spaceTakerIDs; // Systems that occupy space in this servo.
 	
 	private ServoClass servoClass;
 	private ServoClass armorClass;
@@ -43,13 +45,11 @@ public class MekServo extends System
 		this.armorType = mekServo.armorType;
 		this.levelRAM = mekServo.levelRAM;
 		
-		this.spaceTakers = new GappyArrayList<Integer>();
+		this.spaceTakerIDs = new ArrayList<Integer>();
 		
-		for (int i = 0; i < mekServo.spaceTakers.size(); ++i)
+		for (int i = 0; i < mekServo.spaceTakerIDs.size(); ++i)
 		{
-			if (mekServo.spaceTakers.get(i) != null)
-				this.spaceTakers.add((int) mekServo.spaceTakers.get(i));
-			else this.spaceTakers.add(null);
+			this.spaceTakerIDs.add((int) mekServo.spaceTakerIDs.get(i));
 		}
 	}
 	
@@ -62,7 +62,7 @@ public class MekServo extends System
 		this.armorType = null;
 		this.levelRAM = null;
 		
-		this.spaceTakers = new GappyArrayList<Integer>();
+		this.spaceTakerIDs = new ArrayList<Integer>();
 	}
 	public MekServo(Scale scale, ServoClass servoClass, ServoClass armorClass, ServoType servoType, ArmorType armorType, LevelRAM levelRAM)
 	{
@@ -73,7 +73,7 @@ public class MekServo extends System
 		this.armorType = armorType;
 		this.levelRAM = levelRAM;
 		
-		this.spaceTakers = new GappyArrayList<Integer>();
+		this.spaceTakerIDs = new ArrayList<Integer>();
 	}
 	
 	public int getMaxSpace() // The servo's max spaces, accounting for servo class and type
@@ -125,28 +125,23 @@ public class MekServo extends System
 	{
 		int emptySpace = getMaxSpace();
 		
-		for (int i = 0; i < spaceTakers.size(); ++i)
+		for (int i = 0; i < spaceTakerIDs.size(); ++i)
 		{
-			emptySpace -= spaceTakers.get(i);
+			emptySpace -= ((SpaceTaker) listHolder.getSystem(spaceTakerIDs.get(i))).getVolume();
 		}
 		
 		return emptySpace;
 	}
-	/** Occupies a given space if possible, returning an ID for the spacetaker to keep track of for later indexing.
+	/** Occupies a given space if possible.
 	 * 
-	 * @param space Amount of space to occupy.
+	 *  @param spaceTaker the taker to try to place.
 	 * 
-	 * @return The spacetaker's ID.
+	 *  @throws DoesntFitException if the spaceTaker doesn't fit.
 	 */
-	public int takeSpace(int space) throws DidntFitException
+	public void addSystem(SpaceTaker spaceTaker) throws DoesntFitException
 	{
-		if (getEmptySpace() >= space)
-		{
-			int index = spaceTakers.getFirstGap();
-			spaceTakers.add(space);
-			return index;
-		}
-		else throw new DidntFitException(space, getEmptySpace(), getMaxSpace());
+		if (getEmptySpace() >= spaceTaker.getVolume()) spaceTakerIDs.add(spaceTaker.getID());
+		else throw new DoesntFitException(spaceTaker.getVolume(), getEmptySpace(), getMaxSpace());
 	}
 
 	/** Sets current armor.
@@ -175,7 +170,6 @@ public class MekServo extends System
 	/** Gets current armor in the servo's native scale. */
 	public double getCurrentArmor() {return getCurrentArmor();}
 
-
 	/** Gets DC.
 	 * 
 	 *  @param scale Scale to return in.
@@ -185,9 +179,4 @@ public class MekServo extends System
 	public double getDC() {return getDC(scale);}
 	/** Gets the RAM reduction factor. */
 	public double getRAMReduction() {return levelRAM.reduction();}
-
-	@Override
-	public void destroy()
-	{
-	}
 }

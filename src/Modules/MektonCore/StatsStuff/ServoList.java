@@ -10,8 +10,9 @@ import java.util.Map;
 
 import Modules.MektonCore.StatsStuff.HitLocation.ServoSide;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
+import Modules.MektonCore.StatsStuff.SystemTypes.Servo;
 
-public class ServoList extends SystemList<ServoList, Servo>
+public class ServoList extends SystemList
 {	
 	private Map<ServoType, List<Integer>> byType; // List of servos by category
 	private Map<ServoSide, List<Integer>> bySide; // List of servos by side
@@ -76,7 +77,7 @@ public class ServoList extends SystemList<ServoList, Servo>
 	public Servo getServo(ServoType category, ServoSide side, int number)
 	{
 		int index = byTypeAndSide(category, side).get(number);
-		return heldList.get(index);
+		return (Servo) heldList.get(index);
 	}
 	
 	public Servo getServo(HitLocation location)

@@ -5,9 +5,9 @@
 package Modules.MektonCore.ExceptionTypes;
 
 @SuppressWarnings("serial")
-public class DidntFitException extends Exception
+public class DoesntFitException extends Exception
 {
-	public DidntFitException(int neededSpace, int emptySpace, int maxSpace)
+	public DoesntFitException(int neededSpace, int emptySpace, int maxSpace)
 	{
 		super("Cannot fit a " + neededSpace + "-space object into the " + emptySpace + " empty spaces of the " + maxSpace + "-space servo.");
 	}
