@@ -11,9 +11,9 @@ import Modules.HexUtilities.HexConfigManager;
 
 public class TestMenu extends GUISpriteEntity
 {
-	public TestMenu(String owner)
+	public TestMenu(int ownerID)
 	{
-		super(owner);
+		super(ownerID);
 		setSprite(new ImageSprite(GameInfo.getServerPackResource("DummyPlayer.PNG")));
 		setSpriteParams(0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
 		align(AlignmentPoint.northEast, null, AlignmentPoint.northEast);

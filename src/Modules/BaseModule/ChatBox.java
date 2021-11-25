@@ -11,9 +11,9 @@ import GameEngine.EntityTypes.GUITypes.Textbar;
 
 public class ChatBox extends Textbar
 {
-	public ChatBox(String owner, String font, Color color, int heightPixels)
+	public ChatBox(int ownerID, String font, Color color, int heightPixels)
 	{
-		super(owner, "ChatBox", font, color, true, heightPixels);
+		super(ownerID, "ChatBox", font, color, true, heightPixels);
 		sprite.setBasicParams(0, 0, 32, 32);
 	}
 	

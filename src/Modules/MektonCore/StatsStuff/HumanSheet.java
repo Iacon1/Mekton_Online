@@ -29,6 +29,7 @@ public class HumanSheet extends ServoList
 	
 	public HumanSheet()
 	{
+		super();
 		this.stats = new HashMap<Stat, Integer>();
 		initStats(0);
 	}

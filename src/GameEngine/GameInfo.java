@@ -132,9 +132,9 @@ public class GameInfo
 	{
 		return server;
 	}
-	public static Account getAccount(String username)
+	public static Account getAccount(int possessorID)
 	{
-		return server.getAccount(username);
+		return server.getAccount(possessorID);
 	}
 	public static void resetCommand() // Resets all input elements
 	{

@@ -50,20 +50,6 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	}
 	
 	// Basic sprite functions
-	
-	public SpriteEntity(String owner)
-	{
-		super(owner);
-		
-		pos = new Point2D(0, 0);
-		boundSize = new Point2D(0, 0);
-		
-		spriteOff = new Point2D(0, 0);
-		
-		targetPos = new Point2D(-1, -1);
-		
-		animTimer = new SimpleTimer();
-	}
 
 	/** Sets the sprite used for this object.
 	 *  

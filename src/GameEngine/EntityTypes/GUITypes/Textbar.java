@@ -34,9 +34,9 @@ public abstract class Textbar extends GUISpriteEntity implements InputGetter
 		buffer = new String();
 		selected = false;
 	}
-	public Textbar(String owner, String image, String font, Color color, boolean selfClearing, int heightPixels)
+	public Textbar(int ownerID, String image, String font, Color color, boolean selfClearing, int heightPixels)
 	{
-		super(owner);
+		super(ownerID);
 		super.setSprite(new ImageSprite(image));
 		this.font = font;
 		this.color = color;

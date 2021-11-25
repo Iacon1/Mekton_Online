@@ -43,6 +43,7 @@ public abstract class Account implements CommandRunner
 	public void possess(GameEntity entity)
 	{
 		possess(entity.getId());
+		entity.setPossessor(getID());
 	}
 	public boolean hasPossessee()
 	{
@@ -61,4 +62,9 @@ public abstract class Account implements CommandRunner
 	public abstract JPanel serverPanel();
 	
 	public abstract Point2D getCamera();
+
+	public int getID()
+	{
+		return id;
+	}
 }

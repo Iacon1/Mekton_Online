@@ -24,10 +24,6 @@ public abstract class HexEntity<T extends HexCoord> extends SpriteEntity // T is
 		super();
 		path = new LinkedList<T>();
 	}
-	public HexEntity(String owner)
-	{
-		super(owner);
-	}
 
 	private void alignCoords()
 	{

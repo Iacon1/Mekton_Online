@@ -82,10 +82,9 @@ public abstract class GameEntity
 		return children;
 	}
 
-	/** Sets the owner to a specific user, or no owner if
-	 *  null.
+	/** Sets the possessorID to a specific account ID or -1 if none.
 	 * 
-	 * @param owner Owner to set to, or null.
+	 * @param possessorID ID of the possessing account.
 	 * 
 	 * @return None.
 	 */
@@ -93,7 +92,11 @@ public abstract class GameEntity
 	{
 		this.possessorID = possessorID;
 	}
-	
+	public Account getPossessor()
+	{
+		if (possessorID == -1) return null;
+		else return GameInfo.getAccount(possessorID);
+	}
 	public abstract String getName(); // Gets object name
 	public abstract void update(); // Updates regularly
 	/**

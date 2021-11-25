@@ -10,11 +10,16 @@
 package Utils.GSONConfig.TransSerializables;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class SerializableDLListHolder<T, M extends SerializableDLListMember<T>, L extends List<M>> implements TransSerializable
 {
 	protected L heldList;
 	
+	public SerializableDLListHolder(Supplier<L> constructor)
+	{
+		heldList = constructor.get();
+	}
 	@Override
 	public void preSerialize()
 	{

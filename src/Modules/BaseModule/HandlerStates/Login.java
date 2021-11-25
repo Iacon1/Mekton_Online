@@ -42,7 +42,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 		if (packet.newUser)
 		{
 			if (parentThread.getParent().getAccount(packet.username) != null) return; // Don't overwrite an old account!
-			loginFeedback.successful = parentThread.getParent().addAccount(account);
+			loginFeedback.successful = (parentThread.getParent().addAccount(account) != -1); // TODO exception instead
 			if (loginFeedback.successful)
 			{
 				parentThread.setUsername(account.username);

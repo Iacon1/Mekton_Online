@@ -35,14 +35,14 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 		setSpriteParams(0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
 		setBounds(HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight(), 0, -HexConfigManager.getHexHeight());
 	}
-	public DummyPlayer(String owner, MektonMap map)
+	public DummyPlayer(MektonMap map)
 	{
-		super(owner, map);
+		super(map);
 		setSprite(new ImageSprite("DummyPlayer"));
 		setSpriteParams(0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
 		setBounds(HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight(), 0, -HexConfigManager.getHexHeight());
 		
-		ChatBox chatBox = new ChatBox(getOwnerName(), "MicrogrammaNormalFix", Color.red, 20);
+		ChatBox chatBox = new ChatBox(0, "MicrogrammaNormalFix", Color.red, 20); // TODO find value of possessor dynamically
 		chatBoxID = chatBox.getId();
 		chatBox.align(AlignmentPoint.west, null, AlignmentPoint.west);
 		addChild(chatBox);

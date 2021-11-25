@@ -8,9 +8,9 @@ import GameEngine.EntityTypes.InputGetter;
 
 public abstract class Button extends GUISpriteEntity implements InputGetter
 {
-	public Button(String owner)
+	public Button(int ownerID)
 	{
-		super(owner);
+		super(ownerID);
 	}
 	
 	/**

@@ -18,9 +18,8 @@ public abstract class MapEntity extends HexEntity<AxialHexCoord3D>
 		this.mapToken = null;
 	}
 	
-	public MapEntity(String owner, MektonMap map)
+	public MapEntity(MektonMap map)
 	{
-		super(owner);
 		this.mapToken = new EntityToken<MektonMap>(map);
 	}
 	

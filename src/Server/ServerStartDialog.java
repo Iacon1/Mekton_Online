@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import GameEngine.GameInfo;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.ServerMakingModule;
 import GameEngine.Server.GameServer;
@@ -45,6 +46,7 @@ public class ServerStartDialog extends JDialog
 		if (value != null)
 		{
 			GameServer server = ModuleManager.getHighestOfType(ServerMakingModule.class).makeServer();
+			GameInfo.setServer(server);
 			server.start(value); // TODO changeable
 
 			ServerWindow.main(server);

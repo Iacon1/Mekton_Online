@@ -176,9 +176,8 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 		
 		registerCommands();
 	}
-	public MektonActor(String owner, MektonMap map)
+	public MektonActor(MektonMap map)
 	{
-		super(owner, map);
 		actionTimer = new SimpleTimer();
 		commandBank = new ParsingCommandBank();
 		
@@ -246,13 +245,13 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 	@Override
 	public void updatePath()
 	{
-		if (this.path != null && this.hexPos == this.path.getFirst()) // Ready for next step of path
+		if (this.path != null && this.path.size() != 0 && this.hexPos == this.path.getFirst()) // Ready for next step of path
 		{
 			this.path.remove();
 			if (this.path.isEmpty()) this.path = null;
 			else moveTargetHexAct(path.getFirst(), baseSpeed);
 		}
-		else if (this.path != null)
+		else if (this.path != null && this.path.size() != 0)
 		{
 			moveTargetHexAct(path.getFirst(), baseSpeed);
 		}
@@ -280,16 +279,16 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 	@Override
 	public boolean hasRole(String role)
 	{
-		if (RoleAccount.class.isAssignableFrom(getOwner().getClass()))
-			return ((RoleAccount) getOwner()).hasRole(role);
+		if (RoleAccount.class.isAssignableFrom(getPossessor().getClass()))
+			return ((RoleAccount) getPossessor()).hasRole(role);
 		else return false;
 	}
 	
 	@Override
 	public List<String> getRoles()
 	{
-		if (RoleAccount.class.isAssignableFrom(getOwner().getClass()))
-			return ((RoleAccount) getOwner()).getRoles();
+		if (RoleAccount.class.isAssignableFrom(getPossessor().getClass()))
+			return ((RoleAccount) getPossessor()).getRoles();
 		else return null;
 	}
 	

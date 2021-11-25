@@ -71,7 +71,7 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	public GameEntity makePlayer(Account account)
 	{
 		account.setLogged(true);
-		DummyPlayer player = new DummyPlayer(account.username, (MektonMap) GameInfo.getWorld().getRootEntities().get(0)); // Adds a guy to the map
+		DummyPlayer player = new DummyPlayer((MektonMap) GameInfo.getWorld().getRootEntities().get(0)); // Adds a guy to the map
 
 		account.possess(player);
 		GameInfo.getWorld().getRootEntities().get(0).addChild(player);

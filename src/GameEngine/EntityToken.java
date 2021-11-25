@@ -1,6 +1,6 @@
 // By Iacon1
 // Created 09/21/2021
-// Used to convienently get a connected object
+// Used to convienently get a connected game entity
 
 package GameEngine;
 

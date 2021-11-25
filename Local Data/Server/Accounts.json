@@ -1,1 +1,1 @@
-{"Bob":{"type":"Modules.TestModule.TestAccount","data":{"username":"Bob","possessee":-1,"loggedIn":false,"hash":1995005885}}}
+[{"type":"Modules.TestModule.TestAccount","data":{"id":0,"username":"Bob","possessee":-1,"loggedIn":false,"hash":1995005885}}]

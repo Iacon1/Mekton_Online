@@ -13,6 +13,10 @@ public abstract class SystemList extends SerializableDLListHolder<SystemList, Sy
 // public abstract class SystemList<T extends SystemList, C extends System<T>> extends SerializableDLListHolder<T, C, GappyArrayList<C>> {}
 {
 
+	public SystemList()
+	{
+		super(() -> {return new GappyArrayList<System>();});
+	}
 	public int addSystem(System system)
 	{
 		int index = heldList.getFirstGap();

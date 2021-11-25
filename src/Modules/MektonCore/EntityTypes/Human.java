@@ -19,9 +19,9 @@ public class Human extends MektonActor
 	{
 		super();
 	}
-	public Human(String owner, MektonMap map)
+	public Human(MektonMap map)
 	{
-		super(owner, map);
+		super(map);
 		this.stats = new HumanSheet();
 		this.stats.initStats(5);
 	}

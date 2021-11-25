@@ -14,20 +14,21 @@ import GameEngine.GameInfo;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.Net.ConnectionPairThread;
 import GameEngine.Net.Server.Server;
+import Utils.GappyArrayList;
 import Utils.JSONManager;
 import Utils.MiscUtils;
 
 public abstract class GameServer<T extends ConnectionPairThread> extends Server<T>
 {
-	private Map<String, Account> accounts;
+	private GappyArrayList<Account> accounts;
 
 	private void loadAccounts()
 	{
-		accounts = new HashMap<String, Account>();
-		accounts = (HashMap<String, Account>) JSONManager.deserializeJSON(MiscUtils.readText("Local Data/Server/Accounts.json"), accounts.getClass());
-		accounts = (HashMap<String, Account>) JSONManager.deserializeCollectionJSONList(MiscUtils.readText("Local Data/Server/Accounts.json"), HashMap.class, String.class, Account.class);
-
-		if (accounts == null) accounts = new HashMap<String, Account>();
+		accounts = new GappyArrayList<Account>();
+//		accounts = (HashMap<String, Account>) JSONManager.deserializeJSON(MiscUtils.readText("Local Data/Server/Accounts.json"), accounts.getClass());
+		accounts = JSONManager.deserializeCollectionJSONList(MiscUtils.readText("Local Data/Server/Accounts.json"), GappyArrayList.class, Account.class);
+		
+		if (accounts == null) accounts = new GappyArrayList<Account>();
 	}
 	private void saveAccounts()
 	{
@@ -38,33 +39,37 @@ public abstract class GameServer<T extends ConnectionPairThread> extends Server<
 	{	
 		super(supplier);
 
-		accounts = new HashMap<String, Account>();
+		accounts = new GappyArrayList<Account>();
 
 		loadAccounts();
 		saveAccounts();
 		loadAccounts();
 	}
 	
-	public boolean addAccount(Account account) // Returns true if successful
+	public int addAccount(Account account) // Returns true if successful
 	{
-		accounts.put(account.username, account);
+		int id = accounts.getFirstGap();
+		accounts.add(account);
 		saveAccounts();
-		return true; // TODO whitelist / blacklist
+		return id; // TODO whitelist / blacklist
+	}
+	public Account getAccount(int id)
+	{
+		return accounts.get(id);
 	}
 	public Account getAccount(String username)
 	{
-		return accounts.get(username);
+		for (int i = 0; i < accounts.size(); ++i)
+		{
+			if (accounts.get(i) != null && accounts.get(i).username.equals(username))
+				return accounts.get(i);
+		}
+		
+		return null;
 	}
 	public List<Account> getAccounts()
 	{
-		List<Account> accountList = new ArrayList<Account>();
-		
-		for (Map.Entry<String, Account> entry : accounts.entrySet())
-		{
-			accountList.add(entry.getValue());
-		}
-		
-		return accountList;
+		return accounts; // TODO copy?
 	}
 	public void update()
 	{
@@ -76,7 +81,7 @@ public abstract class GameServer<T extends ConnectionPairThread> extends Server<
 	}
 	public boolean login(String username, String password)
 	{
-		if (accounts.get(username) == null) return false;
-		else return accounts.get(username).eqHash(password);
+		if (getAccount(username) == null) return false;
+		else return getAccount(username).eqHash(password);
 	}
 }

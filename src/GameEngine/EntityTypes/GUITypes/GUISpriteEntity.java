@@ -11,13 +11,16 @@ import GameEngine.EntityTypes.SpriteEntity;
 
 public abstract class GUISpriteEntity extends SpriteEntity
 {
+	private int ownerID;
+	
 	public GUISpriteEntity()
 	{
 		super();
 	}
-	public GUISpriteEntity(String owner)
+	public GUISpriteEntity(int ownerID)
 	{
-		super(owner);
+		super();
+		this.ownerID = ownerID;
 	}
 
 	@Override
