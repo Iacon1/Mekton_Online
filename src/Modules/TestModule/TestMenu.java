@@ -11,9 +11,9 @@ import Modules.HexUtilities.HexConfigManager;
 
 public class TestMenu extends GUISpriteEntity
 {
-	public TestMenu(int ownerID)
+	public TestMenu()
 	{
-		super(ownerID);
+		super();
 		setSprite(new ImageSprite(GameInfo.getServerPackResource("DummyPlayer.PNG")));
 		setSpriteParams(0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
 		align(AlignmentPoint.northEast, null, AlignmentPoint.northEast);
@@ -42,6 +42,41 @@ public class TestMenu extends GUISpriteEntity
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void onMouseClickGUI(int mX, int mY, int button)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onMousePressGUI(int mX, int mY, int button)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onMouseReleaseGUI(int mX, int mY, int button)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onKeyPressGUI(int code)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onKeyReleaseGUI(int code)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 

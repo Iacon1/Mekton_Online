@@ -65,12 +65,29 @@ public class GameInfo
 			return array;
 		}
 		
-		/** Returns the list of instances.
-		 *  No guarantee that any one entity *isn't* null!
+		/** Returns the list of instances of a certain type.
+		 * 
+		 *  @param type The class of the entity type to search for.
 		 */
-		public List<GameEntity> getEntities() // Shows every instance instead of just our children; GameWorld.children ought be empty
+		public <T extends GameEntity> List<T> getEntitiesOfType(Class<T> type)
 		{
-			return instances;
+			List<T> array = new ArrayList<T>();
+			
+			for (int i = 0; i < instances.size(); ++i)
+			{
+				GameEntity instance = instances.get(i);
+				if (instance == null) continue;
+				if (type.isAssignableFrom(instance.getClass())) array.add((T) instance);
+			}
+			
+			return array;
+		}
+		
+		/** Returns the list of instances.
+		 */
+		public List<GameEntity> getEntities() // Shows every instance
+		{
+			return instances; //getEntitiesOfType(GameEntity.class);
 		}
 	}
 	private static transient GameWorld world; // Holds any things we might need to transfer to client

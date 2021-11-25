@@ -4,12 +4,16 @@
 
 package GameEngine.Server;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.swing.JPanel;
 
 import GameEngine.GameInfo;
 import GameEngine.Point2D;
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.GameEntity;
+import GameEngine.EntityTypes.GUITypes.GUISpriteEntity;
 
 public abstract class Account implements CommandRunner
 {
@@ -66,5 +70,20 @@ public abstract class Account implements CommandRunner
 	public int getID()
 	{
 		return id;
+	}
+	
+	@Override
+	public boolean runCommand(String... words)
+	{
+		if (GUISpriteEntity.GUICommandHeader.equals(words[0]))
+		{
+			List<GUISpriteEntity> GUIEntities = GameInfo.getWorld().getEntitiesOfType(GUISpriteEntity.class);
+			
+			for (int i = 0; i < GUIEntities.size(); ++i)
+				if (GUIEntities.get(i).getOwnerID() == this.id) GUIEntities.get(i).runCommand(words);
+			return true;
+		}
+		
+		return false;
 	}
 }

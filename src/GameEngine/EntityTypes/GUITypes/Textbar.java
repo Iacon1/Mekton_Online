@@ -12,7 +12,7 @@ import GameEngine.Point2D;
 import GameEngine.ScreenCanvas;
 import GameEngine.EntityTypes.InputGetter;
 
-public abstract class Textbar extends GUISpriteEntity implements InputGetter
+public abstract class Textbar extends GUISpriteEntity
 {
 	private String font;
 	private Color color;
@@ -34,9 +34,9 @@ public abstract class Textbar extends GUISpriteEntity implements InputGetter
 		buffer = new String();
 		selected = false;
 	}
-	public Textbar(int ownerID, String image, String font, Color color, boolean selfClearing, int heightPixels)
+	public Textbar(String image, String font, Color color, boolean selfClearing, int heightPixels)
 	{
-		super(ownerID);
+		super();
 		super.setSprite(new ImageSprite(image));
 		this.font = font;
 		this.color = color;
@@ -46,14 +46,23 @@ public abstract class Textbar extends GUISpriteEntity implements InputGetter
 		buffer = new String();
 		selected = false;
 	}
-	
+
 	public void clear()
 	{
 		buffer = null;
 	}
 	public abstract void onEnter(String text);
+	
 	@Override
-	public void onKeyPress(int code)
+	public void onMouseClickGUI(int mX, int mY, int button)
+	{
+		if (button != 0) return;
+		
+		if (pos.x <= mX && mX <= pos.x + sprite.getSize().x && pos.y <= mY && mY <= pos.y + sprite.getSize().y) selected = true;
+		else selected = false;
+	}
+	@Override
+	public void onKeyPressGUI(int code)
 	{
 		if (!selected) return;
 		
@@ -73,15 +82,6 @@ public abstract class Textbar extends GUISpriteEntity implements InputGetter
 		}
 	}
 	
-	@Override
-	public void onMouseClick(int mX, int mY, int button)
-	{
-		if (button != 0) return;
-		
-		if (pos.x <= mX && mX <= pos.x + sprite.getSize().x && pos.y <= mY && pos.y + sprite.getSize().y <= mY)
-			selected = true;
-		else selected = false;
-	}
 	@Override
 	public void render(ScreenCanvas canvas, Point2D camera) 
 	{

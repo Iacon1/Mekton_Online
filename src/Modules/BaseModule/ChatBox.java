@@ -11,21 +11,12 @@ import GameEngine.EntityTypes.GUITypes.Textbar;
 
 public class ChatBox extends Textbar
 {
-	public ChatBox(int ownerID, String font, Color color, int heightPixels)
+	public ChatBox(String font, Color color, int heightPixels)
 	{
-		super(ownerID, "ChatBox", font, color, true, heightPixels);
+		super("ChatBox", font, color, true, heightPixels);
 		sprite.setBasicParams(0, 0, 32, 32);
 	}
 	
-	@Override
-	public void onMousePress(int mX, int mY, int button) {}
-
-	@Override
-	public void onMouseRelease(int mX, int mY, int button) {}
-
-	@Override
-	public void onKeyRelease(int code) {}
-
 	@Override
 	public void onEnter(String text)
 	{
@@ -34,10 +25,8 @@ public class ChatBox extends Textbar
 
 	@Override
 	public void onStart() {}
-
 	@Override
 	public void onStop() {}
-
 	@Override
 	public void onAnimStop() {}
 
@@ -46,5 +35,12 @@ public class ChatBox extends Textbar
 	{
 		return "Chat Box";
 	}
+
+	@Override
+	public void onMousePressGUI(int mX, int mY, int button) {}
+	@Override
+	public void onMouseReleaseGUI(int mX, int mY, int button) {}
+	@Override
+	public void onKeyReleaseGUI(int code) {}
 
 }

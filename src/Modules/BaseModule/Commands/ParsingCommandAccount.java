@@ -67,6 +67,8 @@ public abstract class ParsingCommandAccount extends Account
 	@Override
 	public boolean runCommand(String... words)
 	{
+		if (super.runCommand(words)) return true;
+		
 		if (commandBank.recognizes(words[0]))
 		{
 			try {commandBank.execute(this, words);}

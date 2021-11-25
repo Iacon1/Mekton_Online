@@ -8,7 +8,9 @@ public interface InputGetter
 {
 	/**
 	* Called when mouse is clicked.
-	* <p>
+	* Important to note that this is a client-side function, so
+	* changes to the object here won't be reflected by the server
+	* or any future frames.
 	* 
 	* @param  mX     Mouse X-position (or null if mouse is out of game window)
 	* @param  mY     Mouse Y-position (or null if mouse is out of game window)
@@ -17,7 +19,9 @@ public interface InputGetter
 	public void onMouseClick(int mX, int mY, int button);
 	/**
 	* Called when mouse is pressed.
-	* <p>
+	* Important to note that this is a client-side function, so
+	* changes to the object here won't be reflected by the server
+	* or any future frames.
 	*
 	* @param  mX     Mouse X-position (or null if mouse is out of game window)
 	* @param  mY     Mouse Y-position (or null if mouse is out of game window)
@@ -26,7 +30,9 @@ public interface InputGetter
 	public void onMousePress(int mX, int mY, int button);
 	/**
 	* Called when mouse is released.
-	* <p>
+	* Important to note that this is a client-side function, so
+	* changes to the object here won't be reflected by the server
+	* or any future frames.
 	* 
 	* @param  mX     Mouse X-position (or null if mouse is out of game window)
 	* @param  mY     Mouse Y-position (or null if mouse is out of game window)
@@ -36,18 +42,18 @@ public interface InputGetter
 	
 	/**
 	* Called when key is pressed.
-	* <p>
-	* This method always returns immediately, whether or not the 
-	* image exists. When this applet attempts to draw the image on
-	* the screen, the data will be loaded. The graphics primitives 
-	* that draw the image will incrementally paint on the screen. 
+	* Important to note that this is a client-side function, so
+	* changes to the object here won't be reflected by the server
+	* or any future frames.
 	*
 	* @param  code The key that was pressed.
 	*/
 	public void onKeyPress(int code);
 	/**
 	* Called when key is released.
-	* <p>
+	* Important to note that this is a client-side function, so
+	* changes to the object here won't be reflected by the server
+	* or any future frames.
 	*
 	* @param  code The key that was released.
 	*/

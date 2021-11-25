@@ -11,6 +11,7 @@ import Modules.MektonCore.EntityTypes.MektonMap;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 
+import GameEngine.EntityToken;
 import GameEngine.GameInfo;
 import GameEngine.ImageSprite;
 import GameEngine.Point2D;
@@ -27,7 +28,8 @@ import Utils.MiscUtils;
 
 public class DummyPlayer extends Human implements InputGetter, CommandRunner
 {	
-	int chatBoxID;
+	EntityToken<ChatBox> chatBox;
+	
 	public DummyPlayer()
 	{
 		super();
@@ -42,8 +44,10 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 		setSpriteParams(0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
 		setBounds(HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight(), 0, -HexConfigManager.getHexHeight());
 		
-		ChatBox chatBox = new ChatBox(0, "MicrogrammaNormalFix", Color.red, 20); // TODO find value of possessor dynamically
-		chatBoxID = chatBox.getId();
+		ChatBox chatBox = new ChatBox("MicrogrammaNormalFix", Color.red, 20);
+		chatBox.setOwnerID(0); // TODO find value of possessor dynamically
+		addChild(chatBox);
+		this.chatBox = new EntityToken<ChatBox>(chatBox.getId());
 		chatBox.align(AlignmentPoint.west, null, AlignmentPoint.west);
 		addChild(chatBox);
 	}
@@ -122,8 +126,8 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 			canvas.drawRectangle(Color.black, new Point2D(0, 0), textSize);
 			canvas.drawText(text, "MicrogrammaNormalFix", Color.red, new Point2D(0, 0), fontSize);
 		}
-		((SpriteEntity) GameInfo.getWorld().getEntity(chatBoxID)).setPos(0, 0);
-		GameInfo.getWorld().getEntity(chatBoxID).render(canvas, camera);
+		chatBox.get().setPos(0, 0);
+		chatBox.get().render(canvas, camera);
 	}
 	@Override
 	public void onPause()
