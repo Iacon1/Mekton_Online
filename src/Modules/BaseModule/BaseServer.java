@@ -29,9 +29,4 @@ public class BaseServer extends GameServer<ClientHandlerThread>
 	{
 		return 10;
 	}
-	
-	public void runCommand(String username, String command)
-	{
-		getAccount(username).runCommand(command.split(" "));
-	}
 }

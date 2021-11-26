@@ -161,6 +161,11 @@ public class GameInfo
 	{
 		GameInfo.command = command;
 	}
+	public static void addCommand(String command)
+	{
+		if (GameInfo.command == null) setCommand(command);
+		else GameInfo.command = GameInfo.command + "; " + command;
+	}
 	public static String getCommand() // Gets input, resets if not empty, returns null if empty
 	{
 		if (GameInfo.command == null)

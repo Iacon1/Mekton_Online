@@ -45,7 +45,7 @@ public class EditMap extends MektonMap implements InputGetter, CommandRunner
 			AxialHexCoord coord = new AxialHexCoord(0, 0);
 			coord = coord.fromPixel(new Point2D(mX, mY).add(ScreenCanvas.getCamera()));
 			
-			GameInfo.setCommand("@" + this.getId() + " " + coord.q + " " + coord.r);
+			GameInfo.addCommand("@" + this.getId() + " " + coord.q + " " + coord.r);
 		}
 	}
 

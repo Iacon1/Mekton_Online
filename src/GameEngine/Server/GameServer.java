@@ -84,4 +84,10 @@ public abstract class GameServer<T extends ConnectionPairThread> extends Server<
 		if (getAccount(username) == null) return false;
 		else return getAccount(username).eqHash(password);
 	}
+	
+	public void runCommand(String username, String command)
+	{
+		String[] commands = command.split("; ");
+		for (int i = 0; i < commands.length; ++i) getAccount(username).runCommand(commands[i].split(" "));
+	}
 }

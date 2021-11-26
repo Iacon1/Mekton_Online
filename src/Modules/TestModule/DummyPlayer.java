@@ -87,14 +87,14 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 	{
 		switch (code)
 		{
-		case KeyEvent.VK_Q: GameInfo.setCommand("move -n -w"); break;
-		case KeyEvent.VK_E: GameInfo.setCommand("move -n -e"); break;
-		case KeyEvent.VK_W: GameInfo.setCommand("move -n"); break;
-		case KeyEvent.VK_A: GameInfo.setCommand("move -s -w"); break;
-		case KeyEvent.VK_D: GameInfo.setCommand("move -s -e"); break;
-		case KeyEvent.VK_S: GameInfo.setCommand("move -s"); break;
-		case KeyEvent.VK_SPACE: GameInfo.setCommand("move -u"); break;
-		case KeyEvent.VK_SHIFT: GameInfo.setCommand("move -d"); break;
+		case KeyEvent.VK_Q: GameInfo.addCommand("move -n -w"); break;
+		case KeyEvent.VK_E: GameInfo.addCommand("move -n -e"); break;
+		case KeyEvent.VK_W: GameInfo.addCommand("move -n"); break;
+		case KeyEvent.VK_A: GameInfo.addCommand("move -s -w"); break;
+		case KeyEvent.VK_D: GameInfo.addCommand("move -s -e"); break;
+		case KeyEvent.VK_S: GameInfo.addCommand("move -s"); break;
+		case KeyEvent.VK_SPACE: GameInfo.addCommand("move -u"); break;
+		case KeyEvent.VK_SHIFT: GameInfo.addCommand("move -d"); break;
 		}
 	}
 

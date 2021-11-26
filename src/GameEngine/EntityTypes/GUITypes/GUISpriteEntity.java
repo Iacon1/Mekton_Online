@@ -25,7 +25,7 @@ public abstract class GUISpriteEntity extends SpriteEntity implements InputGette
 	 */
 	protected static void sendUpdate(String type, Object... parameters)
 	{
-		GameInfo.setCommand(GUICommandHeader + " (" + type + ")" + ": " + MiscUtils.arrayToString(parameters, " "));
+		GameInfo.addCommand(GUICommandHeader + " (" + type + ")" + ": " + MiscUtils.arrayToString(parameters, " "));
 	}
 	
 	public GUISpriteEntity()
