@@ -6,6 +6,7 @@ package Utils;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
@@ -274,5 +275,21 @@ public final class MiscUtils
 			return format.format(value);
 		}
 		else return Integer.toString((int) Math.floor(value));
+	}
+	
+	/** Returns whether caps lock is on.
+	 * 
+	 */
+	public static boolean isCapsLockOn()
+	{
+		return Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK);
+	}
+
+	/** Returns a character version of a VK code
+	 *  @param code The code to translate to a character.
+	 */
+	public static char translateCode(int code)
+	{
+		return (char) code;
 	}
 }

@@ -22,6 +22,7 @@ public class ChatBox extends Textbar
 	public void onSubmit()
 	{
 		GameInfo.getServer().runCommand(this.getOwner(), buffer);
+		clear();
 	}
 
 	@Override

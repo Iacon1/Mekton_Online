@@ -88,6 +88,7 @@ public abstract class GameServer<T extends ConnectionPairThread> extends Server<
 	
 	public void runCommand(Account account, String command)
 	{
+		command = command.toLowerCase();
 		Logging.logNotice("User " + account.username + " used command: \"" + command + "\"");
 		String[] commands = command.split("; ");
 		for (int i = 0; i < commands.length; ++i) account.runCommand(commands[i].split(" "));

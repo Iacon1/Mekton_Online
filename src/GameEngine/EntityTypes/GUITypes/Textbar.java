@@ -14,6 +14,7 @@ import GameEngine.Point2D;
 import GameEngine.ScreenCanvas;
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.InputGetter;
+import Utils.MiscUtils;
 
 public abstract class Textbar extends GUISpriteEntity implements InputGetter, CommandRunner
 {
@@ -51,7 +52,11 @@ public abstract class Textbar extends GUISpriteEntity implements InputGetter, Co
 	{
 		buffer = null;
 	}
-
+	public boolean isSelected()
+	{
+		return selected;
+	}
+	
 	@Override
 	public String onMouseClick(int mX, int mY, int button)
 	{
@@ -88,7 +93,11 @@ public abstract class Textbar extends GUISpriteEntity implements InputGetter, Co
 			if (code == KeyEvent.VK_BACK_SPACE && buffer != null)
 				buffer = buffer.substring(0, buffer.length() - 1);
 			else if (code == KeyEvent.VK_ENTER) onSubmit();
-			else buffer = buffer + String.valueOf((char) code);
+			else
+			{
+				if (buffer != null) buffer = buffer + (char) code;
+				else buffer = String.valueOf((char) code);
+			}
 			return true;
 		}
 		else return false;

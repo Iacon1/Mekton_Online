@@ -77,6 +77,7 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 	@Override
 	public String onKeyPress(int code)
 	{
+		if (chatBox.get().isSelected()) return null;
 		switch (code)
 		{
 		case KeyEvent.VK_Q: return "move -n -w";
