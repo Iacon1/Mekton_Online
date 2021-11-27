@@ -27,7 +27,6 @@ public class MainScreen implements ThreadState<ClientHandlerThread>
 	{
 		if (input != null)
 		{
-			Logging.logNotice("Client " + parentThread.getAccount().username + " used command: \"" + input + "\"");
 			parentThread.getParent().runCommand(parentThread.getAccount().username, input);
 		}
 	}

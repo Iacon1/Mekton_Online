@@ -77,101 +77,88 @@ public class GameFrame extends JFrame
 	
 	private class EntityInputListener implements KeyListener, MouseListener
 	{
-		private int worldHash; // TODO stupid way to keep up-to-date
-		
-		private boolean hasUpdated()
+		private void addCommand(GameEntity getter, String command)
 		{
-			if (GameInfo.getWorld() == null || GameInfo.getWorld().hashCode() == worldHash) return false;
-			else
-			{
-				worldHash = GameInfo.getWorld().hashCode();
-				return true;
-			}
+			if (command == null) return;
+			GameInfo.addCommand("@" + getter.getId() + " " + command);
 		}
 		
-		private List<InputGetter> inputGetters;
-		private void findInputGetters() // Finds all input getters
+		List<InputGetter> inputGetters()
 		{
-			if (!hasUpdated()) return; // Don't want to call this often
-			else
+			List<InputGetter> inputGetters = new ArrayList<InputGetter>();
+			
+			for (int i = 0; i < GameInfo.getWorld().getEntities().size(); ++i)
 			{
-				List<GameEntity> entities = GameInfo.getWorld().getEntities();
-				inputGetters.clear();
-				for (int i = 0; i < entities.size(); ++i)
-				{
-					if (InputGetter.class.isAssignableFrom(entities.get(i).getClass())) inputGetters.add((InputGetter) entities.get(i));
-				}
+				GameEntity entity = GameInfo.getWorld().getEntities().get(i);
+				if (entity != null && InputGetter.class.isAssignableFrom(entity.getClass()))
+					inputGetters.add((InputGetter) entity);
 			}
+				
+			return inputGetters;
 		}
 		
 		@Override
 		public void mouseClicked(MouseEvent e)
 		{
-			findInputGetters();
+			List<InputGetter> inputGetters = inputGetters();
 			
 			Point2D point = new Point2D(e.getX(), e.getY());
 			int mX = canvas.descale(point).x;
 			int mY = canvas.descale(point).y;
-				
+			int button = 0;
+			
 			switch (e.getButton())
 			{
 			case MouseEvent.NOBUTTON: return;
-			case MouseEvent.BUTTON1:
-				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMouseClick(mX, mY, 0);
-				break;
-			case MouseEvent.BUTTON2:
-				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMouseClick(mX, mY, 1);
-				break;
-			case MouseEvent.BUTTON3:
-				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMouseClick(mX, mY, 2);
-				break;
+			case MouseEvent.BUTTON1: button = 0; break;
+			case MouseEvent.BUTTON2: button = 1; break;
+			case MouseEvent.BUTTON3: button = 1; break;
 			}
+			
+			for (int i = 0; i < inputGetters.size(); ++i)
+				addCommand((GameEntity) inputGetters.get(i), inputGetters.get(i).onMouseClick(mX, mY, button));
 		}
 		@Override
 		public void mousePressed(MouseEvent e)
 		{
-			findInputGetters();
+			List<InputGetter> inputGetters = inputGetters();
 			
 			Point2D point = new Point2D(e.getX(), e.getY());
 			int mX = canvas.descale(point).x;
 			int mY = canvas.descale(point).y;
+			int button = 0;
 			
 			switch (e.getButton())
 			{
 			case MouseEvent.NOBUTTON: return;
-			case MouseEvent.BUTTON1:
-				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMousePress(mX, mY, 0);
-				break;
-			case MouseEvent.BUTTON2:
-				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMousePress(mX, mY, 1);
-				break;
-			case MouseEvent.BUTTON3:
-				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMousePress(mX, mY, 2);
-				break;
+			case MouseEvent.BUTTON1: button = 0; break;
+			case MouseEvent.BUTTON2: button = 1; break;
+			case MouseEvent.BUTTON3: button = 2; break;
 			}
+			
+			for (int i = 0; i < inputGetters.size(); ++i)
+				addCommand((GameEntity) inputGetters.get(i), inputGetters.get(i).onMousePress(mX, mY, button));
 		}
 		@Override
 		public void mouseReleased(MouseEvent e)
 		{
-			findInputGetters();
+			List<InputGetter> inputGetters = inputGetters();
 			
 			Point2D point = new Point2D(e.getX(), e.getY());
 			int mX = canvas.descale(point).x;
 			int mY = canvas.descale(point).y;
-				
+			int button = 0;
+			
 			switch (e.getButton())
 			{
 			case MouseEvent.NOBUTTON: return;
-			case MouseEvent.BUTTON1:
-				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMouseRelease(mX, mY, 0);
-				break;
-			case MouseEvent.BUTTON2:
-				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMouseRelease(mX, mY, 1);
-				break;
-			case MouseEvent.BUTTON3:
-				for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onMouseRelease(mX, mY, 2);
-				break;
+			case MouseEvent.BUTTON1: button = 0; break;
+			case MouseEvent.BUTTON2: button = 1; break;
+			case MouseEvent.BUTTON3: button = 2; break;
 			}
+			
+			for (int i = 0; i < inputGetters.size(); ++i)
+				addCommand((GameEntity) inputGetters.get(i), inputGetters.get(i).onMouseRelease(mX, mY, button));
 		}
 			
 		@Override
@@ -196,23 +183,18 @@ public class GameFrame extends JFrame
 		@Override
 		public void keyPressed(KeyEvent e)
 		{
-			findInputGetters();
+			List<InputGetter> inputGetters = inputGetters();
 				
-			for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onKeyPress(e.getKeyCode());
+			for (int i = 0; i < inputGetters.size(); ++i)
+				addCommand((GameEntity) inputGetters.get(i), inputGetters.get(i).onKeyPress(e.getKeyCode()));
 		}
 		@Override
 		public void keyReleased(KeyEvent e)
 		{
-			findInputGetters();
-
-			for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onKeyRelease(e.getKeyCode());
-		}
-		
-		
-		public EntityInputListener()
-		{
-			worldHash = 0;
-			inputGetters = new ArrayList<InputGetter>();
+			List<InputGetter> inputGetters = inputGetters();
+			
+			for (int i = 0; i < inputGetters.size(); ++i)
+				addCommand((GameEntity) inputGetters.get(i), inputGetters.get(i).onKeyRelease(e.getKeyCode()));
 		}
 	}
 

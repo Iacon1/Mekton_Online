@@ -4,6 +4,7 @@
 
 package GameEngine.Server;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -75,13 +76,24 @@ public abstract class Account implements CommandRunner
 	@Override
 	public boolean runCommand(String... words)
 	{
-		if (GUISpriteEntity.GUICommandHeader.equals(words[0]))
+		if (words[0].charAt(0) == '@') // Targeted
 		{
-			List<GUISpriteEntity> GUIEntities = GameInfo.getWorld().getEntitiesOfType(GUISpriteEntity.class);
-			
-			for (int i = 0; i < GUIEntities.size(); ++i)
-				if (GUIEntities.get(i).getOwnerID() == this.id) GUIEntities.get(i).runCommand(words);
-			return true;
+			int targetID = Integer.valueOf(words[0].substring(1));
+			GameEntity target = GameInfo.getWorld().getEntity(targetID);
+			if (CommandRunner.class.isAssignableFrom(target.getClass())) // Can run commands
+			{
+				CommandRunner targetRunner = (CommandRunner) target;
+				if (target.getId() == getPossessee().getId()) // Our possessee
+					return targetRunner.runCommand(Arrays.copyOfRange(words, 1, words.length));
+				if (GUISpriteEntity.class.isAssignableFrom(target.getClass()))
+				{
+					GUISpriteEntity targetGUI = (GUISpriteEntity) target;
+					if (targetGUI.getOwnerID() == getID()) // An owned GUI element
+						return targetRunner.runCommand(Arrays.copyOfRange(words, 1, words.length));
+				}
+				
+			}
+				
 		}
 		
 		return false;

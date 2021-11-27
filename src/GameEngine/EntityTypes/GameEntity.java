@@ -97,6 +97,10 @@ public abstract class GameEntity
 		if (possessorID == -1) return null;
 		else return GameInfo.getAccount(possessorID);
 	}
+	public int getPossessorId()
+	{
+		return possessorID;
+	}
 	public abstract String getName(); // Gets object name
 	public abstract void update(); // Updates regularly
 	/**

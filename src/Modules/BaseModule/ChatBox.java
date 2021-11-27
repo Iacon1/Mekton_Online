@@ -14,13 +14,14 @@ public class ChatBox extends Textbar
 	public ChatBox(String font, Color color, int heightPixels)
 	{
 		super("ChatBox", font, color, true, heightPixels);
-		sprite.setBasicParams(0, 0, 32, 32);
+		sprite.setBasicParams(0, 0, 64, 64);
+		setBounds(0, 0, 0, 0);
 	}
 	
 	@Override
-	public void onEnter(String text)
+	public void onSubmit()
 	{
-		GameInfo.setCommand(text);
+		GameInfo.getServer().runCommand(this.getOwner(), buffer);
 	}
 
 	@Override
@@ -37,10 +38,11 @@ public class ChatBox extends Textbar
 	}
 
 	@Override
-	public void onMousePressGUI(int mX, int mY, int button) {}
+	public String onMousePress(int mX, int mY, int button) {return null;}
 	@Override
-	public void onMouseReleaseGUI(int mX, int mY, int button) {}
+	public String onMouseRelease(int mX, int mY, int button) {return null;}
 	@Override
-	public void onKeyReleaseGUI(int code) {}
+	public String onKeyRelease(int code) {return null;}
+
 
 }

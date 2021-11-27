@@ -16,6 +16,7 @@ import GameEngine.Net.ConnectionPairThread;
 import GameEngine.Net.Server.Server;
 import Utils.GappyArrayList;
 import Utils.JSONManager;
+import Utils.Logging;
 import Utils.MiscUtils;
 
 public abstract class GameServer<T extends ConnectionPairThread> extends Server<T>
@@ -85,9 +86,18 @@ public abstract class GameServer<T extends ConnectionPairThread> extends Server<
 		else return getAccount(username).eqHash(password);
 	}
 	
+	public void runCommand(Account account, String command)
+	{
+		Logging.logNotice("User " + account.username + " used command: \"" + command + "\"");
+		String[] commands = command.split("; ");
+		for (int i = 0; i < commands.length; ++i) account.runCommand(commands[i].split(" "));
+	}
+	public void runCommand(int id, String command)
+	{
+		runCommand(getAccount(id), command);
+	}
 	public void runCommand(String username, String command)
 	{
-		String[] commands = command.split("; ");
-		for (int i = 0; i < commands.length; ++i) getAccount(username).runCommand(commands[i].split(" "));
+		runCommand(getAccount(username), command);
 	}
 }

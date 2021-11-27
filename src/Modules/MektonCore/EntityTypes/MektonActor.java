@@ -172,12 +172,15 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 	{
 		super();
 		actionPoints = 0f;
+		actionTimer = new SimpleTimer();
 		commandBank = new ParsingCommandBank();
 		
 		registerCommands();
 	}
 	public MektonActor(MektonMap map)
 	{
+		super(map);
+		actionPoints = 0f;
 		actionTimer = new SimpleTimer();
 		commandBank = new ParsingCommandBank();
 		

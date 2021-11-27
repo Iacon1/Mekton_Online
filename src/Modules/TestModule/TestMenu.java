@@ -44,40 +44,5 @@ public class TestMenu extends GUISpriteEntity
 		return null;
 	}
 
-	@Override
-	public void onMouseClickGUI(int mX, int mY, int button)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onMousePressGUI(int mX, int mY, int button)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onMouseReleaseGUI(int mX, int mY, int button)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onKeyPressGUI(int code)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onKeyReleaseGUI(int code)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
 
 }

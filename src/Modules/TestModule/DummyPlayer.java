@@ -48,7 +48,6 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 		chatBox.setOwnerID(0); // TODO find value of possessor dynamically
 		addChild(chatBox);
 		this.chatBox = new EntityToken<ChatBox>(chatBox.getId());
-		chatBox.align(AlignmentPoint.west, null, AlignmentPoint.west);
 		addChild(chatBox);
 	}
 	
@@ -62,48 +61,38 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 	public void onAnimStop() {}
 
 	@Override
-	public void onMouseClick(int mX, int mY, int button)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	public String onMouseClick(int mX, int mY, int button) {return null;}
 
 	@Override
-	public void onMousePress(int mX, int mY, int button)
+	public String onMousePress(int mX, int mY, int button)
 	{
 		AxialHexCoord3D point = mapToken.get().fromPixel(new Point2D(mX, mY));
-		if (button == 0) GameInfo.setCommand("move -q " + point.q + " -r " + point.r);
+		if (button == 0) return "move -q " + point.q + " -r " + point.r;
+		else return null;
 	}
 
 	@Override
-	public void onMouseRelease(int mX, int mY, int button)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	public String onMouseRelease(int mX, int mY, int button) {return null;}
 
 	@Override
-	public void onKeyPress(int code)
+	public String onKeyPress(int code)
 	{
 		switch (code)
 		{
-		case KeyEvent.VK_Q: GameInfo.addCommand("move -n -w"); break;
-		case KeyEvent.VK_E: GameInfo.addCommand("move -n -e"); break;
-		case KeyEvent.VK_W: GameInfo.addCommand("move -n"); break;
-		case KeyEvent.VK_A: GameInfo.addCommand("move -s -w"); break;
-		case KeyEvent.VK_D: GameInfo.addCommand("move -s -e"); break;
-		case KeyEvent.VK_S: GameInfo.addCommand("move -s"); break;
-		case KeyEvent.VK_SPACE: GameInfo.addCommand("move -u"); break;
-		case KeyEvent.VK_SHIFT: GameInfo.addCommand("move -d"); break;
+		case KeyEvent.VK_Q: return "move -n -w";
+		case KeyEvent.VK_E: return "move -n -e";
+		case KeyEvent.VK_W: return "move -n";
+		case KeyEvent.VK_A: return "move -s -w";
+		case KeyEvent.VK_D: return "move -s -e";
+		case KeyEvent.VK_S: return "move -s"; 
+		case KeyEvent.VK_SPACE: return "move -u";
+		case KeyEvent.VK_SHIFT: return "move -d";
 		}
+		return null;
 	}
 
 	@Override
-	public void onKeyRelease(int code)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	public String onKeyRelease(int code) {return null;}
 
 	@Override
 	public void onStart()
@@ -115,7 +104,7 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 	{
 		super.render(canvas, camera);
 		
-		if (isPossessee())
+		if (false)//isPossessee())
 		{
 			String text =
 					"Action points: " + MiscUtils.floatPrecise((float) remainingActions(), 2) + "\n" +
@@ -126,7 +115,6 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 			canvas.drawRectangle(Color.black, new Point2D(0, 0), textSize);
 			canvas.drawText(text, "MicrogrammaNormalFix", Color.red, new Point2D(0, 0), fontSize);
 		}
-		chatBox.get().setPos(0, 0);
 		chatBox.get().render(canvas, camera);
 	}
 	@Override
