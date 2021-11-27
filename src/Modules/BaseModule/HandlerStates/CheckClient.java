@@ -1,14 +1,16 @@
 // By Iacon1
 // Created 06/16/2021
 // Checking client state
+// Sends a packet to the client, then waits for one back
 
 package Modules.BaseModule.HandlerStates;
 
 import GameEngine.Net.StateFactory;
 import GameEngine.Net.ThreadState;
-import GameEngine.PacketTypes.ClientInfoPacket;
-import GameEngine.PacketTypes.ServerInfoPacket;
 import Modules.BaseModule.ClientHandlerThread;
+import Modules.BaseModule.DiffieHellman;
+import Modules.BaseModule.PacketTypes.ClientInfoPacket;
+import Modules.BaseModule.PacketTypes.ServerInfoPacket;
 import Utils.JSONManager;
 import Utils.Logging;
 import Utils.MiscUtils;
@@ -17,16 +19,18 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 {
 	boolean sent;
 	private StateFactory factory;
+	private DiffieHellman diffieHellman;
 	
 	public CheckClient(StateFactory factory)
 	{
 		this.factory = factory;
-		
+		diffieHellman = new DiffieHellman();
+		diffieHellman.generateSecret();
 		sent = false;
 	}
 	
 	@Override
-	public void onEnter(ClientHandlerThread parentThread) {}
+	public void onEnter(ClientHandlerThread parentThread) {parentThread.setEncrypt(false);}
 
 	public void processInput(String input, ClientHandlerThread parentThread, boolean mono)
 	{
@@ -42,6 +46,8 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 			else
 			{
 				Logging.logNotice("Client " + parentThread.getSocket().getInetAddress() + " has connected.");
+				diffieHellman.finalMix(packet.mix);
+				diffieHellman.giveKey(parentThread);
 				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class))); // They're good, let's login	
 			}
 		}
@@ -55,6 +61,7 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 			packet.serverName = parentThread.getParent().getName();
 			packet.version = MiscUtils.getVersion();
 			packet.resourceFolder = "Default"; // TODO Set this
+			packet.mix = diffieHellman.initialMix();
 			
 			if (parentThread.getParent().currentPlayers() >= parentThread.getParent().maxPlayers()) // We're full
 			{

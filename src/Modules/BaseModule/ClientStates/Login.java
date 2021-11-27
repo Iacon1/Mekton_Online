@@ -27,6 +27,7 @@ public class Login implements ThreadState<GameClientThread>
 	public void onEnter(GameClientThread parentThread)
 	{
 		LoginDialog.main(parentThread);
+		parentThread.setEncrypt(true);
 	}
 
 	public void processInput(String input, GameClientThread parentThread, boolean mono)

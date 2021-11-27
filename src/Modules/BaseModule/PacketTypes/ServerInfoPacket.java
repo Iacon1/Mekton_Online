@@ -2,7 +2,9 @@
 // Created 04/24/2021
 // Give server info when starting up
 
-package GameEngine.PacketTypes;
+package Modules.BaseModule.PacketTypes;
+
+import GameEngine.Net.Server.ServerInfo;
 
 public class ServerInfoPacket extends Packet
 {
@@ -15,5 +17,15 @@ public class ServerInfoPacket extends Packet
 		good;
 	}
 	public Note note; // Anything special?
+	public String mix; // The server's diffie-hellman mix
 	
+	public ServerInfo getInfo()
+	{
+		ServerInfo info = new ServerInfo();
+		info.serverName = serverName;
+		info.version = version;
+		info.resourceFolder = resourceFolder;
+		
+		return info;
+	}
 }

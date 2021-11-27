@@ -2,7 +2,7 @@
 // Created 04/24/2021
 // Packet
 
-package GameEngine.PacketTypes;
+package Modules.BaseModule.PacketTypes;
 
 public class Packet
 {

@@ -4,8 +4,6 @@
 
 package Modules.BaseModule.PacketTypes;
 
-import GameEngine.PacketTypes.Packet;
-
 public class LoginPacket extends Packet // TODO encrypt these (maybe encrypt *all* packets?)
 {
 	public String username;

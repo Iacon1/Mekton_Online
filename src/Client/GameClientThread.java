@@ -12,7 +12,8 @@ import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.StateGiverModule;
 import GameEngine.Net.StateFactory;
 import GameEngine.Net.StatefulConnectionPairThread;
-import GameEngine.PacketTypes.ServerInfoPacket;
+import GameEngine.Net.Server.ServerInfo;
+import Modules.BaseModule.PacketTypes.ServerInfoPacket;
 
 /** Thread that the client uses to communicate with the server and run the game.
  * 
@@ -21,7 +22,7 @@ public class GameClientThread extends StatefulConnectionPairThread
 {
 	private StateFactory stateFactory; // Where we get our states
 	
-	private ServerInfoPacket serverInfo; // The server info we received
+	private ServerInfo serverInfo; // The server's info
 	
 	private Map<String, Container> containers; // All currently-open UI
 
@@ -74,7 +75,7 @@ public class GameClientThread extends StatefulConnectionPairThread
 	 * 
 	 *  @param serverInfo the received packet.
 	 */
-	public void setInfo(ServerInfoPacket serverInfo)
+	public void setInfo(ServerInfo serverInfo)
 	{
 		this.serverInfo = serverInfo;
 	}
@@ -82,7 +83,7 @@ public class GameClientThread extends StatefulConnectionPairThread
 	 * 
 	 *  @return The stored packet, or null if no packet is stored.
 	 */
-	public ServerInfoPacket getInfo()
+	public ServerInfo getInfo()
 	{
 		return serverInfo;
 	}

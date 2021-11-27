@@ -6,7 +6,6 @@ package Modules.BaseModule.PacketTypes;
 
 import GameEngine.GameInfo;
 import GameEngine.EntityTypes.GameEntity;
-import GameEngine.PacketTypes.Packet;
 import GameEngine.Server.Account;
 import Utils.GSONConfig.TransSerializables.TransSerializable;
 

@@ -27,7 +27,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 	}
 	
 	@Override
-	public void onEnter(ClientHandlerThread parentThread) {}
+	public void onEnter(ClientHandlerThread parentThread) {parentThread.setEncrypt(true);}
 
 	public void processInput(String input, ClientHandlerThread parentThread, boolean mono)
 	{

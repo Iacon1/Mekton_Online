@@ -6,12 +6,14 @@ package GameEngine.Net;
 
 import Utils.Logging;
 import Utils.SimpleTimer;
+import Utils.StringEncrypter;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.*;
+import java.security.Key;
 
 import GameEngine.Configurables.ConfigManager;
 
@@ -31,6 +33,9 @@ public abstract class ConnectionPairThread extends Thread
 	protected volatile boolean runningO; // Output
 	
 	private static String noMsg = "NULL"; // For maintaining a connection during silence
+	
+	private volatile transient Key key; // Transient for security
+	private volatile boolean encrypt = false;
 	
 	protected String getConnectedIP()
 	{
@@ -70,9 +75,15 @@ public abstract class ConnectionPairThread extends Thread
 		{
 			
 			String input = getInput();
+			
+			if (input == null) return false;
+			
+			if (key != null && encrypt)
+				try {input = StringEncrypter.decrypt(input, key);} catch (Exception e)
+				{Logging.logException(e); return false;}
+			
 			if (input == noMsg && loop) continue;
 			else if (input == noMsg) return true;
-			else if (input == null) return false;
 			
 			try {processInput(input);}
 			catch (Exception e) {Logging.logException(e);}
@@ -93,6 +104,10 @@ public abstract class ConnectionPairThread extends Thread
 			String output = null;
 			try {output = processOutput();}
 			catch (Exception e) {Logging.logException(e);}
+			
+			if (key != null && encrypt && output != null)
+				try {output = StringEncrypter.encrypt(output, key);} catch (Exception e)
+				{Logging.logException(e); return;}
 			
 			if (output != null) sendOutput(output);
 			
@@ -121,7 +136,18 @@ public abstract class ConnectionPairThread extends Thread
 	{
 		return socket;
 	}
-	
+	public void setKey(Key key)
+	{
+		this.key = key;
+	}
+	public void clearKey()
+	{
+		setKey(null);
+	}
+	public void setEncrypt(boolean encrypt)
+	{
+		this.encrypt = encrypt;
+	}
 	public ConnectionPairThread()
 	{
 		mono = ConfigManager.getMonoThread();

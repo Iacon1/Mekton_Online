@@ -4,8 +4,6 @@
 
 package Modules.BaseModule.PacketTypes;
 
-import GameEngine.PacketTypes.Packet;
-
 public class LoginFeedbackPacket extends Packet
 {
 	public boolean successful; // Did login succeed? TODO more results

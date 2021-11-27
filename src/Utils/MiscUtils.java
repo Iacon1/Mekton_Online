@@ -190,6 +190,20 @@ public final class MiscUtils
 	{
 		return arrayToString((T[]) list.toArray(), sep);
 	}
+	/** Converts an array of bytes into a string,
+	 *  using their toString functions.
+	 *  
+	 *  @param array The array of bytes
+	 *  @param sep A seperator to put between their strings.
+	 *  
+	 *  @return The string made from the array.
+	 */
+	public static <T> String arrayToString(byte[] array, String sep)
+	{
+		String string = new String();
+		for (int i = 0; i < array.length; ++i) string = string + "0x" + asHex(array[i], 2) + sep;
+		return string;
+	}
 	
 	/** Returns the class name.
 	 * 
@@ -291,5 +305,10 @@ public final class MiscUtils
 	public static char translateCode(int code)
 	{
 		return (char) code;
+	}
+	
+	public static String asHex(byte number, int digits)
+	{
+		return String.format("%0" + digits + "x", number);
 	}
 }
