@@ -311,4 +311,16 @@ public final class MiscUtils
 	{
 		return String.format("%0" + digits + "x", number);
 	}
+	
+	public static byte toByte(String digits)
+	{
+		switch (digits.charAt(0))
+		{
+		case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7':
+			return Byte.valueOf(digits, 16);
+		case '8': case '9': case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
+			return (byte) (int) Integer.valueOf(digits, 16);
+		default: return 0;
+		}
+	}
 }

@@ -10,12 +10,10 @@
 package Modules.BaseModule;
 
 import java.math.BigInteger;
-import java.security.Key;
 import java.util.Arrays;
 import java.util.Random;
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.security.auth.Destroyable;
 
 import GameEngine.Net.ConnectionPairThread;
 
@@ -25,11 +23,11 @@ public final class DiffieHellman
 	private static final int encodeRadix = 16; // Radix for encoding mixes to strings
 	private static final int keyLength = 16; // Key length in bytes
 	
-	private static BigInteger modulus = null;
-	private static BigInteger base = null; // Has to be a primitive root modulo [modulus].
-	private static int maxSecret = 0; // b^(s'*s) < 2^(2^32) due to limitations of Java, so s^2 < logb(2) * 2^32 so s < sqrt(logb(2)) * 2^16
+	private BigInteger modulus = null;
+	private BigInteger base = null; // Has to be a primitive root modulo [modulus].
+	private int maxSecret = 0; // b^(s'*s) < 2^(2^32) due to limitations of Java, so s^2 < logb(2) * 2^32 so s < sqrt(logb(2)) * 2^16
 	/** Inits modulus & base */
-	private static void initPair() 
+	private void initPair() 
 	{
 		// https://www.rfc-editor.org/rfc/rfc3526
 /*		modulus = new BigInteger(
@@ -62,7 +60,6 @@ public final class DiffieHellman
 	}
 	
 	private transient int secret = 0; // Transient for security
-	private transient Key key = null; // Ditto
 	
 	/** Generates the secret.
 	 * 
@@ -88,7 +85,7 @@ public final class DiffieHellman
 	/** Generates the key based off the other side's mix.
 	 * 
 	 */
-	public void finalMix(String mixString)
+	public void finalMix(String mixString, ConnectionPairThread thread)
 	{
 		if (mixString == null) return; // TODO why does this happen?
 		if (modulus == null) initPair();
@@ -96,14 +93,6 @@ public final class DiffieHellman
 		BigInteger mix = new BigInteger(mixString, encodeRadix);
 		
 		BigInteger finalMix = mix.pow(secret).mod(modulus); // b ^ (s' * s) % m
-		key = new SecretKeySpec(Arrays.copyOf(finalMix.toByteArray(), keyLength), "AES");
-	}
-	
-	/** Gives the key to the server.
-	 * 
-	 */
-	public void giveKey(ConnectionPairThread thread)
-	{
-		thread.setKey(key);
+		thread.setKey(new SecretKeySpec(Arrays.copyOf(finalMix.toByteArray(), keyLength), "AES"));
 	}
 }

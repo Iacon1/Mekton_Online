@@ -46,8 +46,7 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 			else
 			{
 				Logging.logNotice("Client " + parentThread.getSocket().getInetAddress() + " has connected.");
-				diffieHellman.finalMix(packet.mix);
-				diffieHellman.giveKey(parentThread);
+				diffieHellman.finalMix(packet.mix, parentThread);
 				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class))); // They're good, let's login	
 			}
 		}

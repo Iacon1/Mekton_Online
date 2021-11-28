@@ -6,7 +6,7 @@ package GameEngine.Net;
 
 import Utils.Logging;
 import Utils.SimpleTimer;
-import Utils.StringEncrypter;
+import Utils.StringCipher;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -35,7 +35,7 @@ public abstract class ConnectionPairThread extends Thread
 	
 	private static String noMsg = "NULL"; // For maintaining a connection during silence
 	
-	private volatile transient Key key; // Transient for security
+	private volatile transient StringCipher cipher = null; // Transient for security
 	private volatile boolean encrypt = false;
 	
 	protected String getConnectedIP()
@@ -79,8 +79,8 @@ public abstract class ConnectionPairThread extends Thread
 			
 			if (input == null) return false;
 			
-			if (key != null && encrypt)
-				try {input = StringEncrypter.decrypt(input, key);} catch (Exception e)
+			if (cipher != null && encrypt)
+				try {input = cipher.decrypt(input);} catch (Exception e)
 				{Logging.logException(e); return false;}
 			
 			if (input == noMsg && loop) continue;
@@ -106,12 +106,8 @@ public abstract class ConnectionPairThread extends Thread
 			try {output = processOutput();}
 			catch (Exception e) {Logging.logException(e);}
 			
-			if (key != null && encrypt && output != null)
-				try {
-					if (GameInfo.isClient())
-						Logging.logNotice("Sending encrypted");
-					
-					output = StringEncrypter.encrypt(output, key);} catch (Exception e)
+			if (cipher != null && encrypt && output != null)
+				try {output = cipher.encrypt(output);} catch (Exception e)
 				{Logging.logException(e); return;}
 			
 			if (output != null) sendOutput(output);
@@ -143,7 +139,9 @@ public abstract class ConnectionPairThread extends Thread
 	}
 	public void setKey(Key key)
 	{
-		this.key = key;
+		this.cipher = new StringCipher();
+		try {cipher.setKey(key);}
+		catch (Exception e) {Logging.logException(e);}
 	}
 	public void clearKey()
 	{

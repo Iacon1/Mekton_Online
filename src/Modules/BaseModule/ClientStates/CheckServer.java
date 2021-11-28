@@ -100,8 +100,7 @@ public class CheckServer implements ThreadState<GameClientThread>
 			else
 			{
 				result = 1;
-				diffieHellman.finalMix(packet.mix);
-				diffieHellman.giveKey(parentThread);
+				diffieHellman.finalMix(packet.mix, parentThread);
 				
 				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class)));
 			}
