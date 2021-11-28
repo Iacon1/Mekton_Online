@@ -102,6 +102,7 @@ public class CheckServer implements ThreadState<GameClientThread>
 				result = 1;
 				diffieHellman.finalMix(packet.mix);
 				diffieHellman.giveKey(parentThread);
+				
 				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class)));
 			}
 		}
@@ -117,6 +118,7 @@ public class CheckServer implements ThreadState<GameClientThread>
 			ClientInfoPacket packet = new ClientInfoPacket();
 			packet.version = MiscUtils.getVersion();
 			packet.mix = diffieHellman.initialMix();
+			
 			return JSONManager.serializeJSON(packet);
 		}
 		else if (result == 2)

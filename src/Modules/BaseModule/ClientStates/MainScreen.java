@@ -15,6 +15,7 @@ import Utils.JSONManager;
 public class MainScreen implements ThreadState<GameClientThread>
 {
 	private StateFactory factory;
+	private boolean frameLoaded = false;
 	
 	public MainScreen(StateFactory factory)
 	{
@@ -26,13 +27,20 @@ public class MainScreen implements ThreadState<GameClientThread>
 	{
 		parentThread.setContainer("main", new GameFrame());
 		parentThread.getContainer("main");
+		frameLoaded = false;
 	}
 
 	public void processInput(String input, GameClientThread parentThread, boolean mono)
 	{
 		GameDataPacket packet = JSONManager.deserializeJSON(input, GameDataPacket.class);
+		if (packet == null) return;
 		GameInfo.setWorld(packet.ourView);
 		GameFrame frame = (GameFrame) parentThread.getContainer("main");
+		
+		if (frame == null && frameLoaded) parentThread.close();
+		else if (frame == null) return;
+		else frameLoaded = true;
+		
 		frame.updateUIStuff();
 	}
 	public String processOutput(GameClientThread parentThread, boolean mono)

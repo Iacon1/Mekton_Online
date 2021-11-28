@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.*;
 import java.security.Key;
 
+import GameEngine.GameInfo;
 import GameEngine.Configurables.ConfigManager;
 
 public abstract class ConnectionPairThread extends Thread
@@ -106,7 +107,11 @@ public abstract class ConnectionPairThread extends Thread
 			catch (Exception e) {Logging.logException(e);}
 			
 			if (key != null && encrypt && output != null)
-				try {output = StringEncrypter.encrypt(output, key);} catch (Exception e)
+				try {
+					if (GameInfo.isClient())
+						Logging.logNotice("Sending encrypted");
+					
+					output = StringEncrypter.encrypt(output, key);} catch (Exception e)
 				{Logging.logException(e); return;}
 			
 			if (output != null) sendOutput(output);

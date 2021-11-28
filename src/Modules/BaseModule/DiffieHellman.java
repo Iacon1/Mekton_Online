@@ -15,13 +15,11 @@ import java.util.Arrays;
 import java.util.Random;
 
 import javax.crypto.spec.SecretKeySpec;
+import javax.security.auth.Destroyable;
 
 import GameEngine.Net.ConnectionPairThread;
-import Utils.Logging;
-import Utils.MiscUtils;
-import Utils.StringEncrypter;
 
-public class DiffieHellman
+public final class DiffieHellman
 {
 	
 	private static final int encodeRadix = 16; // Radix for encoding mixes to strings
