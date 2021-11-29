@@ -17,33 +17,6 @@ public final class StringCipher
 	private Cipher encryptCipher = null;
 	private Cipher decryptCipher = null;
 
-	private static String fromBytes(byte[] bytes)
-	{
-		// Slow
-		String string = "";
-		
-		for (int i = 0; i < bytes.length; ++i)
-		{
-			string += MiscUtils.asHex(bytes[i], 2);	
-		}
-		
-		return string;
-		
-/*		try {return new String(bytes, encodeSet);}
-		catch (Exception e) {Logging.logException(e); return null;}
-*/	}
-	private static byte[] fromString(String string)
-	{
-		// Slow
-		byte[] bytes = new byte[string.length() / 2];
-		
-		for (int i = 0; i < string.length() / 2; ++i) bytes[i] = MiscUtils.toByte(string.substring(2 * i, 2 * (i + 1)));
-		
-		return bytes;
-		
-/*		try {return string.getBytes(encodeSet);}
-		catch (Exception e) {Logging.logException(e); return null;}
-*/	}
 	private static IvParameterSpec generateIv(byte[] seed, int blockSize) // Generates the iv by hashing seed repeatedly
 	{
 		byte[] iv = new byte[blockSize];
@@ -70,35 +43,34 @@ public final class StringCipher
 		decryptCipher.init(Cipher.DECRYPT_MODE, key, ivParamsD);
 	}
 	
-	public String encrypt(String plainText) throws Exception
+	public byte[] encrypt(String plainText) throws Exception
 	{
 		byte[] plainBytes = plainText.getBytes(charset);
 		byte[] cipherBytes = null;
 		
 		cipherBytes = encryptCipher.doFinal(plainBytes);
 		
-		return fromBytes(cipherBytes);
+		return cipherBytes;
 	}
 	
-	public String encrypt(String plainText, Key key) throws Exception
+	public byte[] encrypt(String plainText, Key key) throws Exception
 	{
 		setKey(key);
 		return encrypt(plainText);
 	}
 	
 	
-	public String decrypt(String cipherText) throws Exception
+	public String decrypt(byte[] cipherBytes) throws Exception
 	{
-		byte[] cipherBytes = fromString(cipherText);
 		byte[] plainBytes = null;
 		
 		plainBytes = decryptCipher.doFinal(cipherBytes);
 		
 		return new String(plainBytes, charset);
 	}
-	public String decrypt(String cipherText, Key key) throws Exception
+	public String decrypt(byte[] cipherBytes, Key key) throws Exception
 	{
 		setKey(key);
-		return decrypt(cipherText);
+		return decrypt(cipherBytes);
 	}
 }

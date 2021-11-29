@@ -49,7 +49,19 @@ public abstract class ConnectionPairThread extends Thread
 		try
 		{
 			if (inStream.available() == 0) return null;
-			else return inStream.readUTF();
+			return inStream.readUTF();
+		}
+		catch (EOFException e) {close(); return null;}
+		catch (IOException e) {close(); return null;}
+		catch (Exception e) {Logging.logException(e); return null;}
+	}
+	private String getInputEncrypted()
+	{
+		try
+		{
+			if (inStream.available() == 0) return null;
+			byte[] cipherBytes = inStream.readNBytes(inStream.available());
+			return cipher.decrypt(cipherBytes);
 		}
 		catch (EOFException e) {close(); return null;}
 		catch (IOException e) {close(); return null;}
@@ -57,10 +69,19 @@ public abstract class ConnectionPairThread extends Thread
 	}
 	private void sendOutput(String output)
 	{	
-		try
+		if (output == null) output = noMsg;
+		try {outStream.writeUTF(output);}
+		catch (IOException e) {close();}
+		catch (Exception e) {Logging.logException(e);}
+	}
+	private void sendOutputEncrypted(String output)
+	{	
+		if (output == null) output = noMsg;
+		
+		try 
 		{
-			if (output == null) outStream.writeUTF(noMsg); //return;
-			outStream.writeUTF(output);
+			byte[] cipherBytes = cipher.encrypt(output);
+			outStream.write(cipherBytes);
 		}
 		catch (IOException e) {close();}
 		catch (Exception e) {Logging.logException(e);}
@@ -75,13 +96,12 @@ public abstract class ConnectionPairThread extends Thread
 		while (running && runningI)
 		{
 			
-			String input = getInput();
+			String input = null;
+			
+			if (!encrypt) input = getInput();
+			else input = getInputEncrypted();
 			
 			if (input == null) return false;
-			
-			if (cipher != null && encrypt)
-				try {input = cipher.decrypt(input);} catch (Exception e)
-				{Logging.logException(e); return false;}
 			
 			if (input == noMsg && loop) continue;
 			else if (input == noMsg) return true;
@@ -106,11 +126,11 @@ public abstract class ConnectionPairThread extends Thread
 			try {output = processOutput();}
 			catch (Exception e) {Logging.logException(e);}
 			
-			if (cipher != null && encrypt && output != null)
-				try {output = cipher.encrypt(output);} catch (Exception e)
-				{Logging.logException(e); return;}
-			
-			if (output != null) sendOutput(output);
+			if (output != null)
+			{
+				if (!encrypt) sendOutput(output);
+				else sendOutputEncrypted(output);
+			}
 			
 			if (loop && ConfigManager.getCheckCapO() != 0) 
 			{
