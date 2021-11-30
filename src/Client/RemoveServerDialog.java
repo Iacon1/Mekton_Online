@@ -65,7 +65,7 @@ public class RemoveServerDialog extends JDialog
 	 */
 	public RemoveServerDialog()
 	{
-		setIconImages(MiscUtils.getIcons(true));
+		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.client));
 		
 		nameBox.setColumns(10);
 		setTitle(MiscUtils.getProgramName() + " Client: Remove server...");

@@ -172,7 +172,7 @@ public class GetServerFrame extends JFrame
 	 */
 	public GetServerFrame()
 	{
-		setIconImages(MiscUtils.getIcons(true));
+		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.client));
 		
 		serverIPBox.setColumns(10);
 		setTitle(MiscUtils.getProgramName() + " Client: Join Server");

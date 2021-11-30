@@ -77,7 +77,7 @@ public class LoginDialog extends JDialog
 	{
 		passwordBox.setColumns(10);
 		usernameBox.setColumns(10);
-		setIconImages(MiscUtils.getIcons(true));
+		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.client));
 		
 		setTitle(MiscUtils.getProgramName() + " Client: Login");
 		setBounds(100, 100, 400, 300);

@@ -28,9 +28,6 @@ public final class ModuleManager
 		return moduleType.isAssignableFrom(module.getClass());
 	}
 	
-	// Checks if module implements function. If it does, and if nothing else has yet, then sets highestImplementer of function to module
-	// Functions are listed in Module.java
-	
 	private static List<String> getModules(String path) // Lists all modules
 	{
 		List<String> moduleList;
@@ -94,7 +91,7 @@ public final class ModuleManager
 		return modules.get(fileName);
 	}
 
-	public static <T> T getHighestOfType(Class<T> moduleType, Module delegate) // Get highest implementer of a moduleType, ignoring result delegate if not null; Please make sure T is a module type!
+	public static <T extends Module> T getHighestOfType(Class<T> moduleType, Module delegate) // Get highest implementer of a moduleType, ignoring result delegate if not null
 	{
 		for (int i = modulePriorities.size() - 1; i >= 0; --i)
 		{
@@ -105,7 +102,7 @@ public final class ModuleManager
 		return null;
 	}
 	
-	public static <T> T getHighestOfType(Class<T> moduleType) // Get highest implementer of a moduleType; Please make sure T is a module type!
+	public static <T extends Module> T getHighestOfType(Class<T> moduleType) // Get highest implementer of a moduleType
 	{
 		return getHighestOfType(moduleType, null);
 	}

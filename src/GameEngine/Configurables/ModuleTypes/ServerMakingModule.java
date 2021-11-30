@@ -6,7 +6,7 @@ package GameEngine.Configurables.ModuleTypes;
 
 import GameEngine.Server.GameServer;
 
-public interface ServerMakingModule
+public interface ServerMakingModule extends Module
 {
 	public GameServer makeServer(); // Sets up the server (not what's in the server!)
 }

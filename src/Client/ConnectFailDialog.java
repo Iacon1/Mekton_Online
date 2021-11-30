@@ -58,7 +58,7 @@ public class ConnectFailDialog extends JDialog
 	 */
 	public ConnectFailDialog()
 	{
-		setIconImages(MiscUtils.getIcons(true));
+		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.client));
 		
 		setTitle(MiscUtils.getProgramName() + " Client: Connection failed.");
 		setBounds(100, 100, 300, 175);

@@ -12,6 +12,7 @@ import GameEngine.EntityTypes.GameEntity;
 import GameEngine.Server.Account;
 import GameEngine.Server.GameServer;
 import Utils.GappyArrayList;
+import Utils.JSONManager;
 import Utils.MiscUtils;
 
 public class GameInfo
@@ -113,6 +114,18 @@ public class GameInfo
 	public static void initWorld(GameWorld world)
 	{
 		world = new GameWorld();
+	}
+	public static boolean loadWorld()
+	{
+		String path = MiscUtils.getAbsolute("Local Data/Server/world.JSON");
+		world = JSONManager.deserializeJSON(MiscUtils.readText(path), GameWorld.class);
+		if (world == null) return false;
+		else return true;
+	}
+	public static void saveWorld()
+	{
+		String path = MiscUtils.getAbsolute("Local Data/Server/world.JSON");
+		MiscUtils.saveText(path, JSONManager.serializeJSON(world));
 	}
 	public static void setWorld(GameWorld world)
 	{

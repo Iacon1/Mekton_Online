@@ -7,7 +7,7 @@ package GameEngine.Configurables.ModuleTypes;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.Server.Account;
 
-public interface PlayerHandlerModule
+public interface PlayerHandlerModule extends Module
 {
 	public GameEntity makePlayer(Account account); // Makes a new player entity for a new account
 	public GameEntity wakePlayer(Account account); // Wakes up a returning account's current possessee when they login

@@ -66,7 +66,7 @@ public class SaveServerDialog extends JDialog
 	 */
 	public SaveServerDialog()
 	{
-		setIconImages(MiscUtils.getIcons(true));
+		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.client));
 		
 		nameBox.setColumns(10);
 		setTitle(MiscUtils.getProgramName() + " Client: Save server as...");

@@ -211,7 +211,7 @@ public class ServerMainFrame extends JFrame
 
 		setResizable(false);
 		
-		setIconImages(MiscUtils.getIcons(false));
+		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.server));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight());
 		contentPane = new JPanel();

@@ -45,17 +45,25 @@ public final class MiscUtils
 		else while (list.size() > newSize) list.remove(list.size() - 1);
 	}
 	
+	public enum ExecType
+	{
+		client,
+		server,
+		editor;
+	}
 	/** Returns all versions of the icon for either client or server
 	 * 
-	 *  @param forClient whether it's for the client or server.
+	 *  @param execType The set of icons to get.
 	 *  @return List of icons.
 	 */
-	public static List<Image> getIcons(boolean forClient) // Returns all versions of the icon for either client or server
+	public static List<Image> getIcons(ExecType execType) // Returns all versions of the icon for client, server, or editor
 	{
 		List<Image> icons = new ArrayList<Image>();
 		String pathPrefix;
-		if (forClient) pathPrefix = "Resources/Icons/Client Icons/";
-		else pathPrefix = "Resources/Icons/Server Icons/"; // For the server
+		if (execType == ExecType.client) pathPrefix = "Resources/Icons/Client Icons/";
+		else if (execType == ExecType.server) pathPrefix = "Resources/Icons/Server Icons/";
+		else if (execType == ExecType.editor) pathPrefix = "Resources/Icons/Editor Icons/";
+		else return null;
 		icons.add(Toolkit.getDefaultToolkit().getImage(MiscUtils.getAbsolute(pathPrefix + "Icon16.PNG")));
 		icons.add(Toolkit.getDefaultToolkit().getImage(MiscUtils.getAbsolute(pathPrefix + "Icon32.PNG")));
 		icons.add(Toolkit.getDefaultToolkit().getImage(MiscUtils.getAbsolute(pathPrefix + "Icon64.PNG")));

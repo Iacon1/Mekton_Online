@@ -212,7 +212,7 @@ public class GameFrame extends JFrame
 		queueUpdateRes = false;
 		setTitle(MiscUtils.getProgramName() + " Client: Game Window");
 		
-		setIconImages(MiscUtils.getIcons(true));
+		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.client));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true);
 		setVisible(true);

@@ -58,7 +58,7 @@ public class ServerStartDialog extends JDialog
 	
 	public ServerStartDialog()
 	{
-		setIconImages(MiscUtils.getIcons(false));
+		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.server));
 		
 		setTitle(MiscUtils.getProgramName() + " Server: Start server...");
 		setBounds(100, 100, 300, 175);

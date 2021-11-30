@@ -4,7 +4,7 @@
 
 package GameEngine.Configurables.ModuleTypes;
 
-public interface WorldMakingModule
+public interface WorldMakingModule extends Module
 {
 	public void newWorld(); // Sets up a new world; Only used the first time the server is run
 	public void loadWorld(String server); // Loads a saved world
