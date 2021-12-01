@@ -1,21 +1,21 @@
 // By Iacon1
-// Created 09/11/2021
-// Hex utilities
+// Created 12/01/2021
+//
 
-package Modules.HexUtilities;
+package Modules.Security;
 
 import GameEngine.Configurables.ModuleTypes.Module;
 
-public class HexUtilities implements Module
+public class Security implements Module
 {
 
 	@Override
 	public ModuleConfig getModuleConfig()
 	{
 		ModuleConfig config = new ModuleConfig();
-		config.moduleName = "Hex Utilities";
+		config.moduleName = "Security";
 		config.moduleVersion = "V0.X";
-		config.moduleDescription = "Systems for handling a Hex grid.";
+		config.moduleDescription = "A basic roles system.";
 		
 		return config;
 	}
@@ -23,7 +23,8 @@ public class HexUtilities implements Module
 	@Override
 	public void initModule()
 	{
-		HexConfigManager.init();
+		// TODO Auto-generated method stub
+
 	}
 
 }

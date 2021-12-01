@@ -207,7 +207,7 @@ public class ServerMainFrame extends JFrame
 	public ServerMainFrame(GameServer server)
 	{
 		if (server != null) ServerMainFrame.server = server;
-		setTitle(MiscUtils.getProgramName() + " Server: Main Window");
+		setTitle(MiscUtils.getProgramName() + " Server");
 
 		setResizable(false);
 		

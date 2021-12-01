@@ -12,13 +12,14 @@ import Utils.GSONConfig.AbsFactory;
 
 public class MektonCore implements Module, GSONModule
 {
-	private ModuleConfig config;
-
 	@Override
 	public ModuleConfig getModuleConfig()
 	{
-		config = new ModuleConfig();
-
+		ModuleConfig config = new ModuleConfig();
+		config.moduleName = "Mekton Core";
+		config.moduleVersion = "V0.X";
+		config.moduleDescription = "Mekton's core rules and system, as best as they\ncan be replicated in this engine.";
+		
 		return config;
 	}
 

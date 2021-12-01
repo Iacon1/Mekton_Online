@@ -21,8 +21,6 @@ import java.math.RoundingMode;
 
 public final class MiscUtils
 {
-//	public static float floatTolerance = 0.015625f; // = 2^-6, which can be handled precisely by floats
-	
 	/** Adds items to a list until it reaches a certain size.
 	 * 
 	 *  @param list List to add to.
@@ -125,7 +123,6 @@ public final class MiscUtils
 	 *  @return The read text.
 	 */
 	public static String readText(String name) // Reads text from file
-	
 	{
 		Scanner scanner = null;
 		String text = "";
@@ -146,7 +143,19 @@ public final class MiscUtils
 		}
 		catch (Exception e) {Logging.logException(e); return null;}
 	}
-
+	/** Lists all files in a folder. */
+	public static String[] listFilenames(String name)
+	{
+		File[] files = new File(getAbsolute(name)).listFiles();
+		String[] names = new String[files.length];
+		for (int i = 0; i < files.length; ++i) names[i] = files[i].getName();
+		return names;
+	}
+	/** Creates a new folder. */
+	public static void newFolder(String name)
+	{
+		new File(getAbsolute(name)).mkdir();
+	}
 	/** Returns the computer's external IP.
 	 * 
 	 *  @return The computer's external IP.

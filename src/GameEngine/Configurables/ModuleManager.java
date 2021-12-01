@@ -37,7 +37,9 @@ public final class ModuleManager
 		
 		moduleList = new ArrayList<String>();
 		moduleList.add("BaseModule");
+		moduleList.add("Security");
 		moduleList.add("HexUtilities");
+		moduleList.add("Pathfinding");
 		moduleList.add("MektonCore");
 		moduleList.add("TestModule");
 		
@@ -105,5 +107,18 @@ public final class ModuleManager
 	public static <T extends Module> T getHighestOfType(Class<T> moduleType) // Get highest implementer of a moduleType
 	{
 		return getHighestOfType(moduleType, null);
+	}
+	
+	public static int size()
+	{
+		return modules.size();
+	}
+	
+	/** Gets the module with that priority.
+	 *  
+	 */
+	public static Module getModule(int priority)
+	{
+		return modules.get(modulePriorities.get(priority));
 	}
 }

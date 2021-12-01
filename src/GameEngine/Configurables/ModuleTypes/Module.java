@@ -5,14 +5,24 @@
 
 package GameEngine.Configurables.ModuleTypes;
 
+import javax.swing.JPanel;
+
+import GameEngine.Editor.ModulePane;
+
 public interface Module
 {
 	public static class ModuleConfig
 	{
 		public String moduleName; // Module's display name 
 		public String moduleVersion; // Module's version
+		public String moduleDescription; // Module's description
 	}
 	
 	public ModuleConfig getModuleConfig(); // Gives the config
 	public void initModule(); // Any special stuff the module needs to do on loading
+	
+	public default JPanel getEditorPanel()
+	{
+		return new ModulePane(getModuleConfig());
+	}
 }

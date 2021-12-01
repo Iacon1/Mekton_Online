@@ -12,7 +12,12 @@ public class Pathfinding implements Module
 	@Override
 	public ModuleConfig getModuleConfig()
 	{
-		return null;
+		ModuleConfig config = new ModuleConfig();
+		config.moduleName = "Pathfinding";
+		config.moduleVersion = "V0.X";
+		config.moduleDescription = "An A* pathfinding engine.";
+		
+		return config;
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import GameEngine.Configurables.ModuleTypes.Module;
 import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
 import GameEngine.Configurables.ModuleTypes.ServerMakingModule;
 import GameEngine.Configurables.ModuleTypes.WorldMakingModule;
+import GameEngine.Configurables.ModuleTypes.Module.ModuleConfig;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.Server.Account;
 import GameEngine.Server.GameServer;
@@ -29,6 +30,9 @@ public class TestModule implements Module, WorldMakingModule, ServerMakingModule
 	public ModuleConfig getModuleConfig()
 	{
 		ModuleConfig config = new ModuleConfig();
+		config.moduleName = "Test Module";
+		config.moduleVersion = "V0.X";
+		config.moduleDescription = "A testing rig.";
 		
 		return config;
 	}
