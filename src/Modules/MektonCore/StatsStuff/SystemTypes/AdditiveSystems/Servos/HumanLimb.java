@@ -2,22 +2,25 @@
 // Created 09/16/2021
 // An organic servo, i. e. a limb
 
-package Modules.MektonCore.StatsStuff.SystemTypes;
+package Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.Servos;
 
 import Modules.MektonCore.Enums.Scale;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
+import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledCostValue;
 import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledHitValue;
 
-public class HumanLimb extends System
+public class HumanLimb extends Servo
 {
 	private ServoType limbType;
 	private int body;
 	
-	public HumanLimb(ServoType limbType, int body)
+	public HumanLimb(Scale scale, ServoType limbType, int body)
 	{
+		super(scale);
 		this.limbType = limbType;
 		this.body = body;
 	}
+	
 	@Override
 	public ScaledHitValue getMaxHealth()
 	{
@@ -40,5 +43,12 @@ public class HumanLimb extends System
 		default: return new ScaledHitValue(Scale.human, 0);
 		}
 	}
+
+	@Override
+	public double getWeight() {return 0;}
+
+	@Override
+	public ScaledCostValue getCost() {return new ScaledCostValue(scale, 0);}
+
 
 }

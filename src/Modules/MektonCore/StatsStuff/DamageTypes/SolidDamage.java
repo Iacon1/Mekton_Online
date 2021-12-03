@@ -10,7 +10,7 @@ import Modules.MektonCore.EntityTypes.Mek;
 import Modules.MektonCore.ExceptionTypes.ExcessValueException;
 import Modules.MektonCore.StatsStuff.HitLocation;
 import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledHitValue;
-import Modules.MektonCore.StatsStuff.SystemTypes.MekServo;
+import Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.Servos.MekServo;
 import Utils.Logging;
 
 public class SolidDamage implements Damage

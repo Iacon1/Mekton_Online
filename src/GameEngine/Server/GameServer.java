@@ -21,7 +21,7 @@ import Utils.MiscUtils;
 
 public abstract class GameServer<T extends ConnectionPairThread> extends Server<T>
 {
-	private GappyArrayList<Account> accounts;
+	private List<Account> accounts;
 
 	private void loadAccounts()
 	{
@@ -47,12 +47,11 @@ public abstract class GameServer<T extends ConnectionPairThread> extends Server<
 		loadAccounts();
 	}
 	
-	public int addAccount(Account account) // Returns true if successful
+	public int addAccount(Account account) // Returns id if successful, -1 otherwise
 	{
-		int id = accounts.getFirstGap();
 		accounts.add(account);
 		saveAccounts();
-		return id; // TODO whitelist / blacklist
+		return accounts.indexOf(account); // TODO whitelist / blacklist
 	}
 	public Account getAccount(int id)
 	{

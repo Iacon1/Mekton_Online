@@ -53,7 +53,7 @@ public class HitLocation
 	public ServoSide side;
 	public Special special;
 	public Cinematic cinematic;
-	public int number; // In case multiple things occupy the same slot
+	public int index; // In case multiple things occupy the same slot
 	
 	public HitLocation(ServoType type, ServoSide side, Special special, Cinematic cinematic, int number)
 	{

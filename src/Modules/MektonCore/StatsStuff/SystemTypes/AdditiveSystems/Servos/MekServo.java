@@ -10,16 +10,12 @@
  * Redo space occupation
  */
 
-package Modules.MektonCore.StatsStuff.SystemTypes;
-
-import java.util.ArrayList;
-import java.util.List;
+package Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.Servos;
 
 import Modules.MektonCore.Enums.ArmorType;
 import Modules.MektonCore.Enums.LevelRAM;
 import Modules.MektonCore.Enums.Scale;
 import Modules.MektonCore.Enums.ServoClass;
-import Modules.MektonCore.ExceptionTypes.DoesntFitException;
 import Modules.MektonCore.ExceptionTypes.ExcessValueException;
 import Modules.MektonCore.ExceptionTypes.InsufficientHealthException;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
@@ -74,6 +70,11 @@ public class MekServo extends Servo
 	}
 	
 	// Space variables
+	@Override
+	public ScaledHitValue getVolume()
+	{
+		return new ScaledHitValue(scale, 0); // Nothing actually stores a mek servo in it so there's no rule for taking space
+	}
 	private ScaledHitValue getMaxSpacesBase() // The servo's max spaces, accounting for servo class and type but *not* sacrificed health
 	{
 		switch (servoType)
@@ -137,13 +138,16 @@ public class MekServo extends Servo
 	{
 		return getMaxHealthBase().subtract(sacrificedHealth);
 	}
+	/** Sets the sacrificed / reinforced (if negative) health.
+	 *  @param value The value to set it to.
+	 */
 	public void setSacrificedHealth(ScaledHitValue value) throws InsufficientHealthException
 	{
 		if (!getMaxHealthBase().greaterThan(value)) throw new InsufficientHealthException(value, getMaxHealthBase());
 		sacrificedHealth = new ScaledHitValue(value);
 	}
 	
-	/** Gets the cost in CP, accounting for armor and the scale of the servo. */
+	/** Gets the cost accounting for armor and the scale of the servo. */
 	public ScaledCostValue getCost()
 	{
 		ScaledCostValue baseCost = new ScaledCostValue(scale, 0);
@@ -161,6 +165,7 @@ public class MekServo extends Servo
 	/** Gets the weight in tons, accounting for armor and the scale of the servo. 
 	 *  @return The weight of the servo in tons.
 	 */
+	@Override
 	public double getWeight()
 	{
 		if (sacrificedHealth.getValue() < 0) // Reinforced kills take weight, sacrificed don't

@@ -6,7 +6,7 @@ package Modules.MektonCore.EntityTypes;
 
 import Modules.MektonCore.StatsStuff.HitLocation;
 import Modules.MektonCore.StatsStuff.DamageTypes.Damage;
-import Modules.MektonCore.StatsStuff.SystemTypes.MekServo;
+import Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.Servos.MekServo;
 
 public class Mek extends MektonActor
 {

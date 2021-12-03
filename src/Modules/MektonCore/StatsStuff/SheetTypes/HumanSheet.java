@@ -3,10 +3,12 @@
 // Human states & skills
 // TODO debuffs / buffs
 
-package Modules.MektonCore.StatsStuff;
+package Modules.MektonCore.StatsStuff.SheetTypes;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import Modules.MektonCore.StatsStuff.ServoList;
 
 public class HumanSheet extends ServoList
 {

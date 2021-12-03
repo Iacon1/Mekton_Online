@@ -101,8 +101,8 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 				else if (flags.get("right")) location.side = HitLocation.ServoSide.right;
 				else location.side = Rolls.rollSide(opponentServos, location.type);
 				
-				if (parameters.get("index") != null) location.number = Integer.valueOf(parameters.get("index")) - 1; // -1 is because humans start counting at one
-				else location.number = Rolls.rollXDY(1, opponentServos.servoCount(location.type, location.side)) - 1;
+				if (parameters.get("index") != null) location.index = Integer.valueOf(parameters.get("index")) - 1; // -1 is because humans start counting at one
+				else location.index = Rolls.rollXDY(1, opponentServos.servoCount(location.type, location.side)) - 1;
 				
 				if (opponentServos.getServo(location) == null) // Has the player not picked a valid location?
 					location = Rolls.mechaHitChart(opponentServos, true); // TODO error message?

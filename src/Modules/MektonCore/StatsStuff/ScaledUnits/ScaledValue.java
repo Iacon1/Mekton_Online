@@ -84,7 +84,7 @@ public abstract class ScaledValue<T extends ScaledValue<T>>
 	{
 		return value * getRatio(this.scale, scale);
 	}
-	/** Returns the value of this value at the default scale. 
+	/** Returns the value of this value at the default scale (Mekton-scale). 
 	 * 
 	 *  @return The value at default scale.
 	 */

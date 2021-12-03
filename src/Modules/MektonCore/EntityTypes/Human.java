@@ -4,9 +4,9 @@
 
 package Modules.MektonCore.EntityTypes;
 
-import Modules.MektonCore.StatsStuff.HumanSheet;
 import Modules.MektonCore.StatsStuff.DamageTypes.Damage;
-import Modules.MektonCore.StatsStuff.HumanSheet.Stat;
+import Modules.MektonCore.StatsStuff.SheetTypes.HumanSheet;
+import Modules.MektonCore.StatsStuff.SheetTypes.HumanSheet.Stat;
 import Modules.MektonCore.StatsStuff.HitLocation;
 
 public class Human extends MektonActor
