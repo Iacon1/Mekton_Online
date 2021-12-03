@@ -74,7 +74,7 @@ public class MekServo extends Servo
 	}
 	
 	// Space variables
-	private ScaledHitValue getMaxSpacesBase() // The servo's max spaces, accounting for servo class and type
+	private ScaledHitValue getMaxSpacesBase() // The servo's max spaces, accounting for servo class and type but *not* sacrificed health
 	{
 		switch (servoType)
 		{
@@ -163,6 +163,8 @@ public class MekServo extends Servo
 	 */
 	public double getWeight()
 	{
-		return getMaxHealth().getValue(Scale.mekton) / 2 + getMaxArmor().getValue(Scale.mekton) / 2;
+		if (sacrificedHealth.getValue() < 0) // Reinforced kills take weight, sacrificed don't
+			return getMaxHealth().getValue(Scale.mekton) / 2 + getMaxArmor().getValue(Scale.mekton) / 2;
+		else return getMaxHealthBase().getValue(Scale.mekton) / 2 + getMaxArmor().getValue(Scale.mekton) / 2;
 	}
 }
