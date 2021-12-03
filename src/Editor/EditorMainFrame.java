@@ -1,6 +1,5 @@
 package Editor;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,6 @@ import Utils.Logging;
 import Utils.MiscUtils;
 import javax.swing.JTabbedPane;
 import javax.swing.SpringLayout;
-import javax.swing.JScrollPane;
 
 @SuppressWarnings("serial")
 public class EditorMainFrame extends JFrame

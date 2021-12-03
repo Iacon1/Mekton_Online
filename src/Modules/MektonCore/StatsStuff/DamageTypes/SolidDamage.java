@@ -6,47 +6,44 @@ package Modules.MektonCore.StatsStuff.DamageTypes;
 
 import Modules.MektonCore.EntityTypes.Human;
 import Modules.MektonCore.EntityTypes.Mek;
-import Modules.MektonCore.Enums.Scale;
-import Modules.MektonCore.ExceptionTypes.ExcessArmorException;
-import Modules.MektonCore.ExceptionTypes.ExcessHealthException;
+
+import Modules.MektonCore.ExceptionTypes.ExcessValueException;
 import Modules.MektonCore.StatsStuff.HitLocation;
+import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledHitValue;
 import Modules.MektonCore.StatsStuff.SystemTypes.MekServo;
 import Utils.Logging;
 
 public class SolidDamage implements Damage
 {
-	private double damage; // 1x scale
-	protected Scale scale;
-	
-	public double getDamage(Scale scale)
-	{
-		return scale.getDamageScale() * damage;
-	}
+	protected ScaledHitValue damage;
 
 	/** Simply applies damage to the servo.
 	 * 
 	 *  @param healthDamage Damage to health at native scale.
 	 *  @param armorDamage Damage to armor at native scale.
 	 */
-	protected void applyDirect(MekServo servo, double healthDamage, double armorDamage)
+	protected void applyDirect(MekServo servo, ScaledHitValue healthDamage, ScaledHitValue armorDamage)
 	{
-		double newHealth = Math.max(0, servo.getHealth(scale) - healthDamage);
-		double newArmor = Math.max(0, servo.getCurrentArmor(scale) - armorDamage);
+		ScaledHitValue newHealth = servo.getHealth().subtract(healthDamage);
+		ScaledHitValue newArmor = servo.getArmor().subtract(armorDamage);
 		
-		try {servo.setHealth(scale, newHealth);}
-		catch (ExcessHealthException e) {Logging.logException(e);}
+		if (newHealth.getValue() < 0) newHealth = new ScaledHitValue(servo.getScale(), 0);
+		if (newArmor.getValue() < 0) newArmor = new ScaledHitValue(servo.getScale(), 0);
 		
-		try {servo.setCurrentArmor(scale, newArmor);}
-		catch (ExcessArmorException e) {Logging.logException(e);}
+		try {servo.setHealth(newHealth);}
+		catch (ExcessValueException e) {Logging.logException(e);}
+		
+		try {servo.setArmor(newArmor);}
+		catch (ExcessValueException e) {Logging.logException(e);}
 	}
 
 	protected void apply(Mek recipient, MekServo servo)
 	{
-		double delta = getDamage(scale) - servo.getCurrentArmor(scale); // How much damage is left after armor
+		ScaledHitValue delta = damage.subtract(servo.getArmor()); // How much damage is left after armor
 		
-		if (servo.getDC(scale) == 0) {applyDirect(servo, delta, getDamage(scale));} // Ablative
-		else if (servo.getDC(scale) <= getDamage(scale)) {applyDirect(servo, delta, -1);} // Not ablative, armor chipped
-		else applyDirect(servo, delta, 0); // Not ablative, no armor damage
+		if (servo.getDC().getValue() == 0) {applyDirect(servo, delta, damage);} // Ablative
+		else if (servo.getDC().lessThan(damage)) {applyDirect(servo, delta, new ScaledHitValue(servo.getScale(), 1));} // Not ablative, armor chipped
+		else applyDirect(servo, delta, new ScaledHitValue(servo.getScale(), 0)); // Not ablative, no armor damage
 	}
 	
 	@Override

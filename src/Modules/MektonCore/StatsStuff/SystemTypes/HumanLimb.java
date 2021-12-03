@@ -6,6 +6,7 @@ package Modules.MektonCore.StatsStuff.SystemTypes;
 
 import Modules.MektonCore.Enums.Scale;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
+import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledHitValue;
 
 public class HumanLimb extends System
 {
@@ -18,7 +19,7 @@ public class HumanLimb extends System
 		this.body = body;
 	}
 	@Override
-	public double getMaxHealth(Scale scale)
+	public ScaledHitValue getMaxHealth()
 	{
 		double baseValue = 0;
 		switch (body)
@@ -33,10 +34,10 @@ public class HumanLimb extends System
 		
 		switch (limbType)
 		{
-		case head: return baseValue;
-		case torso: return 2 * baseValue;
-		case arm: case leg: return baseValue + Math.floor(baseValue / 2);
-		default: return 0;
+		case head: return new ScaledHitValue(Scale.human, baseValue);
+		case torso: return new ScaledHitValue(Scale.human, 2 * baseValue);
+		case arm: case leg: return new ScaledHitValue(Scale.human, Math.floor(baseValue / 2));
+		default: return new ScaledHitValue(Scale.human, 0);
 		}
 	}
 

@@ -5,21 +5,19 @@
 package Modules.MektonCore.StatsStuff.DamageTypes;
 
 import Modules.MektonCore.EntityTypes.Mek;
-import Modules.MektonCore.StatsStuff.HitLocation;
+import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledHitValue;
 import Modules.MektonCore.StatsStuff.SystemTypes.MekServo;
 
 public class EnergyDamage extends SolidDamage
 {
 	@Override
-	public void apply(Mek recipient, HitLocation location)
+	public void apply(Mek recipient, MekServo servo)
 	{
-		MekServo servo = recipient.getServo(location);
+		ScaledHitValue delta = damage.multiply(1 - servo.getRAMReduction()).subtract(servo.getArmor()); // How much damage is left after armor
+		ScaledHitValue deltaEnergy = damage.multiply(servo.getRAMReduction());
 		
-		double delta = (1 - servo.getRAMReduction()) * getDamage(scale) - servo.getCurrentArmor(scale);  // How much damage is left after armor
-		double newEnergy = servo.getRAMReduction() * getDamage(scale); // TODO
-		
-		if (servo.getDC(scale) == 0) {applyDirect(servo, delta, getDamage(scale));} // Ablative
-		else if (servo.getDC(scale) <= getDamage(scale)) {applyDirect(servo, delta, -1);} // Not ablative, armor chipped
-		else applyDirect(servo, delta, 0); // Not ablative, no armor damage
+		if (servo.getDC().getValue() == 0) {applyDirect(servo, delta, damage);} // Ablative
+		else if (servo.getDC().lessThan(damage)) {applyDirect(servo, delta, new ScaledHitValue(servo.getScale(), 1));} // Not ablative, armor chipped
+		else applyDirect(servo, delta, new ScaledHitValue(servo.getScale(), 0)); // Not ablative, no armor damage
 	}
 }

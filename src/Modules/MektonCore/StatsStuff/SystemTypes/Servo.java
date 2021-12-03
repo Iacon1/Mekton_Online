@@ -4,14 +4,10 @@
 
 package Modules.MektonCore.StatsStuff.SystemTypes;
 
-import Modules.MektonCore.Enums.Scale;
-
 public abstract class Servo extends System
 {
 	/** Copy constructor. */
 	public Servo(Servo servo) {super(servo);}
 
 	public Servo() {super();}
-
-	public Servo(Scale scale) {super(scale);}
 }
