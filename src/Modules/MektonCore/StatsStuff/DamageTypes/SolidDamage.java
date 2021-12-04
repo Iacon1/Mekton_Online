@@ -17,6 +17,10 @@ public class SolidDamage implements Damage
 {
 	protected ScaledHitValue damage;
 
+	public SolidDamage(ScaledHitValue damage)
+	{
+		this.damage = damage;
+	}
 	/** Simply applies damage to the servo.
 	 * 
 	 *  @param healthDamage Damage to health at native scale.

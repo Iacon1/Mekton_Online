@@ -8,6 +8,7 @@ import Modules.MektonCore.Enums.Scale;
 import Modules.MektonCore.StatsStuff.DamageTypes.Damage;
 import Modules.MektonCore.StatsStuff.DamageTypes.EnergyDamage;
 import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledCostValue;
+import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledDistanceValue;
 import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledHitValue;
 
 public class BeamWeapon extends Weapon
@@ -147,6 +148,7 @@ public class BeamWeapon extends Weapon
 	}
 	public enum Speciality
 	{
+		none(1.0),
 		antiMissile(1.0),
 		variableAntiMissile(1.8),
 		antiPersonnel(1.0),
@@ -171,19 +173,19 @@ public class BeamWeapon extends Weapon
 	private static final double hydroFactor = 2.0;
 	private ScaledHitValue damage;
 	
-	private Accuracy accuracy;
+	private Accuracy accuracy; // TODO implement usage
 	private Range range;
-	private MaxShots maxShots;
-	private boolean clipFed;
-	private Warmup warmup;
-	private WideAngle wideAngle;
-	private BurstValue burstValue;
-	private Speciality speciality;
-	private boolean megaBeam;
-	private boolean longRange;
+	private MaxShots maxShots; // TODO implement usage
+	private boolean clipFed; // TODO implement usage
+	private Warmup warmup; // TODO implement usage
+	private WideAngle wideAngle; // TODO implement usage
+	private BurstValue burstValue; // TODO implement usage
+	private Speciality speciality; // TODO implement usage
+	private boolean megaBeam; // TODO implement usage
+	private boolean longRange; // TODO implement usage
 	private boolean fragile;
-	private boolean disruptor;
-	private boolean hydro;
+	private boolean disruptor; // TODO implement usage
+	private boolean hydro; // TODO implement usage
 	
 	@Override
 	protected ScaledCostValue baseCost()
@@ -217,7 +219,7 @@ public class BeamWeapon extends Weapon
 	public Damage getDamage()
 	{
 		// TODO variations
-		return new EnergyDamage();
+		return new EnergyDamage(damage);
 	}
 
 	@Override
@@ -233,6 +235,27 @@ public class BeamWeapon extends Weapon
 		else return new ScaledHitValue(scale, damage.getValue(scale));
 	}
 
-	@Override public double getWeight() {return getMaxHealth().getValue(Scale.mekton) / 2;}
+	@Override
+	public ScaledDistanceValue getRange()
+	{
+		switch ((int) damage.getValue(scale))
+		{
+		case 1: return new ScaledDistanceValue(scale, 4);
+		case 2: return new ScaledDistanceValue(scale, 6);
+		case 3: return new ScaledDistanceValue(scale, 7);
+		case 4: return new ScaledDistanceValue(scale, 8);
+		case 5: return new ScaledDistanceValue(scale, 9);
+		case 6: return new ScaledDistanceValue(scale, 10);
+		case 7: case 8: return new ScaledDistanceValue(scale, 11);
+		case 9: return new ScaledDistanceValue(scale, 12);
+		case 10: case 11: return new ScaledDistanceValue(scale, 13);
+		case 12: case 13: return new ScaledDistanceValue(scale, 14);
+		case 14: case 15: return new ScaledDistanceValue(scale, 15);
+		case 16: case 17: return new ScaledDistanceValue(scale, 16);
+		case 18: case 19: return new ScaledDistanceValue(scale, 17);
+		case 20: return new ScaledDistanceValue(scale, 18);
+		default: return new ScaledDistanceValue(scale, 1);
+		}
+	}
 
 }

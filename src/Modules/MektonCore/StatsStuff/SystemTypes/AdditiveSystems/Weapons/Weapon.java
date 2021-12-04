@@ -7,6 +7,7 @@ package Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.Weapons;
 import Modules.MektonCore.Enums.Scale;
 import Modules.MektonCore.StatsStuff.DamageTypes.Damage;
 import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledCostValue;
+import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledDistanceValue;
 import Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.AdditiveSystem;
 
 public abstract class Weapon extends AdditiveSystem
@@ -20,5 +21,7 @@ public abstract class Weapon extends AdditiveSystem
 	@Override public ScaledCostValue getCost() {return baseCost().multiply(getMultiplier());}
 	
 	public abstract Damage getDamage();
+	public abstract ScaledDistanceValue getRange();
 
+	@Override public double getWeight() {return getMaxHealth().getValue(Scale.mekton) / 2;}
 }

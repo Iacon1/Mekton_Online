@@ -10,6 +10,11 @@ import Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.Servos.MekServo
 
 public class EnergyDamage extends SolidDamage
 {
+	public EnergyDamage(ScaledHitValue damage)
+	{
+		super(damage);
+	}
+	
 	@Override
 	public void apply(Mek recipient, MekServo servo)
 	{
