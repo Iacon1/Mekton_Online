@@ -4,6 +4,8 @@
 
 package Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.Weapons;
 
+import javax.swing.JPanel;
+
 import Modules.MektonCore.Enums.Scale;
 import Modules.MektonCore.StatsStuff.DamageTypes.Damage;
 import Modules.MektonCore.StatsStuff.DamageTypes.EnergyDamage;
@@ -257,5 +259,4 @@ public class BeamWeapon extends Weapon
 		default: return new ScaledDistanceValue(scale, 1);
 		}
 	}
-
 }

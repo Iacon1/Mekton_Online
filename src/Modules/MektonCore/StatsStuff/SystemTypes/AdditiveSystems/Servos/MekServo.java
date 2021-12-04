@@ -12,6 +12,7 @@
 
 package Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.Servos;
 
+import GameEngine.Editor.EditorPanel;
 import Modules.MektonCore.Enums.ArmorType;
 import Modules.MektonCore.Enums.LevelRAM;
 import Modules.MektonCore.Enums.Scale;
@@ -24,7 +25,6 @@ import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledHitValue;
 
 public class MekServo extends Servo
 {
-	private Scale scale;
 	private ServoClass servoClass;
 	private ServoClass armorClass;
 	private ServoType servoType;
@@ -33,7 +33,7 @@ public class MekServo extends Servo
 	
 	private ScaledHitValue sacrificedHealth;
 	private ScaledHitValue armor;
-	
+
 	/** Copy constructor */
 	public MekServo(MekServo mekServo)
 	{
@@ -43,6 +43,9 @@ public class MekServo extends Servo
 		this.servoType = mekServo.servoType;
 		this.armorType = mekServo.armorType;
 		this.levelRAM = mekServo.levelRAM;
+		
+		this.sacrificedHealth = new ScaledHitValue(scale, 0);
+		this.armor = new ScaledHitValue(scale, 0);
 	}
 	public MekServo()
 	{
@@ -53,6 +56,9 @@ public class MekServo extends Servo
 		this.servoType = null;
 		this.armorType = null;
 		this.levelRAM = null;
+		
+		this.sacrificedHealth = new ScaledHitValue(scale, 0);
+		this.armor = new ScaledHitValue(scale, 0);
 	}
 	public MekServo(Scale scale, ServoClass servoClass, ServoClass armorClass, ServoType servoType, ArmorType armorType, LevelRAM levelRAM)
 	{
@@ -62,6 +68,9 @@ public class MekServo extends Servo
 		this.servoType = servoType;
 		this.armorType = armorType;
 		this.levelRAM = levelRAM;
+		
+		this.sacrificedHealth = new ScaledHitValue(scale, 0);
+		this.armor = new ScaledHitValue(scale, 0);
 	}
 	
 	public Scale getScale()
@@ -160,7 +169,7 @@ public class MekServo extends Servo
 			else baseCost = new ScaledCostValue(scale, getMaxSpacesBase().getValue(scale));
 			break;
 		}
-		return baseCost.multiply((armorType.costMult() + levelRAM.costMult()) * armorClass.level());
+		return baseCost.add(new ScaledCostValue(scale, armorType.costMult() * levelRAM.costMult() * armorClass.level()));
 	}
 	/** Gets the weight in tons, accounting for armor and the scale of the servo. 
 	 *  @return The weight of the servo in tons.
@@ -171,5 +180,20 @@ public class MekServo extends Servo
 		if (sacrificedHealth.getValue() < 0) // Reinforced kills take weight, sacrificed don't
 			return getMaxHealth().getValue(Scale.mekton) / 2 + getMaxArmor().getValue(Scale.mekton) / 2;
 		else return getMaxHealthBase().getValue(Scale.mekton) / 2 + getMaxArmor().getValue(Scale.mekton) / 2;
+	}
+	@Override
+	public EditorPanel editorPanel()
+	{
+		EditorPanel panel = super.editorPanel();
+		panel.setTitle("Servo");
+		panel.addInfo(() -> {return "Scale: " + scale.name();});
+		panel.addInfo(() -> {return "Servo class: " + servoClass.name();});
+		panel.addInfo(() -> {return "Armor class: " + armorClass.name();});
+		
+		panel.addInfo(() -> {return "Max health: " + getMaxHealth().getValue(scale);});
+		panel.addInfo(() -> {return "Max spaces: " + getMaxSpaces().getValue(scale);});
+		panel.addInfo(() -> {return "Max armor: " + getMaxArmor().getValue(scale);});
+		
+		return panel;
 	}
 }

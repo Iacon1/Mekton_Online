@@ -6,6 +6,7 @@ package Modules.MektonCore.Enums;
 
 public enum LevelRAM
 {
+	none(0.0, 1.0, 1),
 	oneFifth(0.2, 1.5, 1),
 	oneFourth(0.25, 1.8, 0.8),
 	oneThird(0.33, 2.2, 0.75),

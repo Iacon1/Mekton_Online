@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Utils.Logging;
 import Utils.MiscUtils;
 import javax.swing.SpringLayout;
 import javax.swing.JLabel;
@@ -62,7 +63,7 @@ public class GetPackDialog extends JDialog
 			dialog.setVisible(true);
 		} catch (Exception e)
 		{
-			e.printStackTrace();
+			Logging.logException(e);
 		}
 	}
 

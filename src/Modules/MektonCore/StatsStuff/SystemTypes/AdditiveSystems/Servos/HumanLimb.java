@@ -4,6 +4,8 @@
 
 package Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.Servos;
 
+import javax.swing.JPanel;
+
 import Modules.MektonCore.Enums.Scale;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
 import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledCostValue;
@@ -49,6 +51,4 @@ public class HumanLimb extends Servo
 
 	@Override
 	public ScaledCostValue getCost() {return new ScaledCostValue(scale, 0);}
-
-
 }

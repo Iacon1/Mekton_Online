@@ -4,9 +4,9 @@
 
 package Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.Weapons;
 
-import Modules.MektonCore.Enums.Scale;
+import javax.swing.JPanel;
+
 import Modules.MektonCore.StatsStuff.DamageTypes.Damage;
-import Modules.MektonCore.StatsStuff.DamageTypes.EnergyDamage;
 import Modules.MektonCore.StatsStuff.DamageTypes.EnergyMeleeDamage;
 import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledCostValue;
 import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledDistanceValue;
@@ -110,6 +110,15 @@ public class EnergyMeleeWeapon extends Weapon
 	private boolean hyper; // TODO implement usage
 	private BeamShield beamShield; // TODO implement usage
 	
+	// Editor panel
+	private class EditorPanel extends JPanel
+	{
+		public EditorPanel()
+		{
+			
+		}
+	}
+	
 	@Override
 	protected ScaledCostValue baseCost()
 	{
@@ -141,5 +150,4 @@ public class EnergyMeleeWeapon extends Weapon
 	@Override public ScaledHitValue getMaxHealth() {return new ScaledHitValue(scale, damage.getValue(scale)).divide(4);}
 
 	@Override public ScaledDistanceValue getRange() {return new ScaledDistanceValue(scale, 1);}
-
 }

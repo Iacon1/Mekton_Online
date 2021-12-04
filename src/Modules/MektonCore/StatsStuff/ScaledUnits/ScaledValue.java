@@ -48,6 +48,7 @@ public abstract class ScaledValue<T extends ScaledValue<T>>
 	/** Copy constructor. */
 	protected ScaledValue(T value)
 	{
+		this.scale = value.getScale();
 		setValue(value);
 	}
 	protected ScaledValue(Scale scale, double value)

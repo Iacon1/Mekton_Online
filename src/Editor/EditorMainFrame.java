@@ -13,6 +13,12 @@ import GameEngine.Configurables.ConfigManager;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.EditorPopulatingModule;
 import GameEngine.Editor.ModulesPane;
+import Modules.MektonCore.Enums.ArmorType;
+import Modules.MektonCore.Enums.LevelRAM;
+import Modules.MektonCore.Enums.Scale;
+import Modules.MektonCore.Enums.ServoClass;
+import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
+import Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.Servos.MekServo;
 import Utils.Logging;
 import Utils.MiscUtils;
 import javax.swing.JTabbedPane;
@@ -30,6 +36,8 @@ public class EditorMainFrame extends JFrame
 		List<JPanel> panels = new ArrayList<JPanel>();
 		
 		panels.add(new ModulesPane());
+		MekServo servo = new MekServo(Scale.mekton, ServoClass.mediumHeavy, ServoClass.mediumHeavy, ServoType.torso, ArmorType.standard, LevelRAM.none); // TODO testing only, remove later
+		panels.add(servo.editorPanel());
 		
 		if (ModuleManager.getHighestOfType(EditorPopulatingModule.class) != null)
 			ModuleManager.getHighestOfType(EditorPopulatingModule.class).populateTabs(panels);
