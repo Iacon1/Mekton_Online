@@ -3,7 +3,9 @@
 package GameEngine.Editor;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.DefaultListModel;
+import javax.swing.JComponent;
 import javax.swing.ListSelectionModel;
 import javax.swing.JList;
 import java.awt.BorderLayout;
@@ -13,12 +15,12 @@ import java.awt.FontMetrics;
 
 import javax.swing.JLabel;
 import java.awt.GridLayout;
-import java.awt.Label;
 import java.util.List;
 import java.util.ArrayList;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.BoxLayout;
+import javax.swing.border.EtchedBorder;
 
 
 @SuppressWarnings("serial")
@@ -28,7 +30,7 @@ public class EditorPanel extends JPanel
 	private JPanel controlsPanel;
 	
 	public interface InfoFunction {public String update();}
-	private List<Label> labels;
+	private List<JLabel> labels;
 	private List<InfoFunction> infoFunctions;
 	private JPanel infoPanel;
 	
@@ -38,7 +40,7 @@ public class EditorPanel extends JPanel
 	}
 	public <T> void addInfo(InfoFunction function)
 	{
-		Label label = new Label();
+		JLabel label = new JLabel();
 		infoPanel.add(label);
 		labels.add(label);
 		infoFunctions.add(function);
@@ -59,8 +61,10 @@ public class EditorPanel extends JPanel
 */	}
 	
 	public interface EditFunction<T> {public void onEdit(T newValue);}
-	private void addControlRow(Component a, Component b)
+	private void addControlRow(JComponent a, JComponent b)
 	{
+		a.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		b.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		controlsPanel.add(a);
 		controlsPanel.add(b);
 		
@@ -83,8 +87,20 @@ public class EditorPanel extends JPanel
 			editFunction.onEdit(optionValues[list.getSelectedIndex()]);
 			updateInfo();
 		});
-
-		addControlRow(new Label(label), list);
+		editFunction.onEdit(optionValues[initialValueIndex]);
+		updateInfo();
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setViewportView(list);
+		list.setLayoutOrientation(JList.VERTICAL);
+		addControlRow(new JLabel(label), scrollPane);
+	}
+	public <T extends Enum> void addOptionList(String label, T[] optionValues, T initialValue, EditFunction<T> editFunction)
+	{
+		String[] optionLabels = new String[optionValues.length];
+		for (int i = 0; i < optionValues.length; ++i) optionLabels[i] = optionValues[i].name();
+		addOptionList(label, optionLabels, optionValues, initialValue.ordinal(), editFunction);
+		
 	}
 	
 	public void setTitle(String title) {titleLabel.setText(title);}
@@ -94,13 +110,14 @@ public class EditorPanel extends JPanel
 	 */
 	public EditorPanel(String title)
 	{
-		setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		setLayout(new BorderLayout(0, 0));
 		
 		titleLabel = new JLabel(title);
 		add(titleLabel, BorderLayout.NORTH);
 		
 		controlsPanel = new JPanel();
+		controlsPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		GridLayout controlsLayout = new GridLayout(0, 2);
 		add(controlsPanel, BorderLayout.CENTER);
 		controlsPanel.setLayout(controlsLayout);
@@ -109,7 +126,7 @@ public class EditorPanel extends JPanel
 		add(infoPanel, BorderLayout.WEST);
 		infoPanel.setLayout(new GridLayout(0, 1));
 		
-		labels = new ArrayList<Label>();
+		labels = new ArrayList<JLabel>();
 		infoFunctions = new ArrayList<InfoFunction>();
 	}
 

@@ -186,13 +186,19 @@ public class MekServo extends Servo
 	{
 		EditorPanel panel = super.editorPanel();
 		panel.setTitle("Servo");
-		panel.addInfo(() -> {return "Scale: " + scale.name();});
 		panel.addInfo(() -> {return "Servo class: " + servoClass.name();});
 		panel.addInfo(() -> {return "Armor class: " + armorClass.name();});
 		
-		panel.addInfo(() -> {return "Max health: " + getMaxHealth().getValue(scale);});
-		panel.addInfo(() -> {return "Max spaces: " + getMaxSpaces().getValue(scale);});
-		panel.addInfo(() -> {return "Max armor: " + getMaxArmor().getValue(scale);});
+		panel.addInfo(() -> {return "Max health: " + getMaxHealth().getValue(Scale.mekton) + " Mek kills";});
+		panel.addInfo(() -> {return "Max spaces: " + getMaxSpaces().getValue(Scale.mekton) + " Mek spaces";});
+		panel.addInfo(() -> {return "Max armor: " + getMaxArmor().getValue(Scale.mekton) + " Mek SP";});
+		
+		panel.addOptionList("Scale: ", Scale.values(), Scale.mekton, s -> {scale = s;});
+		panel.addOptionList("Servo class: ", ServoClass.values(), ServoClass.mediumWeight, c -> {servoClass = c;});
+		panel.addOptionList("Armor class: ", ServoClass.values(), ServoClass.mediumWeight, c -> {armorClass = c;});
+		panel.addOptionList("Servo type: ", ServoType.values(), ServoType.torso, t -> {servoType = t;});
+		panel.addOptionList("Armor type: ", ArmorType.values(), ArmorType.standard, t -> {armorType = t;});
+		panel.addOptionList("Level of RAM: ", LevelRAM.values(), LevelRAM.none, l -> {levelRAM = l;});
 		
 		return panel;
 	}
