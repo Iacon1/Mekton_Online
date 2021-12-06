@@ -4,6 +4,8 @@ package GameEngine.Editor;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTree;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
 import javax.swing.ListSelectionModel;
@@ -17,10 +19,15 @@ import javax.swing.JLabel;
 import java.awt.GridLayout;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.BoxLayout;
 import javax.swing.border.EtchedBorder;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
 
 
 @SuppressWarnings("serial")
@@ -101,6 +108,70 @@ public class EditorPanel extends JPanel
 		for (int i = 0; i < optionValues.length; ++i) optionLabels[i] = optionValues[i].name();
 		addOptionList(label, optionLabels, optionValues, initialValue.ordinal(), editFunction);
 		
+	}
+	
+	private static class EditableNode extends DefaultMutableTreeNode
+	{
+		private Editable editable;
+		
+		public EditableNode(String label, Editable editable)
+		{
+			super(label);
+			this.editable = editable;
+		}
+		
+		public EditorPanel editorPanel()
+		{
+			return editable.editorPanel();
+		}
+		
+	}
+	private MutableTreeNode getNode(String label, Object[] objects)
+	{
+		DefaultMutableTreeNode node = new DefaultMutableTreeNode(label);
+		for (int i = 0; i < objects.length; ++i)
+		{
+			if (objects[i] == null) continue;
+			else if (Object[].class.isAssignableFrom(objects[i].getClass())) // Itself an array
+			{
+				node.add(getNode(objects[i].getClass().getName(), (Object[]) objects[i]));
+			}
+			else if (Editable.class.isAssignableFrom(objects[i].getClass())) // An editable
+			{
+				Editable editable = (Editable) objects[i];
+				node.add(getNode(editable.getName(), editable));
+			}
+			else continue;
+		}
+		
+		return node;
+	}
+	private MutableTreeNode getNode(String label, Editable editable)
+	{
+		EditableNode node = new EditableNode(label, editable);
+		return node;
+	}
+	public void addHierarchicalList(String label, Object... objects)
+	{
+		JTree tree = new JTree();
+		MutableTreeNode rootNode = getNode(label, objects);
+		DefaultTreeModel model = new DefaultTreeModel(rootNode);
+		tree.setModel(model);
+		
+		JSplitPane splitPane = new JSplitPane();
+		splitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+		splitPane.setLeftComponent(tree);
+		
+		tree.addTreeSelectionListener(e -> {
+			Object node = tree.getLastSelectedPathComponent();
+			if (node.getClass() == EditableNode.class)
+			{
+				EditorPanel editorPanel = ((EditableNode) node).editorPanel();
+				splitPane.setRightComponent(editorPanel);
+			}
+		});
+		
+		addControlRow(new JLabel(label), splitPane);
 	}
 	
 	public void setTitle(String title) {titleLabel.setText(title);}

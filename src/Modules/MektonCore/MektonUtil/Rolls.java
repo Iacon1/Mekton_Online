@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import Modules.MektonCore.StatsStuff.ServoList;
+import Modules.MektonCore.StatsStuff.AdditiveSystemList;
 import Modules.MektonCore.StatsStuff.HitLocation.Cinematic;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoSide;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
@@ -55,7 +55,7 @@ public class Rolls
 		else return roll;
 	}
 
-	public static ServoSide rollSide(ServoList servos, ServoType type)
+	public static ServoSide rollSide(AdditiveSystemList servos, ServoType type)
 	{
 		int side = 0;
 		if (servos.servoCount(type) == 0)
@@ -115,7 +115,7 @@ public class Rolls
 		default: return null;
 		}
 	}
-	public static HitLocation mechaHitChart(ServoList servos, boolean doSpecial)
+	public static HitLocation mechaHitChart(AdditiveSystemList servos, boolean doSpecial)
 	{
 		int roll = 0;
 		

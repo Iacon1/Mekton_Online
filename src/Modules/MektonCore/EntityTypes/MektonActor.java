@@ -20,8 +20,8 @@ import Modules.BaseModule.Commands.ParsingCommandBank;
 import Modules.HexUtilities.HexDirection;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
 import Modules.MektonCore.MektonUtil.Rolls;
+import Modules.MektonCore.StatsStuff.AdditiveSystemList;
 import Modules.MektonCore.StatsStuff.HitLocation;
-import Modules.MektonCore.StatsStuff.ServoList;
 import Modules.MektonCore.StatsStuff.DamageTypes.Damage;
 import Modules.Security.RoleAccount;
 import Modules.Security.RoleHolder;
@@ -87,7 +87,7 @@ public abstract class MektonActor extends MapEntity implements CommandRunner, Ro
 		String locationName = parameters.get("location");
 		
 		MektonActor opponent = null;
-		ServoList opponentServos = null;
+		AdditiveSystemList opponentServos = null;
 		HitLocation location = new HitLocation(null, null, null, null, 0);
 		
 		if (locationName != null)

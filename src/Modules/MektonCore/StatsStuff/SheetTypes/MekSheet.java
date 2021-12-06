@@ -6,24 +6,19 @@ package Modules.MektonCore.StatsStuff.SheetTypes;
 
 import java.util.List;
 
+import GameEngine.Editor.Editable;
 import Modules.MektonCore.Enums.Scale;
-import Modules.MektonCore.StatsStuff.ServoList;
+import Modules.MektonCore.StatsStuff.AdditiveSystemList;
 import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledCostValue;
 import Modules.MektonCore.StatsStuff.SystemTypes.MultiplierSystem;
-import Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.AdditiveSystem;
 
-public class MekSheet extends ServoList
+public class MekSheet extends AdditiveSystemList implements Editable
 {
-	private List<AdditiveSystem> additiveSystems;
-	
 	private List<MultiplierSystem> multiplierSystems;
 	
 	public ScaledCostValue getCost()
 	{
 		ScaledCostValue baseValue = new ScaledCostValue(Scale.mekton, 0);
-		
-		for (int i = 0; i < servos.size(); ++i)
-			baseValue.addInPlace(servos.get(i).getCost());
 		
 		for (int i = 0; i < additiveSystems.size(); ++i)
 			baseValue.addInPlace(additiveSystems.get(i).getCost());

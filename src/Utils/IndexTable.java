@@ -8,8 +8,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
-public class IndexTable<E> implements Collection<E>
+public class IndexTable<E> implements List<E>
 {
 	private static class IndexWrapper<E>
 	{
@@ -27,6 +28,10 @@ public class IndexTable<E> implements Collection<E>
 			this.indices = indices;
 		}
 		
+		public void setValue(E value)
+		{
+			this.value = value;
+		}
 		public E getValue()
 		{
 			return value;
@@ -47,6 +52,11 @@ public class IndexTable<E> implements Collection<E>
 			}
 			
 			return true;
+		}
+		
+		public void setIndices(Object[] indices)
+		{
+			this.indices = indices;
 		}
 	}
 	
@@ -98,7 +108,7 @@ public class IndexTable<E> implements Collection<E>
 	public IndexTable()
 	{
 		indexTypes = null;
-		items = null;
+		items = new ArrayList<IndexWrapper<E>>();
 	}
 	public IndexTable(Class<?>... indexTypes)
 	{
@@ -106,7 +116,7 @@ public class IndexTable<E> implements Collection<E>
 		items = new ArrayList<IndexWrapper<E>>();
 	}
 	
-	
+	// Collection overrides
 	@Override public int size() {return items.size();}
 	@Override public boolean isEmpty() {return items.isEmpty();}
 	@Override public boolean contains(Object o) {return getByValue(o) != -1;}
@@ -148,6 +158,51 @@ public class IndexTable<E> implements Collection<E>
 	}
 	@Override public void clear() {items.clear();}
 
+	// List overrides
+	
+	@Override
+	public void add(int index, E element)
+	{
+		Object[] indices = new Object[indexTypes.length];
+		for (int i = 0; i < indexTypes.length; ++i) indices = null;
+		items.add(index, new IndexWrapper<E>(element, indices));
+	}
+	@Override
+	public E set(int index, E element)
+	{
+		if (index < size())
+		{
+			E e = items.get(index).getValue();
+			items.get(index).setValue(element);
+			return e;
+		}
+		else
+		{
+			add(index, element);
+			return null;
+		}
+	}
+	@Override public E remove(int index) {return items.get(index).getValue();}
+	@Override public E get(int index) {return items.get(index).getValue();}
+	@Override public int lastIndexOf(Object o) {return getItemList().lastIndexOf(o);}
+	@Override public ListIterator<E> listIterator() {return getItemList().listIterator();}
+	@Override
+	public ListIterator<E> listIterator(int index) {return getItemList().listIterator(index);}
+	@Override
+	public List<E> subList(int fromIndex, int toIndex) {return getItemList().subList(fromIndex, toIndex);}
+	@Override public boolean addAll(int index, Collection<? extends E> c)
+	{
+		boolean changed = false;
+		int i = 0;
+		for (E e : c)
+		{
+			changed = changed || get(index + i) != e;
+			add(index + i, e);
+			i += 1;
+		}
+		return changed;
+	}
+	
 	// Custom methods
 	public boolean add(E e, Object... indices)
 	{
@@ -162,9 +217,9 @@ public class IndexTable<E> implements Collection<E>
 		
 		return values;
 	}
-	public E get(int index)
+	public int indexOf(Object o)
 	{
-		return items.get(index).getValue();
+		return items.indexOf(o);
 	}
 	public boolean remove(int index, Object... indices) throws IndexTypesException
 	{
@@ -174,4 +229,11 @@ public class IndexTable<E> implements Collection<E>
 		if (itemIndex == -1) return false;
 		return items.remove(itemIndex) != null;
 	}
+	public void setIndices(int index, Object... indices) throws IndexTypesException
+	{
+		if (!correctClasses(indices)) throw new IndexTypesException(indexTypes, indices);
+		items.get(index).setIndices(indices);
+	}
+	
+
 }

@@ -1,20 +1,28 @@
 // By Iacon1
 // Created 09/16/2021
-// A list of servos
+// A list of systems
 
 package Modules.MektonCore.StatsStuff;
 
+import GameEngine.Editor.Editable;
+import GameEngine.Editor.EditorPanel;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoSide;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
+import Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.AdditiveSystem;
 import Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.Servos.Servo;
 import Utils.IndexTable;
 import Utils.IndexTypesException;
 import Utils.Logging;
 
-public abstract class ServoList
+public class AdditiveSystemList implements Editable
 {	
-	protected IndexTable<Servo> servos;
+	protected IndexTable<AdditiveSystem> additiveSystems;
 
+	public AdditiveSystemList()
+	{
+		additiveSystems = new IndexTable<AdditiveSystem>(ServoType.class, ServoSide.class);
+	}
+	
 	/** If the servo is already in the list:
 	 *    Adds the servo to the given type & side.
 	 *  If the servo isn't already in the list:
@@ -24,16 +32,11 @@ public abstract class ServoList
 	 *  @param side The side to list the servo as.
 	 *  @param servo The servo to add or to list.
 	 */
-	public void addServo(ServoType type, ServoSide side, Servo servo) {servos.add(servo, type, side, servo);}
+	public void addServo(ServoType type, ServoSide side, Servo servo) {additiveSystems.add(servo, type, side, servo);}
 	
-	/** Removes the given servo from the table.
-	 *  
-	 *  @param servo  The servo to remove.
-	 */
-	public void removeServo(Servo servo) {servos.remove(servo);}
 	public Servo getServo(ServoType category, ServoSide side, int index)
 	{
-		try {return servos.get(category, side).get(index);}
+		try {return (Servo) additiveSystems.get(category, side).get(index);}
 		catch (IndexTypesException e)
 		{
 			Logging.logException(e);
@@ -51,7 +54,7 @@ public abstract class ServoList
 	 */
 	public int servoCount(ServoType type)
 	{
-		try {return servos.get(type, null).size();}
+		try {return additiveSystems.get(type, null).size();}
 		catch (IndexTypesException e)
 		{
 			Logging.logException(e);
@@ -66,7 +69,7 @@ public abstract class ServoList
 	 */
 	public int servoCount(ServoSide side)
 	{
-		try {return servos.get(null, side).size();}
+		try {return additiveSystems.get(null, side).size();}
 		catch (IndexTypesException e)
 		{
 			Logging.logException(e);
@@ -82,11 +85,36 @@ public abstract class ServoList
 	 */
 	public int servoCount(ServoType type, ServoSide side)
 	{
-		try {return servos.get(type, side).size();}
+		try {return additiveSystems.get(type, side).size();}
 		catch (IndexTypesException e)
 		{
 			Logging.logException(e);
 			return 0;
 		}
+	}
+
+	/** Removes the given system from the table.
+	 *  
+	 *  @param system System to remove.
+	 */
+	public void removeSystem(AdditiveSystem additiveSystem) {additiveSystems.remove(additiveSystem);}
+	public void addSystem(AdditiveSystem additiveSystem)
+	{
+		additiveSystems.add(additiveSystem);
+	}
+
+	@Override
+	public String getName()
+	{
+		return "Additive System List";
+	}
+	@Override
+	public EditorPanel editorPanel()
+	{
+		EditorPanel editorPanel = new EditorPanel("Additive System List");
+		
+		editorPanel.addHierarchicalList("additiveSystems", additiveSystems.toArray());
+		
+		return editorPanel;
 	}
 }

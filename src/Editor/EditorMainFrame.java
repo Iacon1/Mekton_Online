@@ -17,7 +17,9 @@ import Modules.MektonCore.Enums.ArmorType;
 import Modules.MektonCore.Enums.LevelRAM;
 import Modules.MektonCore.Enums.Scale;
 import Modules.MektonCore.Enums.ServoClass;
+import Modules.MektonCore.StatsStuff.HitLocation.ServoSide;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
+import Modules.MektonCore.StatsStuff.SheetTypes.MekSheet;
 import Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.Servos.MekServo;
 import Utils.Logging;
 import Utils.MiscUtils;
@@ -36,8 +38,12 @@ public class EditorMainFrame extends JFrame
 		List<JPanel> panels = new ArrayList<JPanel>();
 		
 		panels.add(new ModulesPane());
-		MekServo servo = new MekServo(Scale.mekton, ServoClass.mediumHeavy, ServoClass.mediumHeavy, ServoType.torso, ArmorType.standard, LevelRAM.none); // TODO testing only, remove later
-		panels.add(servo.editorPanel());
+		MekServo servo1 = new MekServo(Scale.mekton, ServoClass.mediumHeavy, ServoClass.mediumHeavy, ServoType.head, ArmorType.standard, LevelRAM.none); // TODO testing only, remove later
+		MekServo servo2 = new MekServo(Scale.mekton, ServoClass.mediumHeavy, ServoClass.mediumHeavy, ServoType.torso, ArmorType.standard, LevelRAM.none); // TODO testing only, remove later
+		MekSheet mekSheet = new MekSheet();
+		mekSheet.addServo(ServoType.head, ServoSide.middle, servo1);
+		mekSheet.addServo(ServoType.torso, ServoSide.middle, servo2);
+		panels.add(mekSheet.editorPanel());
 		
 		if (ModuleManager.getHighestOfType(EditorPopulatingModule.class) != null)
 			ModuleManager.getHighestOfType(EditorPopulatingModule.class).populateTabs(panels);

@@ -4,15 +4,14 @@
 
 package Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems;
 
-import javax.swing.JPanel;
-
+import GameEngine.Editor.Editable;
 import GameEngine.Editor.EditorPanel;
 import Modules.MektonCore.Enums.Scale;
 import Modules.MektonCore.ExceptionTypes.ExcessValueException;
 import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledCostValue;
 import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledHitValue;
 
-public abstract class AdditiveSystem
+public abstract class AdditiveSystem implements Editable
 {
 	private int systemID;
 	private ScaledHitValue health;
@@ -75,12 +74,8 @@ public abstract class AdditiveSystem
 	 *  @return The cost.
 	 */
 	public abstract ScaledCostValue getCost();
-	
-	/** Returns a panel for the editor to use
-	 *  to edit this system.
-	 * 
-	 *  @Return The panel.
-	 */
+
+	@Override
 	public EditorPanel editorPanel()
 	{
 		EditorPanel panel = new EditorPanel("Additive System");
