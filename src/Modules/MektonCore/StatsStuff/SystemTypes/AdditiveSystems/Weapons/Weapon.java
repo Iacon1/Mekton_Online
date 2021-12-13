@@ -24,4 +24,6 @@ public abstract class Weapon extends AdditiveSystem
 	public abstract ScaledDistanceValue getRange();
 
 	@Override public double getWeight() {return getMaxHealth().getValue(Scale.mekton) / 2;}
+	
+	@Override public String getName() {return "Weapon";}
 }

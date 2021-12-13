@@ -51,4 +51,10 @@ public class HumanLimb extends Servo
 
 	@Override
 	public ScaledCostValue getCost() {return new ScaledCostValue(scale, 0);}
+
+	@Override
+	public String getName()
+	{
+		return "Human limb";
+	}
 }

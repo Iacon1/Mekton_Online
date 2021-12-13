@@ -22,6 +22,7 @@ import Modules.MektonCore.ExceptionTypes.InsufficientHealthException;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
 import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledCostValue;
 import Modules.MektonCore.StatsStuff.ScaledUnits.ScaledHitValue;
+import Utils.Logging;
 
 public class MekServo extends Servo
 {
@@ -205,6 +206,11 @@ public class MekServo extends Servo
 		panel.addOptionList("Servo type: ", ServoType.values(), servoType, t -> {servoType = t;});
 		panel.addOptionList("Armor type: ", ArmorType.values(), armorType, t -> {armorType = t;});
 		panel.addOptionList("Level of RAM: ", LevelRAM.values(), levelRAM, l -> {levelRAM = l;});
+		
+		panel.addSpinner("Sacrificed kills: ", 0, 0, (int) getMaxHealthBase().getValue(scale), v -> {
+			try {setSacrificedHealth(new ScaledHitValue(scale, v));}
+			catch (InsufficientHealthException e) {Logging.logException(e);}
+		});
 		
 		return panel;
 	}

@@ -4,11 +4,14 @@ package GameEngine.Editor;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.JList;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -68,6 +71,7 @@ public class EditorPanel extends JPanel
 */	}
 	
 	public interface EditFunction<T> {public void onEdit(T newValue);}
+	public interface ClickFunction {public void onClick();}
 	private void addControlRow(JComponent a, JComponent b)
 	{
 		a.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -106,9 +110,39 @@ public class EditorPanel extends JPanel
 	{
 		String[] optionLabels = new String[optionValues.length];
 		for (int i = 0; i < optionValues.length; ++i) optionLabels[i] = optionValues[i].name();
-		addOptionList(label, optionLabels, optionValues, initialValue.ordinal(), editFunction);
-		
+		addOptionList(label, optionLabels, optionValues, initialValue.ordinal(), editFunction);	
 	}
+	public void addSpinner(String label, int minimumValue, int defaultValue, int maximumValue, EditFunction<Integer> editFunction)
+	{
+		JSpinner spinner = new JSpinner();
+		spinner.setModel(new SpinnerNumberModel(defaultValue, minimumValue, maximumValue, 1));
+		spinner.addChangeListener(e -> {
+			editFunction.onEdit((Integer) spinner.getModel().getValue());
+			updateInfo();
+		});
+		editFunction.onEdit((Integer) spinner.getModel().getValue());
+		updateInfo();
+		
+		addControlRow(new JLabel(label), spinner);
+	}
+	public void addButton(String label, ClickFunction function)
+	{
+		JButton button = new JButton(label);
+		
+		button.addActionListener(e -> {function.onClick(); updateInfo();});
+		
+		addControlRow(new JLabel(label), button);
+	}
+	public void addButtonPair(String label1, String label2, ClickFunction function1, ClickFunction function2)
+	{
+		JButton button1 = new JButton(label1);
+		button1.addActionListener(e -> {function1.onClick(); updateInfo();});
+		JButton button2 = new JButton(label2);
+		button2.addActionListener(e -> {function2.onClick(); updateInfo();});
+		
+		addControlRow(button1, button2);
+	}
+	
 	
 	private static class EditableNode extends DefaultMutableTreeNode
 	{
@@ -151,7 +185,13 @@ public class EditorPanel extends JPanel
 		EditableNode node = new EditableNode(label, editable);
 		return node;
 	}
-	public void addHierarchicalList(String label, Object... objects)
+	public static interface HierarchicalListUpdateHandle {public void update(Object... objects);}
+	
+	/** Adds a hierarchical list.
+	 * 
+	 *  @return An update handle.
+	 */
+	public HierarchicalListUpdateHandle addHierarchicalList(String label, Object... objects)
 	{
 		JTree tree = new JTree();
 		MutableTreeNode rootNode = getNode(label, objects);
@@ -161,17 +201,35 @@ public class EditorPanel extends JPanel
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
 		splitPane.setLeftComponent(tree);
+		splitPane.setDividerLocation(0.5);
 		
 		tree.addTreeSelectionListener(e -> {
 			Object node = tree.getLastSelectedPathComponent();
+			if (node == null) return;
 			if (node.getClass() == EditableNode.class)
 			{
 				EditorPanel editorPanel = ((EditableNode) node).editorPanel();
 				splitPane.setRightComponent(editorPanel);
+				splitPane.setDividerLocation(0.5);
+				splitPane.setResizeWeight(0.5);
 			}
+			else if (node == rootNode)
+			{
+				splitPane.setRightComponent(null);
+				splitPane.setDividerLocation(1.0);
+				splitPane.setResizeWeight(1.0);
+			}
+			updateInfo();
 		});
-		
 		addControlRow(new JLabel(label), splitPane);
+		
+		return o -> 
+		{
+			MutableTreeNode rN = getNode(label, o);
+			DefaultTreeModel m = new DefaultTreeModel(rN);
+			tree.setModel(m);
+			tree.updateUI();
+		};
 	}
 	
 	public void setTitle(String title) {titleLabel.setText(title);}

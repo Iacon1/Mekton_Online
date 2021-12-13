@@ -6,9 +6,14 @@ package Modules.MektonCore.StatsStuff;
 
 import GameEngine.Editor.Editable;
 import GameEngine.Editor.EditorPanel;
+import Modules.MektonCore.Enums.ArmorType;
+import Modules.MektonCore.Enums.LevelRAM;
+import Modules.MektonCore.Enums.Scale;
+import Modules.MektonCore.Enums.ServoClass;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoSide;
 import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
 import Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.AdditiveSystem;
+import Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.Servos.MekServo;
 import Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.Servos.Servo;
 import Utils.IndexTable;
 import Utils.IndexTypesException;
@@ -113,7 +118,13 @@ public class AdditiveSystemList implements Editable
 	{
 		EditorPanel editorPanel = new EditorPanel("Additive System List");
 		
-		editorPanel.addHierarchicalList("additiveSystems", additiveSystems.toArray());
+		EditorPanel.HierarchicalListUpdateHandle handle = editorPanel.addHierarchicalList("additiveSystems", additiveSystems.toArray());
+		
+		editorPanel.addButton("New servo", () -> {
+			MekServo servo = new MekServo(Scale.mekton, ServoClass.mediumHeavy, ServoClass.mediumHeavy, ServoType.torso, ArmorType.standard, LevelRAM.none);
+			addServo(ServoType.torso, ServoSide.middle, servo);
+			handle.update(additiveSystems.toArray());
+		});
 		
 		return editorPanel;
 	}

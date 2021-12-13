@@ -38,11 +38,7 @@ public class EditorMainFrame extends JFrame
 		List<JPanel> panels = new ArrayList<JPanel>();
 		
 		panels.add(new ModulesPane());
-		MekServo servo1 = new MekServo(Scale.mekton, ServoClass.mediumHeavy, ServoClass.mediumHeavy, ServoType.head, ArmorType.standard, LevelRAM.none); // TODO testing only, remove later
-		MekServo servo2 = new MekServo(Scale.mekton, ServoClass.mediumHeavy, ServoClass.mediumHeavy, ServoType.torso, ArmorType.standard, LevelRAM.none); // TODO testing only, remove later
-		MekSheet mekSheet = new MekSheet();
-		mekSheet.addServo(ServoType.head, ServoSide.middle, servo1);
-		mekSheet.addServo(ServoType.torso, ServoSide.middle, servo2);
+		MekSheet mekSheet = new MekSheet(); // TODO test
 		panels.add(mekSheet.editorPanel());
 		
 		if (ModuleManager.getHighestOfType(EditorPopulatingModule.class) != null)
