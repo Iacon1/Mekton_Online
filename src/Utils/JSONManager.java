@@ -25,6 +25,10 @@ public final class JSONManager
 		}
 	}
 	
+	public static void invalidate() // Forces a reset of the Gson object
+	{
+		setup = false;
+	}
 	public static <C> String serializeJSON(C unserialized) // Serializes
 	{
 		setupIfNot();

@@ -25,6 +25,7 @@ public class MainScreen implements ThreadState<GameClientThread>
 	@Override
 	public void onEnter(GameClientThread parentThread)
 	{
+		JSONManager.invalidate();
 		parentThread.setContainer("main", new GameFrame());
 		parentThread.getContainer("main");
 		frameLoaded = false;
