@@ -1,36 +1,55 @@
 // By Iacon1
 // Created 11/27/2021
-// An implementation of Diffie-Hellman Key Exchange
+// Diffie-Hellman Key Exchange
 // Steps:
-// 1. Init
-// 2. Send them your initialMix
-// 3. Run finalMix with their initialMix
-// 4. Use giveKey on your thread
+// 1. Start
+// 2. Send them your publicComponent
+// 3. Run end with their publicComponent
+// https://www.programcreek.com/java-api-examples/?api=javax.crypto.KeyAgreement
+// https://stackoverflow.com/questions/10900643/how-can-i-construct-a-java-security-publickey-object-from-a-base64-encoded-strin
 
 package Modules.BaseModule;
 
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Random;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
 
+import javax.crypto.KeyAgreement;
+import javax.crypto.spec.DHParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import GameEngine.Net.ConnectionPairThread;
+import Utils.Logging;
 
 public final class DiffieHellman
 {
-	
+	private static final String algorithm = "DiffieHellman";
 	private static final int encodeRadix = 16; // Radix for encoding mixes to strings
 	private static final int keyLength = 16; // Key length in bytes
+
+	private String stringFromKey(PublicKey key)
+	{
+		return new BigInteger(key.getEncoded()).toString(encodeRadix);
+	}
+	private PublicKey keyFromString(String string)
+	{
+		try
+		{
+			byte[] bytes = new BigInteger(string, encodeRadix).toByteArray();
+			KeyFactory factory = KeyFactory.getInstance(algorithm);
+			X509EncodedKeySpec encodedKeySpec = new X509EncodedKeySpec(bytes);
+			return factory.generatePublic(encodedKeySpec);
+		}
+		catch (Exception e) {Logging.logException(e); return null;}
+	}
 	
-	private BigInteger modulus = null;
-	private BigInteger base = null; // Has to be a primitive root modulo [modulus].
-	private int maxSecret = 0; // b^(s'*s) < 2^(2^32) due to limitations of Java, so s^2 < logb(2) * 2^32 so s < sqrt(logb(2)) * 2^16
-	/** Inits modulus & base */
-	private void initPair() 
+	private DHParameterSpec getParams() 
 	{
 		// https://www.rfc-editor.org/rfc/rfc3526
-/*		modulus = new BigInteger(
+		BigInteger modulus = new BigInteger(
 				"FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD1" +
 				"29024E088A67CC74020BBEA63B139B22514A08798E3404DD" +
 				"EF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245" +
@@ -42,57 +61,47 @@ public final class DiffieHellman
 				"E39E772C180E86039B2783A2EC07A28FB5C55DF06F4C52C9" +
 				"DE2BCBF6955817183995497CEA956AE515D2261898FA0510" +
 				"15728E5A8AACAA68FFFFFFFFFFFFFFFF", 16);
-		base = new BigInteger("2", 16);
-*/   
-		// https://www.rfc-editor.org/rfc/rfc2409#section-6
-/*		modulus = new BigInteger(
-				"FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD1" +
-				"29024E088A67CC74020BBEA63B139B22514A08798E3404DD" +
-				"EF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245" +
-				"E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7ED" +
-				"EE386BFB5A899FA5AE9F24117C4B1FE649286651ECE65381" +
-				"FFFFFFFFFFFFFFFF", 16);
-		base = new BigInteger("2", 16); 
-*/
-		modulus = new BigInteger("2").pow(130).subtract(new BigInteger("5")); // https://primes.utm.edu/lists/2small/100bit.html; We need at least 128 bits of encrypting
-		base = new BigInteger("6"); // https://www.wolframalpha.com/widgets/view.jsp?id=ef51422db7db201ebc03c8800f41ba99
-		maxSecret = (int) (Math.sqrt(Math.log(2) / Math.log(base.doubleValue())) * Math.pow(2, 16));
+		BigInteger base = new BigInteger("2", 16);
+		
+		return new DHParameterSpec(modulus, base);
 	}
 	
-	private transient int secret = 0; // Transient for security
-	
+	private String publicComponent = null;
+	private KeyAgreement keyAgreement = null;
+
 	/** Generates the secret.
 	 * 
 	 */
-	public void generateSecret()
+	public void start()
 	{
-		Random random = new Random();
-		random.setSeed(random.nextInt());
-//		secret = new BigInteger(bits, random);
-		if (modulus == null) initPair();
-		secret = Math.abs(random.nextInt(maxSecret));
+		KeyPairGenerator keyGen;
+		try
+		{
+			keyGen = KeyPairGenerator.getInstance(algorithm);
+			DHParameterSpec params = getParams();
+			keyGen.initialize(params);
+			KeyPair keyPair = keyGen.generateKeyPair();
+		
+			keyAgreement = KeyAgreement.getInstance(algorithm);
+			keyAgreement.init(keyPair.getPrivate());
+			
+			publicComponent = stringFromKey(keyPair.getPublic());
+		}
+		catch (Exception e) {Logging.logException(e);}
 	}
 	
-	/** Generates a mix based off the secret.
-	 * 
-	 */
-	public String initialMix() // b ^ s % m
+	public String getPublicComponent() {return publicComponent;}
+	public void end(String component, ConnectionPairThread thread)
 	{
-		if (modulus == null) initPair();
-		return base.pow(secret).mod(modulus).toString(encodeRadix);
-	}
-	
-	/** Generates the key based off the other side's mix.
-	 * 
-	 */
-	public void finalMix(String mixString, ConnectionPairThread thread)
-	{
-		if (mixString == null) return; // TODO why does this happen?
-		if (modulus == null) initPair();
+		try
+		{
+			if (component == null) return; // TODO why does this happen?
+
+			keyAgreement.doPhase(keyFromString(component), true);
 		
-		BigInteger mix = new BigInteger(mixString, encodeRadix);
-		
-		BigInteger finalMix = mix.pow(secret).mod(modulus); // b ^ (s' * s) % m
-		thread.setKey(new SecretKeySpec(Arrays.copyOf(finalMix.toByteArray(), keyLength), "AES"));
+			byte[] secret = keyAgreement.generateSecret();
+			thread.setKey(new SecretKeySpec(secret, 0, keyLength, "AES"));
+		}
+		catch (Exception e) {Logging.logException(e);}
 	}
 }

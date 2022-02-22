@@ -11,17 +11,24 @@ import Utils.MiscUtils;
 
 public class CheckServer implements ThreadState<GameClientThread>
 {
+	private enum Result
+	{
+		waiting,
+		login,
+		bad,
+		done
+	}
 	private StateFactory factory;
-	private volatile int result; // 0 - Waiting for result; 1 - Login; 2 - Bad Server; 3 - Done
+	private volatile Result result; // 0 - Waiting for result; 1 - Login; 2 - Bad Server; 3 - Done
 	private DiffieHellman diffieHellman;
 	
 	public CheckServer(StateFactory factory)
 	{
 		this.factory = factory;
 		diffieHellman = new DiffieHellman();
-		diffieHellman.generateSecret();
+		diffieHellman.start();
 		
-		result = 0;
+		result = Result.waiting;
 	}
 	
 	@Override
@@ -34,8 +41,8 @@ public class CheckServer implements ThreadState<GameClientThread>
 		
 		if (packet == null)
 		{
-			result = 2;
-			while (result != 3);
+			result = Result.login;
+			while (result != Result.done);
 			parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(BadServer.class)));
 		}
 		else
@@ -44,14 +51,14 @@ public class CheckServer implements ThreadState<GameClientThread>
 			
 			if (parentThread.getSocket() == null || !packet.version.equals(MiscUtils.getVersion()))
 			{
-				result = 2;
-				while (result != 3);
+				result = Result.bad;
+				while (result != Result.done);
 				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(BadServer.class)));
 			}
 			else
 			{
-				result = 1;
-				while (result != 3);
+				result = Result.login;
+				while (result != Result.done);
 				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class)));
 			}
 		}		
@@ -59,22 +66,22 @@ public class CheckServer implements ThreadState<GameClientThread>
 	@Override
 	public String processOutputTrio(GameClientThread parentThread) // TODO implement encryption
 	{
-		while (result == 0);
+		while (result == Result.waiting);
 		
-		if (result == 1) // We decided to go forward!
+		if (result == Result.login) // We decided to go forward!
 		{
-			result = 3;
+			result = Result.done;
 			ClientInfoPacket packet = new ClientInfoPacket();
 			packet.version = MiscUtils.getVersion();
-			packet.mix = diffieHellman.initialMix();
+			packet.mix = diffieHellman.getPublicComponent();
 			return JSONManager.serializeJSON(packet);
 		}
-		else if (result == 2)
+		else if (result == Result.bad)
 		{
-			result = 3;
+			result = Result.done;
 			return null; // We have nothing to say to them
 		}
-		else if (result == 3) return null;
+		else if (result == Result.done) return null;
 		else return null; // ???
 	}
 	
@@ -85,7 +92,7 @@ public class CheckServer implements ThreadState<GameClientThread>
 		
 		if (packet == null)
 		{
-			result = 2;
+			result = Result.bad;
 			parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(BadServer.class)));
 		}
 		else
@@ -94,13 +101,14 @@ public class CheckServer implements ThreadState<GameClientThread>
 			
 			if (parentThread.getSocket() == null || !packet.version.equals(MiscUtils.getVersion()))
 			{
-				result = 2;
+				result = Result.bad;
 				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(BadServer.class)));
 			}
 			else
 			{
-				result = 1;
-				diffieHellman.finalMix(packet.mix, parentThread);
+				result = Result.login;
+				diffieHellman.start();
+				diffieHellman.end(packet.mix, parentThread);
 				
 				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class)));
 			}
@@ -109,23 +117,23 @@ public class CheckServer implements ThreadState<GameClientThread>
 	@Override
 	public String processOutputMono(GameClientThread parentThread)
 	{
-		if (result == 0) return null;
+		if (result == Result.waiting) return null;
 		
-		if (result == 1) // We decided to go forward!
+		if (result == Result.login) // We decided to go forward!
 		{
-			result = 3;
+			result = Result.done;
 			ClientInfoPacket packet = new ClientInfoPacket();
 			packet.version = MiscUtils.getVersion();
-			packet.mix = diffieHellman.initialMix();
+			packet.mix = diffieHellman.getPublicComponent();
 			
 			return JSONManager.serializeJSON(packet);
 		}
-		else if (result == 2)
+		else if (result == Result.bad)
 		{
-			result = 3;
+			result = Result.done;
 			return null; // We have nothing to say to them
 		}
-		else if (result == 3) return null;
+		else if (result == Result.done) return null;
 		else return null; // ???
 	}
 	

@@ -25,7 +25,7 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 	{
 		this.factory = factory;
 		diffieHellman = new DiffieHellman();
-		diffieHellman.generateSecret();
+		diffieHellman.start();
 		sent = false;
 	}
 	
@@ -46,7 +46,7 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 			else
 			{
 				Logging.logNotice("Client " + parentThread.getSocket().getInetAddress() + " has connected.");
-				diffieHellman.finalMix(packet.mix, parentThread);
+				diffieHellman.end(packet.mix, parentThread);
 				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class))); // They're good, let's login	
 			}
 		}
@@ -60,7 +60,7 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 			packet.serverName = parentThread.getParent().getName();
 			packet.version = MiscUtils.getVersion();
 			packet.resourceFolder = "Default"; // TODO Set this
-			packet.mix = diffieHellman.initialMix();
+			packet.mix = diffieHellman.getPublicComponent();
 			
 			if (parentThread.getParent().currentPlayers() >= parentThread.getParent().maxPlayers()) // We're full
 			{
