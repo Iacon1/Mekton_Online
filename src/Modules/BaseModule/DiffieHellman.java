@@ -23,6 +23,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import GameEngine.Net.ConnectionPairThread;
 import Utils.Logging;
+import Utils.StringCipher;
 
 public final class DiffieHellman
 {

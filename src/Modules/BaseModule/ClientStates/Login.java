@@ -11,6 +11,7 @@ import Modules.BaseModule.ClientFrames.LoginDialog;
 import Modules.BaseModule.PacketTypes.LoginFeedbackPacket;
 import Modules.BaseModule.PacketTypes.LoginPacket;
 import Utils.JSONManager;
+import Utils.Logging;
 import Utils.MiscUtils;
 
 public class Login implements ThreadState<GameClientThread>
