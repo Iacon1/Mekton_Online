@@ -60,7 +60,10 @@ public abstract class ConnectionPairThread extends Thread
 		try
 		{
 			if (inStream.available() == 0) return null;
-			byte[] cipherBytes = inStream.readNBytes(inStream.available());
+			
+			int length = inStream.readInt();
+			byte[] cipherBytes = inStream.readNBytes(length);
+				
 			return cipher.decrypt(cipherBytes);
 		}
 		catch (EOFException e) {close(); return null;}
@@ -81,6 +84,7 @@ public abstract class ConnectionPairThread extends Thread
 		try 
 		{
 			byte[] cipherBytes = cipher.encrypt(output);
+			outStream.writeInt(cipherBytes.length);
 			outStream.write(cipherBytes);
 		}
 		catch (IOException e) {close();}
