@@ -70,7 +70,7 @@ public final class DiffieHellman
 	private String publicComponent = null;
 	private KeyAgreement keyAgreement = null;
 
-	/** Generates the secret.
+	/** Starts the key-generating process.
 	 * 
 	 */
 	public void start()
@@ -90,15 +90,21 @@ public final class DiffieHellman
 		}
 		catch (Exception e) {Logging.logException(e);}
 	}
-	
-	public String getPublicComponent() {return publicComponent;}
-	public void end(String component, ConnectionPairThread thread)
+	/** Returns the public mix of the base, modulus, and secret.
+	 *	@return The public mix.
+	 */
+	public String getPublicMix() {return publicComponent;}
+	/** Ends the key-generating process, giving the thread an encryption key.
+	 *	@param mix The other party's public mix.
+	 *	@param thread The thread to give the resulting key to.
+	 */
+	public void end(String mix, ConnectionPairThread thread)
 	{
 		try
 		{
-			if (component == null) return; // TODO why does this happen?
+			if (mix == null) return; // TODO why does this happen?
 
-			keyAgreement.doPhase(keyFromString(component), true);
+			keyAgreement.doPhase(keyFromString(mix), true);
 		
 			byte[] secret = keyAgreement.generateSecret();
 			thread.setKey(new SecretKeySpec(secret, 0, keyLength, "AES"));

@@ -60,7 +60,7 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 			packet.serverName = parentThread.getParent().getName();
 			packet.version = MiscUtils.getVersion();
 			packet.resourceFolder = "Default"; // TODO Set this
-			packet.mix = diffieHellman.getPublicComponent();
+			packet.mix = diffieHellman.getPublicMix();
 			
 			if (parentThread.getParent().currentPlayers() >= parentThread.getParent().maxPlayers()) // We're full
 			{

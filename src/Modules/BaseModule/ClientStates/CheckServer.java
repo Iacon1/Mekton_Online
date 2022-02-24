@@ -73,7 +73,7 @@ public class CheckServer implements ThreadState<GameClientThread>
 			result = Result.done;
 			ClientInfoPacket packet = new ClientInfoPacket();
 			packet.version = MiscUtils.getVersion();
-			packet.mix = diffieHellman.getPublicComponent();
+			packet.mix = diffieHellman.getPublicMix();
 			return JSONManager.serializeJSON(packet);
 		}
 		else if (result == Result.bad)
@@ -124,7 +124,7 @@ public class CheckServer implements ThreadState<GameClientThread>
 			result = Result.done;
 			ClientInfoPacket packet = new ClientInfoPacket();
 			packet.version = MiscUtils.getVersion();
-			packet.mix = diffieHellman.getPublicComponent();
+			packet.mix = diffieHellman.getPublicMix();
 			
 			return JSONManager.serializeJSON(packet);
 		}
