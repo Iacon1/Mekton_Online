@@ -6,53 +6,53 @@ package GameEngine.EntityTypes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import GameEngine.ScreenCanvas;
 import GameEngine.Server.Account;
+import Utils.GSONConfig.TransSerializables.CRMHolder;
 import GameEngine.GameInfo;
 import GameEngine.Point2D;
 
-
-public abstract class GameEntity
+public abstract class GameEntity //extends CRMHolder<GameEntity, Behavior>
 {
-	private int parentID; // Parent object index; -1 means none
+	private int parentId; // Parent object index; -1 means none
 	private int ourId;
 	protected List<Integer> childrenIds; // Children object indices
-
+	protected Map<Class<? extends Behavior>, Behavior> behaviors; // Behaviors.
+	
 	private int possessorID;
-	
-	public boolean isPossessee()
-	{
-		return ourId == GameInfo.getPossessee();
-	}
-	public int getId()
-	{
-		return ourId;
-	}
-	
-	public GameEntity()
-	{
-		if (GameInfo.getWorld() != null) ourId = GameInfo.getWorld().addEntity(this);
-		// This seems dumb, but note if it's ever null then it will likely be replaced by a new world that already contains us
-		parentID = -1;
-		possessorID = -1;
-		childrenIds = new ArrayList<Integer>();
-	}
 	
 	public static GameEntity getEntity(int id)
 	{
 		return GameInfo.getWorld().getEntity(id);
 	}
+
+	public GameEntity()
+	{
+		if (GameInfo.getWorld() != null) ourId = GameInfo.getWorld().addEntity(this);
+		// This seems dumb, but note if it's ever null then it will likely be replaced by a new world that already contains us
+		parentId = -1;
+		possessorID = -1;
+		childrenIds = new ArrayList<Integer>();
+	}
+	
+	public String getName() {return this.getClass().getName() + " (ID " + ourId + ")";}
+
+	
+	public boolean isPossessee() {return ourId == GameInfo.getPossessee();}
+	public int getId() {return ourId;}		
+
+//	protected Map<?, Behavior> getMap() {return behaviors;}
 	
 	public GameEntity getParent() // Gets parent object; Returns null if none
 	{
-		if (parentID == -1) return null;
-		else return getEntity(parentID);
-	}
-	
+		if (parentId == -1) return null;
+		else return getEntity(parentId);
+	}	
 	public void removeChild(GameEntity child, boolean recurse)
 	{
-		child.parentID = -1;
+		child.parentId = -1;
 		if (recurse) child.clearChildren(true);
 		this.childrenIds.remove(Integer.valueOf(child.getId()));
 	}
@@ -62,9 +62,9 @@ public abstract class GameEntity
 	}
 	public void addChild(GameEntity child) // Adds a new child, replacing its old parent if needed
 	{
-		if (child.parentID != -1)
+		if (child.parentId != -1)
 			child.getParent().removeChild(child, false);
-		child.parentID = this.getId();
+		child.parentId = this.getId();
 		childrenIds.add(child.getId());
 	}
 	public GameEntity getChild(int i) // Gets child #i
@@ -101,13 +101,25 @@ public abstract class GameEntity
 	{
 		return possessorID;
 	}
-	public abstract String getName(); // Gets object name
-	public abstract void update(); // Updates regularly
-	/**
-	* Draws to canvas.
-	* <p>
-	* 
-	* @param  canvas Canvas to draw to.
-	*/
-	public abstract void render(ScreenCanvas canvas, Point2D camera);
+
+
+	public void addBehavior(Behavior behavior)
+	{
+		behaviors.put(behavior.getClass(), behavior);
+		behavior.setParent(this);
+	}
+	public Behavior getBehavior(Class<? extends Behavior> behaviorClass)
+	{
+		return behaviors.get(behaviorClass);
+	}
+
+	/** Updates the object.
+	 * 
+	 */
+	public void update() {for (Behavior behavior : behaviors.values()) behavior.update();}
+	/** Draws to canvas.
+	 * 
+	 * @param  canvas Canvas to draw to.
+	 */
+	public void render(ScreenCanvas canvas, Point2D camera) {for (Behavior behavior : behaviors.values()) behavior.render(canvas, camera);}
 }
