@@ -26,7 +26,6 @@ public final class ConfigManager
 		protected int checkCapI = 60; // 0 - None
 		protected int checkCapO = 60; // 0 - None
 		protected int checkCapM = 60; // 0 - None
-		protected boolean mono = true;
 	}
 	private static Config config;
 	
@@ -66,11 +65,7 @@ public final class ConfigManager
 	{
 		return config.checkCapM;
 	}
-	
-	public static boolean getMonoThread()
-	{
-		return config.mono;
-	}
+
 	public static int getScreenWidth() // Width of screen in pixels
 	{
 		return config.screenWidth;
