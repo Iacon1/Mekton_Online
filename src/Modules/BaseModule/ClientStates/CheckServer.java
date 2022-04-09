@@ -35,58 +35,7 @@ public class CheckServer implements ThreadState<GameClientThread>
 	public void onEnter(GameClientThread parentThread) {parentThread.setEncrypt(false);}
 	
 	@Override
-	public void processInputTrio(String input, GameClientThread parentThread) // TODO implement encryption
-	{
-		ServerInfoPacket packet = JSONManager.deserializeJSON(input, ServerInfoPacket.class);
-		
-		if (packet == null)
-		{
-			result = Result.login;
-			while (result != Result.done);
-			parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(BadServer.class)));
-		}
-		else
-		{
-			parentThread.setInfo(packet.getInfo());
-			
-			if (parentThread.getSocket() == null || !packet.version.equals(MiscUtils.getVersion()))
-			{
-				result = Result.bad;
-				while (result != Result.done);
-				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(BadServer.class)));
-			}
-			else
-			{
-				result = Result.login;
-				while (result != Result.done);
-				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class)));
-			}
-		}		
-	}	
-	@Override
-	public String processOutputTrio(GameClientThread parentThread) // TODO implement encryption
-	{
-		while (result == Result.waiting);
-		
-		if (result == Result.login) // We decided to go forward!
-		{
-			result = Result.done;
-			ClientInfoPacket packet = new ClientInfoPacket();
-			packet.version = MiscUtils.getVersion();
-			packet.mix = diffieHellman.getPublicMix();
-			return JSONManager.serializeJSON(packet);
-		}
-		else if (result == Result.bad)
-		{
-			result = Result.done;
-			return null; // We have nothing to say to them
-		}
-		else if (result == Result.done) return null;
-		else return null; // ???
-	}
-	
-	@Override
-	public void processInputMono(String input, GameClientThread parentThread)
+	public void processInput(String input, GameClientThread parentThread)
 	{
 		ServerInfoPacket packet = JSONManager.deserializeJSON(input, ServerInfoPacket.class);
 		
@@ -115,7 +64,7 @@ public class CheckServer implements ThreadState<GameClientThread>
 		}
 	}
 	@Override
-	public String processOutputMono(GameClientThread parentThread)
+	public String processOutput(GameClientThread parentThread)
 	{
 		if (result == Result.waiting) return null;
 		

@@ -30,8 +30,9 @@ public class Login implements ThreadState<GameClientThread>
 		LoginDialog.main(parentThread);
 		parentThread.setEncrypt(true);
 	}
-
-	public void processInput(String input, GameClientThread parentThread, boolean mono)
+	
+	@Override
+	public void processInput(String input, GameClientThread parentThread)
 	{
 		LoginFeedbackPacket packet = JSONManager.deserializeJSON(input, LoginFeedbackPacket.class);
 		
@@ -49,8 +50,8 @@ public class Login implements ThreadState<GameClientThread>
 			dialog.onFail("Login failed.");
 		}
 	}
-	
-	public String processOutput(GameClientThread parentThread, boolean mono)
+	@Override
+	public String processOutput(GameClientThread parentThread)
 	{
 		LoginDialog dialog = (LoginDialog) parentThread.getContainer("login");
 		if (dialog.isVisible() == false && !successful)
@@ -61,16 +62,6 @@ public class Login implements ThreadState<GameClientThread>
 		else return null;
 	}
 
-	@Override
-	public void processInputTrio(String input, GameClientThread parentThread) {processInput(input, parentThread, false);}
-	@Override
-	public String processOutputTrio(GameClientThread parentThread) {return processOutput(parentThread, false);}
-	
-	@Override
-	public void processInputMono(String input, GameClientThread parentThread) {processInput(input, parentThread, true);}
-	@Override
-	public String processOutputMono(GameClientThread parentThread) {return processOutput(parentThread, true);}
-	
 	@Override
 	public StateFactory getFactory()
 	{

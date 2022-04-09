@@ -20,7 +20,6 @@ import GameEngine.Configurables.ConfigManager;
 
 public abstract class ConnectionPairThread extends Thread
 {
-	protected boolean mono; // true = Mono-thread, false = tri-thread
 	private Thread inThread; // Thread for getting & processing input
 	private Thread outThread; // Thread for processing & sending output
 	
@@ -30,8 +29,6 @@ public abstract class ConnectionPairThread extends Thread
 	protected Socket socket; // Socket for communicating
 	
 	protected volatile boolean running; // Main
-	protected volatile boolean runningI; // Input
-	protected volatile boolean runningO; // Output
 	
 	private static String noMsg = "NULL"; // For maintaining a connection during silence
 	
@@ -97,7 +94,7 @@ public abstract class ConnectionPairThread extends Thread
 	
 	private boolean inputRun(boolean loop) // Run by inThread; Returns false if no input was gotten
 	{
-		while (running && runningI)
+		while (running)
 		{
 			
 			String input = null;
@@ -124,7 +121,7 @@ public abstract class ConnectionPairThread extends Thread
 	}
 	private void outputRun(boolean loop) // Run by outThread
 	{
-		while (running && runningO)
+		while (running)
 		{			
 			String output = null;
 			try {output = processOutput();}
@@ -177,15 +174,11 @@ public abstract class ConnectionPairThread extends Thread
 	}
 	public ConnectionPairThread()
 	{
-		mono = ConfigManager.getMonoThread();
-		if (mono) setName("MtO Connection Pair Thread (" + getId() + ")");
-		else setName("MtO Connection Pair Main Thread (" + getId() + ")");
+		setName("MtO Connection Pair Thread (" + getId() + ")");
 	}
 	public ConnectionPairThread(Socket socket)
 	{
-		mono = ConfigManager.getMonoThread();
-		if (mono) setName("MtO Connection Pair Thread (" + getId() + ")");
-		else setName("MtO Connection Pair Main Thread (" + getId() + ")");
+		setName("MtO Connection Pair Thread (" + getId() + ")");
 		setSocket(socket);
 	}
 	
@@ -193,63 +186,30 @@ public abstract class ConnectionPairThread extends Thread
 	{
 		if (socket == null || socket.isClosed()) close(); // SHUT IT DOWN!
 		
-		if (mono)
+		SimpleTimer timer = new SimpleTimer();
+		timer.start();
+		inputRun(false);
+		outputRun(false);
+		if (ConfigManager.getCheckCapM() != 0)
 		{
-			SimpleTimer timer = new SimpleTimer();
-			timer.start();
-			if (runningI) inputRun(false);
-			if (runningO) outputRun(false);
-			if (ConfigManager.getCheckCapM() != 0)
+			try
 			{
-				try
-				{
-					Thread.sleep(Math.max(0, 1000 / ConfigManager.getCheckCapM() - timer.stopTime())); // Accounts for lag in an effort to maintain consistent framerate.
-				}
-				catch (Exception e) {Logging.logException(e);}
+				Thread.sleep(Math.max(0, 1000 / ConfigManager.getCheckCapM() - timer.stopTime())); // Accounts for lag in an effort to maintain consistent framerate.
 			}
-			else timer.stopTime();
+			catch (Exception e) {Logging.logException(e);}
 		}
-		else
-		{
-			if ((inThread == null || !inThread.isAlive()) && runningI)
-			{
-				inThread = new Thread(() ->  {inputRun(true);});
-				inThread.setName("MtO Connection Pair Input Thread (" + getId() + ")");
-				inThread.start();
-			}
-			if ((outThread == null || !outThread.isAlive()) && runningO)
-			{
-				outThread = new Thread(() ->  {outputRun(true);});
-				outThread.setName("MtO Connection Pair Output Thread (" + getId() + ")");
-				outThread.start();
-			}
-		}
+		else timer.stopTime();
 	}
+	
 	public void run() // Loop
 	{
 		running = true;
-		runningI = true;
-		runningO = true;
 		while (running) runFunc();
 	}
-	
-	protected boolean isInputRunning() // Returns whether it *should* be alive *or* whether it *is* alive
-	{
-		if (mono) return false;
-		if (inThread == null) return runningI;
-		else return runningI || inThread.isAlive();
-	}
-	protected boolean isOutputRunning() // Returns whether it *should* be alive *or* whether it *is* alive
-	{
-		if (mono) return false;
-		if (outThread == null) return runningO;
-		else return runningO || outThread.isAlive();
-	}
+
 	public void close()
 	{
 		running = false;
-		runningI = false;
-		runningO = false;
 		
 		try {if (socket == null || socket.isClosed()) socket.close();}
 		catch (Exception e) {Logging.logException(e);}

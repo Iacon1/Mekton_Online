@@ -29,7 +29,8 @@ public class Login implements ThreadState<ClientHandlerThread>
 	@Override
 	public void onEnter(ClientHandlerThread parentThread) {parentThread.setEncrypt(true);}
 
-	public void processInput(String input, ClientHandlerThread parentThread, boolean mono)
+	@Override
+	public void processInput(String input, ClientHandlerThread parentThread)
 	{
 		if (send) return; // Don't take more packets while still giving feedback on one
 		
@@ -66,7 +67,8 @@ public class Login implements ThreadState<ClientHandlerThread>
 		send = true;
 	}
 	
-	public String processOutput(ClientHandlerThread parentThread, boolean mono)
+	@Override
+	public String processOutput(ClientHandlerThread parentThread)
 	{
 		if (send)
 		{
@@ -76,16 +78,6 @@ public class Login implements ThreadState<ClientHandlerThread>
 		}
 		else return null;
 	}
-
-	@Override
-	public void processInputTrio(String input, ClientHandlerThread parentThread) {processInput(input, parentThread, false);}
-	@Override
-	public String processOutputTrio(ClientHandlerThread parentThread) {return processOutput(parentThread, false);}
-	
-	@Override
-	public void processInputMono(String input, ClientHandlerThread parentThread) {processInput(input, parentThread, true);}
-	@Override
-	public String processOutputMono(ClientHandlerThread parentThread) {return processOutput(parentThread, true);}
 	
 	@Override
 	public StateFactory getFactory()

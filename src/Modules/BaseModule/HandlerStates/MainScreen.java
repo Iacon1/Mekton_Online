@@ -23,28 +23,20 @@ public class MainScreen implements ThreadState<ClientHandlerThread>
 	@Override
 	public void onEnter(ClientHandlerThread parentThread) {}
 
-	public void processInput(String input, ClientHandlerThread parentThread, boolean mono)
+	@Override
+	public void processInput(String input, ClientHandlerThread parentThread)
 	{
 		if (input != null)
 		{
 			parentThread.getParent().runCommand(parentThread.getAccount().username, input);
 		}
 	}
-	public String processOutput(ClientHandlerThread parentThread, boolean mono)
+	@Override
+	public String processOutput(ClientHandlerThread parentThread)
 	{
 		GameDataPacket packet = new GameDataPacket(parentThread.getAccount());
 		return JSONManager.serializeJSON(packet);
 	}
-
-	@Override
-	public void processInputTrio(String input, ClientHandlerThread parentThread) {processInput(input, parentThread, false);}
-	@Override
-	public String processOutputTrio(ClientHandlerThread parentThread) {return processOutput(parentThread, false);}
-	
-	@Override
-	public void processInputMono(String input, ClientHandlerThread parentThread) {processInput(input, parentThread, true);}
-	@Override
-	public String processOutputMono(ClientHandlerThread parentThread) {return processOutput(parentThread, true);}
 	
 	@Override
 	public StateFactory getFactory()

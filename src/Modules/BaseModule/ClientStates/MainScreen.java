@@ -30,8 +30,8 @@ public class MainScreen implements ThreadState<GameClientThread>
 		parentThread.getContainer("main");
 		frameLoaded = false;
 	}
-
-	public void processInput(String input, GameClientThread parentThread, boolean mono)
+	@Override
+	public void processInput(String input, GameClientThread parentThread)
 	{
 		GameDataPacket packet = JSONManager.deserializeJSON(input, GameDataPacket.class);
 		if (packet == null) return;
@@ -44,7 +44,8 @@ public class MainScreen implements ThreadState<GameClientThread>
 		
 		frame.updateUIStuff();
 	}
-	public String processOutput(GameClientThread parentThread, boolean mono)
+	@Override
+	public String processOutput(GameClientThread parentThread)
 	{
 		String input = GameInfo.getCommand();
 		if (input != null) // We got input
@@ -52,16 +53,6 @@ public class MainScreen implements ThreadState<GameClientThread>
 		return null;
 	}
 
-	@Override
-	public void processInputTrio(String input, GameClientThread parentThread) {processInput(input, parentThread, false);}
-	@Override
-	public String processOutputTrio(GameClientThread parentThread) {return processOutput(parentThread, false);}
-	
-	@Override
-	public void processInputMono(String input, GameClientThread parentThread) {processInput(input, parentThread, true);}
-	@Override
-	public String processOutputMono(GameClientThread parentThread) {return processOutput(parentThread, true);}
-	
 	@Override
 	public StateFactory getFactory()
 	{

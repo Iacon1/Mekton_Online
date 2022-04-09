@@ -32,7 +32,8 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 	@Override
 	public void onEnter(ClientHandlerThread parentThread) {parentThread.setEncrypt(false);}
 
-	public void processInput(String input, ClientHandlerThread parentThread, boolean mono)
+	@Override
+	public void processInput(String input, ClientHandlerThread parentThread)
 	{
 		if (sent)
 		{
@@ -51,8 +52,8 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 			}
 		}
 	}
-
-	public String processOutput(ClientHandlerThread parentThread, boolean mono)
+	@Override
+	public String processOutput(ClientHandlerThread parentThread)
 	{
 		if (!sent)
 		{
@@ -76,16 +77,6 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 		else return null; // We have nothing to say to them
 	}
 
-	@Override
-	public void processInputTrio(String input, ClientHandlerThread parentThread) {processInput(input, parentThread, false);}
-	@Override
-	public String processOutputTrio(ClientHandlerThread parentThread) {return processOutput(parentThread, false);}
-	
-	@Override
-	public void processInputMono(String input, ClientHandlerThread parentThread) {processInput(input, parentThread, true);}
-	@Override
-	public String processOutputMono(ClientHandlerThread parentThread) {return processOutput(parentThread, true);}
-	
 	@Override
 	public StateFactory getFactory()
 	{

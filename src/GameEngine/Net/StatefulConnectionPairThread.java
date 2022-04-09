@@ -22,14 +22,8 @@ public abstract class StatefulConnectionPairThread extends ConnectionPairThread
 	}
 	public void changeState() // Changes the state
 	{
-		runningI = false;
-		runningO = false;
-		while (isInputRunning());
-		while (isOutputRunning());
 		currentState = nextState;
 		currentState.onEnter(this);
-		runningI = true;
-		runningO = true;
 	}
 
 	public ThreadState getCurrentState()
@@ -49,16 +43,8 @@ public abstract class StatefulConnectionPairThread extends ConnectionPairThread
 	}
 
 	@Override
-	public void processInput(String input)
-	{
-		if (mono) currentState.processInputMono(input, this);
-		else currentState.processInputTrio(input, this);
-	}
+	public void processInput(String input) {currentState.processInput(input, this);}
 
 	@Override
-	public String processOutput()
-	{
-		if (mono) return currentState.processOutputMono(this);
-		else return currentState.processOutputTrio(this);
-	}
+	public String processOutput() {return currentState.processOutput(this);}
 }
