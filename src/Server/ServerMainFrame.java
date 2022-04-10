@@ -265,7 +265,7 @@ public class ServerMainFrame extends JFrame
 		overviewPanel.setLayout(sl_overviewPanel);
 		initObjectsTree();
 		
-		timer.schedule(new UpdateTask(), ConfigManager.getFrameCap(), ConfigManager.getFrameCap());
+		timer.schedule(new UpdateTask(), ConfigManager.getFramerateCap(), ConfigManager.getFramerateCap());
 		
 		pack();
 	}

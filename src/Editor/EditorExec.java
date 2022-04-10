@@ -31,7 +31,6 @@ public final class EditorExec
 		{
 			GameInfo.setServerPack("Default");
 			ModuleManager.init();
-			ConfigManager.init();
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			GetPackDialog.main(null);
 		}

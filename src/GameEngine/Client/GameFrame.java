@@ -40,13 +40,10 @@ public class GameFrame extends JFrame
 		float scaleY = getHeight() / ConfigManager.getScreenHeight();
 		if (scaleY < 1) scaleY = 1;
 		
-		if (ConfigManager.maintainRatio())
-		{
-			if (getWidth() >= getHeight()) // wider than tall
-				scaleY = scaleX; // Heighten to match 
-			else // Taller than wide
-				scaleX = scaleY; // Lengthen to match
-		}
+		if (getWidth() >= getHeight()) // wider than tall
+			scaleY = scaleX; // Heighten to match 
+		else // Taller than wide
+			scaleX = scaleY; // Lengthen to match
 
 		canvas.setScale(scaleX, scaleY);
 		int newResX = (int) (ConfigManager.getScreenWidth() * scaleX);

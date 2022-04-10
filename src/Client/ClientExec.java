@@ -34,7 +34,6 @@ public class ClientExec
 		{
 			GameInfo.setServerPack("Default");
 			ModuleManager.init();
-			ConfigManager.init();
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			GetServerFrame.main(null);
 			

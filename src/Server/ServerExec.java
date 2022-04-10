@@ -18,12 +18,10 @@ public class ServerExec
 
 	public static void main(String[] args)
 	{
-//		Logging.setLogger(new DebugLogger());
 		Logging.setLogger(new ServerLogger());
 		
 		try
 		{
-			ConfigManager.init();
 			GameInfo.setServerPack("Default");
 			ModuleManager.init();
 			JSONManager.invalidate();

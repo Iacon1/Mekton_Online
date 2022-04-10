@@ -110,9 +110,9 @@ public abstract class ConnectionPairThread extends Thread
 			try {processInput(input);}
 			catch (Exception e) {Logging.logException(e);}
 
-			if (loop && ConfigManager.getCheckCapI() != 0)
+			if (loop && ConfigManager.getNetrateCap() != 0)
 			{
-				try {Thread.sleep(1000 / ConfigManager.getCheckCapI());}
+				try {Thread.sleep(1000 / ConfigManager.getNetrateCap());}
 				catch (Exception e) {Logging.logException(e);}
 			}
 			else if (!loop) return true;
@@ -133,9 +133,9 @@ public abstract class ConnectionPairThread extends Thread
 				else sendOutputEncrypted(output);
 			}
 			
-			if (loop && ConfigManager.getCheckCapO() != 0) 
+			if (loop && ConfigManager.getNetrateCap() != 0) 
 			{
-				try {Thread.sleep(1000 / ConfigManager.getCheckCapO());}
+				try {Thread.sleep(1000 / ConfigManager.getNetrateCap());}
 				catch (Exception e) {Logging.logException(e);}
 			}
 			else if (!loop) return;
@@ -190,11 +190,11 @@ public abstract class ConnectionPairThread extends Thread
 		timer.start();
 		inputRun(false);
 		outputRun(false);
-		if (ConfigManager.getCheckCapM() != 0)
+		if (ConfigManager.getNetrateCap() != 0)
 		{
 			try
 			{
-				Thread.sleep(Math.max(0, 1000 / ConfigManager.getCheckCapM() - timer.stopTime())); // Accounts for lag in an effort to maintain consistent framerate.
+				Thread.sleep(Math.max(0, 1000 / ConfigManager.getNetrateCap() - timer.stopTime())); // Accounts for lag in an effort to maintain consistent framerate.
 			}
 			catch (Exception e) {Logging.logException(e);}
 		}

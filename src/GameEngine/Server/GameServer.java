@@ -4,10 +4,7 @@
 
 package GameEngine.Server;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
 import GameEngine.GameInfo;
@@ -26,7 +23,6 @@ public abstract class GameServer<T extends ConnectionPairThread> extends Server<
 	private void loadAccounts()
 	{
 		accounts = new GappyArrayList<Account>();
-//		accounts = (HashMap<String, Account>) JSONManager.deserializeJSON(MiscUtils.readText("Local Data/Server/Accounts.json"), accounts.getClass());
 		accounts = JSONManager.deserializeCollectionJSONList(MiscUtils.readText("Local Data/Server/Accounts.json"), GappyArrayList.class, Account.class);
 		
 		if (accounts == null) accounts = new GappyArrayList<Account>();

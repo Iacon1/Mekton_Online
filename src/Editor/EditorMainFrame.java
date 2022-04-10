@@ -77,8 +77,7 @@ public class EditorMainFrame extends JFrame
 		
 		GameInfo.setServerPack(serverPack);
 		ModuleManager.init();
-		ConfigManager.init();
-		
+
 		setResizable(true);
 		
 		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.editor));
