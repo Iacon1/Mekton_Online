@@ -12,17 +12,13 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 
 import GameEngine.EntityToken;
-import GameEngine.GameInfo;
 import GameEngine.ImageSprite;
 import GameEngine.Point2D;
 import GameEngine.ScreenCanvas;
-import GameEngine.EntityTypes.Alignable;
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.InputGetter;
-import GameEngine.EntityTypes.SpriteEntity;
-import GameEngine.Managers.GraphicsManager;
 import Modules.BaseModule.ChatBox;
-import Modules.HexUtilities.HexConfigManager;
+import Modules.HexUtilities.HexConfig;
 
 import Utils.MiscUtils;
 
@@ -34,15 +30,15 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 	{
 		super();
 		setSprite(new ImageSprite("DummyPlayer"));
-		setSpriteParams(0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
-		setBounds(HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight(), 0, -HexConfigManager.getHexHeight());
+		setSpriteParams(0, 0, HexConfig.getHexWidth(), 2 * HexConfig.getHexHeight());
+		setBounds(HexConfig.getHexWidth(), HexConfig.getHexHeight(), 0, -HexConfig.getHexHeight());
 	}
 	public DummyPlayer(MektonMap map)
 	{
 		super(map);
 		setSprite(new ImageSprite("DummyPlayer"));
-		setSpriteParams(0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
-		setBounds(HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight(), 0, -HexConfigManager.getHexHeight());
+		setSpriteParams(0, 0, HexConfig.getHexWidth(), 2 * HexConfig.getHexHeight());
+		setBounds(HexConfig.getHexWidth(), HexConfig.getHexHeight(), 0, -HexConfig.getHexHeight());
 		
 		ChatBox chatBox = new ChatBox("MicrogrammaNormalFix", Color.red, 20);
 		chatBox.setOwnerID(0); // TODO find value of possessor dynamically
@@ -105,7 +101,7 @@ public class DummyPlayer extends Human implements InputGetter, CommandRunner
 	{
 		super.render(canvas, camera);
 		
-		if (false)//isPossessee())
+		if (isPossessee())
 		{
 			String text =
 					"Action points: " + MiscUtils.floatPrecise((float) remainingActions(), 2) + "\n" +

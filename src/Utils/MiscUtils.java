@@ -324,11 +324,22 @@ public final class MiscUtils
 		return (char) code;
 	}
 	
+	/** Converts a number into a string depicting its hexadecimal representation.
+	 *  @param number The number to represent.
+	 *  @param digits The length of the representation in characters.
+	 *  
+	 *  @return The string.
+	 */
 	public static String asHex(byte number, int digits)
 	{
 		return String.format("%0" + digits + "x", number);
 	}
 	
+	/** Converts the least-significant digit of a string depicting a hexadecimal number into a byte.
+	 *  @param digits The number to conver the LSD of.
+	 *  
+	 *  @return The byte.
+	 */
 	public static byte toByte(String digits)
 	{
 		switch (digits.charAt(0))

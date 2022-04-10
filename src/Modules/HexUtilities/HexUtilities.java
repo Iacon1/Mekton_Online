@@ -21,9 +21,6 @@ public class HexUtilities implements Module
 	}
 
 	@Override
-	public void initModule()
-	{
-		HexConfigManager.init();
-	}
+	public void initModule() {}
 
 }

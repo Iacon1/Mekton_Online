@@ -7,7 +7,7 @@ package Modules.TestModule;
 import GameEngine.GameInfo;
 import GameEngine.ImageSprite;
 import GameEngine.EntityTypes.GUITypes.GUISpriteEntity;
-import Modules.HexUtilities.HexConfigManager;
+import Modules.HexUtilities.HexConfig;
 
 public class TestMenu extends GUISpriteEntity
 {
@@ -15,7 +15,7 @@ public class TestMenu extends GUISpriteEntity
 	{
 		super();
 		setSprite(new ImageSprite(GameInfo.getServerPackResource("DummyPlayer.PNG")));
-		setSpriteParams(0, 0, HexConfigManager.getHexWidth(), 2 * HexConfigManager.getHexHeight());
+		setSpriteParams(0, 0, HexConfig.getHexWidth(), 2 * HexConfig.getHexHeight());
 		align(AlignmentPoint.northEast, null, AlignmentPoint.northEast);
 	}
 	

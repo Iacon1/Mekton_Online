@@ -28,8 +28,11 @@ public final class ConfigManager
 		{
 			path = GameInfo.getServerPackResource("Config.json");
 			values = JSONManager.deserializeJSON(MiscUtils.readText(path), values.getClass());
-			Logging.logError("No config found.");
-			values = new HashMap<String, String>();
+			if (values == null)
+			{
+				Logging.logError("No config found.");
+				values = new HashMap<String, String>();
+			}
 		}
 		else
 		{

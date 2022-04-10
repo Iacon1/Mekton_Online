@@ -23,7 +23,7 @@ import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.SpriteEntity;
 import GameEngine.Managers.GraphicsManager;
 
-import Modules.HexUtilities.HexConfigManager;
+import Modules.HexUtilities.HexConfig;
 import Modules.HexUtilities.HexDirection;
 import Modules.HexUtilities.HexEntity;
 import Modules.HexUtilities.HexStructures.Axial.AxialHexCoord3D;
@@ -257,7 +257,7 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 	{
 		if (k >= map.getLevels()) return; // Cannot draw hexes above this
 		// TODO optimization using BakingCanvas
-		camera = camera.add(new Point2D(0, (k - cameraZ) * HexConfigManager.getHexHeight()));
+		camera = camera.add(new Point2D(0, (k - cameraZ) * HexConfig.getHexHeight()));
 		for (int i = 0; i < map.getColumns(); ++i) // columns
 			for (int j = map.firstRow(i); j <= map.lastRow(i); ++j)
 			{
@@ -266,15 +266,15 @@ public class MektonMap extends GameEntity implements HexMap<AxialHexCoord3D, Mek
 				AxialHexCoord3D hexCoord = new AxialHexCoord3D(i, j, k);
 				MektonHex hex = getHex(hexCoord);
 				canvas.drawImage(tileset, toPixel(hexCoord, camera), new Point2D(
-						hex.texturePos.x * HexConfigManager.getHexWidth(), 
-						hex.texturePos.y * HexConfigManager.getHexHeight()),
-						new Point2D(HexConfigManager.getHexWidth(), HexConfigManager.getHexHeight()));
+						hex.texturePos.x * HexConfig.getHexWidth(), 
+						hex.texturePos.y * HexConfig.getHexHeight()),
+						new Point2D(HexConfig.getHexWidth(), HexConfig.getHexHeight()));
 				canvas.drawText(hexCoord.q + ", " + hexCoord.r, GraphicsManager.getFont("MicrogrammaNormalFix"), Color.white, toPixel(hexCoord, camera), 16);
 			}
 	}
 	private void drawChildren(ScreenCanvas canvas, Point2D camera, int k, int cameraZ)
 	{
-		camera = camera.add(new Point2D(0, (k - cameraZ) * HexConfigManager.getHexHeight()));
+		camera = camera.add(new Point2D(0, (k - cameraZ) * HexConfig.getHexHeight()));
 		for (int t = 0; t < getChildren().size(); ++t) // O(w)
 		{
 			HexEntity<AxialHexCoord3D> entity = (HexEntity<AxialHexCoord3D>) getChildren().get(t);

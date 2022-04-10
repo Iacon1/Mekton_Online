@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import GameEngine.Point2D;
-import Modules.HexUtilities.HexConfigManager;
+import Modules.HexUtilities.HexConfig;
 import Modules.HexUtilities.HexDirection;
 import Modules.HexUtilities.HexStructures.HexCoord;
 import Modules.HexUtilities.HexStructures.HexCoordConverter;
@@ -133,9 +133,9 @@ public class AxialHexCoord implements HexCoord
 	public Point2D toPixel() // https://www.redblobgames.com/grids/hexagons/#hex-to-pixel
 	{
 		Point2D point = new Point2D(0, 0);
-		point.x = ((3 * HexConfigManager.getHexWidth()) / 4 + 1) * q; // Extra q fixes a off-by-one spacing issue
+		point.x = ((3 * HexConfig.getHexWidth()) / 4 + 1) * q; // Extra q fixes a off-by-one spacing issue
 		// x = (3 / 2 * q * size) = (3 * width) / 4 * q
-		point.y = (HexConfigManager.getHexHeight() / 2) * q + HexConfigManager.getHexHeight() * r;
+		point.y = (HexConfig.getHexHeight() / 2) * q + HexConfig.getHexHeight() * r;
 		// y = size * (sqrt3 / 2 * q + sqrt3 * r) = (height / 2 * q + height * r)
 
 		// Using approximations somehow works better, yay
@@ -146,9 +146,9 @@ public class AxialHexCoord implements HexCoord
 	public AxialHexCoord fromPixel(Point2D point)
 	{
 		AxialHexCoord coord = new AxialHexCoord(0, 0);
-		coord.q = Math.floorDiv(point.x, (3 * HexConfigManager.getHexWidth()) / 4 + 1);
+		coord.q = Math.floorDiv(point.x, (3 * HexConfig.getHexWidth()) / 4 + 1);
 		
-		coord.r = Math.floorDiv(point.y - (HexConfigManager.getHexHeight() / 2) * coord.q, HexConfigManager.getHexHeight());
+		coord.r = Math.floorDiv(point.y - (HexConfig.getHexHeight() / 2) * coord.q, HexConfig.getHexHeight());
 		if (point.y >= coord.toPixel().y) coord.r -= 1; // Hack
 		
 		return coord;
