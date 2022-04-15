@@ -9,6 +9,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 
+import GameEngine.Configurables.ModuleManager;
 import Utils.Logging;
 
 public class AdapterDelegator // Simply cleans up some of the code in CustomJAdapter by handling delegation
@@ -34,6 +35,16 @@ public class AdapterDelegator // Simply cleans up some of the code in CustomJAda
 			TypeToken<J> type = (TypeToken<J>) TypeToken.get(Class.forName(typeName));
 
 			return gson.getDelegateAdapter(factory, type);
+		}
+		catch (ClassNotFoundException e)
+		{
+			try
+			{
+				TypeToken<J> type = (TypeToken<J>) TypeToken.get(Class.forName(typeName, true, ModuleManager.getLoader()));
+
+				return gson.getDelegateAdapter(factory, type);
+			}
+			catch (Exception e2) {Logging.logException(e2); return null;}
 		}
 		catch (Exception e) {Logging.logException(e); return null;}
 	}

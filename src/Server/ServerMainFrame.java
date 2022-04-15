@@ -71,7 +71,9 @@ public class ServerMainFrame extends JFrame
 	
 	private void updateLogs() // Updates logs
 	{
-		final ServerLogger logger = (ServerLogger) Logging.getLogger();
+		ServerLogger logger = null;
+		try {logger = (ServerLogger) Logging.getLogger();}
+		catch (Exception e) {return;}
 		allLabel.setText(logger.buildLabelText(null));
 		noteLabel.setText(logger.buildLabelText("note"));
 		errorLabel.setText(logger.buildLabelText("error"));

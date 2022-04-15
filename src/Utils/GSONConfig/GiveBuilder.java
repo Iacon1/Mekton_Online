@@ -20,7 +20,6 @@ public final class GiveBuilder
 	public static GsonBuilder giveBuilder()
 	{
 		GsonBuilder builder = new GsonBuilder();
-
 		builder.registerTypeAdapterFactory(new AbsFactory<GameEntity>(GameEntity.class));
 		builder.registerTypeAdapterFactory(new AbsFactory<Account>(Account.class));
 		builder.registerTypeAdapterFactory(new AbsFactory<Sprite>(Sprite.class));

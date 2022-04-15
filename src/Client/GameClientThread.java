@@ -13,7 +13,6 @@ import GameEngine.Configurables.ModuleTypes.StateGiverModule;
 import GameEngine.Net.StateFactory;
 import GameEngine.Net.StatefulConnectionPairThread;
 import GameEngine.Net.Server.ServerInfo;
-import Modules.BaseModule.PacketTypes.ServerInfoPacket;
 
 /** Thread that the client uses to communicate with the server and run the game.
  * 

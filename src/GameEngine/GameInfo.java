@@ -219,6 +219,9 @@ public class GameInfo
 	{
 		return serverPackPrefix != null;
 	}
+	/** Returns the absolute location of a server-pack-relative file or folder.
+	 * 
+	 */
 	public static String getServerPackResource(String resourceName)
 	{
 		return MiscUtils.getAbsolute(serverPackPrefix + "/" + resourceName);

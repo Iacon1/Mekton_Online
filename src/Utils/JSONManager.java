@@ -56,6 +56,9 @@ public final class JSONManager
 		catch (Exception e) {Logging.logException(e); return null;}
 	}
 	
+	/**
+	 * 
+	 */
 	public static <C> C deserializeCollectionJSONList(String serialized, Class<C> mainClass, Class... classArgs) // Unserializes a parameterized collection
 	{
 		java.lang.reflect.Type typeTo = TypeToken.getParameterized(mainClass, classArgs).getType();

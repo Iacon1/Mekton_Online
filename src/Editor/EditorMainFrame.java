@@ -9,18 +9,10 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import GameEngine.GameInfo;
-import GameEngine.Configurables.ConfigManager;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.EditorPopulatingModule;
 import GameEngine.Editor.ModulesPane;
-import Modules.MektonCore.Enums.ArmorType;
-import Modules.MektonCore.Enums.LevelRAM;
-import Modules.MektonCore.Enums.Scale;
-import Modules.MektonCore.Enums.ServoClass;
-import Modules.MektonCore.StatsStuff.HitLocation.ServoSide;
-import Modules.MektonCore.StatsStuff.HitLocation.ServoType;
-import Modules.MektonCore.StatsStuff.SheetTypes.MekSheet;
-import Modules.MektonCore.StatsStuff.SystemTypes.AdditiveSystems.Servos.MekServo;
+
 import Utils.Logging;
 import Utils.MiscUtils;
 import javax.swing.JTabbedPane;
@@ -38,9 +30,7 @@ public class EditorMainFrame extends JFrame
 		List<JPanel> panels = new ArrayList<JPanel>();
 		
 		panels.add(new ModulesPane());
-		MekSheet mekSheet = new MekSheet(); // TODO test
-		panels.add(mekSheet.editorPanel());
-		
+
 		if (ModuleManager.getHighestOfType(EditorPopulatingModule.class) != null)
 			ModuleManager.getHighestOfType(EditorPopulatingModule.class).populateTabs(panels);
 		
