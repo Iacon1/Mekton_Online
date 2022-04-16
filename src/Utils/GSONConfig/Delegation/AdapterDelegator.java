@@ -32,19 +32,8 @@ public class AdapterDelegator // Simply cleans up some of the code in CustomJAda
 	{
 		try
 		{
-			TypeToken<J> type = (TypeToken<J>) TypeToken.get(Class.forName(typeName));
-
+			TypeToken<J> type = (TypeToken<J>) TypeToken.get(Class.forName(typeName, true, ModuleManager.getLoader()));
 			return gson.getDelegateAdapter(factory, type);
-		}
-		catch (ClassNotFoundException e)
-		{
-			try
-			{
-				TypeToken<J> type = (TypeToken<J>) TypeToken.get(Class.forName(typeName, true, ModuleManager.getLoader()));
-
-				return gson.getDelegateAdapter(factory, type);
-			}
-			catch (Exception e2) {Logging.logException(e2); return null;}
 		}
 		catch (Exception e) {Logging.logException(e); return null;}
 	}
