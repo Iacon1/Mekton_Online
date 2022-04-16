@@ -16,6 +16,7 @@ public class ModulesPane extends JPanel
 	 */
 	public ModulesPane()
 	{
+		super();
 		setName("Modules");
 		SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);

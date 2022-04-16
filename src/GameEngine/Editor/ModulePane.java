@@ -2,7 +2,8 @@ package GameEngine.Editor;
 
 import javax.swing.JPanel;
 
-import GameEngine.Configurables.ModuleTypes.Module;
+import GameEngine.Configurables.ModuleTypes.Module.ModuleConfig;
+
 import javax.swing.SpringLayout;
 import javax.swing.JLabel;
 @SuppressWarnings("serial")
@@ -12,7 +13,7 @@ public class ModulePane extends JPanel
 	/**
 	 * Create the panel.
 	 */
-	public ModulePane(Module.ModuleConfig config)
+	public ModulePane(ModuleConfig config)
 	{
 		setName(config.moduleName);
 		

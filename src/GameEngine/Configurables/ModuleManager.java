@@ -154,7 +154,7 @@ public final class ModuleManager
 	
 	public static int size()
 	{
-		return size();
+		return modules.size();
 	}
 	
 	/** Gets the module with that priority.

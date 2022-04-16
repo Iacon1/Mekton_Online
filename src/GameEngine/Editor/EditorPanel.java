@@ -6,9 +6,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
+import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
@@ -20,6 +22,8 @@ import java.awt.FontMetrics;
 
 import javax.swing.JLabel;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,236 +31,272 @@ import java.util.Collection;
 import javax.swing.border.BevelBorder;
 import javax.swing.BoxLayout;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+import GameEngine.MenuSlate;
+import GameEngine.MenuSlate.InfoFunction;
+
 
 @SuppressWarnings("serial")
-public class EditorPanel extends JPanel
+public class EditorPanel extends JPanel implements MenuSlate
 {
-	private JLabel titleLabel;
-	private JPanel controlsPanel;
+	private interface UpdateTask {public void onUpdate();}
+
+	private int cellsH;
+	private int cellsV;
+	private int cellWidth;
+	private int cellHeight;
+	private List<UpdateTask> updateTasks; // Tasks to do on update
 	
-	public interface InfoFunction {public String update();}
-	private List<JLabel> labels;
-	private List<InfoFunction> infoFunctions;
-	private JPanel infoPanel;
-	
-	private void updateInfo()
-	{
-		for (int i = 0; i < infoFunctions.size(); ++i) labels.get(i).setText(infoFunctions.get(i).update());
-	}
-	public <T> void addInfo(InfoFunction function)
-	{
-		JLabel label = new JLabel();
-		infoPanel.add(label);
-		labels.add(label);
-		infoFunctions.add(function);
-		
-		updateInfo();
-		
-/*		int labelsW = 0;
-		int labelsH = 0;
-		
-		for (int i = 0; i < labels.size(); ++i)
-		{
-			FontMetrics metrics = labels.get(i).getFontMetrics(labels.get(i).getFont());
-			labelsW = Math.max(labelsW, metrics.stringWidth(labels.get(i).getText()) + metrics.charWidth('a'));
-			labelsH = labelsH + metrics.getHeight();
-		}
-		infoPanel.setSize(new Dimension(labelsW, labelsH));
-		infoPanel.updateUI();
-*/	}
-	
-	public interface EditFunction<T> {public void onEdit(T newValue);}
-	public interface ClickFunction {public void onClick();}
-	private void addControlRow(JComponent a, JComponent b)
-	{
-		a.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		b.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		controlsPanel.add(a);
-		controlsPanel.add(b);
-		
-	}
-	/** Adds a selectable list to the panel
-	 * 
-	 */
-	public <T> void addOptionList(String label, String[] optionLabels, T[] optionValues, int initialValueIndex, EditFunction<T> editFunction)
-	{
-		DefaultListModel<String> listModel = new DefaultListModel<String>();
-		
-		for (int i = 0; i < optionLabels.length; ++i) listModel.addElement(optionLabels[i]);
-		
-		JList<String> list = new JList<String>();
-		list.setModel(listModel);
-		list.setSelectedIndex(initialValueIndex);
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.addListSelectionListener(e ->
-		{
-			editFunction.onEdit(optionValues[list.getSelectedIndex()]);
-			updateInfo();
-		});
-		editFunction.onEdit(optionValues[initialValueIndex]);
-		updateInfo();
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setViewportView(list);
-		list.setLayoutOrientation(JList.VERTICAL);
-		addControlRow(new JLabel(label), scrollPane);
-	}
-	public <T extends Enum> void addOptionList(String label, T[] optionValues, T initialValue, EditFunction<T> editFunction)
-	{
-		String[] optionLabels = new String[optionValues.length];
-		for (int i = 0; i < optionValues.length; ++i) optionLabels[i] = optionValues[i].name();
-		addOptionList(label, optionLabels, optionValues, initialValue.ordinal(), editFunction);	
-	}
-	public void addSpinner(String label, int minimumValue, int defaultValue, int maximumValue, EditFunction<Integer> editFunction)
-	{
-		JSpinner spinner = new JSpinner();
-		spinner.setModel(new SpinnerNumberModel(defaultValue, minimumValue, maximumValue, 1));
-		spinner.addChangeListener(e -> {
-			editFunction.onEdit((Integer) spinner.getModel().getValue());
-			updateInfo();
-		});
-		editFunction.onEdit((Integer) spinner.getModel().getValue());
-		updateInfo();
-		
-		addControlRow(new JLabel(label), spinner);
-	}
-	public void addButton(String label, ClickFunction function)
-	{
-		JButton button = new JButton(label);
-		
-		button.addActionListener(e -> {function.onClick(); updateInfo();});
-		
-		addControlRow(new JLabel(label), button);
-	}
-	public void addButtonPair(String label1, String label2, ClickFunction function1, ClickFunction function2)
-	{
-		JButton button1 = new JButton(label1);
-		button1.addActionListener(e -> {function1.onClick(); updateInfo();});
-		JButton button2 = new JButton(label2);
-		button2.addActionListener(e -> {function2.onClick(); updateInfo();});
-		
-		addControlRow(button1, button2);
-	}
-	
-	
-	private static class EditableNode extends DefaultMutableTreeNode
-	{
-		private Editable editable;
-		
-		public EditableNode(String label, Editable editable)
-		{
-			super(label);
-			this.editable = editable;
-		}
-		
-		public EditorPanel editorPanel()
-		{
-			return editable.editorPanel();
-		}
-		
-	}
-	private MutableTreeNode getNode(String label, Object[] objects)
-	{
-		DefaultMutableTreeNode node = new DefaultMutableTreeNode(label);
-		for (int i = 0; i < objects.length; ++i)
-		{
-			if (objects[i] == null) continue;
-			else if (Object[].class.isAssignableFrom(objects[i].getClass())) // Itself an array
-			{
-				node.add(getNode(objects[i].getClass().getName(), (Object[]) objects[i]));
-			}
-			else if (Editable.class.isAssignableFrom(objects[i].getClass())) // An editable
-			{
-				Editable editable = (Editable) objects[i];
-				node.add(getNode(editable.getName(), editable));
-			}
-			else continue;
-		}
-		
-		return node;
-	}
-	private MutableTreeNode getNode(String label, Editable editable)
-	{
-		EditableNode node = new EditableNode(label, editable);
-		return node;
-	}
-	public static interface HierarchicalListUpdateHandle {public void update(Object... objects);}
-	
-	/** Adds a hierarchical list.
-	 * 
-	 *  @return An update handle.
-	 */
-	public HierarchicalListUpdateHandle addHierarchicalList(String label, Object... objects)
-	{
-		JTree tree = new JTree();
-		MutableTreeNode rootNode = getNode(label, objects);
-		DefaultTreeModel model = new DefaultTreeModel(rootNode);
-		tree.setModel(model);
-		
-		JSplitPane splitPane = new JSplitPane();
-		splitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-		splitPane.setLeftComponent(tree);
-		splitPane.setDividerLocation(0.5);
-		
-		tree.addTreeSelectionListener(e -> {
-			Object node = tree.getLastSelectedPathComponent();
-			if (node == null) return;
-			if (node.getClass() == EditableNode.class)
-			{
-				EditorPanel editorPanel = ((EditableNode) node).editorPanel();
-				splitPane.setRightComponent(editorPanel);
-				splitPane.setDividerLocation(0.5);
-				splitPane.setResizeWeight(0.5);
-			}
-			else if (node == rootNode)
-			{
-				splitPane.setRightComponent(null);
-				splitPane.setDividerLocation(1.0);
-				splitPane.setResizeWeight(1.0);
-			}
-			updateInfo();
-		});
-		addControlRow(new JLabel(label), splitPane);
-		
-		return o -> 
-		{
-			MutableTreeNode rN = getNode(label, o);
-			DefaultTreeModel m = new DefaultTreeModel(rN);
-			tree.setModel(m);
-			tree.updateUI();
-		};
-	}
-	
-	public void setTitle(String title) {titleLabel.setText(title);}
+	private void update() {for (UpdateTask task : updateTasks) task.onUpdate();}
 	
 	/**
 	 * Create the panel.
 	 */
-	public EditorPanel(String title)
+	public EditorPanel()
+	{
+		super();
+		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		setLayout(null);
+		setSize(640, 480);
+		
+		updateTasks = new ArrayList<UpdateTask>();
+	}
+	/**
+	 * Create the panel.
+	 */
+	public EditorPanel(int width, int height, int cellsH, int cellsV)
 	{
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		setLayout(new BorderLayout(0, 0));
+		setLayout(null);
 		
-		titleLabel = new JLabel(title);
-		add(titleLabel, BorderLayout.NORTH);
+		updateTasks = new ArrayList<UpdateTask>();
+		setVisible(true);
+		setCells(cellsH, cellsV);
+		setSize(width, height);
+	}
+	
+	@Override
+	public void setCells(int h, int v)
+	{
+		cellWidth = getWidth() / h;
+		cellHeight = getHeight() / v;
 		
-		controlsPanel = new JPanel();
-		controlsPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		GridLayout controlsLayout = new GridLayout(0, 2);
-		add(controlsPanel, BorderLayout.CENTER);
-		controlsPanel.setLayout(controlsLayout);
+		cellsH = h;
+		cellsV = v;
+	}
+	
+	@Override
+	public void setSize(int width, int height)
+	{
+		super.setSize(width, height);
+		if (cellsH != 0 && cellsV != 0) setCells(cellsH, cellsV);
+	}
+	
+	@Override
+	public void addInfo(int x, int y, String label, int labelLength, int contentLength,
+			InfoFunction<String> function)
+	{
+		JLabel labelLabel = new JLabel();
+		add(labelLabel);
+		labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);
+		JLabel contentLabel = new JLabel();
+		add(contentLabel);
+		contentLabel.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);
 		
-		infoPanel = new JPanel();
-		add(infoPanel, BorderLayout.WEST);
-		infoPanel.setLayout(new GridLayout(0, 1));
+		labelLabel.setText(label);
+		contentLabel.setText(function.getValue());
 		
-		labels = new ArrayList<JLabel>();
-		infoFunctions = new ArrayList<InfoFunction>();
+		updateTasks.add(() -> {contentLabel.setText(function.getValue());});
 	}
 
+	@Override
+	public void addTextbar(int x, int y, String label, int labelLength, int maxLength, int contentLength,
+			DataFunction<String> function)
+	{
+		JLabel labelLabel = new JLabel();
+		add(labelLabel);
+		labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);
+		JTextField contentField = new JTextField();
+		add(contentField);
+		contentField.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);
+		
+		labelLabel.setText(label);
+		contentField.setText(function.getValue());
+		
+		updateTasks.add(() -> {contentField.setText(function.getValue());});
+		contentField.getDocument().addDocumentListener(new DocumentListener()
+		{
+			private void onUpdate()
+			{
+				function.setValue(contentField.getText());
+				update();
+			}
+			@Override
+			public void insertUpdate(DocumentEvent e) {onUpdate();}
+			@Override
+			public void removeUpdate(DocumentEvent e) {onUpdate();}
+			@Override
+			public void changedUpdate(DocumentEvent e) {onUpdate();}
+		});
+	}
+	
+	@Override
+	public void addIntegerWheel(int x, int y, String label, int labelLength, int min, int max, int contentLength,
+			DataFunction<Integer> function)
+	{
+		JLabel labelLabel = new JLabel();
+		add(labelLabel);
+		labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);
+		JSpinner contentSpinner = new JSpinner();
+		add(contentSpinner);
+		contentSpinner.setModel(new SpinnerNumberModel(min, min, max, 1));
+		contentSpinner.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);
+		
+		labelLabel.setText(label);
+		contentSpinner.setValue(function.getValue());
+		
+		updateTasks.add(() -> {contentSpinner.setValue(function.getValue());});
+		contentSpinner.addChangeListener(new ChangeListener()
+		{
+			@Override
+			public void stateChanged(ChangeEvent e)
+			{
+				function.setValue((Integer) contentSpinner.getValue());
+				update();
+			}
+		});
+	}
+	@Override
+	public void addDoubleWheel(int x, int y, String label, int labelLength, double min, double max, int digits, int contentLength,
+			DataFunction<Double> function)
+	{
+		JLabel labelLabel = new JLabel();
+		add(labelLabel);
+		labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);
+		JSpinner contentSpinner = new JSpinner();
+		add(contentSpinner);
+		contentSpinner.setModel(new SpinnerNumberModel(min, min, max, 1));
+		contentSpinner.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);
+		
+		labelLabel.setText(label);
+		contentSpinner.setValue(function.getValue());
+		
+		updateTasks.add(() -> {contentSpinner.setValue(function.getValue());});
+		contentSpinner.addChangeListener(new ChangeListener()
+		{
+			@Override
+			public void stateChanged(ChangeEvent e)
+			{
+				function.setValue((Double) contentSpinner.getValue());
+				update();
+			}
+		});
+	}
+
+	@Override
+	public void addCheckbox(int x, int y, String label, int labelLength, int contentLength,
+			DataFunction<Boolean> function)
+	{
+		JLabel labelLabel = new JLabel();
+		add(labelLabel);
+		labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);
+		JCheckBox contentBox = new JCheckBox();
+		add(contentBox);
+		contentBox.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);
+		
+		labelLabel.setText(label);
+		contentBox.setSelected(function.getValue());
+		
+		updateTasks.add(() -> {contentBox.setSelected(function.getValue());});
+		contentBox.addChangeListener(new ChangeListener()
+		{
+			@Override
+			public void stateChanged(ChangeEvent e)
+			{
+				function.setValue(contentBox.isSelected());
+				update();
+			}
+		});
+	}
+
+	@Override
+	public <T> void addOptions(int x, int y, String label, int labelLength, int contentLength, String[] optionLabels, T[] options,
+			DataFunction<T> function)
+	{
+		JLabel labelLabel = new JLabel();
+		add(labelLabel);
+		labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);
+		JList<String> contentList = new JList<String>();
+		add(contentList);
+		contentList.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);
+		
+		
+		
+		labelLabel.setText(label);
+		DefaultListModel<String> listModel = new DefaultListModel<String>();
+		for (int i = 0; i < optionLabels.length; ++i) listModel.addElement(optionLabels[i]);
+		contentList.setModel(listModel);
+		contentList.setSelectedIndex(0);
+		contentList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		contentList.setSelectedIndex(listModel.indexOf(function.getValue()));
+		
+		updateTasks.add(() -> {contentList.setSelectedIndex(listModel.indexOf(function.getValue()));});
+		contentList.addListSelectionListener(new ListSelectionListener()
+		{
+			@Override
+			public void valueChanged(ListSelectionEvent e)
+			{
+				function.setValue(options[contentList.getSelectedIndex()]);
+				update();
+			}
+		});	
+	}
+	@Override
+	public <E extends Enum<E>> void addOptions(int x, int y, String label, int labelLength, int contentLength, E[] options,
+			DataFunction<E> function)
+	{
+		String[] optionLabels = new String[options.length];
+		for (int i = 0; i < options.length; ++i) optionLabels[i] = options[i].name();
+		addOptions(x, y, label, labelLength, contentLength, optionLabels, options, function);
+	}
+	
+	@Override
+	public void addButton(int x, int y, String label, int w, int h, ButtonFunction function)
+	{
+		JButton contentButton = new JButton();
+		contentButton.setBounds(x * cellWidth, y * cellHeight, (x + w) * cellWidth, (y + h) * cellHeight);
+		
+		contentButton.setText(label);
+		
+		contentButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				function.onClick();
+				update();
+			}
+		});
+	}
+	
+	@Override
+	public MenuSlate addSubSlate(int x, int y, int w, int h, DataFunction<MenuSlate> function)
+	{
+		EditorPanel contentPanel = new EditorPanel();
+		add(contentPanel);
+		contentPanel.setBounds(x * cellWidth, y * cellHeight, (x + w) * cellWidth, (y + h) * cellHeight);
+		contentPanel.setCells(w, h);
+		// TODO allow swapping of subslates
+		return contentPanel;
+	}
 }
