@@ -11,6 +11,7 @@ import javax.swing.JTree;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
@@ -26,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.swing.border.BevelBorder;
@@ -50,36 +52,42 @@ import GameEngine.MenuSlate.InfoFunction;
 public class EditorPanel extends JPanel implements MenuSlate
 {
 	private interface UpdateTask {public void onUpdate();}
-
+	private interface ResizeTask {public void onResize();}
 	private int cellsH;
 	private int cellsV;
 	private int cellWidth;
 	private int cellHeight;
 	private List<UpdateTask> updateTasks; // Tasks to do on update
-	
+	private List<ResizeTask> resizeTasks; // Resize components on screen resize
 	private void update() {for (UpdateTask task : updateTasks) task.onUpdate();}
-	
+	private void resize() {for (ResizeTask task : resizeTasks) task.onResize();}
 	/**
 	 * Create the panel.
 	 */
 	public EditorPanel()
 	{
 		super();
+		
+		updateTasks = new ArrayList<UpdateTask>();
+		resizeTasks = new ArrayList<ResizeTask>();
+		
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		setLayout(null);
 		setSize(640, 480);
-		
-		updateTasks = new ArrayList<UpdateTask>();
 	}
 	/**
 	 * Create the panel.
 	 */
 	public EditorPanel(int width, int height, int cellsH, int cellsV)
 	{
+		super();
+		
+		updateTasks = new ArrayList<UpdateTask>();
+		resizeTasks = new ArrayList<ResizeTask>();
+		
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		setLayout(null);
 		
-		updateTasks = new ArrayList<UpdateTask>();
 		setVisible(true);
 		setCells(cellsH, cellsV);
 		setSize(width, height);
@@ -87,12 +95,14 @@ public class EditorPanel extends JPanel implements MenuSlate
 	
 	@Override
 	public void setCells(int h, int v)
-	{
+	{		
 		cellWidth = getWidth() / h;
 		cellHeight = getHeight() / v;
 		
 		cellsH = h;
 		cellsV = v;
+		resize();
+		update();
 	}
 	
 	@Override
@@ -100,6 +110,8 @@ public class EditorPanel extends JPanel implements MenuSlate
 	{
 		super.setSize(width, height);
 		if (cellsH != 0 && cellsV != 0) setCells(cellsH, cellsV);
+		resize();
+		update();
 	}
 	
 	@Override
@@ -108,15 +120,17 @@ public class EditorPanel extends JPanel implements MenuSlate
 	{
 		JLabel labelLabel = new JLabel();
 		add(labelLabel);
-		labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);
+		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);});
 		JLabel contentLabel = new JLabel();
 		add(contentLabel);
-		contentLabel.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);
+		resizeTasks.add(() -> {contentLabel.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);});
 		
 		labelLabel.setText(label);
 		contentLabel.setText(function.getValue());
 		
 		updateTasks.add(() -> {contentLabel.setText(function.getValue());});
+		resize();
+		update();
 	}
 
 	@Override
@@ -125,10 +139,10 @@ public class EditorPanel extends JPanel implements MenuSlate
 	{
 		JLabel labelLabel = new JLabel();
 		add(labelLabel);
-		labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);
+		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);});
 		JTextField contentField = new JTextField();
 		add(contentField);
-		contentField.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);
+		resizeTasks.add(() -> {contentField.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);});
 		
 		labelLabel.setText(label);
 		contentField.setText(function.getValue());
@@ -148,6 +162,8 @@ public class EditorPanel extends JPanel implements MenuSlate
 			@Override
 			public void changedUpdate(DocumentEvent e) {onUpdate();}
 		});
+		resize();
+		update();
 	}
 	
 	@Override
@@ -156,11 +172,11 @@ public class EditorPanel extends JPanel implements MenuSlate
 	{
 		JLabel labelLabel = new JLabel();
 		add(labelLabel);
-		labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);
+		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);});
 		JSpinner contentSpinner = new JSpinner();
 		add(contentSpinner);
 		contentSpinner.setModel(new SpinnerNumberModel(min, min, max, 1));
-		contentSpinner.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);
+		resizeTasks.add(() -> {contentSpinner.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);});
 		
 		labelLabel.setText(label);
 		contentSpinner.setValue(function.getValue());
@@ -175,6 +191,8 @@ public class EditorPanel extends JPanel implements MenuSlate
 				update();
 			}
 		});
+		resize();
+		update();
 	}
 	@Override
 	public void addDoubleWheel(int x, int y, String label, int labelLength, double min, double max, int digits, int contentLength,
@@ -182,11 +200,11 @@ public class EditorPanel extends JPanel implements MenuSlate
 	{
 		JLabel labelLabel = new JLabel();
 		add(labelLabel);
-		labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);
+		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);});
 		JSpinner contentSpinner = new JSpinner();
 		add(contentSpinner);
 		contentSpinner.setModel(new SpinnerNumberModel(min, min, max, 1));
-		contentSpinner.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);
+		resizeTasks.add(() -> {contentSpinner.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);});
 		
 		labelLabel.setText(label);
 		contentSpinner.setValue(function.getValue());
@@ -201,6 +219,8 @@ public class EditorPanel extends JPanel implements MenuSlate
 				update();
 			}
 		});
+		resize();
+		update();
 	}
 
 	@Override
@@ -209,10 +229,10 @@ public class EditorPanel extends JPanel implements MenuSlate
 	{
 		JLabel labelLabel = new JLabel();
 		add(labelLabel);
-		labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);
+		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);});
 		JCheckBox contentBox = new JCheckBox();
 		add(contentBox);
-		contentBox.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);
+		resizeTasks.add(() -> {contentBox.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);});
 		
 		labelLabel.setText(label);
 		contentBox.setSelected(function.getValue());
@@ -227,6 +247,8 @@ public class EditorPanel extends JPanel implements MenuSlate
 				update();
 			}
 		});
+		resize();
+		update();
 	}
 
 	@Override
@@ -235,31 +257,26 @@ public class EditorPanel extends JPanel implements MenuSlate
 	{
 		JLabel labelLabel = new JLabel();
 		add(labelLabel);
-		labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);
-		JList<String> contentList = new JList<String>();
-		add(contentList);
-		contentList.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);
-		
-		
+		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);});
+		JComboBox<String> contentBox = new JComboBox<String>(optionLabels);
+		add(contentBox);
+		resizeTasks.add(() -> {contentBox.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);});
 		
 		labelLabel.setText(label);
-		DefaultListModel<String> listModel = new DefaultListModel<String>();
-		for (int i = 0; i < optionLabels.length; ++i) listModel.addElement(optionLabels[i]);
-		contentList.setModel(listModel);
-		contentList.setSelectedIndex(0);
-		contentList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		contentList.setSelectedIndex(listModel.indexOf(function.getValue()));
+		contentBox.setEditable(false);
 		
-		updateTasks.add(() -> {contentList.setSelectedIndex(listModel.indexOf(function.getValue()));});
-		contentList.addListSelectionListener(new ListSelectionListener()
+		updateTasks.add(() -> {contentBox.setSelectedIndex(Arrays.asList(options).indexOf(function.getValue()));});
+		contentBox.addActionListener(new ActionListener()
 		{
 			@Override
-			public void valueChanged(ListSelectionEvent e)
+			public void actionPerformed(ActionEvent e)
 			{
-				function.setValue(options[contentList.getSelectedIndex()]);
+				function.setValue(options[contentBox.getSelectedIndex()]);
 				update();
 			}
-		});	
+		});
+		resize();
+		update();
 	}
 	@Override
 	public <E extends Enum<E>> void addOptions(int x, int y, String label, int labelLength, int contentLength, E[] options,
@@ -268,13 +285,15 @@ public class EditorPanel extends JPanel implements MenuSlate
 		String[] optionLabels = new String[options.length];
 		for (int i = 0; i < options.length; ++i) optionLabels[i] = options[i].name();
 		addOptions(x, y, label, labelLength, contentLength, optionLabels, options, function);
+		resize();
+		update();
 	}
 	
 	@Override
 	public void addButton(int x, int y, String label, int w, int h, ButtonFunction function)
 	{
 		JButton contentButton = new JButton();
-		contentButton.setBounds(x * cellWidth, y * cellHeight, (x + w) * cellWidth, (y + h) * cellHeight);
+		resizeTasks.add(() -> {contentButton.setBounds(x * cellWidth, y * cellHeight, (x + w) * cellWidth, (y + h) * cellHeight);});
 		
 		contentButton.setText(label);
 		
@@ -287,6 +306,8 @@ public class EditorPanel extends JPanel implements MenuSlate
 				update();
 			}
 		});
+		resize();
+		update();
 	}
 	
 	@Override
@@ -294,9 +315,11 @@ public class EditorPanel extends JPanel implements MenuSlate
 	{
 		EditorPanel contentPanel = new EditorPanel();
 		add(contentPanel);
-		contentPanel.setBounds(x * cellWidth, y * cellHeight, (x + w) * cellWidth, (y + h) * cellHeight);
+		resizeTasks.add(() -> {contentPanel.setBounds(x * cellWidth, y * cellHeight, (x + w) * cellWidth, (y + h) * cellHeight);});
 		contentPanel.setCells(w, h);
 		// TODO allow swapping of subslates
+		resize();
+		update();
 		return contentPanel;
 	}
 }
