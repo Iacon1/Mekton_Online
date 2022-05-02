@@ -57,6 +57,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 	private int cellsV;
 	private int cellWidth;
 	private int cellHeight;
+	private boolean propogate; // See addSubSlate
 	private List<UpdateTask> updateTasks; // Tasks to do on update
 	private List<ResizeTask> resizeTasks; // Resize components on screen resize
 	private void update() {for (UpdateTask task : updateTasks) task.onUpdate();}
@@ -314,8 +315,11 @@ public class EditorPanel extends JPanel implements MenuSlate
 	public MenuSlate addSubSlate(int x, int y, int w, int h, DataFunction<MenuSlate> function)
 	{
 		EditorPanel contentPanel = new EditorPanel();
+		contentPanel.setSize(w * cellWidth, y * cellHeight);
 		add(contentPanel);
 		resizeTasks.add(() -> {contentPanel.setBounds(x * cellWidth, y * cellHeight, (x + w) * cellWidth, (y + h) * cellHeight);});
+		updateTasks.add(() -> {propogate = false; contentPanel.update(); propogate = true;});
+		contentPanel.updateTasks.add(() -> {if (propogate) update();});
 		contentPanel.setCells(w, h);
 		// TODO allow swapping of subslates
 		resize();
