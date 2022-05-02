@@ -280,12 +280,56 @@ public class EditorPanel extends JPanel implements MenuSlate
 		update();
 	}
 	@Override
-	public <E extends Enum<E>> void addOptions(int x, int y, String label, int labelLength, int contentLength, E[] options,
-			DataFunction<E> function)
+	public <T> void addOptions(int x, int y, String label, int labelLength, int contentLength, int contentHeight, String[] optionLabels, T[] options,
+			DataFunction<T> function)
+	{
+		JLabel labelLabel = new JLabel();
+		add(labelLabel);
+		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, contentHeight * cellHeight);});
+		
+		DefaultListModel<String> contentModel = new DefaultListModel<String>();
+		for (int i = 0; i < optionLabels.length; ++i) contentModel.add(i, optionLabels[i]);
+		JList<String> contentList = new JList<String>();
+		contentList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		contentList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		contentList.setModel(contentModel);
+		
+		add(contentList);
+		resizeTasks.add(() -> {contentList.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, contentHeight * cellHeight);});
+		
+		labelLabel.setText(label);
+		
+		updateTasks.add(() -> {contentList.setSelectedIndex(Arrays.asList(options).indexOf(function.getValue()));});
+		contentList.addListSelectionListener(new ListSelectionListener()
+		{
+			@Override
+			public void valueChanged(ListSelectionEvent e)
+			{
+				function.setValue(options[contentList.getSelectedIndex()]);
+				update();
+			}
+		});
+		resize();
+		update();
+	}
+	
+	@Override
+	public <E extends Enum<E>> void addOptions(int x, int y, String label, int labelLength, int contentLength, 
+			E[] options, DataFunction<E> function)
 	{
 		String[] optionLabels = new String[options.length];
 		for (int i = 0; i < options.length; ++i) optionLabels[i] = options[i].name();
 		addOptions(x, y, label, labelLength, contentLength, optionLabels, options, function);
+		resize();
+		update();
+	}
+	@Override
+	public <E extends Enum<E>> void addOptions(int x, int y, String label, int labelLength, int contentLength, int contentHeight, 
+			E[] options, DataFunction<E> function)
+	{
+		String[] optionLabels = new String[options.length];
+		for (int i = 0; i < options.length; ++i) optionLabels[i] = options[i].name();
+		addOptions(x, y, label, labelLength, contentLength, contentHeight, optionLabels, options, function);
 		resize();
 		update();
 	}

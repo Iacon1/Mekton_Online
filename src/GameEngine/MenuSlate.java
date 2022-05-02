@@ -40,10 +40,16 @@ public interface MenuSlate
 	// Option list
 	public <T> void addOptions(int x,  int y, String label, int labelLength, int contentLength,
 			String[] optionLabels, T[] options, DataFunction<T> function);
+	<T> void addOptions(int x, int y, String label, int labelLength, int contentLength, int contentHeight,
+			String[] optionLabels, T[] options, DataFunction<T> function);
 	public <E extends Enum<E>> void addOptions(int x, int y, String label, int labelLength, int contentLength,
+			E[] options, DataFunction<E> function);
+	public <E extends Enum<E>> void addOptions(int x, int y, String label, int labelLength, int contentLength, int contentHeight,
 			E[] options, DataFunction<E> function);
 	// TODO tree support
 	// Section
 	public MenuSlate addSubSlate(int x, int y, int w, int h,
 			DataFunction<MenuSlate> function);
+
+	
 }
