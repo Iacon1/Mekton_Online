@@ -17,6 +17,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JList;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
@@ -31,6 +32,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import javax.swing.border.BevelBorder;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
@@ -110,6 +112,14 @@ public class EditorPanel extends JPanel implements MenuSlate
 	public void setSize(int width, int height)
 	{
 		super.setSize(width, height);
+		if (cellsH != 0 && cellsV != 0) setCells(cellsH, cellsV);
+		resize();
+		update();
+	}
+	@Override
+	public void setBounds(int x, int y, int width, int height)
+	{
+		super.setBounds(x, y, width, height);
 		if (cellsH != 0 && cellsV != 0) setCells(cellsH, cellsV);
 		resize();
 		update();
@@ -338,7 +348,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 	public void addButton(int x, int y, String label, int w, int h, ButtonFunction function)
 	{
 		JButton contentButton = new JButton();
-		resizeTasks.add(() -> {contentButton.setBounds(x * cellWidth, y * cellHeight, (x + w) * cellWidth, (y + h) * cellHeight);});
+		resizeTasks.add(() -> {contentButton.setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight);});
 		
 		contentButton.setText(label);
 		
@@ -359,9 +369,9 @@ public class EditorPanel extends JPanel implements MenuSlate
 	public MenuSlate addSubSlate(int x, int y, int w, int h, DataFunction<MenuSlate> function)
 	{
 		EditorPanel contentPanel = new EditorPanel();
-		contentPanel.setSize(w * cellWidth, y * cellHeight);
+		contentPanel.setSize(w * cellWidth, h * cellHeight);
 		add(contentPanel);
-		resizeTasks.add(() -> {contentPanel.setBounds(x * cellWidth, y * cellHeight, (x + w) * cellWidth, (y + h) * cellHeight);});
+		resizeTasks.add(() -> {contentPanel.setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight);});
 		updateTasks.add(() -> {propogate = false; contentPanel.update(); propogate = true;});
 		contentPanel.updateTasks.add(() -> {if (propogate) update();});
 		contentPanel.setCells(w, h);
