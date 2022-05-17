@@ -12,7 +12,7 @@ import GameEngine.ScreenCanvas;
 import GameEngine.Server.Account;
 import Utils.GSONConfig.TransSerializables.CRMHolder;
 import GameEngine.GameInfo;
-import GameEngine.Point2D;
+import GameEngine.IntPoint2D;
 
 public abstract class GameEntity //extends CRMHolder<GameEntity, Behavior>
 {
@@ -121,5 +121,5 @@ public abstract class GameEntity //extends CRMHolder<GameEntity, Behavior>
 	 * 
 	 * @param  canvas Canvas to draw to.
 	 */
-	public void render(ScreenCanvas canvas, Point2D camera) {for (Behavior behavior : behaviors.values()) behavior.render(canvas, camera);}
+	public void render(ScreenCanvas canvas, IntPoint2D camera) {for (Behavior behavior : behaviors.values()) behavior.render(canvas, camera);}
 }

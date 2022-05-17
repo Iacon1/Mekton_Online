@@ -4,7 +4,7 @@
 
 package GameEngine.EntityTypes;
 
-import GameEngine.Point2D;
+import GameEngine.IntPoint2D;
 
 public interface Alignable
 {
@@ -27,7 +27,7 @@ public interface Alignable
 	 * 
 	 * @param point Point to get coordinate of.
 	 */
-	public Point2D getAlignmentPoint(AlignmentPoint point);
+	public IntPoint2D getAlignmentPoint(AlignmentPoint point);
 	/** Aligns us with another Alignable. 
 	 * 
 	 * @param point Which of our alignment points to align.

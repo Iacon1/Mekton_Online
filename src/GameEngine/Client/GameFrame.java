@@ -15,7 +15,7 @@ import java.util.List;
 import javax.swing.JFrame;
 
 import GameEngine.GameInfo;
-import GameEngine.Point2D;
+import GameEngine.IntPoint2D;
 import GameEngine.ScreenCanvas;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.Alignable;
@@ -99,7 +99,7 @@ public class GameFrame extends JFrame
 		{
 			List<InputGetter> inputGetters = inputGetters();
 			
-			Point2D point = new Point2D(e.getX(), e.getY());
+			IntPoint2D point = new IntPoint2D(e.getX(), e.getY());
 			int mX = canvas.descale(point).x;
 			int mY = canvas.descale(point).y;
 			int button = 0;
@@ -120,7 +120,7 @@ public class GameFrame extends JFrame
 		{
 			List<InputGetter> inputGetters = inputGetters();
 			
-			Point2D point = new Point2D(e.getX(), e.getY());
+			IntPoint2D point = new IntPoint2D(e.getX(), e.getY());
 			int mX = canvas.descale(point).x;
 			int mY = canvas.descale(point).y;
 			int button = 0;
@@ -141,7 +141,7 @@ public class GameFrame extends JFrame
 		{
 			List<InputGetter> inputGetters = inputGetters();
 			
-			Point2D point = new Point2D(e.getX(), e.getY());
+			IntPoint2D point = new IntPoint2D(e.getX(), e.getY());
 			int mX = canvas.descale(point).x;
 			int mY = canvas.descale(point).y;
 			int button = 0;
@@ -229,9 +229,9 @@ public class GameFrame extends JFrame
 		registerInputListener();
 	}
 	
-	public static Point2D getAlignmentPoint(AlignmentPoint point)
+	public static IntPoint2D getAlignmentPoint(AlignmentPoint point)
 	{
-		Point2D pos = new Point2D(0, 0);
+		IntPoint2D pos = new IntPoint2D(0, 0);
 		switch (point)
 		{
 		case northWest: break;

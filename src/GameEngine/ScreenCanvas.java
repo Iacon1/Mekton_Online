@@ -12,13 +12,13 @@ import java.awt.Graphics;
 @SuppressWarnings("serial")
 public class ScreenCanvas extends UtilCanvas
 {
-	static private Point2D camera = null;
+	static private IntPoint2D camera = null;
 	
-	public static Point2D getCamera()
+	public static IntPoint2D getCamera()
 	{
-		return camera.clone();
+		return new IntPoint2D(camera);
 	}
-	public static void setCamera(Point2D camera)
+	public static void setCamera(IntPoint2D camera)
 	{
 		ScreenCanvas.camera = camera;
 	}

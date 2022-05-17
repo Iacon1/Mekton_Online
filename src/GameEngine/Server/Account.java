@@ -11,7 +11,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import GameEngine.GameInfo;
-import GameEngine.Point2D;
+import GameEngine.IntPoint2D;
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.EntityTypes.GUITypes.GUISpriteEntity;
@@ -66,7 +66,7 @@ public abstract class Account implements CommandRunner
 	
 	public abstract JPanel serverPanel();
 	
-	public abstract Point2D getCamera();
+	public abstract IntPoint2D getCamera();
 
 	public int getID()
 	{

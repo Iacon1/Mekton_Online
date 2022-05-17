@@ -15,7 +15,7 @@ public class ImageSprite extends Sprite
 	}
 
 	@Override
-	public void render(UtilCanvas canvas, Point2D pos)
+	public void render(UtilCanvas canvas, IntPoint2D pos)
 	{
 		canvas.drawImage(texturePath, pos, texturePos, textureSize);
 	}

@@ -5,7 +5,7 @@
 package GameEngine.EntityTypes;
 
 import GameEngine.GameInfo;
-import GameEngine.Point2D;
+import GameEngine.IntPoint2D;
 import GameEngine.ScreenCanvas;
 
 public abstract class Behavior
@@ -27,5 +27,5 @@ public abstract class Behavior
 	 */
 	public abstract void update();
 
-	public abstract void render(ScreenCanvas canvas, Point2D camera);
+	public abstract void render(ScreenCanvas canvas, IntPoint2D camera);
 }

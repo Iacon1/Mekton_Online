@@ -10,7 +10,7 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 
 import GameEngine.ImageSprite;
-import GameEngine.Point2D;
+import GameEngine.IntPoint2D;
 import GameEngine.ScreenCanvas;
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.InputGetter;
@@ -104,10 +104,10 @@ public abstract class Textbar extends GUISpriteEntity implements InputGetter, Co
 	}
 	
 	@Override
-	public void render(ScreenCanvas canvas, Point2D camera) 
+	public void render(ScreenCanvas canvas, IntPoint2D camera) 
 	{
 		super.render(canvas, camera);
-		if (buffer != null) canvas.drawText(buffer, font, color, pos.add(spriteOff), heightPixels);
+		if (buffer != null) canvas.drawText(buffer, font, color, getPos().add(spriteOff), heightPixels);
 	}
 
 	public abstract void onSubmit();

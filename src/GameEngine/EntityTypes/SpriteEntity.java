@@ -7,6 +7,8 @@ package GameEngine.EntityTypes;
 import GameEngine.Animation;
 import GameEngine.Sprite;
 import GameEngine.Client.GameFrame;
+import GameEngine.DoublePoint2D;
+import GameEngine.IntPoint2D;
 import GameEngine.Point2D;
 import GameEngine.ScreenCanvas;
 import Utils.SimpleTimer;
@@ -17,15 +19,15 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	
 	protected Sprite sprite;
 
-	protected Point2D pos; // Position on screen
-	protected Point2D boundSize; // Size of hitbox
-	
-	protected Point2D spriteOff; // Texture offset
+	protected DoublePoint2D pos; // Position on screen w/ subpixel precision
+	protected IntPoint2D boundSize; // Size of hitbox
+
+	protected IntPoint2D spriteOff; // Texture offset
 
 	// Kinetic variables
 	
-	protected Point2D targetPos; // Target position, -1 if none
-	protected int speed = 0; // Speed, 0 if none
+	protected IntPoint2D targetPos; // Target position, -1 if none
+	protected double speed = 0; // Speed, 0 if none
 	
 	// Animation variables
 	
@@ -39,12 +41,12 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	{
 		super();
 		
-		pos = new Point2D(0, 0);
-		boundSize = new Point2D(0, 0);
+		pos = new DoublePoint2D(0., 0.);
+		boundSize = new IntPoint2D(0, 0);
 		
-		spriteOff = new Point2D(0, 0);
+		spriteOff = new IntPoint2D(0, 0);
 
-		targetPos = new Point2D(-1, -1);
+		targetPos = new IntPoint2D(-1, -1);
 		
 		animTimer = new SimpleTimer();
 	}
@@ -87,23 +89,20 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 		if (spriteOffY != null) spriteOff.y = spriteOffY;
 	}
 	
-	public void setPos(Point2D pos)
-	{
-		this.pos = pos;
-	}
+	public void setPos(IntPoint2D pos) {this.pos = new DoublePoint2D(pos);}
 	public void setPos(int x, int y)
 	{
-		setPos(new Point2D(x, y));
+		setPos(new IntPoint2D(x, y));
 	}
 	
-	public Point2D getPos()
+	public IntPoint2D getPos()
 	{
-		return pos;
+		return new IntPoint2D(pos);
 	}
 	
 	// Kinetic functions
 	
-	public int getSpeed()
+	public double getSpeed()
 	{
 		return speed;
 	}
@@ -119,7 +118,17 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	*
 	* @param  delta how far to move in each direction..
 	*/
-	public void moveDelta(Point2D delta)
+	public void moveDelta(DoublePoint2D delta)
+	{
+		pos = pos.add(delta);
+	}
+	/**
+	* Moves by delta (i. e. adds delta to our position).
+	* <p>
+	*
+	* @param  delta how far to move in each direction..
+	*/
+	public void moveDelta(IntPoint2D delta)
 	{
 		pos = pos.add(delta);
 	}
@@ -127,12 +136,12 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	* Moves to pos at a set speed.
 	* <p>
 	*
-	* @param  pos   Where to go to.
-	* @param  speed How fast to move.
+	* @param  target   Where to go to.
+	* @param  speed How fast to move in pixels per frame.
 	*/
-	public void moveTargetSpeed(Point2D pos, int speed)
+	public void moveTargetSpeed(IntPoint2D target, double speed)
 	{
-		targetPos = pos;
+		targetPos = target;
 		this.speed = speed;
 		if (this.speed != 0) onStart();
 	}
@@ -143,34 +152,34 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	* @param  delta How far to go.
 	* @param  speed How fast to move.
 	*/
-	public void moveDeltaSpeed(Point2D delta, int speed)
+	public void moveDeltaSpeed(IntPoint2D delta, double speed)
 	{
-		moveTargetSpeed(pos.add(delta), speed);
+		moveTargetSpeed(new IntPoint2D(pos.add(delta)), speed);
 	}
 
-	protected Point2D getSpeedVector(Point2D delta)
+	protected DoublePoint2D getSpeedVector(IntPoint2D delta)
 	{
 		
 		double angle = Math.atan2(delta.y, delta.x);
-		int sX = (int) Math.floor(((double) speed) * Math.cos(angle)); // Directional speeds
-		int sY = (int) Math.floor(((double) speed) * Math.sin(angle));
-		return new Point2D(sX, sY);
+		double sX = speed * Math.cos(angle); // Directional speeds
+		double sY = speed * Math.sin(angle);
+		return new DoublePoint2D(sX, sY);
 	}
 	private void updateMove() // Updates movement with speed
 	{
-		if (targetPos.equals(new Point2D(-1, -1)) && speed == 0) return;
-		Point2D delta = new Point2D(targetPos.x - pos.x, targetPos.y - pos.y);
+		if (targetPos.equals(new IntPoint2D(-1, -1)) && speed == 0) return;
+		IntPoint2D delta = targetPos.subtract(pos);
 		
-		Point2D speedVector = getSpeedVector(delta);
+		DoublePoint2D speedVector = getSpeedVector(delta);
 		
-		if (Math.abs(delta.x) <= Math.abs(speedVector.x)) pos.x = targetPos.x; // We're within speed of target
+		if (Math.abs(delta.x) <= Math.abs(speedVector.x)) pos.x = targetPos.x.doubleValue(); // We're within speed of target
 		else pos.x += speedVector.x;
-		if (Math.abs(delta.y) <= Math.abs(speedVector.y)) pos.y = targetPos.y; // We're within speed of target
+		if (Math.abs(delta.y) <= Math.abs(speedVector.y)) pos.y = targetPos.y.doubleValue(); // We're within speed of target
 		else pos.y += speedVector.y;
 		
 		if (pos.equals(targetPos))
 		{
-			targetPos = new Point2D(-1, -1);
+			targetPos = new IntPoint2D(-1, -1);
 			speed = 0;
 			onStop();
 		}
@@ -224,10 +233,10 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	
 	// Alignment functions
 	
-	private Point2D getAlignmentOffset(AlignmentPoint point) // Gets the offset instead of the point
+	private IntPoint2D getAlignmentOffset(AlignmentPoint point) // Gets the offset instead of the point
 	{
-		if (sprite == null) return new Point2D(0, 0);
-		Point2D offset = new Point2D(0, 0);
+		if (sprite == null) return new IntPoint2D(0, 0);
+		IntPoint2D offset = new IntPoint2D(0, 0);
 		switch (point)
 		{
 		case northWest: break;
@@ -254,16 +263,16 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	// Override functions
 	
 	@Override
-	public Point2D getAlignmentPoint(AlignmentPoint point)
+	public IntPoint2D getAlignmentPoint(AlignmentPoint point)
 	{
-		Point2D offset = getAlignmentOffset(point);
-		if (offset != null) return pos.add(offset);
+		IntPoint2D offset = getAlignmentOffset(point);
+		if (offset != null) return new IntPoint2D(pos.add(offset));
 		else return null;
 	}
 	@Override
 	public void align(AlignmentPoint point, Alignable target, AlignmentPoint targetPoint)
 	{
-		Point2D targetPos = null;
+		IntPoint2D targetPos = null;
 		if (target != null) targetPos = target.getAlignmentPoint(targetPoint);
 		else targetPos = GameFrame.getAlignmentPoint(targetPoint); // Align with frame;
 		
@@ -274,8 +283,8 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	public void update() {updateAnim(); updateMove();}
 	
 	@Override
-	public void render(ScreenCanvas canvas, Point2D camera) 
+	public void render(ScreenCanvas canvas, IntPoint2D camera) 
 	{
-		sprite.render(canvas, pos.subtract(camera).add(spriteOff));
+		sprite.render(canvas, getPos().subtract(camera).add(spriteOff));
 	}
 }

@@ -6,13 +6,13 @@ package GameEngine;
 
 public abstract class Sprite
 {
-	protected Point2D texturePos; // Offset on texture sheet
-	protected Point2D textureSize; // Width, height on texture sheet
+	protected IntPoint2D texturePos; // Offset on texture sheet
+	protected IntPoint2D textureSize; // Width, height on texture sheet
 	
 	public Sprite()
 	{
-		texturePos = new Point2D(0, 0);
-		textureSize = new Point2D(0, 0);
+		texturePos = new IntPoint2D(0, 0);
+		textureSize = new IntPoint2D(0, 0);
 	}
 	
 	public void setBasicParams(Integer textureX, Integer textureY, Integer width, Integer height)
@@ -24,11 +24,11 @@ public abstract class Sprite
 		if (height != null) textureSize.y = height;
 	}
 	
-	public Point2D getSize()
+	public IntPoint2D getSize()
 	{
-		return textureSize.clone();
+		return new IntPoint2D(textureSize);
 	}
 	
-	public abstract void render(UtilCanvas canvas, Point2D pos);
+	public abstract void render(UtilCanvas canvas, IntPoint2D pos);
 	
 }
