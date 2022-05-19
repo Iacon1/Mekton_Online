@@ -41,4 +41,15 @@ public class IntPoint2D extends Point2D<Integer, IntPoint2D>
 	{
 		return new IntPoint2D(this.x.intValue() / factor.intValue(), this.y.intValue() / factor.intValue());
 	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (!(obj instanceof Point2D)) return false;
+		else
+		{
+			Point2D<?, ?> point = (Point2D<?, ?>) obj;
+			return (x.intValue() == point.x.intValue()) && (y.intValue() == point.y.intValue());
+		}
+	}
 }

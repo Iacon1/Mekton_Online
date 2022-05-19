@@ -19,15 +19,4 @@ public abstract class Point2D<T extends Number, P extends Point2D<T, P>>
 	{
 		return (x.hashCode() + "." + y.hashCode()).hashCode();
 	}
-	
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (obj.getClass() != this.getClass()) return false;
-		else
-		{
-			Point2D<T, P> point = (Point2D<T, P>) obj;
-			return (x.equals(point.x)) && (y.equals(point.y));
-		}
-	}
 }
