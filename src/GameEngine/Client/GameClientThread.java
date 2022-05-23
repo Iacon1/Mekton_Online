@@ -2,17 +2,19 @@
 // Created 4/21/2021
 // Updates the game state and receives input to send to the server
 
-package Client;
+package GameEngine.Client;
 
 import java.awt.Container;
 import java.util.HashMap;
 import java.util.Map;
 
+import GameEngine.Client.ClientStates.ClientStateFactory;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.StateGiverModule;
 import GameEngine.Net.StateFactory;
 import GameEngine.Net.StatefulConnectionPairThread;
 import GameEngine.Net.Server.ServerInfo;
+import GameEngine.Server.HandlerStates.HandlerStateFactory;
 
 /** Thread that the client uses to communicate with the server and run the game.
  * 
@@ -31,7 +33,10 @@ public class GameClientThread extends StatefulConnectionPairThread
 	public GameClientThread()
 	{
 		super();
-		stateFactory = ModuleManager.getHighestOfType(StateGiverModule.class).clientFactory();
+		StateGiverModule stateFactoryFactory = ModuleManager.getHighestOfType(StateGiverModule.class);
+		if (stateFactoryFactory == null) // Use default factory
+			stateFactory = new ClientStateFactory();
+		else stateFactory = stateFactoryFactory.clientFactory(); // Use found factory
 		containers = new HashMap<String, Container>();
 		initState(stateFactory.getState(0));
 	}

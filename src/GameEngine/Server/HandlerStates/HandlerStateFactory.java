@@ -2,7 +2,7 @@
 // Created 06/16/2021
 //
 
-package Server.ServerStates;
+package GameEngine.Server.HandlerStates;
 
 import Utils.MiscUtils;
 import GameEngine.Net.StateFactory;

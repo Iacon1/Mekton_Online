@@ -2,7 +2,7 @@
 // Created 06/16/2021
 // Map screen
 
-package Server.ServerStates;
+package GameEngine.Server.HandlerStates;
 
 import GameEngine.Net.StateFactory;
 import GameEngine.Net.ThreadState;

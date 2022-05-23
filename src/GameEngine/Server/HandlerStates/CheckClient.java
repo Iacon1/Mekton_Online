@@ -3,7 +3,7 @@
 // Checking client state
 // Sends a packet to the client, then waits for one back
 
-package Server.ServerStates;
+package GameEngine.Server.HandlerStates;
 
 import GameEngine.Net.StateFactory;
 import GameEngine.Net.ThreadState;

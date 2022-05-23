@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
-import Client.GameClientThread;
+import GameEngine.Client.GameClientThread;
 import GameEngine.PacketTypes.LoginPacket;
 import Utils.Logging;
 import Utils.MiscUtils;

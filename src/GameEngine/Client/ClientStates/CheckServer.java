@@ -1,11 +1,11 @@
 package GameEngine.Client.ClientStates;
 
-import Client.GameClientThread;
 import GameEngine.Net.StateFactory;
 import GameEngine.Net.ThreadState;
 import GameEngine.PacketTypes.ClientInfoPacket;
 import GameEngine.PacketTypes.ServerInfoPacket;
 import GameEngine.DiffieHellman;
+import GameEngine.Client.GameClientThread;
 import Utils.JSONManager;
 import Utils.MiscUtils;
 

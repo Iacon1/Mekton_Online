@@ -5,7 +5,7 @@
 package GameEngine.Client.ClientStates;
 
 import Client.ConnectFailDialog;
-import Client.GameClientThread;
+import GameEngine.Client.GameClientThread;
 import GameEngine.Net.StateFactory;
 import GameEngine.Net.ThreadState;
 import Utils.MiscUtils;

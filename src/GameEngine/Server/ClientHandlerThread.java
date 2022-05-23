@@ -10,41 +10,45 @@ import GameEngine.Configurables.ModuleTypes.StateGiverModule;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.Net.StateFactory;
 import GameEngine.Net.StatefulConnectionPairThread;
-
+import GameEngine.Server.HandlerStates.HandlerStateFactory;
 import Utils.Logging;
 
 public class ClientHandlerThread extends StatefulConnectionPairThread
 {
-	private StateFactory stateFactory_; // Where we get our states
+	private StateFactory stateFactory; // Where we get our states
 	
-	protected volatile String username_ = null; // Client's account name
+	protected volatile String username = null; // Client's account name
 	
 	public Account getAccount()
 	{
-		return parent_.getAccount(username_);
+		return parent.getAccount(username);
 	}
 	protected GameEntity getUserEntity()
 	{
-		return parent_.getAccount(username_).getPossessee();
+		return parent.getAccount(username).getPossessee();
 	}
 	
-	protected static volatile BaseServer parent_;
+	protected static volatile BaseServer parent;
 	
 	public ClientHandlerThread()
 	{
 		super();
-		stateFactory_ = ModuleManager.getHighestOfType(StateGiverModule.class).handlerFactory();
-		initState(stateFactory_.getState(0));
+		StateGiverModule stateFactoryFactory = ModuleManager.getHighestOfType(StateGiverModule.class);
+		if (stateFactoryFactory == null) // Use default factory
+			stateFactory = new HandlerStateFactory();
+		else stateFactory = stateFactoryFactory.handlerFactory();
+	 
+		initState(stateFactory.getState(0));
 	}
 	public void setParent(BaseServer parent)
 	{
-		parent_ = parent;
+		this.parent = parent;
 	}
 	
 	@Override
 	public void runFunc()
 	{
-		parent_.update();
+		parent.update();
 		super.runFunc();
 	}
 	
@@ -57,15 +61,15 @@ public class ClientHandlerThread extends StatefulConnectionPairThread
 	
 	public BaseServer getParent()
 	{
-		return parent_;
+		return parent;
 	}
 
 	public void setUsername(String username)
 	{
-		username_ = username;
+		this.username = username;
 	}
 	public String getUsername()
 	{
-		return username_;
+		return username;
 	}
 }

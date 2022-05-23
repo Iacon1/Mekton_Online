@@ -4,8 +4,8 @@
 
 package GameEngine.Client.ClientStates;
 
-import Client.GameClientThread;
 import GameEngine.GameInfo;
+import GameEngine.Client.GameClientThread;
 import GameEngine.Client.GameFrame;
 import GameEngine.Net.StateFactory;
 import GameEngine.Net.ThreadState;

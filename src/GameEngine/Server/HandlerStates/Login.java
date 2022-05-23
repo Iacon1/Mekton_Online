@@ -1,4 +1,4 @@
-package Server.ServerStates;
+package GameEngine.Server.HandlerStates;
 
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.PlayerHandlerModule;
