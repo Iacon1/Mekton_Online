@@ -24,7 +24,7 @@ public class ServerExec
 		
 		try
 		{
-			GameInfo.setServerPack("Default");
+			GameInfo.setServerPack("Default"); // TODO changeable
 			ModuleManager.init();
 			JSONManager.invalidate();
 			ModuleManager.getHighestOfType(WorldMakingModule.class).newWorld(); // TODO loading

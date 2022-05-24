@@ -44,7 +44,7 @@ public final class JSONManager
 	public static <C> C deserializeJSON(String serialized, Class<C> classTo) // Unserializes
 	{
 		setupIfNot();
-//		Logging.logNotice(serialized);
+		Logging.logNotice(serialized);
 		try {return gson.fromJson(serialized, classTo);}
 		catch (Exception e) {Logging.logException(e); return null;}
 	}
@@ -56,10 +56,14 @@ public final class JSONManager
 		catch (Exception e) {Logging.logException(e); return null;}
 	}
 	
-	/**
-	 * 
+	/** Deserializes a parameterized collection.
+	 *  @param serialized String to deserialize.
+	 *  @param mainClass Class of the collection.
+	 *  @param classArgs Parameters.
+	 *  
+	 *  @return The deserialized collection.
 	 */
-	public static <C> C deserializeCollectionJSONList(String serialized, Class<C> mainClass, Class... classArgs) // Unserializes a parameterized collection
+	public static <C> C deserializeCollectionJSONList(String serialized, Class<C> mainClass, Class<?>... classArgs) // Unserializes a parameterized collection
 	{
 		java.lang.reflect.Type typeTo = TypeToken.getParameterized(mainClass, classArgs).getType();
 	

@@ -1,6 +1,6 @@
 // By Iacon1
 // Created 09/03/2021
-//
+// Adapter that runs and then runs the adapter under it
 
 package Utils.GSONConfig.Delegation;
 

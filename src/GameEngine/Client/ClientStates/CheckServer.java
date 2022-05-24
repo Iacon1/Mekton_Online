@@ -5,7 +5,9 @@ import GameEngine.Net.ThreadState;
 import GameEngine.PacketTypes.ClientInfoPacket;
 import GameEngine.PacketTypes.ServerInfoPacket;
 import GameEngine.DiffieHellman;
+import GameEngine.GameInfo;
 import GameEngine.Client.GameClientThread;
+import GameEngine.Configurables.ModuleManager;
 import Utils.JSONManager;
 import Utils.MiscUtils;
 
@@ -58,7 +60,8 @@ public class CheckServer implements ThreadState<GameClientThread>
 				result = Result.login;
 				diffieHellman.start();
 				diffieHellman.end(packet.mix, parentThread);
-				
+				GameInfo.setServerPack(packet.resourceFolder);
+				ModuleManager.init();
 				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class)));
 			}
 		}
