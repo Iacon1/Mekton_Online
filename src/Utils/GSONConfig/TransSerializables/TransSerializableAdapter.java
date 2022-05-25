@@ -36,8 +36,6 @@ public class TransSerializableAdapter<T> extends DelegatingAdapter<T>
 		((TransSerializable) value).preSerialize(); // We can assume T is extended from TransSerializable
 		delegator.getAdapter(type).write(out, value); // Serialize
 	}
-
-	
 	
 	public static class Factory extends DelegatingFactory<TransSerializable>
 	{

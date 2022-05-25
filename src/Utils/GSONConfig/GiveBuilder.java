@@ -20,10 +20,11 @@ public final class GiveBuilder
 	public static GsonBuilder giveBuilder()
 	{
 		GsonBuilder builder = new GsonBuilder();
+		builder.registerTypeAdapterFactory(new TransSerializableAdapter.Factory());
 		builder.registerTypeAdapterFactory(new AbsFactory<GameEntity>(GameEntity.class));
 		builder.registerTypeAdapterFactory(new AbsFactory<Account>(Account.class));
 		builder.registerTypeAdapterFactory(new AbsFactory<Sprite>(Sprite.class));
-		builder.registerTypeAdapterFactory(new TransSerializableAdapter.Factory());
+		
 		builder.registerTypeAdapter(Color.class, new ColorAdapter());
 		
 		GSONModule module = ModuleManager.getHighestOfType(GSONModule.class);
