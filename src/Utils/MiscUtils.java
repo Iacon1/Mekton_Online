@@ -330,7 +330,7 @@ public final class MiscUtils
 	 *  
 	 *  @return The string.
 	 */
-	public static String asHex(byte number, int digits)
+	public static String asHex(int number, int digits)
 	{
 		return String.format("%0" + digits + "x", number);
 	}
