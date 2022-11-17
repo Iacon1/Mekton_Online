@@ -5,14 +5,15 @@
 package GameEngine.EntityTypes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import GameEngine.ScreenCanvas;
+import GameEngine.Graphics.Camera;
+import GameEngine.Graphics.ScreenCanvas;
 import GameEngine.Server.Account;
-import Utils.GSONConfig.TransSerializables.CRMHolder;
 import GameEngine.GameInfo;
-import GameEngine.IntPoint2D;
+import GameEngine.EntityTypes.Behaviors.Behavior;
 
 public abstract class GameEntity //extends CRMHolder<GameEntity, Behavior>
 {
@@ -35,6 +36,7 @@ public abstract class GameEntity //extends CRMHolder<GameEntity, Behavior>
 		parentId = -1;
 		possessorID = -1;
 		childrenIds = new ArrayList<Integer>();
+		behaviors = new HashMap<Class<? extends Behavior>, Behavior>();
 	}
 	
 	public String getName() {return this.getClass().getName() + " (ID " + ourId + ")";}
@@ -103,14 +105,29 @@ public abstract class GameEntity //extends CRMHolder<GameEntity, Behavior>
 	}
 
 
-	public void addBehavior(Behavior behavior)
+	public void addBehavior(Behavior behavior, boolean overrideSuperclass)
 	{
 		behaviors.put(behavior.getClass(), behavior);
+		if (overrideSuperclass)
+		{
+			Class<?> c = behavior.getClass().getSuperclass();
+			while (c != Behavior.class)
+			{
+				behaviors.put((Class<? extends Behavior>) c, behavior);
+				c = c.getSuperclass();
+			}
+		}
 		behavior.setParent(this);
 	}
-	public Behavior getBehavior(Class<? extends Behavior> behaviorClass)
+	public void addBehavior(Behavior behavior)
 	{
-		return behaviors.get(behaviorClass);
+		addBehavior(behavior, true);
+	}
+	public <B extends Behavior> B getBehavior(Class<B> behaviorClass)
+	{
+		Behavior b = behaviors.get(behaviorClass);
+		if (b != null && behaviorClass.isAssignableFrom(b.getClass())) return (B) b;
+		else return null;
 	}
 
 	/** Updates the object.
@@ -121,5 +138,5 @@ public abstract class GameEntity //extends CRMHolder<GameEntity, Behavior>
 	 * 
 	 * @param  canvas Canvas to draw to.
 	 */
-	public void render(ScreenCanvas canvas, IntPoint2D camera) {for (Behavior behavior : behaviors.values()) behavior.render(canvas, camera);}
+	public void render(ScreenCanvas canvas, Camera camera) {for (Behavior behavior : behaviors.values()) behavior.render(canvas, camera);}
 }

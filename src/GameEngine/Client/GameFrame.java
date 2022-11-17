@@ -16,7 +16,8 @@ import javax.swing.JFrame;
 
 import GameEngine.GameInfo;
 import GameEngine.IntPoint2D;
-import GameEngine.ScreenCanvas;
+import GameEngine.Graphics.RenderQueue;
+import GameEngine.Graphics.ScreenCanvas;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.Alignable;
 import GameEngine.EntityTypes.Alignable.AlignmentPoint;
@@ -66,9 +67,10 @@ public class GameFrame extends JFrame
 	/** Updates the UI
 	 * 
 	 */
-	public void updateUIStuff() // Updates UI stuff
+	public void updateUIStuff(RenderQueue renderQueue) // Updates UI stuff
 	{	
 		checkScale();
+		canvas.setRenderQueue(renderQueue);
 		canvas.repaint();
 	}
 	

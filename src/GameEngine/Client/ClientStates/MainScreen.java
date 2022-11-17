@@ -16,12 +16,12 @@ public class MainScreen implements ThreadState<GameClientThread>
 {
 	private StateFactory factory;
 	private boolean frameLoaded = false;
-	
+
 	public MainScreen(StateFactory factory)
 	{
 		this.factory = factory;
 	}
-	
+
 	@Override
 	public void onEnter(GameClientThread parentThread)
 	{
@@ -30,20 +30,25 @@ public class MainScreen implements ThreadState<GameClientThread>
 		parentThread.getContainer("main");
 		frameLoaded = false;
 	}
+
 	@Override
 	public void processInput(String input, GameClientThread parentThread)
 	{
 		GameDataPacket packet = JSONManager.deserializeJSON(input, GameDataPacket.class);
-		if (packet == null) return;
-		GameInfo.setWorld(packet.ourView);
+		if (packet == null)
+			return;
 		GameFrame frame = (GameFrame) parentThread.getContainer("main");
-		
-		if (frame == null && frameLoaded) parentThread.close();
-		else if (frame == null) return;
-		else frameLoaded = true;
-		
-		frame.updateUIStuff();
+
+		if (frame == null && frameLoaded)
+			parentThread.close();
+		else if (frame == null)
+			return;
+		else
+			frameLoaded = true;
+
+		frame.updateUIStuff(packet.renderQueue);
 	}
+
 	@Override
 	public String processOutput(GameClientThread parentThread)
 	{

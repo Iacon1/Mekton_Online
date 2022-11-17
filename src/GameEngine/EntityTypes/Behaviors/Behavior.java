@@ -2,11 +2,13 @@
 // Created 02/24/2022
 // Behavior for an entity.
 
-package GameEngine.EntityTypes;
+package GameEngine.EntityTypes.Behaviors;
 
 import GameEngine.GameInfo;
 import GameEngine.IntPoint2D;
-import GameEngine.ScreenCanvas;
+import GameEngine.EntityTypes.GameEntity;
+import GameEngine.Graphics.Camera;
+import GameEngine.Graphics.ScreenCanvas;
 
 public abstract class Behavior
 {
@@ -27,5 +29,5 @@ public abstract class Behavior
 	 */
 	public abstract void update();
 
-	public abstract void render(ScreenCanvas canvas, IntPoint2D camera);
+	public abstract void render(ScreenCanvas canvas, Camera camera);
 }

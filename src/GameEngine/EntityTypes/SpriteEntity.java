@@ -5,12 +5,13 @@
 package GameEngine.EntityTypes;
 
 import GameEngine.Animation;
-import GameEngine.Sprite;
+import GameEngine.Graphics.Sprite;
 import GameEngine.Client.GameFrame;
 import GameEngine.DoublePoint2D;
 import GameEngine.IntPoint2D;
 import GameEngine.Point2D;
-import GameEngine.ScreenCanvas;
+import GameEngine.Graphics.Camera;
+import GameEngine.Graphics.ScreenCanvas;
 import Utils.SimpleTimer;
 
 public abstract class SpriteEntity extends GameEntity implements Alignable
@@ -283,8 +284,8 @@ public abstract class SpriteEntity extends GameEntity implements Alignable
 	public void update() {updateAnim(); updateMove();}
 	
 	@Override
-	public void render(ScreenCanvas canvas, IntPoint2D camera) 
+	public void render(ScreenCanvas canvas, Camera camera) 
 	{
-		sprite.render(canvas, getPos().subtract(camera).add(spriteOff));
+		sprite.render(canvas, getPos().subtract(camera.topLeftCorner).add(spriteOff));
 	}
 }

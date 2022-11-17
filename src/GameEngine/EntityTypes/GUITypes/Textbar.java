@@ -9,11 +9,12 @@ package GameEngine.EntityTypes.GUITypes;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 
-import GameEngine.ImageSprite;
 import GameEngine.IntPoint2D;
-import GameEngine.ScreenCanvas;
+import GameEngine.Graphics.Camera;
+import GameEngine.Graphics.ScreenCanvas;
 import GameEngine.EntityTypes.CommandRunner;
 import GameEngine.EntityTypes.InputGetter;
+import GameEngine.Graphics.SingleSprite;
 import Utils.MiscUtils;
 
 public abstract class Textbar extends GUISpriteEntity implements InputGetter, CommandRunner
@@ -39,7 +40,7 @@ public abstract class Textbar extends GUISpriteEntity implements InputGetter, Co
 	public Textbar(String image, String font, Color color, boolean selfClearing, int heightPixels)
 	{
 		super();
-		super.setSprite(new ImageSprite(image));
+		super.setSprite(new SingleSprite(image));
 		this.font = font;
 		this.color = color;
 		this.heightPixels = heightPixels;
@@ -104,10 +105,10 @@ public abstract class Textbar extends GUISpriteEntity implements InputGetter, Co
 	}
 	
 	@Override
-	public void render(ScreenCanvas canvas, IntPoint2D camera) 
+	public void render(ScreenCanvas canvas, Camera camera) 
 	{
 		super.render(canvas, camera);
-		if (buffer != null) canvas.drawText(buffer, font, color, getPos().add(spriteOff), heightPixels);
+		if (buffer != null) canvas.addText(buffer, font, color, getPos().add(spriteOff), heightPixels);
 	}
 
 	public abstract void onSubmit();

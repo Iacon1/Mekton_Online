@@ -2,11 +2,14 @@
 // Created 10/01/2021
 // Something that can be drawn to the screen
 
-package GameEngine;
+package GameEngine.Graphics;
+
+import GameEngine.IntPoint2D;
 
 public abstract class Sprite
 {
-	protected IntPoint2D texturePos; // Offset on texture sheet
+	protected IntPoint2D pos;		  // World position to render top-left corner at
+	protected IntPoint2D texturePos;  // Offset on texture sheet
 	protected IntPoint2D textureSize; // Width, height on texture sheet
 	
 	public Sprite()
@@ -15,6 +18,11 @@ public abstract class Sprite
 		textureSize = new IntPoint2D(0, 0);
 	}
 	
+	public void setPos(Integer x, Integer y)
+	{
+		if (x != null) pos.x = x;
+		if (y != null) pos.y = y;
+	}
 	public void setBasicParams(Integer textureX, Integer textureY, Integer width, Integer height)
 	{
 		if (textureX != null) texturePos.x = textureX;
@@ -28,7 +36,6 @@ public abstract class Sprite
 	{
 		return new IntPoint2D(textureSize);
 	}
-	
+
 	public abstract void render(UtilCanvas canvas, IntPoint2D pos);
-	
 }

@@ -4,6 +4,10 @@
 
 package GameEngine.Server.HandlerStates;
 
+import GameEngine.Configurables.ModuleManager;
+import GameEngine.Configurables.ModuleTypes.GraphicsHandlerModule;
+import GameEngine.Graphics.ScreenCanvas;
+import GameEngine.Graphics.UtilCanvas;
 import GameEngine.Net.StateFactory;
 import GameEngine.Net.ThreadState;
 import GameEngine.PacketTypes.GameDataPacket;
@@ -33,7 +37,9 @@ public class MainScreen implements ThreadState<ClientHandlerThread>
 	@Override
 	public String processOutput(ClientHandlerThread parentThread)
 	{
-		GameDataPacket packet = new GameDataPacket(parentThread.getAccount());
+		ScreenCanvas canvas = new ScreenCanvas();
+		ModuleManager.getHighestOfType(GraphicsHandlerModule.class).drawWorld(parentThread.getAccount().getPossessee(), canvas);
+		GameDataPacket packet = new GameDataPacket(canvas.getRenderQueue());
 		return JSONManager.serializeJSON(packet);
 	}
 	

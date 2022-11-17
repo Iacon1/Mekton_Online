@@ -7,7 +7,8 @@ package GameEngine.EntityTypes.GUITypes;
 
 import GameEngine.GameInfo;
 import GameEngine.IntPoint2D;
-import GameEngine.ScreenCanvas;
+import GameEngine.Graphics.Camera;
+import GameEngine.Graphics.ScreenCanvas;
 import GameEngine.EntityTypes.SpriteEntity;
 import GameEngine.Server.Account;
 
@@ -33,7 +34,7 @@ public abstract class GUISpriteEntity extends SpriteEntity
 		return GameInfo.getServer().getAccount(getOwnerID());
 	}
 	@Override
-	public void render(ScreenCanvas canvas, IntPoint2D camera) 
+	public void render(ScreenCanvas canvas, Camera camera) 
 	{
 		if (sprite != null) sprite.render(canvas, getPos().add(spriteOff));
 	}

@@ -4,12 +4,15 @@
 
 package GameEngine.Configurables.ModuleTypes;
 
-import GameEngine.ScreenCanvas;
+import GameEngine.EntityTypes.GameEntity;
+import GameEngine.Graphics.ScreenCanvas;
+import GameEngine.Graphics.UtilCanvas;
 
 public interface GraphicsHandlerModule extends Module
 {
 	/** Draws the game world. 
+	 *  @param viewer The viewer to draw from the perspective of.
 	 *  @param canvas The screen canvas to draw to.
 	 */
-	public void drawWorld(ScreenCanvas canvas); // Draws the world
+	public void drawWorld(GameEntity viewer, ScreenCanvas canvas); // Draws the world
 }
