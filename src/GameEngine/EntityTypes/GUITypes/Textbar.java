@@ -13,11 +13,11 @@ import GameEngine.IntPoint2D;
 import GameEngine.Graphics.Camera;
 import GameEngine.Graphics.ScreenCanvas;
 import GameEngine.EntityTypes.CommandRunner;
-import GameEngine.EntityTypes.InputGetter;
 import GameEngine.Graphics.SingleSprite;
+import GameEngine.Server.Account;
 import Utils.MiscUtils;
 
-public abstract class Textbar extends GUISpriteEntity implements InputGetter, CommandRunner
+public abstract class Textbar extends Button
 {
 	private String font;
 	private Color color;
@@ -59,49 +59,24 @@ public abstract class Textbar extends GUISpriteEntity implements InputGetter, Co
 	}
 	
 	@Override
-	public String onMouseClick(int mX, int mY, int button)
+	public void onClick(int userId, int clickType)
 	{
-		if (button != 0) return null;
-		
-		if (pos.x <= mX && mX <= pos.x + sprite.getSize().x && pos.y <= mY && mY <= pos.y + sprite.getSize().y)
-			return "select";
-		else if (selected) return "unselect";
-		else return null;
 	}
 	@Override
-	public String onKeyPress(int code)
+	public void handleKeyboard(int userId, KeyEvent event)
 	{
-		if (!selected) return null;
-		return "key " + code;
-	}
-
-	@Override
-	public boolean runCommand(String... words)
-	{
-		if (words[0].equals("select"))
+		if (!selected) return;
+		else
 		{
-			selected = true;
-			return true;
-		}
-		else if (words[0].equals("unselect"))
-		{
-			selected = false;
-			return true;
-		}
-		else if (words[0].equals("key"))
-		{
-			int code = Integer.valueOf(words[1]);
-			if (code == KeyEvent.VK_BACK_SPACE && buffer != null)
+			if (event.getKeyCode() == KeyEvent.VK_BACK_SPACE && buffer != null)
 				buffer = buffer.substring(0, buffer.length() - 1);
-			else if (code == KeyEvent.VK_ENTER) onSubmit();
+			else if (event.getKeyCode() == KeyEvent.VK_ENTER) onSubmit();
 			else
 			{
-				if (buffer != null) buffer = buffer + (char) code;
-				else buffer = String.valueOf((char) code);
+				if (buffer != null) buffer = buffer + (char) event.getKeyCode();
+				else buffer = String.valueOf(event.getKeyCode());
 			}
-			return true;
 		}
-		else return false;
 	}
 	
 	@Override

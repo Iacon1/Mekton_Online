@@ -52,10 +52,13 @@ public class MainScreen implements ThreadState<GameClientThread>
 	@Override
 	public String processOutput(GameClientThread parentThread)
 	{
-		String input = GameInfo.getCommand();
-		if (input != null) // We got input
-			return input;
-		return null;
+		if (GameInfo.clientInput != null && !GameInfo.clientInput.inputs.isEmpty()) // We got input
+		{
+			String output = JSONManager.serializeJSON(GameInfo.clientInput);
+			GameInfo.clearInput();
+			return output;
+		}
+		else return null;
 	}
 
 	@Override

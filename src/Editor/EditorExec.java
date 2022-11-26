@@ -24,7 +24,7 @@ public final class EditorExec
 	public static void main(String[] args)
 	{
 		Logging.setLogger(new DebugLogger());
-		GraphicsManager.init();
+		GraphicsManager.init(false);
 		SoundManager.init();
 		GameInfo.setClient(false);
 		try

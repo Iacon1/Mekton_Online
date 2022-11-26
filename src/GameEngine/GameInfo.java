@@ -9,6 +9,7 @@ import java.util.List;
 
 import GameEngine.Client.GameFrame;
 import GameEngine.EntityTypes.GameEntity;
+import GameEngine.PacketTypes.ClientInputPacket;
 import GameEngine.Server.Account;
 import GameEngine.Server.GameServer;
 import Utils.GappyArrayList;
@@ -91,25 +92,20 @@ public class GameInfo
 			return instances; //getEntitiesOfType(GameEntity.class);
 		}
 	}
-	private static transient GameWorld world; // Holds any things we might need to transfer to client
+	private static transient GameWorld world = new GameWorld(); // Holds any things we might need to transfer to client
 	
 	// Things that don't need to be communicated
 	
 	// Client-side
 	private static transient GameFrame frame;
 	private static transient boolean isClient; // On if client
-	private static transient String command;
+	public static transient ClientInputPacket clientInput = new ClientInputPacket();;
 	private static transient int possessee; // Client's current player form
 //	private static transient Point2D camera;
 	private static transient String serverPackPrefix; // Server pack's path
 
 	// Server-side
 	private static transient GameServer server;
-	
-	private GameInfo() // Static class, do not call
-	{
-		world = new GameWorld();
-	}
 	
 	public static void initWorld(GameWorld world)
 	{
@@ -166,31 +162,6 @@ public class GameInfo
 	{
 		return server.getAccount(possessorID);
 	}
-	public static void resetCommand() // Resets all input elements
-	{
-		GameInfo.command = null;
-	}
-	public static void setCommand(String command)
-	{
-		GameInfo.command = command;
-	}
-	public static void addCommand(String command)
-	{
-		if (GameInfo.command == null) setCommand(command);
-		else GameInfo.command = GameInfo.command + "; " + command;
-	}
-	public static String getCommand() // Gets input, resets if not empty, returns null if empty
-	{
-		if (GameInfo.command == null)
-			return null;
-		else
-		{
-			String command = GameInfo.command;
-			resetCommand();
-			
-			return command;
-		}
-	}
 	
 	public static void setPossessee(int id)
 	{
@@ -200,7 +171,10 @@ public class GameInfo
 	{
 		return possessee;
 	}
-
+	public static void clearInput()
+	{
+		clientInput.inputs.clear();
+	}
 /*	public static void setCamera(Point2D camera)
 	{
 		GameInfo.camera = camera;

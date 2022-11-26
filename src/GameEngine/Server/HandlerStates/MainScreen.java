@@ -10,6 +10,7 @@ import GameEngine.Graphics.ScreenCanvas;
 import GameEngine.Graphics.UtilCanvas;
 import GameEngine.Net.StateFactory;
 import GameEngine.Net.ThreadState;
+import GameEngine.PacketTypes.ClientInputPacket;
 import GameEngine.PacketTypes.GameDataPacket;
 import GameEngine.Server.ClientHandlerThread;
 import Utils.JSONManager;
@@ -29,10 +30,9 @@ public class MainScreen implements ThreadState<ClientHandlerThread>
 	@Override
 	public void processInput(String input, ClientHandlerThread parentThread)
 	{
-		if (input != null)
-		{
-			parentThread.getParent().runCommand(parentThread.getAccount().username, input);
-		}
+		if (input == null) return;
+		ClientInputPacket packet = JSONManager.deserializeJSON(input, ClientInputPacket.class);
+		parentThread.getAccount().processOtherInputs(packet.inputs);
 	}
 	@Override
 	public String processOutput(ClientHandlerThread parentThread)

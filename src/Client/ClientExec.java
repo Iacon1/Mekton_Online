@@ -27,13 +27,12 @@ public class ClientExec
 	public static void main(String[] args)
 	{
 		Logging.setLogger(new DebugLogger());
-		GraphicsManager.init();
+		GraphicsManager.init(false);
 		SoundManager.init();
 		GameInfo.setClient(true);
 		try
 		{
 			GameInfo.setServerPack("Default");
-			ModuleManager.init();
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			GetServerFrame.main(null);
 			

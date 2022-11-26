@@ -23,9 +23,12 @@ public final class GraphicsManager
 	private static Map<String, Image> images;
 	private static Map<String, Font> fonts;
 	
-	public static void init()
+	public static void init(boolean justFonts)
 	{
-		images = new HashMap<String, Image>();
+		if (!justFonts)
+		{
+			images = new HashMap<String, Image>();
+		}
 		fonts = new HashMap<String, Font>();
 	}
 	

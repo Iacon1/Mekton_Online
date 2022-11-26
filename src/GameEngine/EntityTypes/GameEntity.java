@@ -4,10 +4,15 @@
 
 package GameEngine.EntityTypes;
 
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import GameEngine.Graphics.Camera;
 import GameEngine.Graphics.ScreenCanvas;
@@ -15,7 +20,7 @@ import GameEngine.Server.Account;
 import GameEngine.GameInfo;
 import GameEngine.EntityTypes.Behaviors.Behavior;
 
-public abstract class GameEntity //extends CRMHolder<GameEntity, Behavior>
+public abstract class GameEntity implements InputHandler //extends CRMHolder<GameEntity, Behavior>
 {
 	private int parentId; // Parent object index; -1 means none
 	private int ourId;
@@ -129,7 +134,30 @@ public abstract class GameEntity //extends CRMHolder<GameEntity, Behavior>
 		if (b != null && behaviorClass.isAssignableFrom(b.getClass())) return (B) b;
 		else return null;
 	}
-
+	
+	/** Processes an input event.
+	 * @param input Input event to process.
+	 *
+	 */
+	public void handleInput(int userID, InputEvent event)
+	{
+		Set<Behavior> processedBehaviors = new HashSet<Behavior>();
+		
+		if (MouseEvent.class.isAssignableFrom(event.getClass()))
+		{
+			handleMouse(userID, (MouseEvent) event);
+			for (Behavior behavior : behaviors.values()) if (!processedBehaviors.contains(behavior))
+				behavior.handleMouse(userID, (MouseEvent) event);
+		}
+		else if (KeyEvent.class.isAssignableFrom(event.getClass()))
+		{
+			handleKeyboard(userID, (KeyEvent) event);
+			for (Behavior behavior : behaviors.values()) if (!processedBehaviors.contains(behavior))
+				behavior.handleKeyboard(userID, (KeyEvent) event);
+		}
+		for (int i = 0; i < childrenIds.size(); ++i) getChild(i).handleInput(userID, event);
+	}
+	
 	/** Updates the object.
 	 * 
 	 */

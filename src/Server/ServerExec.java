@@ -10,6 +10,7 @@ import GameEngine.GameInfo;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.WorldMakingModule;
+import GameEngine.Managers.GraphicsManager;
 import Utils.DebugLogger;
 import Utils.JSONManager;
 import Utils.Logging;
@@ -26,6 +27,7 @@ public class ServerExec
 		{
 			GameInfo.setServerPack("Default"); // TODO changeable
 			ModuleManager.init();
+			GraphicsManager.init(true);
 			JSONManager.invalidate();
 			ModuleManager.getHighestOfType(WorldMakingModule.class).newWorld(); // TODO loading
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

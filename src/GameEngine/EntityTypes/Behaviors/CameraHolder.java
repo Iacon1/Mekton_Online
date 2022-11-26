@@ -4,6 +4,10 @@
 
 package GameEngine.EntityTypes.Behaviors;
 
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+
 import GameEngine.IntPoint2D;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.SpriteEntity;
@@ -42,5 +46,8 @@ public class CameraHolder extends Behavior
 	public Camera getCamera() {return camera;}
 	
 	@Override public void render(ScreenCanvas canvas, Camera camera) {}
+	@Override public void handleMouse(int userID, MouseEvent event) {}
+	@Override public void handleKeyboard(int userID, KeyEvent event) {}
+	@Override public void getInput(InputEvent input) {}
 
 }

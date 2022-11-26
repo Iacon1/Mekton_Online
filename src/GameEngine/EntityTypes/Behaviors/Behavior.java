@@ -4,13 +4,15 @@
 
 package GameEngine.EntityTypes.Behaviors;
 
+import java.awt.event.InputEvent;
+
 import GameEngine.GameInfo;
-import GameEngine.IntPoint2D;
 import GameEngine.EntityTypes.GameEntity;
+import GameEngine.EntityTypes.InputHandler;
 import GameEngine.Graphics.Camera;
 import GameEngine.Graphics.ScreenCanvas;
 
-public abstract class Behavior
+public abstract class Behavior implements InputHandler
 {
 	private int parentID;
 	
@@ -24,6 +26,7 @@ public abstract class Behavior
 		return GameInfo.getWorld().getEntity(parentID);
 	}
 	
+	public abstract void getInput(InputEvent input);
 	/** Updates the object.
 	 * 
 	 */

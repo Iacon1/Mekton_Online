@@ -5,6 +5,8 @@
 package GameEngine.EntityTypes.GUITypes;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 import GameEngine.GameInfo;
 
@@ -37,12 +39,7 @@ public class ChatBox extends Textbar
 		return "Chat Box";
 	}
 
-	@Override
-	public String onMousePress(int mX, int mY, int button) {return null;}
-	@Override
-	public String onMouseRelease(int mX, int mY, int button) {return null;}
-	@Override
-	public String onKeyRelease(int code) {return null;}
+	@Override public void handleMouse(int userID, MouseEvent event) {}
 
-
+	@Override public void handleKeyboard(int userID, KeyEvent event) {} // TODO
 }

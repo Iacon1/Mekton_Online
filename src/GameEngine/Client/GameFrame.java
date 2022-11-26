@@ -9,8 +9,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -21,8 +19,6 @@ import GameEngine.Graphics.ScreenCanvas;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.Alignable;
 import GameEngine.EntityTypes.Alignable.AlignmentPoint;
-import GameEngine.EntityTypes.GameEntity;
-import GameEngine.EntityTypes.InputGetter;
 import Utils.MiscUtils;
 
 @SuppressWarnings("serial")
@@ -75,126 +71,34 @@ public class GameFrame extends JFrame
 	}
 	
 	private class EntityInputListener implements KeyListener, MouseListener
-	{
-		private void addCommand(GameEntity getter, String command)
+	{		
+		private MouseEvent descaleMouse(MouseEvent e)
 		{
-			if (command == null) return;
-			GameInfo.addCommand("@" + getter.getId() + " " + command);
-		}
-		
-		List<InputGetter> inputGetters()
-		{
-			List<InputGetter> inputGetters = new ArrayList<InputGetter>();
-			
-			for (int i = 0; i < GameInfo.getWorld().getEntities().size(); ++i)
-			{
-				GameEntity entity = GameInfo.getWorld().getEntities().get(i);
-				if (entity != null && InputGetter.class.isAssignableFrom(entity.getClass()))
-					inputGetters.add((InputGetter) entity);
-			}
-				
-			return inputGetters;
-		}
-		
-		@Override
-		public void mouseClicked(MouseEvent e)
-		{
-			List<InputGetter> inputGetters = inputGetters();
-			
-			IntPoint2D point = new IntPoint2D(e.getX(), e.getY());
-			int mX = canvas.descale(point).x;
-			int mY = canvas.descale(point).y;
-			int button = 0;
-			
-			switch (e.getButton())
-			{
-			case MouseEvent.NOBUTTON: return;
-			case MouseEvent.BUTTON1: button = 0; break;
-			case MouseEvent.BUTTON2: button = 1; break;
-			case MouseEvent.BUTTON3: button = 1; break;
-			}
-			
-			for (int i = 0; i < inputGetters.size(); ++i)
-				addCommand((GameEntity) inputGetters.get(i), inputGetters.get(i).onMouseClick(mX, mY, button));
+			IntPoint2D pos = new IntPoint2D(e.getX(), e.getY());
+			pos = canvas.descale(pos);
+			return new MouseEvent(e.getComponent(), e.getID(), e.getWhen(), e.getModifiersEx(), pos.x, pos.y, e.getClickCount(), e.isPopupTrigger(), e.getButton());
 		}
 		@Override
-		public void mousePressed(MouseEvent e)
-		{
-			List<InputGetter> inputGetters = inputGetters();
-			
-			IntPoint2D point = new IntPoint2D(e.getX(), e.getY());
-			int mX = canvas.descale(point).x;
-			int mY = canvas.descale(point).y;
-			int button = 0;
-			
-			switch (e.getButton())
-			{
-			case MouseEvent.NOBUTTON: return;
-			case MouseEvent.BUTTON1: button = 0; break;
-			case MouseEvent.BUTTON2: button = 1; break;
-			case MouseEvent.BUTTON3: button = 2; break;
-			}
-			
-			for (int i = 0; i < inputGetters.size(); ++i)
-				addCommand((GameEntity) inputGetters.get(i), inputGetters.get(i).onMousePress(mX, mY, button));
-		}
+		public void mouseClicked(MouseEvent e) {GameInfo.clientInput.inputs.add(descaleMouse(e));}
 		@Override
-		public void mouseReleased(MouseEvent e)
-		{
-			List<InputGetter> inputGetters = inputGetters();
-			
-			IntPoint2D point = new IntPoint2D(e.getX(), e.getY());
-			int mX = canvas.descale(point).x;
-			int mY = canvas.descale(point).y;
-			int button = 0;
-			
-			switch (e.getButton())
-			{
-			case MouseEvent.NOBUTTON: return;
-			case MouseEvent.BUTTON1: button = 0; break;
-			case MouseEvent.BUTTON2: button = 1; break;
-			case MouseEvent.BUTTON3: button = 2; break;
-			}
-			
-			for (int i = 0; i < inputGetters.size(); ++i)
-				addCommand((GameEntity) inputGetters.get(i), inputGetters.get(i).onMouseRelease(mX, mY, button));
-		}
-			
+		public void mousePressed(MouseEvent e) {GameInfo.clientInput.inputs.add(descaleMouse(e));}
+		@Override
+		public void mouseReleased(MouseEvent e) {GameInfo.clientInput.inputs.add(descaleMouse(e));}
 		@Override
 		public void mouseEntered(MouseEvent e) // I don't think this can actually trigger bc of how the canvas is set up
-		{
-			return;
-		}
+		{return;}
 		@Override
 		public void mouseExited(MouseEvent e) // See mouseEntered
-		{
-			return;
-		}
+		{return;}
 
 		@Override
 		public void keyTyped(KeyEvent e) // Not really useful to us I think; TODO Maybe?
-		{
-//			findInputGetters();
-//				
-//			for (int i = 0; i < inputGetters.size(); ++i) inputGetters.get(i).onKeyPress(e.getKeyCode());
-		}
+		{GameInfo.clientInput.inputs.add(e);}
 			
 		@Override
-		public void keyPressed(KeyEvent e)
-		{
-			List<InputGetter> inputGetters = inputGetters();
-				
-			for (int i = 0; i < inputGetters.size(); ++i)
-				addCommand((GameEntity) inputGetters.get(i), inputGetters.get(i).onKeyPress(e.getKeyCode()));
-		}
+		public void keyPressed(KeyEvent e) {GameInfo.clientInput.inputs.add(e);}
 		@Override
-		public void keyReleased(KeyEvent e)
-		{
-			List<InputGetter> inputGetters = inputGetters();
-			
-			for (int i = 0; i < inputGetters.size(); ++i)
-				addCommand((GameEntity) inputGetters.get(i), inputGetters.get(i).onKeyRelease(e.getKeyCode()));
-		}
+		public void keyReleased(KeyEvent e) {GameInfo.clientInput.inputs.add(e);}
 	}
 
 	private void registerInputListener()

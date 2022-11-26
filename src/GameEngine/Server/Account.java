@@ -4,9 +4,9 @@
 
 package GameEngine.Server;
 
+import java.awt.event.InputEvent;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.Queue;
 
 import javax.swing.JPanel;
 
@@ -97,5 +97,18 @@ public abstract class Account implements CommandRunner
 		}
 		
 		return false;
+	}
+	
+	// Inputs that are not a command
+	public void processOtherInputs(Queue<InputEvent> inputs)
+	{
+		while (!inputs.isEmpty())
+		{
+			InputEvent input = inputs.poll();
+			for (int i = 0; i < GameInfo.getWorld().getEntities().size(); ++i)
+			{
+				GameInfo.getWorld().getEntity(i).handleInput(id, input);
+			}
+		}
 	}
 }
