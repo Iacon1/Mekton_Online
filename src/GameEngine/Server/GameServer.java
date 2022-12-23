@@ -67,14 +67,7 @@ public abstract class GameServer<T extends ConnectionPairThread> extends Server<
 	{
 		return accounts; // TODO copy?
 	}
-	public void update()
-	{
-		for (int i = 0; i < GameInfo.getWorld().getEntities().size(); ++i)
-		{
-			GameEntity entity = GameInfo.getWorld().getEntities().get(i);
-			if (entity != null) entity.update();
-		}
-	}
+	
 	public boolean login(String username, String password)
 	{
 		if (getAccount(username) == null) return false;

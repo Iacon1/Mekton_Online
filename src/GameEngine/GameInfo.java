@@ -92,7 +92,7 @@ public class GameInfo
 			return instances; //getEntitiesOfType(GameEntity.class);
 		}
 	}
-	private static transient GameWorld world = new GameWorld(); // Holds any things we might need to transfer to client
+	private static transient GameWorld world = new GameWorld();
 	
 	// Things that don't need to be communicated
 	
@@ -106,6 +106,7 @@ public class GameInfo
 
 	// Server-side
 	private static transient GameServer server;
+	public static transient final Object updateLock = new Object();
 	
 	public static void initWorld(GameWorld world)
 	{
@@ -125,11 +126,25 @@ public class GameInfo
 	}
 	public static void setWorld(GameWorld world)
 	{
-		GameInfo.world = world;
+		synchronized (GameInfo.updateLock)
+		{
+			GameInfo.world = world;
+		}
 	}
 	public static GameWorld getWorld()
 	{
 		return world;
+	}
+	public static void updateWorld()
+	{
+		synchronized (GameInfo.updateLock)
+		{
+			for (int i = 0; i < GameInfo.world.getEntities().size(); ++i)
+			{
+				GameEntity entity = GameInfo.world.getEntities().get(i);
+				if (entity != null) entity.update();
+			}
+		}
 	}
 	
 	public static void setFrame(GameFrame frame)

@@ -4,6 +4,7 @@
 
 package GameEngine.Server.HandlerStates;
 
+import GameEngine.GameInfo;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.GraphicsHandlerModule;
 import GameEngine.Graphics.ScreenCanvas;
@@ -32,7 +33,10 @@ public class MainScreen implements ThreadState<ClientHandlerThread>
 	{
 		if (input == null) return;
 		ClientInputPacket packet = JSONManager.deserializeJSON(input, ClientInputPacket.class);
-		parentThread.getAccount().processOtherInputs(packet.inputs);
+		synchronized ((GameInfo.updateLock))
+		{
+			parentThread.getAccount().processOtherInputs(packet.inputs);
+		}
 	}
 	@Override
 	public String processOutput(ClientHandlerThread parentThread)

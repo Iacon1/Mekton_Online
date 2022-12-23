@@ -19,6 +19,7 @@ import GameEngine.Server.Account;
 import GameEngine.Server.GameServer;
 import Utils.Logging;
 import Utils.MiscUtils;
+import Utils.SimpleTimer;
 
 import javax.swing.JTabbedPane;
 import javax.swing.JScrollPane;
@@ -40,7 +41,8 @@ public class ServerMainFrame extends JFrame
 {	
 	private static GameServer server;
 	private DefaultTreeModel model;
-	private final Timer timer = new Timer();
+	private final Timer displayTimer = new Timer();
+	private final Timer gameTimer = new Timer();
 	private JPanel contentPane;
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	private final JTabbedPane logPanel = new JTabbedPane(JTabbedPane.LEFT);
@@ -57,6 +59,10 @@ public class ServerMainFrame extends JFrame
 	private final JSplitPane splitPane = new JSplitPane();
 	private final JTree objectTree = new JTree();
 	private final JPanel playersPanel = new JPanel();
+	
+	private SimpleTimer framerateCounter = new SimpleTimer();
+	private int lastFramerate = 0;
+	private final JLabel FPSLabel = new JLabel("New label");
 	
 	private class InstanceNode extends DefaultMutableTreeNode
 	{
@@ -179,13 +185,24 @@ public class ServerMainFrame extends JFrame
 		
 	}
 	
-	private class UpdateTask extends TimerTask // Updates the display
+	private class DisplayUpdateTask extends TimerTask // Updates the display
 	{
 		public void run() // Updates the display
 		{
 			updateLogs();
 			updateObjectsTree();
 			updatePlayersList();
+			FPSLabel.setText("FPS: " + String.valueOf(lastFramerate) + " / " + ConfigManager.getFramerateCap());
+		}
+	}
+	private class GameUpdateTask extends TimerTask // Updates the game
+	{
+		public void run() // Updates the display
+		{
+			int millis = framerateCounter.stopTime();
+			lastFramerate = 1000 / millis;
+			framerateCounter.start();
+			GameInfo.updateWorld();
 		}
 	}
 	
@@ -222,7 +239,6 @@ public class ServerMainFrame extends JFrame
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		tabbedPane.setBounds(0, 0, 640, 480); // TODO Fix preset values
-		
 		
 		contentPane.add(tabbedPane);
 		
@@ -265,10 +281,15 @@ public class ServerMainFrame extends JFrame
 		tabbedPane.addTab("Overview", null, overviewPanel, null);
 		SpringLayout sl_overviewPanel = new SpringLayout();
 		overviewPanel.setLayout(sl_overviewPanel);
+		
+		FPSLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		FPSLabel.setVerticalAlignment(SwingConstants.TOP);
+		overviewPanel.add(FPSLabel);
+		
 		initObjectsTree();
 		
-		timer.schedule(new UpdateTask(), ConfigManager.getFramerateCap(), ConfigManager.getFramerateCap());
-		
+		displayTimer.schedule(new DisplayUpdateTask(), 1000 / ConfigManager.getFramerateCap(), 1000 / ConfigManager.getFramerateCap());
+		gameTimer.schedule(new GameUpdateTask(), 1000 / ConfigManager.getFramerateCap(), 1000 / ConfigManager.getFramerateCap());
 		pack();
 	}
 }

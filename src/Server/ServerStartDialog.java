@@ -45,10 +45,9 @@ public class ServerStartDialog extends JDialog
 		Integer value = (Integer) portSpinner.getValue();
 		if (value != null)
 		{
-			GameServer server = ModuleManager.getHighestOfType(ServerMakingModule.class).makeServer();
+			GameServer<?> server = ModuleManager.getHighestOfType(ServerMakingModule.class).makeServer();
 			GameInfo.setServer(server);
 			server.start(value); // TODO changeable
-
 			ServerWindow.main(server);
 			
 			this.setVisible(false);

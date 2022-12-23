@@ -48,7 +48,6 @@ public class ClientHandlerThread extends StatefulConnectionPairThread
 	@Override
 	public void runFunc()
 	{
-		parent.update();
 		super.runFunc();
 	}
 	
