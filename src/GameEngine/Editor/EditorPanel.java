@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.DefaultListModel;
@@ -27,9 +28,13 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.BorderFactory;
@@ -48,7 +53,9 @@ import javax.swing.tree.TreeNode;
 
 import GameEngine.MenuSlate;
 import GameEngine.MenuSlate.InfoFunction;
-
+import GameEngine.MenuSlate.TabHandle;
+import GameEngine.Configurables.ConfigManager;
+import Utils.Logging;
 
 @SuppressWarnings("serial")
 public class EditorPanel extends JPanel implements MenuSlate
@@ -59,11 +66,25 @@ public class EditorPanel extends JPanel implements MenuSlate
 	private int cellsV;
 	private int cellWidth;
 	private int cellHeight;
-	private boolean propogate; // See addSubSlate
 	private List<UpdateTask> updateTasks; // Tasks to do on update
 	private List<ResizeTask> resizeTasks; // Resize components on screen resize
-	private void update() {for (UpdateTask task : updateTasks) task.onUpdate();}
-	private void resize() {for (ResizeTask task : resizeTasks) task.onResize();}
+	private Timer timer;
+	private TimerTask updateTask = new TimerTask()
+	{
+		@Override public void run() 
+		{
+			for (UpdateTask task : updateTasks) task.onUpdate();
+			
+		}
+	};
+	private TimerTask resizeTask = new TimerTask()
+	{
+		@Override public void run() 
+		{
+			for (ResizeTask task : resizeTasks) task.onResize();
+		}
+	};
+	
 	/**
 	 * Create the panel.
 	 */
@@ -73,10 +94,14 @@ public class EditorPanel extends JPanel implements MenuSlate
 		
 		updateTasks = new ArrayList<UpdateTask>();
 		resizeTasks = new ArrayList<ResizeTask>();
+		timer = new Timer();
 		
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		setLayout(null);
 		setSize(640, 480);
+		
+		timer.scheduleAtFixedRate(updateTask, 0, 1000 / ConfigManager.getFramerateCap());
+		timer.scheduleAtFixedRate(resizeTask, 0, 1000 / ConfigManager.getFramerateCap());
 	}
 	/**
 	 * Create the panel.
@@ -87,6 +112,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 		
 		updateTasks = new ArrayList<UpdateTask>();
 		resizeTasks = new ArrayList<ResizeTask>();
+		timer = new Timer();
 		
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		setLayout(null);
@@ -94,6 +120,9 @@ public class EditorPanel extends JPanel implements MenuSlate
 		setVisible(true);
 		setCells(cellsH, cellsV);
 		setSize(width, height);
+
+		timer.scheduleAtFixedRate(updateTask, 0, 1000 / ConfigManager.getFramerateCap());
+		timer.scheduleAtFixedRate(resizeTask, 0, 1000 / ConfigManager.getFramerateCap());
 	}
 	
 	@Override
@@ -104,8 +133,6 @@ public class EditorPanel extends JPanel implements MenuSlate
 		
 		cellsH = h;
 		cellsV = v;
-		resize();
-		update();
 	}
 	
 	@Override
@@ -113,58 +140,55 @@ public class EditorPanel extends JPanel implements MenuSlate
 	{
 		super.setSize(width, height);
 		if (cellsH != 0 && cellsV != 0) setCells(cellsH, cellsV);
-		resize();
-		update();
 	}
 	@Override
 	public void setBounds(int x, int y, int width, int height)
 	{
 		super.setBounds(x, y, width, height);
 		if (cellsH != 0 && cellsV != 0) setCells(cellsH, cellsV);
-		resize();
-		update();
 	}
 	
 	@Override
-	public void addInfo(int x, int y, String label, int labelLength, int contentLength,
+	public void addInfo(int x, int y, String label, int labelLength, int contentLength, int h,
 			InfoFunction<String> function)
 	{
 		JLabel labelLabel = new JLabel();
 		add(labelLabel);
-		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);});
+		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, h * cellHeight);});
 		JLabel contentLabel = new JLabel();
 		add(contentLabel);
-		resizeTasks.add(() -> {contentLabel.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);});
+		resizeTasks.add(() -> {contentLabel.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, h * cellHeight);});
 		
 		labelLabel.setText(label);
 		contentLabel.setText(function.getValue());
 		
 		updateTasks.add(() -> {contentLabel.setText(function.getValue());});
-		resize();
-		update();
 	}
 
 	@Override
-	public void addTextbar(int x, int y, String label, int labelLength, int maxLength, int contentLength,
+	public void addTextbar(int x, int y, String label, int labelLength, int maxLength, int contentLength, int h,
 			DataFunction<String> function)
 	{
+		final DataFunction<String> wrappedFunction = new DataFunctionWrapper<String>(function);
+		
 		JLabel labelLabel = new JLabel();
 		add(labelLabel);
-		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);});
+		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, h * cellHeight);});
 		JTextField contentField = new JTextField();
 		add(contentField);
-		resizeTasks.add(() -> {contentField.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);});
+		resizeTasks.add(() -> {contentField.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, h * cellHeight);});
 		
 		labelLabel.setText(label);
 		contentField.setText(function.getValue());
 		
-		updateTasks.add(() -> {contentField.setText(function.getValue());});
+		updateTasks.add(() ->
+		{if (!contentField.getText().equals(wrappedFunction.getValue())) contentField.setText(wrappedFunction.getValue());});
+
 		contentField.getDocument().addDocumentListener(new DocumentListener()
 		{
 			private void onUpdate()
 			{
-				function.setValue(contentField.getText());
-				update();
+				wrappedFunction.setValue(contentField.getText());
 			}
 			@Override
 			public void insertUpdate(DocumentEvent e) {onUpdate();}
@@ -173,71 +197,58 @@ public class EditorPanel extends JPanel implements MenuSlate
 			@Override
 			public void changedUpdate(DocumentEvent e) {onUpdate();}
 		});
-		resize();
-		update();
 	}
 	
 	@Override
-	public void addIntegerWheel(int x, int y, String label, int labelLength, int min, int max, int contentLength,
+	public void addIntegerWheel(int x, int y, String label, int labelLength, int min, int max, int contentLength, int h,
 			DataFunction<Integer> function)
 	{
+		final DataFunction<Integer> wrappedFunction = new DataFunctionWrapper<Integer>(function);
+		
 		JLabel labelLabel = new JLabel();
 		add(labelLabel);
-		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);});
+		
+		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, h * cellHeight);});
 		JSpinner contentSpinner = new JSpinner();
 		add(contentSpinner);
+		
 		contentSpinner.setModel(new SpinnerNumberModel(min, min, max, 1));
-		resizeTasks.add(() -> {contentSpinner.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);});
+		resizeTasks.add(() -> {contentSpinner.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, h * cellHeight);});
 		
 		labelLabel.setText(label);
-		contentSpinner.setValue(function.getValue());
+		contentSpinner.setValue(wrappedFunction.getValue());
 		
-		updateTasks.add(() -> {contentSpinner.setValue(function.getValue());});
-		contentSpinner.addChangeListener(new ChangeListener()
-		{
-			@Override
-			public void stateChanged(ChangeEvent e)
-			{
-				function.setValue((Integer) contentSpinner.getValue());
-				update();
-			}
-		});
-		resize();
-		update();
+		updateTasks.add(() -> {contentSpinner.setValue(wrappedFunction.getValue());});
+		contentSpinner.addChangeListener((ChangeEvent e) -> {wrappedFunction.setValue((Integer) contentSpinner.getValue());});
 	}
 	@Override
-	public void addDoubleWheel(int x, int y, String label, int labelLength, double min, double max, int digits, int contentLength,
+	public void addDoubleWheel(int x, int y, String label, int labelLength, double min, double max, int digits, int contentLength, int h,
 			DataFunction<Double> function)
 	{
+		final DataFunction<Double> wrappedFunction = new DataFunctionWrapper<Double>(function);
+		
 		JLabel labelLabel = new JLabel();
 		add(labelLabel);
-		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);});
+		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, h * cellHeight);});
+		
 		JSpinner contentSpinner = new JSpinner();
 		add(contentSpinner);
 		contentSpinner.setModel(new SpinnerNumberModel(min, min, max, 1));
-		resizeTasks.add(() -> {contentSpinner.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);});
+		resizeTasks.add(() -> {contentSpinner.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, h * cellHeight);});
 		
 		labelLabel.setText(label);
-		contentSpinner.setValue(function.getValue());
+		contentSpinner.setValue(wrappedFunction.getValue());
 		
-		updateTasks.add(() -> {contentSpinner.setValue(function.getValue());});
-		contentSpinner.addChangeListener(new ChangeListener()
-		{
-			@Override
-			public void stateChanged(ChangeEvent e)
-			{
-				function.setValue((Double) contentSpinner.getValue());
-				update();
-			}
-		});
-		resize();
-		update();
+		updateTasks.add(() -> {contentSpinner.setValue(wrappedFunction.getValue());});
+		contentSpinner.addChangeListener((ChangeEvent e) -> {wrappedFunction.setValue((Double) contentSpinner.getValue());});
 	}
 
 	@Override
-	public void addCheckbox(int x, int y, String label, int labelLength, int contentLength,
+	public void addCheckbox(int x, int y, String label, int labelLength, int contentLength, int h,
 			DataFunction<Boolean> function)
 	{
+		final DataFunction<Boolean> wrappedFunction = new DataFunctionWrapper<Boolean>(function);
+		
 		JLabel labelLabel = new JLabel();
 		add(labelLabel);
 		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);});
@@ -246,56 +257,55 @@ public class EditorPanel extends JPanel implements MenuSlate
 		resizeTasks.add(() -> {contentBox.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);});
 		
 		labelLabel.setText(label);
-		contentBox.setSelected(function.getValue());
+		contentBox.setSelected(wrappedFunction.getValue());
 		
-		updateTasks.add(() -> {contentBox.setSelected(function.getValue());});
+		updateTasks.add(() -> {contentBox.setSelected(wrappedFunction.getValue());});
 		contentBox.addChangeListener(new ChangeListener()
 		{
 			@Override
 			public void stateChanged(ChangeEvent e)
 			{
-				function.setValue(contentBox.isSelected());
-				update();
+				wrappedFunction.setValue(contentBox.isSelected());
 			}
 		});
-		resize();
-		update();
 	}
 
 	@Override
-	public <T> void addOptions(int x, int y, String label, int labelLength, int contentLength, String[] optionLabels, T[] options,
+	public <T> void addOptions(int x, int y, String label, int labelLength, int contentLength, int h, String[] optionLabels, T[] options,
 			DataFunction<T> function)
 	{
+		final DataFunction<T> wrappedFunction = new DataFunctionWrapper<T>(function);
+		
 		JLabel labelLabel = new JLabel();
 		add(labelLabel);
-		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);});
+		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, h * cellHeight);});
+		
 		JComboBox<String> contentBox = new JComboBox<String>(optionLabels);
 		add(contentBox);
-		resizeTasks.add(() -> {contentBox.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);});
+		resizeTasks.add(() -> {contentBox.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, h * cellHeight);});
 		
 		labelLabel.setText(label);
 		contentBox.setEditable(false);
 		
-		updateTasks.add(() -> {contentBox.setSelectedIndex(Arrays.asList(options).indexOf(function.getValue()));});
+		updateTasks.add(() -> {contentBox.setSelectedIndex(Arrays.asList(options).indexOf(wrappedFunction.getValue()));});
 		contentBox.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				function.setValue(options[contentBox.getSelectedIndex()]);
-				update();
+				wrappedFunction.setValue(options[contentBox.getSelectedIndex()]);
 			}
 		});
-		resize();
-		update();
 	}
 	@Override
-	public <T> void addOptions(int x, int y, String label, int labelLength, int contentLength, int contentHeight, String[] optionLabels, T[] options,
+	public <T> void addOptions(int x, int y, String label, int labelLength, int contentLength, int labelHeight, int contentHeight, String[] optionLabels, T[] options,
 			DataFunction<T> function)
 	{
+		final DataFunction<T> wrappedFunction = new DataFunctionWrapper<T>(function);
+		
 		JLabel labelLabel = new JLabel();
 		add(labelLabel);
-		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, contentHeight * cellHeight);});
+		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, labelHeight * cellHeight);});
 		
 		DefaultListModel<String> contentModel = new DefaultListModel<String>();
 		for (int i = 0; i < optionLabels.length; ++i) contentModel.add(i, optionLabels[i]);
@@ -309,39 +319,32 @@ public class EditorPanel extends JPanel implements MenuSlate
 		
 		labelLabel.setText(label);
 		
-		updateTasks.add(() -> {contentList.setSelectedIndex(Arrays.asList(options).indexOf(function.getValue()));});
+		updateTasks.add(() -> {contentList.setSelectedIndex(Arrays.asList(options).indexOf(wrappedFunction.getValue()));});
 		contentList.addListSelectionListener(new ListSelectionListener()
 		{
 			@Override
 			public void valueChanged(ListSelectionEvent e)
 			{
-				function.setValue(options[contentList.getSelectedIndex()]);
-				update();
+				wrappedFunction.setValue(options[contentList.getSelectedIndex()]);
 			}
 		});
-		resize();
-		update();
 	}
 	
 	@Override
-	public <E extends Enum<E>> void addOptions(int x, int y, String label, int labelLength, int contentLength, 
+	public <E extends Enum<E>> void addOptions(int x, int y, String label, int labelLength, int contentLength, int h,
 			E[] options, DataFunction<E> function)
 	{
 		String[] optionLabels = new String[options.length];
 		for (int i = 0; i < options.length; ++i) optionLabels[i] = options[i].name();
-		addOptions(x, y, label, labelLength, contentLength, optionLabels, options, function);
-		resize();
-		update();
+		addOptions(x, y, label, labelLength, contentLength, h, optionLabels, options, function);
 	}
 	@Override
-	public <E extends Enum<E>> void addOptions(int x, int y, String label, int labelLength, int contentLength, int contentHeight, 
+	public <E extends Enum<E>> void addOptions(int x, int y, String label, int labelLength, int contentLength, int labelHeight, int contentHeight, 
 			E[] options, DataFunction<E> function)
 	{
 		String[] optionLabels = new String[options.length];
 		for (int i = 0; i < options.length; ++i) optionLabels[i] = options[i].name();
-		addOptions(x, y, label, labelLength, contentLength, contentHeight, optionLabels, options, function);
-		resize();
-		update();
+		addOptions(x, y, label, labelLength, contentLength, labelHeight, contentHeight, optionLabels, options, function);
 	}
 	
 	@Override
@@ -358,11 +361,8 @@ public class EditorPanel extends JPanel implements MenuSlate
 			public void actionPerformed(ActionEvent e)
 			{
 				function.onClick();
-				update();
 			}
 		});
-		resize();
-		update();
 	}
 	
 	@Override
@@ -372,12 +372,47 @@ public class EditorPanel extends JPanel implements MenuSlate
 		contentPanel.setSize(w * cellWidth, h * cellHeight);
 		add(contentPanel);
 		resizeTasks.add(() -> {contentPanel.setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight);});
-		updateTasks.add(() -> {propogate = false; contentPanel.update(); propogate = true;});
-		contentPanel.updateTasks.add(() -> {if (propogate) update();});
 		contentPanel.setCells(w, h);
 		// TODO allow swapping of subslates
-		resize();
-		update();
 		return contentPanel;
+	}
+	
+	@Override
+	public TabHandle addTabbedSection(int x, int y, int w, int h)
+	{
+		JTabbedPane contentPane = new JTabbedPane();
+		
+		contentPane.setSize(w * cellWidth, h * cellHeight);
+		add(contentPane);
+		
+		TabHandle tabHandle = new TabHandle()
+		{
+			public Map<String, EditorPanel> slates = new HashMap<String, EditorPanel>();
+			public Map<String, Integer> slateTabIDs = new HashMap<String, Integer>();
+			public Map<String, Integer> slateResizeIDs = new HashMap<String, Integer>();
+			private int i = 0;
+			
+			@Override
+			public void addTab(String name, MenuSlate slate)
+			{
+				contentPane.add(name, (EditorPanel) slate);
+				slates.put(name, (EditorPanel) slate);
+				slateResizeIDs.put(name,  resizeTasks.size());
+				resizeTasks.add(() -> ((EditorPanel) slate).setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight));
+				((EditorPanel) slate).setCells(w, h);
+			}
+
+			@Override
+			public void removeTab(String name)
+			{
+				contentPane.remove(slates.get(name));
+				resizeTasks.remove((int) slateResizeIDs.get(name));
+				slates.remove(name);
+				slateResizeIDs.remove(name);
+			}
+		};
+		
+		resizeTasks.add(() -> {contentPane.setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight);});
+		return tabHandle;
 	}
 }

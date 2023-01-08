@@ -72,7 +72,7 @@ public final class ModuleManager
 	
 	private static void loadModule(String moduleName) throws Exception
 	{
-		Logging.logNotice("Loading module " + moduleName + ".");
+//		Logging.logNotice("Loading module " + moduleName + ".");
 		String path = GameInfo.getServerPackResource("Modules/" + moduleName + ".jar");
 		URL url = new File(path).toURI().toURL();
 	
@@ -92,14 +92,14 @@ public final class ModuleManager
 			
 			if (className.endsWith(moduleName)) moduleClass = classLoader.loadClass(className);
 			else classLoader.loadClass(className);
-			Logging.logNotice("Loaded class " + className);
+//			Logging.logNotice("Loaded class " + className);
 		}
 		Module module = (Module) moduleClass.getDeclaredConstructor().newInstance();
 
 		modules.put(moduleName, module);
 		modulePriorities.add(moduleName);
 		
-		Logging.logNotice("Loaded module " + moduleName + ".");
+//		Logging.logNotice("Loaded module " + moduleName + ".");
 		module.initModule();
 	}
 	
@@ -116,6 +116,7 @@ public final class ModuleManager
 		modules = new HashMap<String, Module>();
 		modulePriorities = new ArrayList<String>();
 
+		Logging.logNotice("Loading modules.");
 		List<String> moduleNames = getModuleNames("");
 		List<URL> moduleURLs = getModuleURLs("");
 		

@@ -288,8 +288,8 @@ public class ServerMainFrame extends JFrame
 		
 		initObjectsTree();
 		
-		displayTimer.schedule(new DisplayUpdateTask(), 1000 / ConfigManager.getFramerateCap(), 1000 / ConfigManager.getFramerateCap());
-		gameTimer.schedule(new GameUpdateTask(), 1000 / ConfigManager.getFramerateCap(), 1000 / ConfigManager.getFramerateCap());
+		displayTimer.scheduleAtFixedRate(new DisplayUpdateTask(), 1000 / ConfigManager.getFramerateCap(), 1000 / ConfigManager.getFramerateCap());
+		gameTimer.scheduleAtFixedRate(new GameUpdateTask(), 1000 / ConfigManager.getFramerateCap(), 1000 / ConfigManager.getFramerateCap());
 		pack();
 	}
 }
