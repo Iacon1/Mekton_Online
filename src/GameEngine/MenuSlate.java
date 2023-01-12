@@ -73,8 +73,8 @@ public interface MenuSlate
 			E[] options, DataFunction<E> function);
 	// TODO tree support
 	// Section
-	public MenuSlate addSubSlate(int x, int y, int w, int h,
-			DataFunction<MenuSlate> function);
+	public void addSubSlate(int x, int y, int w, int h,
+			MenuSlate subSlate);
 	public TabHandle addTabbedSection(int x, int y, int w, int h);
 	
 }

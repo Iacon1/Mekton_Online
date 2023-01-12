@@ -3,28 +3,20 @@
 package GameEngine.Editor;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
-import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.JTree;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JList;
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FontMetrics;
+import java.awt.Insets;
 
 import javax.swing.JLabel;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -33,12 +25,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 
 import javax.swing.border.BevelBorder;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -46,16 +36,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
-
 import GameEngine.MenuSlate;
-import GameEngine.MenuSlate.InfoFunction;
-import GameEngine.MenuSlate.TabHandle;
 import GameEngine.Configurables.ConfigManager;
-import Utils.Logging;
 
 @SuppressWarnings("serial")
 public class EditorPanel extends JPanel implements MenuSlate
@@ -248,15 +230,14 @@ public class EditorPanel extends JPanel implements MenuSlate
 			DataFunction<Boolean> function)
 	{
 		final DataFunction<Boolean> wrappedFunction = new DataFunctionWrapper<Boolean>(function);
-		
-		JLabel labelLabel = new JLabel();
-		add(labelLabel);
-		resizeTasks.add(() -> {labelLabel.setBounds(x * cellWidth, y * cellHeight, labelLength * cellWidth, cellHeight);});
+
 		JCheckBox contentBox = new JCheckBox();
+		contentBox.setText(label);
+		contentBox.setMargin(new Insets(0, 0, 0, 0));
+		contentBox.set
 		add(contentBox);
-		resizeTasks.add(() -> {contentBox.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, cellHeight);});
+		resizeTasks.add(() -> {contentBox.setBounds(x * cellWidth, y * cellHeight, (labelLength + contentLength) * cellWidth, h * cellHeight);});
 		
-		labelLabel.setText(label);
 		contentBox.setSelected(wrappedFunction.getValue());
 		
 		updateTasks.add(() -> {contentBox.setSelected(wrappedFunction.getValue());});
@@ -366,15 +347,12 @@ public class EditorPanel extends JPanel implements MenuSlate
 	}
 	
 	@Override
-	public MenuSlate addSubSlate(int x, int y, int w, int h, DataFunction<MenuSlate> function)
+	public void addSubSlate(int x, int y, int w, int h, MenuSlate subSlate)
 	{
-		EditorPanel contentPanel = new EditorPanel();
-		contentPanel.setSize(w * cellWidth, h * cellHeight);
-		add(contentPanel);
-		resizeTasks.add(() -> {contentPanel.setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight);});
-		contentPanel.setCells(w, h);
-		// TODO allow swapping of subslates
-		return contentPanel;
+		((EditorPanel) subSlate).setSize(w * cellWidth, h * cellHeight);
+		add((Component) subSlate);
+		resizeTasks.add(() -> {((EditorPanel) subSlate).setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight);});
+//		subSlate.setCells(w, h);
 	}
 	
 	@Override
@@ -399,7 +377,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 				slates.put(name, (EditorPanel) slate);
 				slateResizeIDs.put(name,  resizeTasks.size());
 				resizeTasks.add(() -> ((EditorPanel) slate).setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight));
-				((EditorPanel) slate).setCells(w, h);
+//				slate.setCells(w, h);
 			}
 
 			@Override
