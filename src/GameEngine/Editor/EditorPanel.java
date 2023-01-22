@@ -209,7 +209,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 		contentSpinner.addChangeListener((ChangeEvent e) -> {wrappedFunction.setValue((Integer) contentSpinner.getValue());});
 	}
 	@Override
-	public void addDoubleWheel(int x, int y, String label, int labelLength, double min, double max, int digits, int contentLength, int h,
+	public void addDoubleWheel(int x, int y, String label, int labelLength, double min, double initial, double max, int digits, int contentLength, int h,
 			DataFunction<Double> function)
 	{
 		final DataFunction<Double> wrappedFunction = new DataFunctionWrapper<Double>(function);
@@ -220,16 +220,23 @@ public class EditorPanel extends JPanel implements MenuSlate
 		
 		JSpinner contentSpinner = new JSpinner();
 		add(contentSpinner);
-		contentSpinner.setModel(new SpinnerNumberModel(min, min, max, Math.pow(10, -digits - 1)));
+		contentSpinner.setModel(new SpinnerNumberModel(initial, min, max, Math.pow(10, -digits - 1)));
 		resizeTasks.add(() -> {contentSpinner.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, h * cellHeight);});
 		
 		labelLabel.setText(label);
-		contentSpinner.setValue(wrappedFunction.getValue());
+		if (wrappedFunction.getValue() != null) contentSpinner.setValue(wrappedFunction.getValue());
 		
-		//updateTasks.add(() -> {contentSpinner.setValue(wrappedFunction.getValue());});
+//		updateTasks.add(() -> {if (wrappedFunction.getValue() != null) contentSpinner.setValue(wrappedFunction.getValue());});
 		contentSpinner.addChangeListener((ChangeEvent e) -> {wrappedFunction.setValue((Double) contentSpinner.getValue());});
 	}
-
+	@Override
+	public void addDoubleWheel(int x, int y, String label, int labelLength, double min, double max, int digits, int contentLength, int h,
+			DataFunction<Double> function)
+	{
+		double initial = min;
+		if (function.getValue() != null) initial = function.getValue();
+		addDoubleWheel(x, y, label, labelLength, min, initial, max, digits, contentLength, h, function);
+	}
 	@Override
 	public void addCheckbox(int x, int y, String label, int labelLength, int contentLength, int h,
 			DataFunction<Boolean> function)

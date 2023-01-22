@@ -27,6 +27,7 @@ import java.io.File;
 import Utils.JSONManager;
 import Utils.Logging;
 import Utils.MiscUtils;
+import jdk.internal.org.jline.utils.Colors;
 
 public final class GraphicsManager
 {
@@ -92,7 +93,7 @@ public final class GraphicsManager
 		for (int i = 0; i < img1.getHeight(); ++i)
 			for (int j = 0; j < img1.getWidth(); ++j)
 				img2.setRGB(j, i, img1.getRGB(j, i));
-		
+
 		return img2;
 	}
 	public static BufferedImage getImagePath(String path) // Gets an image from path
@@ -163,7 +164,6 @@ public final class GraphicsManager
 		
 		File file = new File(GameInfo.getServerPackResource("/Graphics/" + name + ".PNG"));
 		BufferedImage img;
-		Logging.logNotice(GameInfo.getServerPackResource("/Graphics/" + name + ".PNG"));
 		try {img = ImageIO.read(file);}
 		catch (Exception e) {Logging.logException(e); return null;}
 		
@@ -174,6 +174,35 @@ public final class GraphicsManager
 				Color color = new Color(rgb, true);
 				if (!palette.contains(color)) palette.add(color);
 			}
+		
 		return palette.toArray(new Color[palette.size()]);
 	}
+	
+	public static float getHue(Color c)
+	{
+		float[] hsb = new float[3];
+		return Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), hsb)[0];
+	}
+	public static float getSaturation(Color c)
+	{
+		float[] hsb = new float[3];
+		return Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), hsb)[1];
+	}
+	public static float getValue(Color c)
+	{
+		float[] hsb = new float[3];
+		return Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), hsb)[2];
+	}
+	public static float getRotation(float hue1, float hue2)
+	{
+		return 360 * (hue2 - hue1);
+	}
+	public static float rotateHue(float hue, float rot)
+	{
+		hue = (hue + rot / 360);
+		if (hue == 0) return 0;
+		else if (hue % 1 == 0) return 1;
+		else return hue % 1;
+	}
+	
 }

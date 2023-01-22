@@ -42,8 +42,6 @@ public class PaletteImageRenderToken extends ImageRenderToken
 	@Override
 	public void render(Graphics2D g)
 	{
-		Logging.logNotice(MiscUtils.arrayToString(GraphicsManager.getPalette(textureFile), ","));
-		Logging.logNotice(MiscUtils.arrayToString(palette, ", "));
 		g.drawImage(GraphicsManager.getImage(textureFile, palette), dx1s, dy1s, dx2s, dy2s, sx1, sy1, sx2, sy2, null);
 	}
 }

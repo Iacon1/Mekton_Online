@@ -33,7 +33,8 @@ public interface MenuSlate
 		@Override public T getValue() {return function.getValue();}
 		@Override public void setValue(T data)
 		{
-			if (!function.getValue().equals(data)) function.setValue(data);
+			if (function.getValue() != null && !function.getValue().equals(data)) function.setValue(data);
+			else if (function.getValue() == null) function.setValue(data);
 		}
 		
 	}
@@ -59,6 +60,8 @@ public interface MenuSlate
 	public void addIntegerWheel(int x, int y, String label, int labelLength, int min, int max, int contentLength, int h,
 			DataFunction<Integer> function);
 	// Double wheel
+	public void addDoubleWheel(int x, int y, String label, int labelLength, double min, double initial, double max, int digits, int contentLength, int h,
+			DataFunction<Double> function);
 	public void addDoubleWheel(int x, int y, String label, int labelLength, double min, double max, int digits, int contentLength, int h,
 			DataFunction<Double> function);
 	// Check box
@@ -84,4 +87,6 @@ public interface MenuSlate
 	public void addSprite(int x, int y, int w, int h,
 			InfoFunction<Sprite> function);
 	public void clear();
+
+	
 }

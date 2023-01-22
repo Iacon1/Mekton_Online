@@ -26,12 +26,12 @@ public class LayeredSprite extends Sprite
 		palettes = new HashMap<String, Color[]>();
 	}
 	
-	public void addLayer(String name, String texturePath, Color... palette)
+	public void setLayer(String name, String texturePath, Color... palette)
 	{
 		texturePaths.put(name, texturePath);
 		palettes.put(name, palette);
 	}
-	public void addLayer(String name, String texturePath)
+	public void setLayer(String name, String texturePath)
 	{
 		texturePaths.put(name, texturePath);
 		Color[] palette = GraphicsManager.getPalette(texturePath);
