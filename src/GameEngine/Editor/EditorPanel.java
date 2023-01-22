@@ -14,7 +14,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JList;
 import java.awt.Component;
-import java.awt.Insets;
+import java.awt.Image;
 
 import javax.swing.JLabel;
 import java.awt.event.ActionEvent;
@@ -28,7 +28,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.swing.border.BevelBorder;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -36,8 +35,15 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import GameEngine.IntPoint2D;
 import GameEngine.MenuSlate;
 import GameEngine.Configurables.ConfigManager;
+import GameEngine.Graphics.ScreenCanvas;
+import GameEngine.Graphics.Sprite;
+import GameEngine.Graphics.UtilCanvas;
+import Utils.Logging;
+import Utils.MiscUtils;
 
 @SuppressWarnings("serial")
 public class EditorPanel extends JPanel implements MenuSlate
@@ -50,7 +56,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 	private int cellHeight;
 	private List<UpdateTask> updateTasks; // Tasks to do on update
 	private List<ResizeTask> resizeTasks; // Resize components on screen resize
-	private Timer timer;
+	private static Timer timer = new Timer();
 	private TimerTask updateTask = new TimerTask()
 	{
 		@Override public void run() 
@@ -76,8 +82,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 		
 		updateTasks = new ArrayList<UpdateTask>();
 		resizeTasks = new ArrayList<ResizeTask>();
-		timer = new Timer();
-		
+
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		setLayout(null);
 		setSize(640, 480);
@@ -215,13 +220,13 @@ public class EditorPanel extends JPanel implements MenuSlate
 		
 		JSpinner contentSpinner = new JSpinner();
 		add(contentSpinner);
-		contentSpinner.setModel(new SpinnerNumberModel(min, min, max, 1));
+		contentSpinner.setModel(new SpinnerNumberModel(min, min, max, Math.pow(10, -digits - 1)));
 		resizeTasks.add(() -> {contentSpinner.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, h * cellHeight);});
 		
 		labelLabel.setText(label);
 		contentSpinner.setValue(wrappedFunction.getValue());
 		
-		updateTasks.add(() -> {contentSpinner.setValue(wrappedFunction.getValue());});
+		//updateTasks.add(() -> {contentSpinner.setValue(wrappedFunction.getValue());});
 		contentSpinner.addChangeListener((ChangeEvent e) -> {wrappedFunction.setValue((Double) contentSpinner.getValue());});
 	}
 
@@ -233,8 +238,8 @@ public class EditorPanel extends JPanel implements MenuSlate
 
 		JCheckBox contentBox = new JCheckBox();
 		contentBox.setText(label);
-		contentBox.setMargin(new Insets(0, 0, 0, 0));
-		contentBox.set
+		contentBox.setHorizontalTextPosition(2); // Left
+		contentBox.setOpaque(false);
 		add(contentBox);
 		resizeTasks.add(() -> {contentBox.setBounds(x * cellWidth, y * cellHeight, (labelLength + contentLength) * cellWidth, h * cellHeight);});
 		
@@ -294,7 +299,6 @@ public class EditorPanel extends JPanel implements MenuSlate
 		contentList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		contentList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		contentList.setModel(contentModel);
-		
 		add(contentList);
 		resizeTasks.add(() -> {contentList.setBounds((x + labelLength) * cellWidth, y * cellHeight, contentLength * cellWidth, contentHeight * cellHeight);});
 		
@@ -332,6 +336,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 	public void addButton(int x, int y, String label, int w, int h, ButtonFunction function)
 	{
 		JButton contentButton = new JButton();
+		add(contentButton);
 		resizeTasks.add(() -> {contentButton.setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight);});
 		
 		contentButton.setText(label);
@@ -347,12 +352,34 @@ public class EditorPanel extends JPanel implements MenuSlate
 	}
 	
 	@Override
-	public void addSubSlate(int x, int y, int w, int h, MenuSlate subSlate)
+	public SubHandle addSubSlate(int x, int y, int w, int h, MenuSlate subSlate)
 	{
-		((EditorPanel) subSlate).setSize(w * cellWidth, h * cellHeight);
+		((EditorPanel) subSlate).setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight);
 		add((Component) subSlate);
+		revalidate();
 		resizeTasks.add(() -> {((EditorPanel) subSlate).setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight);});
 //		subSlate.setCells(w, h);
+		return new SubHandle()
+		{
+			private MenuSlate handledSlate = subSlate;
+			
+			@Override
+			public void removeSlate()
+			{
+				remove((Component) handledSlate);
+				revalidate();
+			}
+
+			@Override
+			public void swapSlate(MenuSlate newSlate)
+			{
+				removeSlate();
+				handledSlate = newSlate;
+				((EditorPanel) handledSlate).setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight);
+				add((Component) handledSlate);
+				revalidate();
+			}
+		};
 	}
 	
 	@Override
@@ -365,18 +392,17 @@ public class EditorPanel extends JPanel implements MenuSlate
 		
 		TabHandle tabHandle = new TabHandle()
 		{
-			public Map<String, EditorPanel> slates = new HashMap<String, EditorPanel>();
-			public Map<String, Integer> slateTabIDs = new HashMap<String, Integer>();
-			public Map<String, Integer> slateResizeIDs = new HashMap<String, Integer>();
-			private int i = 0;
+			private Map<String, EditorPanel> slates = new HashMap<String, EditorPanel>();
+//			private Map<String, Integer> slateResizeIDs = new HashMap<String, Integer>();
 			
 			@Override
-			public void addTab(String name, MenuSlate slate)
+			public void setTab(String name, MenuSlate slate)
 			{
-				contentPane.add(name, (EditorPanel) slate);
+				if (contentPane.indexOfTab(name) == -1) contentPane.add(name, (EditorPanel) slate);
+				else contentPane.setComponentAt(contentPane.indexOfTab(name), (EditorPanel) slate);
 				slates.put(name, (EditorPanel) slate);
-				slateResizeIDs.put(name,  resizeTasks.size());
-				resizeTasks.add(() -> ((EditorPanel) slate).setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight));
+//				slateResizeIDs.put(name, i++);
+//				resizeTasks.add(() -> {slates.get(name).setSize(w * cellWidth, h * cellHeight);});
 //				slate.setCells(w, h);
 			}
 
@@ -384,13 +410,44 @@ public class EditorPanel extends JPanel implements MenuSlate
 			public void removeTab(String name)
 			{
 				contentPane.remove(slates.get(name));
-				resizeTasks.remove((int) slateResizeIDs.get(name));
+//				resizeTasks.remove((int) slateResizeIDs.get(name));
 				slates.remove(name);
-				slateResizeIDs.remove(name);
+//				slateResizeIDs.remove(name);
 			}
 		};
 		
 		resizeTasks.add(() -> {contentPane.setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight);});
 		return tabHandle;
+	}
+	@Override
+	public void addSprite(int x, int y, int w, int h, InfoFunction<Sprite> function)
+	{
+		ScreenCanvas c = new ScreenCanvas();
+		add(c);
+		c.setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight);
+		
+		updateTasks.add(() -> 
+		{
+			IntPoint2D sSize = function.getValue().getSize();
+			c.setScale(((float) w * (float) cellWidth) / (float) sSize.x, ((float) h * (float) cellHeight) / (float) sSize.y);
+			function.getValue().render(c, new IntPoint2D(0, 0));
+			c.repaint();
+		});
+	}
+	
+	@Override
+	public void clear()
+	{
+		updateTasks.clear();
+		resizeTasks.clear();
+		this.removeAll();
+	}
+	
+	@Override
+	public void finalize()
+	{
+		updateTask.cancel();
+		resizeTask.cancel();
+		timer.purge();
 	}
 }

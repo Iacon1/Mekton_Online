@@ -14,8 +14,6 @@ import GameEngine.Graphics.RenderTokens.ImageRenderToken;
 
 public class ImageRenderTokenAdapter extends TypeAdapter<ImageRenderToken>
 {
-	private static final int NPC = 2; // Nibbles per channel
-	
 	@Override
 	public ImageRenderToken read(JsonReader in) throws IOException
 	{

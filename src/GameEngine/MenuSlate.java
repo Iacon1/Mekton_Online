@@ -9,6 +9,10 @@
 
 package GameEngine;
 
+import java.awt.Image;
+
+import GameEngine.Graphics.Sprite;
+
 public interface MenuSlate
 {
 	// Interfaces
@@ -16,7 +20,8 @@ public interface MenuSlate
 	public interface DataFunction<T> extends InfoFunction<T> {public void setValue(T data);}
 	public interface ButtonFunction {public void onClick();}
 	public interface TreeFunction extends DataFunction<Object[]> {};
-	public interface TabHandle {public void addTab(String name, MenuSlate slate); public void removeTab(String name);}
+	public interface SubHandle {public void removeSlate(); public void swapSlate(MenuSlate newSlate);}
+	public interface TabHandle {public void setTab(String name, MenuSlate slate); public void removeTab(String name);}
 	public class DataFunctionWrapper<T> implements DataFunction<T>
 	{
 		private DataFunction<T> function;
@@ -73,8 +78,10 @@ public interface MenuSlate
 			E[] options, DataFunction<E> function);
 	// TODO tree support
 	// Section
-	public void addSubSlate(int x, int y, int w, int h,
+	public SubHandle addSubSlate(int x, int y, int w, int h,
 			MenuSlate subSlate);
 	public TabHandle addTabbedSection(int x, int y, int w, int h);
-	
+	public void addSprite(int x, int y, int w, int h,
+			InfoFunction<Sprite> function);
+	public void clear();
 }

@@ -2,18 +2,15 @@ package GameEngine.Graphics.RenderTokens;
 
 import java.awt.Graphics2D;
 
-import GameEngine.IntPoint2D;
-import GameEngine.Graphics.Camera;
 import GameEngine.Graphics.RenderQueue;
-import GameEngine.Graphics.UtilCanvas;
 import GameEngine.Managers.GraphicsManager;
 import Utils.Logging;
-import Utils.MiscUtils;
+
 
 public class ImageRenderToken extends RenderQueue.RenderToken
 {
-	private String textureFile;
-	private int dx1s, dy1s, dx2s, dy2s, sx1, sy1, sx2, sy2;
+	protected String textureFile;
+	protected int dx1s, dy1s, dx2s, dy2s, sx1, sy1, sx2, sy2;
 	
 	public ImageRenderToken()
 	{

@@ -11,12 +11,8 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import Utils.MiscUtils;
-
 public class ColorAdapter extends TypeAdapter<Color>
 {
-	private static final int NPC = 2; // Nibbles per channel
-	
 	@Override
 	public Color read(JsonReader in) throws IOException
 	{

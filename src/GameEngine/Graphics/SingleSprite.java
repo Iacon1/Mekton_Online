@@ -1,6 +1,6 @@
 // By Iacon1
 // Created 10/01/2021
-//
+// Sprite that has only a single texture
 
 package GameEngine.Graphics;
 

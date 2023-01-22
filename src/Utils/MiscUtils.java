@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -298,6 +300,20 @@ public final class MiscUtils
 	 *  @param digits The precision to represent it at.
 	 */
 	public static String floatPrecise(float value, int digits)
+	{
+		if (digits > 0)
+		{
+			DecimalFormat format = new DecimalFormat("#." + "#".repeat(digits));
+			format.setRoundingMode(RoundingMode.HALF_UP);
+			return format.format(value);
+		}
+		else return Integer.toString((int) Math.floor(value));
+	}
+	/** Returns a string representation of a double, up to a specified precision.
+	 *  @param value  The double to represent.
+	 *  @param digits The precision to represent it at.
+	 */
+	public static String doublePrecise(double value, int digits)
 	{
 		if (digits > 0)
 		{

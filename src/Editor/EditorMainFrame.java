@@ -12,7 +12,7 @@ import GameEngine.GameInfo;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.EditorPopulatingModule;
 import GameEngine.Editor.ModulesPane;
-
+import GameEngine.Graphics.LayeredSprite;
 import Utils.Logging;
 import Utils.MiscUtils;
 import javax.swing.JTabbedPane;

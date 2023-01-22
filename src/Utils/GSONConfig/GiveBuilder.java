@@ -16,11 +16,13 @@ import GameEngine.Configurables.ModuleTypes.GSONModule;
 import GameEngine.EntityTypes.GameEntity;
 import GameEngine.Graphics.RenderQueue.RenderToken;
 import GameEngine.Graphics.RenderTokens.ImageRenderToken;
+import GameEngine.Graphics.RenderTokens.PaletteImageRenderToken;
 import GameEngine.Server.Account;
 import Utils.GSONConfig.Adapters.ColorAdapter;
 import Utils.GSONConfig.Adapters.ImageRenderTokenAdapter;
 import Utils.GSONConfig.Adapters.KeyEventAdapter;
 import Utils.GSONConfig.Adapters.MouseEventAdapter;
+import Utils.GSONConfig.Adapters.PaletteImageRenderTokenAdapter;
 import Utils.GSONConfig.TransSerializables.TransSerializableAdapter;
 
 public final class GiveBuilder
@@ -34,6 +36,7 @@ public final class GiveBuilder
 		
 		// Render tokens
 		builder.registerTypeAdapter(ImageRenderToken.class, new ImageRenderTokenAdapter());
+		builder.registerTypeAdapter(PaletteImageRenderToken.class, new PaletteImageRenderTokenAdapter());
 		builder.registerTypeAdapterFactory(new AbsFactory<RenderToken>(RenderToken.class));
 		
 		builder.registerTypeAdapter(Color.class, new ColorAdapter());

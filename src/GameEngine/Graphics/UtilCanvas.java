@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import GameEngine.IntPoint2D;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.Graphics.RenderTokens.ImageRenderToken;
+import GameEngine.Graphics.RenderTokens.PaletteImageRenderToken;
 import GameEngine.Graphics.RenderTokens.RectangleRenderToken;
 import GameEngine.Graphics.RenderTokens.TextRenderToken;
 import GameEngine.Managers.GraphicsManager;
@@ -71,6 +72,20 @@ public abstract class UtilCanvas extends JPanel
 		int sy2 = texturePos.y + textureSize.y;
 		
 		renderQueue.addToken(new ImageRenderToken(textureFile, dx1s, dy1s, dx2s, dy2s, sx1, sy1, sx2, sy2));
+	}
+	public void addPaletteImage(String textureFile, IntPoint2D pos, IntPoint2D texturePos, IntPoint2D textureSize, Color... palette)
+	{
+		int dx1s = (int) (pos.x);
+		int dy1s = (int) (pos.y);
+		int dx2s = (int) (dx1s + textureSize.x);
+		int dy2s = (int) (dy1s + textureSize.y);
+		
+		int sx1 = texturePos.x;
+		int sy1 = texturePos.y;
+		int sx2 = texturePos.x + textureSize.x;
+		int sy2 = texturePos.y + textureSize.y;
+		
+		renderQueue.addToken(new PaletteImageRenderToken(textureFile, dx1s, dy1s, dx2s, dy2s, sx1, sy1, sx2, sy2, palette));
 	}
 	public void addText(String text, String font, Color color, IntPoint2D pos, int heightPixels)
 	{
