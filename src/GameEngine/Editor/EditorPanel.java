@@ -56,6 +56,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 	private int cellHeight;
 	private List<UpdateTask> updateTasks; // Tasks to do on update
 	private List<ResizeTask> resizeTasks; // Resize components on screen resize
+	private List<MenuSlate> children; // Sub-slates and tabs
 	private static Timer timer = new Timer();
 	private TimerTask updateTask = new TimerTask()
 	{
@@ -82,7 +83,8 @@ public class EditorPanel extends JPanel implements MenuSlate
 		
 		updateTasks = new ArrayList<UpdateTask>();
 		resizeTasks = new ArrayList<ResizeTask>();
-
+		children = new ArrayList<MenuSlate>();
+		
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		setLayout(null);
 		setSize(640, 480);
@@ -99,6 +101,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 		
 		updateTasks = new ArrayList<UpdateTask>();
 		resizeTasks = new ArrayList<ResizeTask>();
+		children = new ArrayList<MenuSlate>();
 		timer = new Timer();
 		
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -283,11 +286,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 		updateTasks.add(() -> {contentBox.setSelectedIndex(Arrays.asList(options).indexOf(wrappedFunction.getValue()));});
 		contentBox.addActionListener(new ActionListener()
 		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				wrappedFunction.setValue(options[contentBox.getSelectedIndex()]);
-			}
+			@Override public void actionPerformed(ActionEvent e) {wrappedFunction.setValue(options[contentBox.getSelectedIndex()]);}
 		});
 	}
 	@Override
@@ -364,6 +363,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 		((EditorPanel) subSlate).setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight);
 		add((Component) subSlate);
 		revalidate();
+		children.add(subSlate);
 		resizeTasks.add(() -> {((EditorPanel) subSlate).setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight);});
 //		subSlate.setCells(w, h);
 		return new SubHandle()
@@ -373,6 +373,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 			@Override
 			public void removeSlate()
 			{
+				children.remove(handledSlate);
 				remove((Component) handledSlate);
 				revalidate();
 			}
@@ -384,6 +385,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 				handledSlate = newSlate;
 				((EditorPanel) handledSlate).setBounds(x * cellWidth, y * cellHeight, w * cellWidth, h * cellHeight);
 				add((Component) handledSlate);
+				children.add(handledSlate);
 				revalidate();
 			}
 		};
@@ -406,8 +408,9 @@ public class EditorPanel extends JPanel implements MenuSlate
 			public void setTab(String name, MenuSlate slate)
 			{
 				if (contentPane.indexOfTab(name) == -1) contentPane.add(name, (EditorPanel) slate);
-				else contentPane.setComponentAt(contentPane.indexOfTab(name), (EditorPanel) slate);
+				else {slates.get(name).clear(); contentPane.setComponentAt(contentPane.indexOfTab(name), (EditorPanel) slate);}
 				slates.put(name, (EditorPanel) slate);
+				children.add(slate);
 //				slateResizeIDs.put(name, i++);
 //				resizeTasks.add(() -> {slates.get(name).setSize(w * cellWidth, h * cellHeight);});
 //				slate.setCells(w, h);
@@ -418,6 +421,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 			{
 				contentPane.remove(slates.get(name));
 //				resizeTasks.remove((int) slateResizeIDs.get(name));
+				children.remove(slates.get(name));
 				slates.remove(name);
 //				slateResizeIDs.remove(name);
 			}
@@ -447,12 +451,15 @@ public class EditorPanel extends JPanel implements MenuSlate
 	{
 		updateTasks.clear();
 		resizeTasks.clear();
+		for (MenuSlate child : children) child.clear();
+		children.clear();
 		this.removeAll();
 	}
 	
 	@Override
 	public void finalize()
 	{
+		clear();
 		updateTask.cancel();
 		resizeTask.cancel();
 		timer.purge();
