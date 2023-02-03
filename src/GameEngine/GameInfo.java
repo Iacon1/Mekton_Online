@@ -190,15 +190,6 @@ public class GameInfo
 	{
 		clientInput.inputs.clear();
 	}
-/*	public static void setCamera(Point2D camera)
-	{
-		GameInfo.camera = camera;
-	}
-	public static Point2D getCamera()
-	{
-		return camera;
-	}
-*/
 	
 	public static void setServerPack(String serverPack)
 	{

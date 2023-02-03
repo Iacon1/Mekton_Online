@@ -3,7 +3,6 @@ package GameEngine.Editor;
 import javax.swing.JPanel;
 
 import GameEngine.Configurables.ModuleManager;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SpringLayout;
 

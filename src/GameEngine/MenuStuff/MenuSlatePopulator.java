@@ -2,7 +2,7 @@
 // Created 01/11/2023
 //
 
-package GameEngine;
+package GameEngine.MenuStuff;
 
 import java.util.function.Supplier;
 
