@@ -3,6 +3,7 @@
 package GameEngine.Editor;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
@@ -38,6 +39,7 @@ import javax.swing.event.ListSelectionListener;
 import GameEngine.IntPoint2D;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.Alignable;
+import GameEngine.EntityTypes.Alignable.AlignmentPoint;
 import GameEngine.Graphics.ScreenCanvas;
 import GameEngine.Graphics.Sprite;
 import GameEngine.MenuStuff.MenuSlate;
@@ -56,7 +58,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 	private List<MenuSlate> children; // Sub-slates and tabs
 	private static Timer timer = new Timer();
 	
-	private Object componentLock = new Object(); // Hold while modifying components
+	private static Object componentLock = new Object(); // Hold while modifying components
 	private TimerTask updateTask = new TimerTask()
 	{
 		@Override public void run() 
@@ -199,9 +201,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 				components = new Component[] {getPanel()};
 				revalidate();
 			}
-		}
-		
-		
+		}		
 	}
 	private class EditorPanelTabHandle extends EditorPanelComponentHandle implements TabHandle
 	{
@@ -235,6 +235,85 @@ public class EditorPanel extends JPanel implements MenuSlate
 				slates.remove(name);
 			}
 		}
+	}
+	private class EditorPanelScrollHandle extends EditorPanelComponentHandle implements SubHandle
+	{
+		private JScrollPane pane;
+		private MenuSlate handledSlate;
+		
+		public EditorPanelScrollHandle(JScrollPane pane, MenuSlate handledSlate)
+		{
+			super((EditorPanel) handledSlate);
+			this.pane = pane;
+			this.handledSlate = handledSlate;
+		}
+		
+		public EditorPanel getPanel() {return (EditorPanel) handledSlate;}
+		
+		@Override
+		public void removeSlate()
+		{
+			synchronized (componentLock)
+			{
+				children.remove(handledSlate);
+				pane.remove(getPanel());
+				components = new Component[0];
+				revalidate();
+			}
+		}
+
+		@Override
+		public void swapSlate(MenuSlate newSlate)
+		{
+			synchronized (componentLock)
+			{
+				removeSlate();
+				handledSlate = newSlate;
+				getPanel().setBounds(getX() * cellWidth, getY() * cellHeight, getW() * cellWidth, getY() * cellHeight);
+				pane.add(getPanel());
+				children.add(handledSlate);
+				components = new Component[] {getPanel()};
+				revalidate();
+			}
+		}		
+	}
+	private class BasicResizeTask implements ResizeTask
+	{
+		private ComponentHandle parent;
+		private Alignable.AlignmentPoint anchorPoint;
+		private Component component;
+		private int x, y, w, h;
+		
+		public BasicResizeTask(ComponentHandle parent, Alignable.AlignmentPoint anchorPoint,Component component, int x, int y, int w, int h)
+		{
+			this.parent = parent;
+			this.anchorPoint = anchorPoint;
+			this.component = component;
+			this.x = x;
+			this.y = y;
+			this.w = w;
+			this.h = h;
+		}
+		@Override
+		public void onResize()
+		{
+			IntPoint2D anchorPos = getAnchorPos(parent, anchorPoint);
+			component.setBounds((anchorPos.x + x) * cellWidth, (anchorPos.y + y) * cellHeight, w * cellWidth, h * cellHeight);
+			int BRW = anchorPos.x + x + w, BRH = anchorPos.y + y + h;
+			if (BRW > getHCells())
+			{
+				double hFactor = ((double) BRW) / getHCells();
+				setSize((int) (getWidth() * hFactor), getHeight());
+				setCells(BRW, getVCells());
+			}
+			if (BRH > getVCells())
+			{
+				double vFactor = ((double) BRH) / getVCells();
+				setSize(getWidth(), (int) (getHeight() * vFactor));
+				setCells(getHCells(), BRH);
+			}
+		}
+		
 	}
 	private IntPoint2D getAnchorPos(ComponentHandle comp, Alignable.AlignmentPoint anchor)
 	{
@@ -305,6 +384,17 @@ public class EditorPanel extends JPanel implements MenuSlate
 		cellsH = h;
 		cellsV = v;
 	}
+	@Override public int getHCells() {return cellsH;}
+	@Override public int getVCells() {return cellsV;}
+	@Override
+	public void clear()
+	{
+		updateTasks.clear();
+		resizeTasks.clear();
+		for (MenuSlate child : children) child.clear();
+		children.clear();
+		this.removeAll();
+	}
 	
 	@Override
 	public void setSize(int width, int height)
@@ -326,19 +416,10 @@ public class EditorPanel extends JPanel implements MenuSlate
 	{
 		JLabel labelLabel = new JLabel();
 		add(labelLabel);
-		resizeTasks.add(() ->
-		{
-			IntPoint2D anchorPos = getAnchorPos(parent, anchorPoint);
-			labelLabel.setBounds((anchorPos.x + x) * cellWidth, (anchorPos.y + y) * cellHeight, labelLength * cellWidth, h * cellHeight);
-		});
+		resizeTasks.add(new BasicResizeTask(parent, anchorPoint, labelLabel, x, y, labelLength, h));
 		JLabel contentLabel = new JLabel();
 		add(contentLabel);
-		resizeTasks.add(() -> 
-		{
-			IntPoint2D anchorPos = getAnchorPos(parent, anchorPoint);
-			contentLabel.setBounds((anchorPos.x + x + labelLength) * cellWidth, (anchorPos.y + y) * cellHeight, contentLength * cellWidth, h * cellHeight);
-		});
-		
+		resizeTasks.add(new BasicResizeTask(parent, anchorPoint, contentLabel, x + labelLength, y, contentLength, h));	
 		labelLabel.setText(label);
 		contentLabel.setText(function.getValue());
 		
@@ -357,18 +438,10 @@ public class EditorPanel extends JPanel implements MenuSlate
 		
 		JLabel labelLabel = new JLabel();
 		add(labelLabel);
-		resizeTasks.add(() ->
-		{
-			IntPoint2D anchorPos = getAnchorPos(parent, anchorPoint);
-			labelLabel.setBounds((anchorPos.x + x) * cellWidth, (anchorPos.y + y) * cellHeight, labelLength * cellWidth, h * cellHeight);
-		});
+		resizeTasks.add(new BasicResizeTask(parent, anchorPoint, labelLabel, x, y, labelLength, h));
 		JTextField contentField = new JTextField();
 		add(contentField);
-		resizeTasks.add(() -> 
-		{
-			IntPoint2D anchorPos = getAnchorPos(parent, anchorPoint);
-			contentField.setBounds((anchorPos.x + x + labelLength) * cellWidth, (anchorPos.y + y) * cellHeight, contentLength * cellWidth, h * cellHeight);
-		});
+		resizeTasks.add(new BasicResizeTask(parent, anchorPoint, contentField, x + labelLength, y, contentLength, h));	
 		labelLabel.setText(label);
 		contentField.setText(function.getValue());
 		
@@ -413,7 +486,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 		JSpinner contentSpinner = new JSpinner();
 		add(contentSpinner);
 		
-		contentSpinner.setModel(new SpinnerNumberModel(min, min, max, 1));
+		contentSpinner.setModel(new SpinnerNumberModel(initial, min, max, 1));
 		resizeTasks.add(() -> 
 		{
 			IntPoint2D anchorPos = getAnchorPos(parent, anchorPoint);
@@ -434,7 +507,7 @@ public class EditorPanel extends JPanel implements MenuSlate
 			DataFunction<Integer> function)
 	{
 		int initial = min;
-		if (function.getValue() != null) initial = function.getValue();
+		if (function.getValue() != null && min <= function.getValue() && function.getValue() <= max) initial = function.getValue();
 		return addIntegerWheel(parent, anchorPoint, x, y, label, labelLength, min, initial, max, contentLength, h, function);
 	}
 	@Override
@@ -668,11 +741,36 @@ public class EditorPanel extends JPanel implements MenuSlate
 	}
 
 	@Override
+	public ComponentHandle addSprite(ComponentHandle parent, Alignable.AlignmentPoint anchorPoint,
+			int x, int y, int w, int h, InfoFunction<Sprite> function)
+	{
+		ScreenCanvas c = new ScreenCanvas();
+		add(c);
+		resizeTasks.add(() ->
+		{
+			IntPoint2D anchorPos = getAnchorPos(parent, anchorPoint);
+			c.setBounds((anchorPos.x + x) * cellWidth, (anchorPos.y + y) * cellHeight, w * cellWidth, h * cellHeight);
+		});
+		updateTasks.add(() -> 
+		{
+			IntPoint2D sSize = function.getValue().getSize();
+			c.setScale(((float) w * (float) cellWidth) / (float) sSize.x, ((float) h * (float) cellHeight) / (float) sSize.y);
+			function.getValue().render(c, new IntPoint2D(0, 0));
+			c.repaint();
+		});
+		
+		return new EditorPanelComponentHandle(c);
+	}
+	@Override
+	public ComponentHandle addSprite(int x, int y, int w, int h, InfoFunction<Sprite> function)
+	{
+		return addSprite(null, null, x, y, w, h, function);
+	}
+
+	@Override
 	public SubHandle addSubSlate(ComponentHandle parent, Alignable.AlignmentPoint anchorPoint,
 			int x, int y, int w, int h, MenuSlate subSlate)
 	{
-		IntPoint2D anchorPos0 = getAnchorPos(parent, anchorPoint);
-		((EditorPanel) subSlate).setBounds((anchorPos0.x + x) * cellWidth, (anchorPos0.y + y) * cellHeight, w * cellWidth, h * cellHeight);
 		add((Component) subSlate);
 		revalidate();
 		children.add(subSlate);
@@ -680,25 +778,28 @@ public class EditorPanel extends JPanel implements MenuSlate
 		resizeTasks.add(() ->
 		{
 			IntPoint2D anchorPos = getAnchorPos(parent, anchorPoint);
-			handle.getPanel().setBounds((anchorPos.x + x) * cellWidth, (anchorPos.y + y) * cellHeight, w * cellWidth, h * cellHeight);
+			int newW = w; if (newW == -1) newW = handle.getPanel().getHCells();
+			int newH = h; if (newH == -1) newH = handle.getPanel().getVCells();
+			handle.getPanel().setBounds((anchorPos.x + x) * cellWidth, (anchorPos.y + y) * cellHeight, newW * cellWidth, newH * cellHeight);
+			int BRW = anchorPos.x + x + newW , BRH = anchorPos.y + y + newH;
+			if (BRW > getHCells())
+			{
+				double hFactor = ((double) BRW) / getHCells();
+				setSize((int) (getWidth() * hFactor), getHeight());
+				setCells(BRW, getVCells());
+			}
+			if (BRH > getVCells())
+			{
+				double vFactor = ((double) BRH) / getVCells();
+				setSize(getWidth(), (int) (getHeight() * vFactor));
+				setCells(getHCells(), BRH);
+			}
 		});
 		return handle;
 	}
 	@Override
 	public SubHandle addSubSlate(ComponentHandle parent, Alignable.AlignmentPoint anchorPoint,
-			int x, int y, MenuSlate subSlate)
-	{
-		add((Component) subSlate);
-		revalidate();
-		children.add(subSlate);
-		EditorPanelSubHandle handle = new EditorPanelSubHandle(subSlate);
-		resizeTasks.add(() ->
-		{
-			IntPoint2D anchorPos = getAnchorPos(parent, anchorPoint);
-			handle.getPanel().setBounds((anchorPos.x + x) * cellWidth, (anchorPos.y + y) * cellHeight, handle.getPanel().getHCells() * cellWidth, handle.getPanel().getVCells() * cellHeight);
-		});
-		return handle;
-	}
+			int x, int y, MenuSlate subSlate) {return addSubSlate(parent, anchorPoint, x, y, -1, -1, subSlate);}
 	@Override
 	public SubHandle addSubSlate(int x, int y, int w, int h, MenuSlate subSlate)
 	{
@@ -732,42 +833,45 @@ public class EditorPanel extends JPanel implements MenuSlate
 	{
 		return addTabbedSection(null, null, x, y, w, h);
 	}
+	
 	@Override
-	public ComponentHandle addSprite(ComponentHandle parent, Alignable.AlignmentPoint anchorPoint,
-			int x, int y, int w, int h, InfoFunction<Sprite> function)
+	public SubHandle addScrollSlate(ComponentHandle parent, AlignmentPoint anchorPoint, int x, int y, int w1, int h1,
+			int w2, int h2, MenuSlate subSlate)
 	{
-		ScreenCanvas c = new ScreenCanvas();
-		add(c);
+		JScrollPane scrollPane = new JScrollPane((Component) subSlate, 0, 0);
+		add(scrollPane);
+		revalidate();
+		children.add(subSlate);
+		EditorPanelScrollHandle handle = new EditorPanelScrollHandle(scrollPane, subSlate);
 		resizeTasks.add(() ->
 		{
 			IntPoint2D anchorPos = getAnchorPos(parent, anchorPoint);
-			c.setBounds((anchorPos.x + x) * cellWidth, (anchorPos.y + y) * cellHeight, w * cellWidth, h * cellHeight);
+			scrollPane.setBounds((anchorPos.x + x) * cellWidth, (anchorPos.y + y) * cellHeight, w1 * cellWidth, h1 * cellHeight);
+			handle.getPanel().setSize(w2 * cellWidth,  h2 * cellHeight);
 		});
-		updateTasks.add(() -> 
+		return handle;
+	}
+	@Override
+	public SubHandle addScrollSlate(ComponentHandle parent, AlignmentPoint anchorPoint, int x, int y, int w, int h,
+			MenuSlate subSlate)
+	{
+		JScrollPane scrollPane = new JScrollPane((Component) subSlate);
+		add(scrollPane);
+		revalidate();
+		children.add(subSlate);
+		EditorPanelScrollHandle handle = new EditorPanelScrollHandle(scrollPane, subSlate);
+		resizeTasks.add(() ->
 		{
-			IntPoint2D sSize = function.getValue().getSize();
-			c.setScale(((float) w * (float) cellWidth) / (float) sSize.x, ((float) h * (float) cellHeight) / (float) sSize.y);
-			function.getValue().render(c, new IntPoint2D(0, 0));
-			c.repaint();
+			IntPoint2D anchorPos = getAnchorPos(parent, anchorPoint);
+			scrollPane.setBounds((anchorPos.x + x) * cellWidth, (anchorPos.y + y) * cellHeight, w * cellWidth, h * cellHeight);
+//			handle.getPanel().setSize(handle.getPanel().getHCells() * cellWidth,  handle.getPanel().getVCells() * cellHeight);
 		});
-		
-		return new EditorPanelComponentHandle(c);
+		return handle;
 	}
 	@Override
-	public ComponentHandle addSprite(int x, int y, int w, int h, InfoFunction<Sprite> function)
-	{
-		return addSprite(null, null, x, y, w, h, function);
-	}
-	
+	public SubHandle addScrollSlate(int x, int y, int w1, int h1, int w2, int h2, MenuSlate subSlate) {return addScrollSlate(null, null, x, y, w1, h1, w2, h2, subSlate);}
 	@Override
-	public void clear()
-	{
-		updateTasks.clear();
-		resizeTasks.clear();
-		for (MenuSlate child : children) child.clear();
-		children.clear();
-		this.removeAll();
-	}
+	public SubHandle addScrollSlate(int x, int y, int w, int h, MenuSlate subSlate) {return addScrollSlate(null, null, x, y, w, h, subSlate);}
 	
 	@Override
 	public void finalize()
@@ -777,6 +881,4 @@ public class EditorPanel extends JPanel implements MenuSlate
 		resizeTask.cancel();
 		timer.purge();
 	}
-	@Override public int getHCells() {return cellsH;}
-	@Override public int getVCells() {return cellsV;}
 }

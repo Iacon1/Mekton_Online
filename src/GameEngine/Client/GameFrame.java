@@ -19,13 +19,17 @@ import GameEngine.Graphics.ScreenCanvas;
 import GameEngine.Configurables.ConfigManager;
 import GameEngine.EntityTypes.Alignable;
 import GameEngine.EntityTypes.Alignable.AlignmentPoint;
+import Utils.Logging;
 import Utils.MiscUtils;
+import Utils.SimpleTimer;
 
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame
 {
 	private ScreenCanvas canvas;
 	private boolean queueUpdateRes;
+	private SimpleTimer framerateCounter = new SimpleTimer();
+	private int lastFramerate = 0;
 	
 	/** Updates the scale of the screen.
 	 * 
@@ -65,9 +69,18 @@ public class GameFrame extends JFrame
 	 */
 	public void updateUIStuff(RenderQueue renderQueue) // Updates UI stuff
 	{	
-		checkScale();
-		canvas.setRenderQueue(renderQueue);
-		canvas.repaint();
+		if (renderQueue != null)
+		{
+			checkScale();
+			canvas.setRenderQueue(renderQueue);
+			canvas.repaint();
+		
+			int millis = framerateCounter.stopTime();
+			if (millis > 0) lastFramerate = 1000 / millis;
+			else lastFramerate = -1;
+			framerateCounter.start();
+			Logging.logNotice("Framerate: " + lastFramerate + " / " + ConfigManager.getFramerateCap());
+		}
 	}
 	
 	private class EntityInputListener implements KeyListener, MouseListener

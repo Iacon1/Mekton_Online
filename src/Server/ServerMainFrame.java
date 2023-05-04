@@ -200,7 +200,8 @@ public class ServerMainFrame extends JFrame
 		public void run() // Updates the display
 		{
 			int millis = framerateCounter.stopTime();
-			lastFramerate = 1000 / millis;
+			if (millis != 0) lastFramerate = 1000 / millis;
+			else lastFramerate = -1;
 			framerateCounter.start();
 			GameInfo.updateWorld();
 		}

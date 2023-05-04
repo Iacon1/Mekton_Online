@@ -65,7 +65,6 @@ public final class ConfigManager
 	public static void setValue(String name, String value) {setupIfNot(); values.put(name, value); saveConfig();}
 	
 	public static int getFramerateCap() {return Integer.valueOf(getValue("framerate_cap", "60"));} // In FPS
-	public static int getNetrateCap() {return Integer.valueOf(getValue("netrate_cap", "60"));} // In CPS
 
 	public static int getScreenWidth() {return Integer.valueOf(getValue("screen_width", "640"));} // Width of screen, in pixels
 

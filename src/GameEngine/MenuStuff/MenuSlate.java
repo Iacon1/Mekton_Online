@@ -52,7 +52,9 @@ public interface MenuSlate
 	
 	// Functions
 	public void setCells(int w, int h);
-	
+	public int getHCells();
+	public int getVCells();
+	public void clear();
 	// Prints info
 	public ComponentHandle addInfo(ComponentHandle parent, Alignable.AlignmentPoint anchorPoint,
 			int x, int y, String label, int labelLength, int contentLength, int h,
@@ -142,7 +144,13 @@ public interface MenuSlate
 			E[] options, DataFunction<E> function);
 	public <E extends Enum<E>> ComponentHandle addOptions(int x, int y, String label, int labelLength, int contentLength, int labelHeight, int contentHeight,
 			E[] options, DataFunction<E> function);
-	// TODO tree support
+	// Sprite
+		public ComponentHandle addSprite(ComponentHandle parent, Alignable.AlignmentPoint anchorPoint,
+				int x, int y, int w, int h,
+				InfoFunction<Sprite> function);
+		public ComponentHandle addSprite(int x, int y, int w, int h,
+				InfoFunction<Sprite> function);
+		// TODO tree support
 	// Section
 	public SubHandle addSubSlate(ComponentHandle parent, Alignable.AlignmentPoint anchorPoint,
 			int x, int y, int w, int h,
@@ -157,14 +165,14 @@ public interface MenuSlate
 	public TabHandle addTabbedSection(ComponentHandle parent, Alignable.AlignmentPoint anchorPoint,
 			int x, int y, int w, int h);
 	public TabHandle addTabbedSection(int x, int y, int w, int h);
-	public ComponentHandle addSprite(ComponentHandle parent, Alignable.AlignmentPoint anchorPoint,
+	public SubHandle addScrollSlate(ComponentHandle parent, Alignable.AlignmentPoint anchorPoint,
+			int x, int y, int w1, int h1, int w2, int h2,
+			MenuSlate subSlate);
+	public SubHandle addScrollSlate(ComponentHandle parent, Alignable.AlignmentPoint anchorPoint,
 			int x, int y, int w, int h,
-			InfoFunction<Sprite> function);
-	public ComponentHandle addSprite(int x, int y, int w, int h,
-			InfoFunction<Sprite> function);
-	public void clear();
-	
-	public int getHCells();
-	public int getVCells();
-	
+			MenuSlate subSlate);
+	public SubHandle addScrollSlate(int x, int y, int w1, int h1, int w2, int h2,
+			MenuSlate subSlate);
+	public SubHandle addScrollSlate(int x, int y, int w, int h,
+			MenuSlate subSlate);
 }

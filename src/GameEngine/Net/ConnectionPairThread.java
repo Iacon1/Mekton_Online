@@ -5,7 +5,6 @@
 package GameEngine.Net;
 
 import Utils.Logging;
-import Utils.SimpleTimer;
 import Utils.StringCipher;
 
 import java.io.DataInputStream;
@@ -14,15 +13,10 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.*;
 import java.security.Key;
-
-import GameEngine.GameInfo;
-import GameEngine.Configurables.ConfigManager;
+import java.util.TimerTask;
 
 public abstract class ConnectionPairThread extends Thread
 {
-	private Thread inThread; // Thread for getting & processing input
-	private Thread outThread; // Thread for processing & sending output
-	
 	private DataInputStream inStream;
 	private DataOutputStream outStream;
 	
@@ -110,12 +104,7 @@ public abstract class ConnectionPairThread extends Thread
 			try {processInput(input);}
 			catch (Exception e) {Logging.logException(e);}
 
-			if (loop && ConfigManager.getNetrateCap() != 0)
-			{
-				try {Thread.sleep(1000 / ConfigManager.getNetrateCap());}
-				catch (Exception e) {Logging.logException(e);}
-			}
-			else if (!loop) return true;
+			if (!loop) return true;
 		}
 		return true;
 	}
@@ -133,12 +122,7 @@ public abstract class ConnectionPairThread extends Thread
 				else sendOutputEncrypted(output);
 			}
 			
-			if (loop && ConfigManager.getNetrateCap() != 0) 
-			{
-				try {Thread.sleep(1000 / ConfigManager.getNetrateCap());}
-				catch (Exception e) {Logging.logException(e);}
-			}
-			else if (!loop) return;
+			if (!loop) return;
 		}
 	}
 	
@@ -186,19 +170,8 @@ public abstract class ConnectionPairThread extends Thread
 	{
 		if (socket == null || socket.isClosed()) close(); // SHUT IT DOWN!
 		
-		SimpleTimer timer = new SimpleTimer();
-		timer.start();
 		inputRun(false);
 		outputRun(false);
-		if (ConfigManager.getNetrateCap() != 0)
-		{
-			try
-			{
-				Thread.sleep(Math.max(0, 1000 / ConfigManager.getNetrateCap() - timer.stopTime())); // Accounts for lag in an effort to maintain consistent framerate.
-			}
-			catch (Exception e) {Logging.logException(e);}
-		}
-		else timer.stopTime();
 	}
 	
 	public void run() // Loop
