@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import GameEngine.GameInfo;
-import Utils.JSONManager;
+import Utils.DataManager;
 import Utils.Logging;
 import Utils.MiscUtils;
 
@@ -27,7 +27,7 @@ public final class StringManager
 		if (stringBank == null)
 		{
 			Logging.logError("Have not loaded string bank " + path + ". Loading...");
-			stringBank = JSONManager.deserializeCollectionJSON(MiscUtils.getAbsolute(path), new HashMap<String, String>().getClass());
+			stringBank = DataManager.deserializeCollection(MiscUtils.getAbsolute(path), new HashMap<String, String>().getClass());
 			if (stringBank == null) Logging.logError("Could not load string bank @ " + path);
 			else Logging.logError("Loading done");
 			stringBanks.put(path, stringBank);
@@ -40,6 +40,6 @@ public final class StringManager
 	
 	public static String getString(String bank, String name)
 	{
-		return getStringPath(GameInfo.getServerPackResource("/Strings/" + bank + ".JSON"), name);
+		return getStringPath(GameInfo.inServerPack("/Strings/" + bank + ".JSON"), name);
 	}
 }

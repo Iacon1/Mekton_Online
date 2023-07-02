@@ -61,6 +61,6 @@ public final class SoundManager
 	
 	public static void playSound(String name)
 	{
-		playSound(GameInfo.getServerPackResource("/Sounds/SFX/" + name + ".WAV"));
+		playSound(GameInfo.inServerPack("/Sounds/SFX/" + name + ".WAV"));
 	}
 }

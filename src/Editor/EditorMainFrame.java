@@ -63,14 +63,14 @@ public class EditorMainFrame extends JFrame
 	 */
 	public EditorMainFrame(String serverPack)
 	{
-		setTitle(MiscUtils.getProgramName() + " Editor");
+		setTitle(GameInfo.getProgramName() + " Editor");
 		
 		GameInfo.setServerPack(serverPack);
-		ModuleManager.init();
+		ModuleManager.loadModules();
 
 		setResizable(true);
 		
-		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.editor));
+		setIconImages(GameInfo.getIcons(GameInfo.ExecType.editor));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 640, 480);
 		

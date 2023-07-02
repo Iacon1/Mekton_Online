@@ -5,13 +5,14 @@
 
 package GameEngine.Server.HandlerStates;
 
+import GameEngine.GameInfo;
 import GameEngine.Net.StateFactory;
 import GameEngine.Net.ThreadState;
 import GameEngine.PacketTypes.ClientInfoPacket;
 import GameEngine.PacketTypes.ServerInfoPacket;
 import GameEngine.Server.ClientHandlerThread;
 import GameEngine.DiffieHellman;
-import Utils.JSONManager;
+import Utils.DataManager;
 import Utils.Logging;
 import Utils.MiscUtils;
 
@@ -37,8 +38,8 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 	{
 		if (sent)
 		{
-			ClientInfoPacket packet = JSONManager.deserializeJSON(input, ClientInfoPacket.class);
-			if (packet == null || !packet.version.equals(MiscUtils.getVersion())) // We don't actually care about this client anymore
+			ClientInfoPacket packet = DataManager.deserialize(input, ClientInfoPacket.class);
+			if (packet == null || !packet.version.equals(GameInfo.getVersion())) // We don't actually care about this client anymore
 			{
 				if (packet == null) Logging.logError("Client " + parentThread.getSocket().getInetAddress() + " tried to connect<br> but failed to send a info packet.");
 				else Logging.logError("Client " + parentThread.getSocket().getInetAddress() + " tried to connect<br> but sent a bad packet.");
@@ -59,7 +60,7 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 		{
 			ServerInfoPacket packet = new ServerInfoPacket();
 			packet.serverName = parentThread.getParent().getName();
-			packet.version = MiscUtils.getVersion();
+			packet.version = GameInfo.getVersion();
 			packet.resourceFolder = "Default"; // TODO Set this
 			packet.mix = diffieHellman.getPublicMix();
 			
@@ -72,7 +73,7 @@ public class CheckClient implements ThreadState<ClientHandlerThread>
 			sent = true;
 			
 			Logging.logNotice("Sent info to " + parentThread.getSocket().getInetAddress());
-			return JSONManager.serializeJSON(packet);
+			return DataManager.serialize(packet);
 		}
 		else return null; // We have nothing to say to them
 	}

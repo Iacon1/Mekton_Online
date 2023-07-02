@@ -227,11 +227,11 @@ public class ServerMainFrame extends JFrame
 	public ServerMainFrame(GameServer server)
 	{
 		if (server != null) ServerMainFrame.server = server;
-		setTitle(MiscUtils.getProgramName() + " Server");
+		setTitle(GameInfo.getProgramName() + " Server");
 
 		setResizable(false);
 		
-		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.server));
+		setIconImages(GameInfo.getIcons(GameInfo.ExecType.server));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, ConfigManager.getScreenWidth(), ConfigManager.getScreenHeight());
 		contentPane = new JPanel();

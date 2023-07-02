@@ -6,13 +6,18 @@
 package GameEngine.Configurables;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
@@ -20,117 +25,92 @@ import java.util.jar.JarFile;
 
 import GameEngine.GameInfo;
 import GameEngine.Configurables.ModuleTypes.Module;
-import Utils.JSONManager;
+import GameEngine.Configurables.ModuleTypes.Module.ModuleConfig;
+import Utils.DataManager;
 import Utils.Logging;
 import Utils.MiscUtils;
 
 public final class ModuleManager
 {
-	private static Map<String, Module> modules; // The actual modules, by file name
-	private static List<String> modulePriorities; // The module names by priority
-	private static URLClassLoader classLoader;
+	private static final String modulesPathName = "Modules"; // Where the modules are
+	private static final String extension = ".mom"; // Mekton Online Module
 	
+	private static Map<String, Module> modules; // The actual modules, by file name
+	private static List<String> loadOrder; // The module names by load order
+
+	private static ClassLoader classLoader;
+
 	public static <T> boolean doesImplement(Module module, Class<T> moduleType) // Does module implement that module type? 
 	{
 		return moduleType.isAssignableFrom(module.getClass());
 	}
 
-	private static List<String> getModuleNames(String path)
-	{
-		if (!(new File(GameInfo.getServerPackResource(path + "/Modules/")).exists())) return new ArrayList<String>(); // If this path has no modules folder then return nothing.
+	public static void loadModules() // Loads all modules from the server pack in GameInfo
+	{		
+		modules = new HashMap<String, Module>();
+		loadOrder = new ArrayList<String>();
+		Logging.logNotice("Loading modules.");
 		
-		String moduleListText = MiscUtils.readText(GameInfo.getServerPackResource(path + "/Modules/ModuleList.json")); // Otherwise, load the module list.
-		List<String> currentList = (List<String>) JSONManager.deserializeCollectionJSONList(moduleListText, ArrayList.class, String.class);
-		List<String> newList = new ArrayList<String>();
-		for (int i = 0; i < currentList.size(); ++i)
+		String[] moduleFNames = MiscUtils.listFilenames(GameInfo.inServerPack(modulesPathName + "/"), extension);
+		List<URL> moduleURLs = new ArrayList<URL>();
+		
+		Logging.logNotice("Modules: " + MiscUtils.arrayToString(moduleFNames, ", "));
+		
+		for (String moduleFName : moduleFNames)
 		{
-			String moduleName = currentList.get(i);
-			File moduleFileJ = new File(GameInfo.getServerPackResource(path + "/Modules/" + moduleName + ".jar"));
-			if (moduleFileJ.exists()) newList.add(moduleName);
-		}
-		
-		return newList;
-	}
-	private static List<URL> getModuleURLs(String path) // Lists all modules
-	{
-		if (!(new File(GameInfo.getServerPackResource(path + "/Modules/")).exists())) return new ArrayList<URL>(); // If this path has no modules folder then return nothing.
-		
-		String moduleListText = MiscUtils.readText(GameInfo.getServerPackResource(path + "/Modules/ModuleList.json"));
-		List<String> currentList = (List<String>) JSONManager.deserializeCollectionJSONList(moduleListText, ArrayList.class, String.class);
-		List<URL> newList = new ArrayList<URL>();
-		for (int i = 0; i < currentList.size(); ++i)
-		{
-			String moduleName = currentList.get(i);
-			File moduleFileJ = new File(GameInfo.getServerPackResource(path + "/Modules/" + moduleName + ".jar"));
-			if (moduleFileJ.exists()) try {newList.add(moduleFileJ.toURI().toURL());}
-			catch (Exception e) {Logging.logException(e);}
-		}
-
-		return newList;
-	}
- // TODO metamodule support
-	
-	private static void loadModule(String moduleName) throws Exception
-	{
-//		Logging.logNotice("Loading module " + moduleName + ".");
-		String path = GameInfo.getServerPackResource("Modules/" + moduleName + ".jar");
-		URL url = new File(path).toURI().toURL();
-	
-		JarFile moduleFile = new JarFile(path);
-		Enumeration<JarEntry> entries = moduleFile.entries();
-		
-		Class moduleClass = null;
-		
-		// https://stackoverflow.com/questions/11016092/how-to-load-classes-at-runtime-from-a-folder-or-jar
-		while (entries.hasMoreElements())
-		{
-			JarEntry entry = entries.nextElement();
-			if (entry.isDirectory() || !entry.getName().endsWith(".class"))
+			try
+			{
+				String absFName = GameInfo.inServerPack(modulesPathName + "/" + moduleFName);
+				JarFile moduleJar = new JarFile(absFName);
+				JarEntry configEntry = moduleJar.getJarEntry(modulesPathName + "/" + moduleFName.substring(0, moduleFName.length() - 4) + "/ModuleConfig.json");
+				ModuleConfig defaultConfig = DataManager.deserialize(MiscUtils.readZIPEntry(moduleJar, configEntry), ModuleConfig.class);
+				
+				// Determine place in load order: If I require someone then go after them otherwise go before them.
+				for (int i = loadOrder.size() - 1; i >= -1; --i)
+					if (i == -1 || Arrays.binarySearch(defaultConfig.dependencies, loadOrder.get(i)) >= 0)
+					{
+						loadOrder.add(i + 1, defaultConfig.moduleName);
+						moduleURLs.add(i + 1, (new File(absFName)).toURI().toURL());
+						break;
+					}			
+				moduleJar.close();
+			}
+			catch (Exception e)
+			{
+				Logging.logException(e);
+				Logging.logError("Did not load module @ " + GameInfo.inServerPack(modulesPathName + "/" + moduleFName) + ".");
 				continue;
-			String className = entry.getName().substring(0, entry.getName().length() - 6); // Removes ".class"
-			className = className.replace('/', '.'); // From file notation to class notation
-			
-			if (className.endsWith(moduleName)) moduleClass = classLoader.loadClass(className);
-			else classLoader.loadClass(className);
-//			Logging.logNotice("Loaded class " + className);
+			}
 		}
-		Module module = (Module) moduleClass.getDeclaredConstructor().newInstance();
+		// Load all into class loader
+		classLoader = new URLClassLoader(moduleURLs.toArray(new URL[] {}));
 
-		modules.put(moduleName, module);
-		modulePriorities.add(moduleName);
+		for (URL url : moduleURLs)
+		{
+			String filePath = url.getFile();
+			String moduleName = filePath.substring(filePath.lastIndexOf("/") + 1, filePath.length() - 4);
+			try
+			{
+				Module module = (Module) classLoader.loadClass(modulesPathName + "." + moduleName + "." + moduleName).getDeclaredConstructor().newInstance();
+				ModuleConfig config = DataManager.deserialize(new String(MiscUtils.readResource(classLoader, modulesPathName + "/" + moduleName + "/" + "ModuleConfig.json")), ModuleConfig.class);
+				module.initModule(config);
+				modules.put(module.getConfig().moduleName, module);
+			}
+			catch (Exception e)
+			{
+				Logging.logException(e);
+				Logging.logError("Malformed module " + filePath + ".");
+				break;
+			}
+		}
+		Logging.logNotice("Finished loading modules.");
 		
-//		Logging.logNotice("Loaded module " + moduleName + ".");
-		module.initModule();
+		
 	}
-	
-	public static final ClassLoader getLoader()
+	public static ClassLoader getLoader()
 	{
 		return classLoader;
 	}
-	public static void init() // Loads all modules from the server pack in GameInfo
-	{
-		URL packURL = null;
-		try {packURL = (new File(GameInfo.getServerPackResource("/"))).toURI().toURL();}
-		catch (Exception e) {Logging.logException(e); return;}
-		
-		modules = new HashMap<String, Module>();
-		modulePriorities = new ArrayList<String>();
-
-		Logging.logNotice("Loading modules.");
-		List<String> moduleNames = getModuleNames("");
-		List<URL> moduleURLs = getModuleURLs("");
-		
-		classLoader = URLClassLoader.newInstance(moduleURLs.toArray(new URL[moduleURLs.size()]));
-		
-		for (int i = 0; i < moduleNames.size(); ++i) // From highest priority to lowest
-		{			
-			try {loadModule(moduleNames.get(i));}
-			catch (Exception e) {Logging.logException(e);}
-		}
-		
-		Logging.logNotice("Finished loading modules.");
-	}
-
 	public static Module getModule(String fileName) // In case you need a specific module
 	{
 		return modules.get(fileName);
@@ -138,31 +118,20 @@ public final class ModuleManager
 
 	public static <T extends Module> T getHighestOfType(Class<T> moduleType, Module delegate) // Get highest implementer of a moduleType, ignoring result delegate if not null
 	{
-		if (modulePriorities == null) return null;
-		for (int i = modulePriorities.size() - 1; i >= 0; --i)
+		if (loadOrder == null) return null;
+		for (int i = loadOrder.size() - 1; i >= 0; --i)
 		{
-			Module module = modules.get(modulePriorities.get(i));
+			Module module = modules.get(loadOrder.get(i));
+			if (module == null) return null;
 			if (doesImplement(module, moduleType) && (delegate == null || module != delegate)) return (T) module;
 		}
 		
 		return null;
 	}
-	
-	public static <T extends Module> T getHighestOfType(Class<T> moduleType) // Get highest implementer of a moduleType
-	{
-		return getHighestOfType(moduleType, null);
-	}
+	public static <T extends Module> T getHighestOfType(Class<T> moduleType) {return getHighestOfType(moduleType, null);}
 	
 	public static int size()
 	{
 		return modules.size();
-	}
-	
-	/** Gets the module with that priority.
-	 *  
-	 */
-	public static Module getModule(int priority)
-	{
-		return modules.get(modulePriorities.get(priority));
 	}
 }

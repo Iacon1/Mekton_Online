@@ -14,7 +14,7 @@ import GameEngine.Configurables.ConfigManager;
 import GameEngine.Net.StateFactory;
 import GameEngine.Net.ThreadState;
 import GameEngine.PacketTypes.GameDataPacket;
-import Utils.JSONManager;
+import Utils.DataManager;
 
 public class MainScreen implements ThreadState<GameClientThread>
 {
@@ -40,7 +40,7 @@ public class MainScreen implements ThreadState<GameClientThread>
 	@Override
 	public void onEnter(GameClientThread parentThread)
 	{
-		JSONManager.invalidate();
+		DataManager.invalidate();
 		parentThread.setContainer("main", new GameFrame());
 		parentThread.getContainer("main");
 		frameLoaded = false;
@@ -53,7 +53,7 @@ public class MainScreen implements ThreadState<GameClientThread>
 	{
 		synchronized (packetLock)
 		{
-			packet = JSONManager.deserializeJSON(input, GameDataPacket.class);
+			packet = DataManager.deserialize(input, GameDataPacket.class);
 		
 			if (packet == null)
 				return;
@@ -70,7 +70,7 @@ public class MainScreen implements ThreadState<GameClientThread>
 	{
 		if (GameInfo.clientInput != null && !GameInfo.clientInput.inputs.isEmpty()) // We got input
 		{
-			String output = JSONManager.serializeJSON(GameInfo.clientInput);
+			String output = DataManager.serialize(GameInfo.clientInput);
 			GameInfo.clearInput();
 			return output;
 		} else

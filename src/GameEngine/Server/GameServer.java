@@ -12,7 +12,7 @@ import GameEngine.EntityTypes.GameEntity;
 import GameEngine.Net.ConnectionPairThread;
 import GameEngine.Net.Server.Server;
 import Utils.GappyArrayList;
-import Utils.JSONManager;
+import Utils.DataManager;
 import Utils.Logging;
 import Utils.MiscUtils;
 
@@ -23,13 +23,13 @@ public abstract class GameServer<T extends ConnectionPairThread> extends Server<
 	private void loadAccounts()
 	{
 		accounts = new GappyArrayList<Account>();
-		accounts = JSONManager.deserializeCollectionJSONList(MiscUtils.readText("Local Data/Server/Accounts.json"), GappyArrayList.class, Account.class);
+		accounts = DataManager.deserializeCollectionList(MiscUtils.readText("Local Data/Server/Accounts.json"), GappyArrayList.class, Account.class);
 		
 		if (accounts == null) accounts = new GappyArrayList<Account>();
 	}
 	private void saveAccounts()
 	{
-		MiscUtils.saveText("Local Data/Server/Accounts.json", JSONManager.serializeJSON(accounts));
+		MiscUtils.saveText("Local Data/Server/Accounts.json", DataManager.serialize(accounts));
 	}
 	
 	public GameServer(Supplier<T> supplier)

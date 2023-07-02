@@ -12,6 +12,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import GameEngine.GameInfo;
 import Utils.Logging;
 import Utils.MiscUtils;
 
@@ -58,9 +59,8 @@ public class ConnectFailDialog extends JDialog
 	 */
 	public ConnectFailDialog()
 	{
-		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.client));
-		
-		setTitle(MiscUtils.getProgramName() + " Client: Connection failed.");
+		setIconImages(GameInfo.getIcons(GameInfo.ExecType.client));
+		setTitle(GameInfo.getProgramName() + " Client: Connection failed.");
 		setBounds(100, 100, 300, 175);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

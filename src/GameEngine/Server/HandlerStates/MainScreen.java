@@ -14,7 +14,7 @@ import GameEngine.Net.ThreadState;
 import GameEngine.PacketTypes.ClientInputPacket;
 import GameEngine.PacketTypes.GameDataPacket;
 import GameEngine.Server.ClientHandlerThread;
-import Utils.JSONManager;
+import Utils.DataManager;
 
 public class MainScreen implements ThreadState<ClientHandlerThread>
 {
@@ -32,7 +32,7 @@ public class MainScreen implements ThreadState<ClientHandlerThread>
 	public void processInput(String input, ClientHandlerThread parentThread)
 	{
 		if (input == null) return;
-		ClientInputPacket packet = JSONManager.deserializeJSON(input, ClientInputPacket.class);
+		ClientInputPacket packet = DataManager.deserialize(input, ClientInputPacket.class);
 		synchronized ((GameInfo.updateLock))
 		{
 			parentThread.getAccount().processOtherInputs(packet.inputs);
@@ -44,7 +44,7 @@ public class MainScreen implements ThreadState<ClientHandlerThread>
 		ScreenCanvas canvas = new ScreenCanvas();
 		ModuleManager.getHighestOfType(GraphicsHandlerModule.class).drawWorld(parentThread.getAccount().getPossessee(), canvas);
 		GameDataPacket packet = new GameDataPacket(canvas.getRenderQueue());
-		return JSONManager.serializeJSON(packet);
+		return DataManager.serialize(packet);
 	}
 	
 	@Override

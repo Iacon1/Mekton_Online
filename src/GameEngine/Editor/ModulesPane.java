@@ -28,8 +28,8 @@ public class ModulesPane extends JPanel
 		springLayout.putConstraint(SpringLayout.EAST, tabbedPane, 0, SpringLayout.EAST, this);
 		add(tabbedPane);
 
-		for (int i = 0; i < ModuleManager.size(); ++i)
-			tabbedPane.add(ModuleManager.getModule(i).getEditorPanel());
+//		for (int i = 0; i < ModuleManager.size(); ++i)
+//			tabbedPane.add(ModuleManager.getModule(i).getEditorPanel());
 	}
 
 }

@@ -10,7 +10,7 @@ import GameEngine.Net.StateFactory;
 import GameEngine.Net.ThreadState;
 import GameEngine.PacketTypes.LoginFeedbackPacket;
 import GameEngine.PacketTypes.LoginPacket;
-import Utils.JSONManager;
+import Utils.DataManager;
 
 import Utils.MiscUtils;
 
@@ -34,7 +34,7 @@ public class Login implements ThreadState<GameClientThread>
 	@Override
 	public void processInput(String input, GameClientThread parentThread)
 	{
-		LoginFeedbackPacket packet = JSONManager.deserializeJSON(input, LoginFeedbackPacket.class);
+		LoginFeedbackPacket packet = DataManager.deserialize(input, LoginFeedbackPacket.class);
 		
 		successful = packet.successful;
 		if (successful)
@@ -58,7 +58,7 @@ public class Login implements ThreadState<GameClientThread>
 			parentThread.close();
 		LoginPacket packet = dialog.getPacket();
 		if (packet != null)
-			return JSONManager.serializeJSON(packet);
+			return DataManager.serialize(packet);
 		else return null;
 	}
 

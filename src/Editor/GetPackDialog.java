@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import GameEngine.GameInfo;
 import Utils.Logging;
 import Utils.MiscUtils;
 import javax.swing.SpringLayout;
@@ -72,9 +73,9 @@ public class GetPackDialog extends JDialog
 	 */
 	public GetPackDialog()
 	{
-		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.editor));
+		setIconImages(GameInfo.getIcons(GameInfo.ExecType.editor));
 		
-		setTitle(MiscUtils.getProgramName() + " Editor: Set Serverpack");
+		setTitle(GameInfo.getProgramName() + " Editor: Set Serverpack");
 		setBounds(100, 100, 300, 175);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

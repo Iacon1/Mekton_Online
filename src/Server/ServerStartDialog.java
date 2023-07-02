@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import GameEngine.GameInfo;
 import GameEngine.Configurables.ModuleManager;
 import GameEngine.Configurables.ModuleTypes.ServerMakingModule;
+import GameEngine.Server.BaseServer;
 import GameEngine.Server.GameServer;
 import Utils.Logging;
 import Utils.MiscUtils;
@@ -45,11 +46,15 @@ public class ServerStartDialog extends JDialog
 		Integer value = (Integer) portSpinner.getValue();
 		if (value != null)
 		{
-			GameServer<?> server = ModuleManager.getHighestOfType(ServerMakingModule.class).makeServer();
-			GameInfo.setServer(server);
-			server.start(value); // TODO changeable
-			ServerWindow.main(server);
+			GameServer<?> server;
+			ServerMakingModule module = ModuleManager.getHighestOfType(ServerMakingModule.class);
 			
+			if (module != null) server = module.makeServer();
+			else server = new BaseServer();
+			GameInfo.setServer(server);
+			server.start(value);
+			ServerWindow.main(server);
+
 			this.setVisible(false);
 			this.dispose();
 		}
@@ -57,9 +62,9 @@ public class ServerStartDialog extends JDialog
 	
 	public ServerStartDialog()
 	{
-		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.server));
+		setIconImages(GameInfo.getIcons(GameInfo.ExecType.server));
 		
-		setTitle(MiscUtils.getProgramName() + " Server: Start server...");
+		setTitle(GameInfo.getProgramName() + " Server: Start server...");
 		setBounds(100, 100, 300, 175);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

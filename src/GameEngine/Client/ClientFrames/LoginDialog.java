@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
+import GameEngine.GameInfo;
 import GameEngine.Client.GameClientThread;
 import GameEngine.PacketTypes.LoginPacket;
 import Utils.Logging;
@@ -78,9 +79,9 @@ public class LoginDialog extends JDialog
 	{
 		passwordBox.setColumns(10);
 		usernameBox.setColumns(10);
-		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.client));
+		setIconImages(GameInfo.getIcons(GameInfo.ExecType.client));
 		
-		setTitle(MiscUtils.getProgramName() + " Client: Login");
+		setTitle(GameInfo.getProgramName() + " Client: Login");
 		setBounds(100, 100, 400, 300);
 		
 		getContentPane().setLayout(new BorderLayout());

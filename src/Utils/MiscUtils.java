@@ -7,18 +7,27 @@ package Utils;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.math.RoundingMode;
 
 public final class MiscUtils
@@ -44,48 +53,7 @@ public final class MiscUtils
 		if (list.size() < newSize) addItemsToFit(list, newSize);
 		else while (list.size() > newSize) list.remove(list.size() - 1);
 	}
-	
-	public enum ExecType
-	{
-		client,
-		server,
-		editor;
-	}
-	/** Returns all versions of the icon for either client or server
-	 * 
-	 *  @param execType The set of icons to get.
-	 *  @return List of icons.
-	 */
-	public static List<Image> getIcons(ExecType execType) // Returns all versions of the icon for client, server, or editor
-	{
-		List<Image> icons = new ArrayList<Image>();
-		String pathPrefix;
-		if (execType == ExecType.client) pathPrefix = "Resources/Icons/Client Icons/";
-		else if (execType == ExecType.server) pathPrefix = "Resources/Icons/Server Icons/";
-		else if (execType == ExecType.editor) pathPrefix = "Resources/Icons/Editor Icons/";
-		else return null;
-		icons.add(Toolkit.getDefaultToolkit().getImage(MiscUtils.getAbsolute(pathPrefix + "Icon16.PNG")));
-		icons.add(Toolkit.getDefaultToolkit().getImage(MiscUtils.getAbsolute(pathPrefix + "Icon32.PNG")));
-		icons.add(Toolkit.getDefaultToolkit().getImage(MiscUtils.getAbsolute(pathPrefix + "Icon64.PNG")));
-		icons.add(Toolkit.getDefaultToolkit().getImage(MiscUtils.getAbsolute(pathPrefix + "Icon128.PNG")));
-		
-		return icons;
-	}
-	
-	/** Returns the program version.
-	 *  @return The version of the program.
-	 */
-	public static String getVersion() // Gets version
-	{
-		return "V0.X";
-	}
-	/** Returns the program name.
-	 *  @return The program's name.
-	 */
-	public static String getProgramName() // What is this program (inc. version)?
-	{
-		return "Mekton Online " + getVersion();
-	}
+
 	/** Returns the absolute path of the filename.
 	 *  
 	 *  @param name The filename.
@@ -145,10 +113,29 @@ public final class MiscUtils
 		}
 		catch (Exception e) {Logging.logException(e); return null;}
 	}
+	/** Reads text from a file.
+	 *  
+	 *  @param name The filename / path to read from.
+	 *  @return The read text.
+	 */
+	public static String readText(Path path) // Reads text from file
+	{
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		try {Files.copy(path, stream);}
+		catch (Exception e) {Logging.logException(e); return null;}
+		return stream.toString();
+	}
 	/** Lists all files in a folder. */
 	public static String[] listFilenames(String name)
 	{
 		File[] files = new File(getAbsolute(name)).listFiles();
+		String[] names = new String[files.length];
+		for (int i = 0; i < files.length; ++i) names[i] = files[i].getName();
+		return names;
+	}
+	public static String[] listFilenames(String name, String extension)
+	{
+		File[] files = new File(getAbsolute(name)).listFiles((File fDir, String fName) -> {return fName.endsWith(extension);});
 		String[] names = new String[files.length];
 		for (int i = 0; i < files.length; ++i) names[i] = files[i].getName();
 		return names;
@@ -366,5 +353,33 @@ public final class MiscUtils
 			return (byte) (int) Integer.valueOf(digits, 16);
 		default: return 0;
 		}
+	}
+	
+	/** Reads a ZIP entry and converts it to text.
+	 * @param file the ZIP file this entry came from.
+	 * @param entry the entry to read and convert.
+	 * 
+	 * @return The entry as a string.
+	 */
+	public static String readZIPEntry(ZipFile file, ZipEntry entry) throws IOException
+	{
+		BufferedInputStream stream = new BufferedInputStream(file.getInputStream(entry));
+		byte[] bytes = stream.readAllBytes();
+		stream.close();
+		return new String(bytes);
+	}
+	
+	/** Reads a resource and converts it to bytes.
+	 * @param loader the class loader this resource is defined in.
+	 * @param resource the name of the resource to convert.
+	 * 
+	 * @return The resource as a byte array.
+	 */
+	public static byte[] readResource(ClassLoader loader, String resource) throws IOException
+	{
+		BufferedInputStream stream = new BufferedInputStream(loader.getResourceAsStream(resource));
+		byte[] bytes = stream.readAllBytes();
+		stream.close();
+		return bytes;
 	}
 }

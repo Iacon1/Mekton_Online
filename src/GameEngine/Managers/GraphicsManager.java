@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import GameEngine.GameInfo;
+import GameEngine.Configurables.ModuleManager;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -23,8 +24,9 @@ import java.awt.image.ImageObserver;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
+import java.io.InputStream;
 
-import Utils.JSONManager;
+import Utils.DataManager;
 import Utils.Logging;
 import Utils.MiscUtils;
 import jdk.internal.org.jline.utils.Colors;
@@ -75,10 +77,27 @@ public final class GraphicsManager
 	private static BufferedImage getAsIndexed(String path)
 	{
 		List<Color> palette = new ArrayList<Color>();
-		File file = new File(MiscUtils.getAbsolute(path));
+		
 		BufferedImage img1, img2;
-		try {img1 = ImageIO.read(file);}
-		catch (Exception e) {Logging.logException(e); return null;}
+		try
+		{
+			File file = new File(MiscUtils.getAbsolute(path));
+			img1 = ImageIO.read(file);
+		}
+		catch (Exception e) // Path might be resource and not file
+		{
+			try
+			{
+				InputStream stream = ModuleManager.getLoader().getResourceAsStream(path);
+				img1 = ImageIO.read(stream);
+			}
+			catch (Exception e2)
+			{
+				Logging.logException(e);
+				Logging.logException(e2);
+				return null;
+			}
+		}
 		
 		for (int i = 0; i < img1.getHeight(); ++i)
 			for (int j = 0; j < img1.getWidth(); ++j)
@@ -134,11 +153,11 @@ public final class GraphicsManager
 	{
 		if (palette != null)
 		{
-			BufferedImage i = getImagePath(GameInfo.getServerPackResource("/Graphics/" + name + ".PNG"));
+			BufferedImage i = getImagePath(GameInfo.inServerPack("/Graphics/" + name + ".PNG"));
 			WritableRaster r = i.getRaster();
 			return new BufferedImage(getColorModel(palette), r, i.isAlphaPremultiplied(), new Hashtable());
 		}
-		else return getImagePath(GameInfo.getServerPackResource("/Graphics/" + name + ".PNG"));
+		else return getImagePath(GameInfo.inServerPack("/Graphics/" + name + ".PNG"));
 	}
 	public static Image getImage(String name)
 	{
@@ -146,7 +165,7 @@ public final class GraphicsManager
 	}
 	public static Font getFont(String name)
 	{
-		return getFontPath(GameInfo.getServerPackResource("/Fonts/" + name + ".TTF"));
+		return getFontPath(GameInfo.inServerPack("/Fonts/" + name + ".TTF"));
 	}
 	public static Color getColor(int r, int g, int b)
 	{
@@ -162,7 +181,7 @@ public final class GraphicsManager
 	{
 		List<Color> palette = new ArrayList<Color>();
 		
-		File file = new File(GameInfo.getServerPackResource("/Graphics/" + name + ".PNG"));
+		File file = new File(GameInfo.inServerPack("/Graphics/" + name + ".PNG"));
 		BufferedImage img;
 		try {img = ImageIO.read(file);}
 		catch (Exception e) {Logging.logException(e); return null;}

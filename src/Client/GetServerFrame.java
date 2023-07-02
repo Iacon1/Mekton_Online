@@ -10,11 +10,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import GameEngine.GameInfo;
 import GameEngine.Client.GameClientThread;
 import GameEngine.Net.Client.Client;
 import Utils.Logging;
 import Utils.MiscUtils;
-import Utils.JSONManager;
+import Utils.DataManager;
 
 import javax.swing.JLabel;
 import javax.swing.SpringLayout;
@@ -61,7 +62,7 @@ public class GetServerFrame extends JFrame
 	
 	private void populateList() // Populates savedServerList from file
 	{
-		savedServerArray = (ArrayList<SavedServer>) JSONManager.deserializeCollectionJSONList(MiscUtils.readText("Local Data/Client/SavedServers.JSON"), ArrayList.class, SavedServer.class);
+		savedServerArray = (ArrayList<SavedServer>) DataManager.deserializeCollectionList(MiscUtils.readText("Local Data/Client/SavedServers.JSON"), ArrayList.class, SavedServer.class);
 		if (savedServerArray == null)
 		{
 			savedServerArray = new ArrayList<SavedServer>();
@@ -100,7 +101,7 @@ public class GetServerFrame extends JFrame
 		}
 		if (!foundServer) savedServerArray.add(server);
 		
-		String serialized = JSONManager.serializeJSON(savedServerArray);
+		String serialized = DataManager.serialize(savedServerArray);
 		MiscUtils.saveText("Local Data/Client/SavedServers.JSON", serialized);
 		populateList();
 	}
@@ -115,7 +116,7 @@ public class GetServerFrame extends JFrame
 			if (savedServerArray.get(i).name.equals(name))
 			{
 				savedServerArray.remove(i);
-				MiscUtils.saveText("Local Data/Client/SavedServers.JSON", JSONManager.serializeJSON(savedServerArray));
+				MiscUtils.saveText("Local Data/Client/SavedServers.JSON", DataManager.serialize(savedServerArray));
 				populateList();
 				return;
 			}
@@ -173,10 +174,9 @@ public class GetServerFrame extends JFrame
 	 */
 	public GetServerFrame()
 	{
-		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.client));
-		
+		setIconImages(GameInfo.getIcons(GameInfo.ExecType.client));
+		setTitle(GameInfo.getProgramName() + " Client: Join Server");
 		serverIPBox.setColumns(10);
-		setTitle(MiscUtils.getProgramName() + " Client: Join Server");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		

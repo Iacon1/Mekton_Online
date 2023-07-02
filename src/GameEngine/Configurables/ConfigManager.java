@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import GameEngine.GameInfo;
-import Utils.JSONManager;
+import Utils.DataManager;
 import Utils.Logging;
 import Utils.MiscUtils;
 
@@ -26,8 +26,8 @@ public final class ConfigManager
 		
 		if (GameInfo.hasServerPack())
 		{
-			path = GameInfo.getServerPackResource("Config.json");
-			values = JSONManager.deserializeJSON(MiscUtils.readText(path), values.getClass());
+			path = GameInfo.inServerPack("Config.json");
+			values = DataManager.deserialize(MiscUtils.readText(path), values.getClass());
 			if (values == null)
 			{
 				Logging.logError("No config found.");
@@ -44,8 +44,8 @@ public final class ConfigManager
 	}
 	private static void saveConfig()
 	{
-		String path = GameInfo.getServerPackResource("Config.json");
-		String text = JSONManager.serializeJSON(values);
+		String path = GameInfo.inServerPack("Config.json");
+		String text = DataManager.serialize(values);
 		MiscUtils.saveText(path, text);
 	}
 	

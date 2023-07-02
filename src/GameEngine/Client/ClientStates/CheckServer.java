@@ -8,7 +8,7 @@ import GameEngine.DiffieHellman;
 import GameEngine.GameInfo;
 import GameEngine.Client.GameClientThread;
 import GameEngine.Configurables.ModuleManager;
-import Utils.JSONManager;
+import Utils.DataManager;
 import Utils.MiscUtils;
 
 public class CheckServer implements ThreadState<GameClientThread>
@@ -39,7 +39,7 @@ public class CheckServer implements ThreadState<GameClientThread>
 	@Override
 	public void processInput(String input, GameClientThread parentThread)
 	{
-		ServerInfoPacket packet = JSONManager.deserializeJSON(input, ServerInfoPacket.class);
+		ServerInfoPacket packet = DataManager.deserialize(input, ServerInfoPacket.class);
 		
 		if (packet == null)
 		{
@@ -50,7 +50,7 @@ public class CheckServer implements ThreadState<GameClientThread>
 		{
 			parentThread.setInfo(packet.getInfo());
 			
-			if (parentThread.getSocket() == null || !packet.version.equals(MiscUtils.getVersion()))
+			if (parentThread.getSocket() == null || !packet.version.equals(GameInfo.getVersion()))
 			{
 				result = Result.bad;
 				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(BadServer.class)));
@@ -61,7 +61,7 @@ public class CheckServer implements ThreadState<GameClientThread>
 				diffieHellman.start();
 				diffieHellman.end(packet.mix, parentThread);
 				GameInfo.setServerPack(packet.resourceFolder);
-				ModuleManager.init();
+				ModuleManager.loadModules();
 				parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(Login.class)));
 			}
 		}
@@ -75,10 +75,10 @@ public class CheckServer implements ThreadState<GameClientThread>
 		{
 			result = Result.done;
 			ClientInfoPacket packet = new ClientInfoPacket();
-			packet.version = MiscUtils.getVersion();
+			packet.version = GameInfo.getVersion();
 			packet.mix = diffieHellman.getPublicMix();
 			
-			return JSONManager.serializeJSON(packet);
+			return DataManager.serialize(packet);
 		}
 		else if (result == Result.bad)
 		{

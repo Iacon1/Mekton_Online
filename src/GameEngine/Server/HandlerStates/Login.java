@@ -10,7 +10,7 @@ import GameEngine.Server.Account;
 import GameEngine.Server.ClientHandlerThread;
 import GameEngine.Configurables.ModuleTypes.ServerMakingModule;
 
-import Utils.JSONManager;
+import Utils.DataManager;
 import Utils.Logging;
 import Utils.MiscUtils;
 
@@ -35,7 +35,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 	{
 		if (send) return; // Don't take more packets while still giving feedback on one
 		
-		LoginPacket packet = JSONManager.deserializeJSON(input, LoginPacket.class);
+		LoginPacket packet = DataManager.deserialize(input, LoginPacket.class);
 		
 		Account account = ModuleManager.getHighestOfType(ServerMakingModule.class).newAccount();
 		account.username = packet.username; 
@@ -75,7 +75,7 @@ public class Login implements ThreadState<ClientHandlerThread>
 		{
 			send = false;
 			if (loginFeedback.successful) parentThread.queueStateChange(getFactory().getState(MiscUtils.ClassToString(MainScreen.class)));
-			return JSONManager.serializeJSON(loginFeedback);
+			return DataManager.serialize(loginFeedback);
 		}
 		else return null;
 	}

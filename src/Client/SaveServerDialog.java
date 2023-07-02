@@ -12,6 +12,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import GameEngine.GameInfo;
 import Utils.MiscUtils;
 
 import javax.swing.SpringLayout;
@@ -66,10 +67,9 @@ public class SaveServerDialog extends JDialog
 	 */
 	public SaveServerDialog()
 	{
-		setIconImages(MiscUtils.getIcons(MiscUtils.ExecType.client));
-		
+		setIconImages(GameInfo.getIcons(GameInfo.ExecType.client));
+		setTitle(GameInfo.getProgramName() + " Client: Save server as...");
 		nameBox.setColumns(10);
-		setTitle(MiscUtils.getProgramName() + " Client: Save server as...");
 		setBounds(100, 100, 300, 175);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

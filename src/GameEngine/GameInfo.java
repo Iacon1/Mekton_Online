@@ -4,8 +4,12 @@
 
 package GameEngine;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import GameEngine.Client.GameFrame;
 import GameEngine.EntityTypes.GameEntity;
@@ -13,11 +17,59 @@ import GameEngine.PacketTypes.ClientInputPacket;
 import GameEngine.Server.Account;
 import GameEngine.Server.GameServer;
 import Utils.GappyArrayList;
-import Utils.JSONManager;
+import Utils.Logging;
+import Utils.DataManager;
 import Utils.MiscUtils;
 
 public class GameInfo
 {
+	// Program info
+	
+	public enum ExecType
+	{
+		client,
+		server,
+		editor;
+	}
+	/** Returns all versions of the icon for either client or server
+	 * 
+	 *  @param execType The set of icons to get.
+	 *  @return List of icons.
+	 */
+	public static List<Image> getIcons(ExecType execType) // Returns all versions of the icon for client, server, or editor
+	{
+		List<Image> icons = new ArrayList<Image>();
+		String pathPrefix;
+		if (execType == ExecType.client) pathPrefix = "Icons/Client Icons/";
+		else if (execType == ExecType.server) pathPrefix = "Icons/Server Icons/";
+		else if (execType == ExecType.editor) pathPrefix = "Icons/Editor Icons/";
+		else return null;
+		try
+		{
+			icons.add(ImageIO.read(ClassLoader.getSystemResourceAsStream(pathPrefix + "Icon16.PNG")));
+			icons.add(ImageIO.read(ClassLoader.getSystemResourceAsStream(pathPrefix + "Icon32.PNG")));
+			icons.add(ImageIO.read(ClassLoader.getSystemResourceAsStream(pathPrefix + "Icon64.PNG")));
+			icons.add(ImageIO.read(ClassLoader.getSystemResourceAsStream(pathPrefix + "Icon128.PNG")));
+		}
+		catch (Exception e) {Logging.logException(e); return null;}
+		return icons;
+	}
+	
+	/** Returns the program version.
+	 *  @return The version of the program.
+	 */
+	public static String getVersion() // Gets version
+	{
+		return "V0.X";
+	}
+	/** Returns the program name.
+	 *  @return The program's name.
+	 */
+	public static String getProgramName() // What is this program (inc. version)?
+	{
+		return "Mekton Online " + getVersion();
+	}
+	
 	// Things that might need to be communicated
 	public static class GameWorld
 	{
@@ -115,14 +167,14 @@ public class GameInfo
 	public static boolean loadWorld()
 	{
 		String path = MiscUtils.getAbsolute("Local Data/Server/world.JSON");
-		world = JSONManager.deserializeJSON(MiscUtils.readText(path), GameWorld.class);
+		world = DataManager.deserialize(MiscUtils.readText(path), GameWorld.class);
 		if (world == null) return false;
 		else return true;
 	}
 	public static void saveWorld()
 	{
 		String path = MiscUtils.getAbsolute("Local Data/Server/world.JSON");
-		MiscUtils.saveText(path, JSONManager.serializeJSON(world));
+		MiscUtils.saveText(path, DataManager.serialize(world));
 	}
 	public static void setWorld(GameWorld world)
 	{
@@ -202,7 +254,7 @@ public class GameInfo
 	/** Returns the absolute location of a server-pack-relative file or folder.
 	 * 
 	 */
-	public static String getServerPackResource(String resourceName)
+	public static String inServerPack(String resourceName)
 	{
 		return MiscUtils.getAbsolute(serverPackPrefix + "/" + resourceName);
 	}

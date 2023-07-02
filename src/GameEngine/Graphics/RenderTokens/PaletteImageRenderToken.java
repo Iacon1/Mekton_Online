@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import GameEngine.Managers.GraphicsManager;
-import Utils.JSONManager;
+import Utils.DataManager;
 import Utils.Logging;
 import Utils.MiscUtils;
 
@@ -27,7 +27,7 @@ public class PaletteImageRenderToken extends ImageRenderToken
 	public String toString()
 	{
 		String output = super.toString();
-		output += "|" + JSONManager.serializeJSON(palette);
+		output += "|" + DataManager.serialize(palette);
 		
 		return output;
 	}
@@ -37,7 +37,7 @@ public class PaletteImageRenderToken extends ImageRenderToken
 		return new PaletteImageRenderToken(s[0],
 				Integer.parseInt(s[1]), Integer.parseInt(s[2]), Integer.parseInt(s[3]), Integer.parseInt(s[4]),
 				Integer.parseInt(s[5]), Integer.parseInt(s[6]), Integer.parseInt(s[7]), Integer.parseInt(s[8]),
-				JSONManager.deserializeJSON(s[9], Color[].class));
+				DataManager.deserialize(s[9], Color[].class));
 	}
 	@Override
 	public void render(Graphics2D g)
