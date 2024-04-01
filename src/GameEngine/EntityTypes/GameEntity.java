@@ -20,7 +20,7 @@ import GameEngine.Server.Account;
 import GameEngine.GameInfo;
 import GameEngine.EntityTypes.Behaviors.Behavior;
 
-public abstract class GameEntity implements InputHandler //extends CRMHolder<GameEntity, Behavior>
+public abstract class GameEntity implements InputHandler, CommandRunner //extends CRMHolder<GameEntity, Behavior>
 {
 	private int parentId; // Parent object index; -1 means none
 	private int ourId;

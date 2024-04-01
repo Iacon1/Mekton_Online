@@ -45,17 +45,16 @@ public class ParsingCommandBank
 	 * 
 	 *  @param caller The object calling this.
 	 *  @param words The command, parameters, values, and flags to run.
+	 *  @return The command's return value.
 	 */
-	public void execute(Object caller, String[] words) throws Exception
+	public String execute(Object caller, String[] words) throws Exception
 	{
 		for (String name : commands.keySet())
 		{
 			if (commands.get(name).hasAlias(words[0]))
-			{
-				commands.get(name).execute(caller, words);
-				return;
-			}
+				return commands.get(name).execute(caller, words);
 		}
+		return null;
 	}
 	
 	/** Executes the command, if it exists.

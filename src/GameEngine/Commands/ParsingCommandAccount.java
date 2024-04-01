@@ -39,7 +39,7 @@ public abstract class ParsingCommandAccount extends Account
 				new ParsingCommand.Parameter[] {
 						new ParsingCommand.Parameter(new String[] {"command", "c"}, "The command to get info on.", true)},
 				new ParsingCommand.Flag[] {},
-				(Object caller, Map<String, String> parameters, Map<String, Boolean> flags) -> {helpFunction(caller, parameters, flags);}
+				(Object caller, Map<String, String> parameters, Map<String, Boolean> flags) -> {helpFunction(caller, parameters, flags); return null;} // TODO
 				);
 		registerCommand(helpCommand);
 		
@@ -49,7 +49,7 @@ public abstract class ParsingCommandAccount extends Account
 				new ParsingCommand.Parameter[] {
 						new ParsingCommand.Parameter(new String[] {"target", "id"}, "The target to possess.", false)},
 				new ParsingCommand.Flag[] {},
-				(Object caller, Map<String, String> parameters, Map<String, Boolean> flags) -> {possessFunction(caller, parameters, flags);}
+				(Object caller, Map<String, String> parameters, Map<String, Boolean> flags) -> {possessFunction(caller, parameters, flags); return null;} // TODO
 				);
 		registerCommand(possessCommand);
 	}
@@ -65,17 +65,17 @@ public abstract class ParsingCommandAccount extends Account
 	
 	
 	@Override
-	public boolean runCommand(String... words)
+	public String runCommand(String... words)
 	{
-		if (super.runCommand(words)) return true;
+		String superC = super.runCommand(words);
+		if (superC != null) return superC;
 		
 		if (commandBank.recognizes(words[0]))
 		{
-			try {commandBank.execute(this, words);}
-			catch (Exception e) {Logging.logException(e);}
-			return true;	
+			try {return commandBank.execute(this, words);}
+			catch (Exception e) {Logging.logException(e); return null;}
 		}
 		else if (CommandRunner.class.isAssignableFrom(getPossessee().getClass())) return ((CommandRunner) getPossessee()).runCommand(words);
-		else return false;
+		else return null;
 	}
 }

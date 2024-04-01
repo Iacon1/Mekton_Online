@@ -42,4 +42,7 @@ public class ChatBox extends Textbar
 	@Override public void handleMouse(int userID, MouseEvent event) {}
 
 	@Override public void handleKeyboard(int userID, KeyEvent event) {} // TODO
+
+	@Override
+	public String runCommand(String... words) {return null;}
 }

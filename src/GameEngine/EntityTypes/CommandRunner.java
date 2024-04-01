@@ -9,7 +9,7 @@ public interface CommandRunner
 	/** Runs a command.
 	 * 
 	 *  @param params The command name, followed by any parameters, values, or flags.
-	 *  @return Whether the command was recognized.
+	 *  @return The command's output, or null if no command was recognized.
 	 */
-	public boolean runCommand(String... words);
+	public String runCommand(String... words);
 }

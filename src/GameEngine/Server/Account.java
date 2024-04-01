@@ -74,7 +74,7 @@ public abstract class Account implements CommandRunner
 	}
 	
 	@Override
-	public boolean runCommand(String... words)
+	public String runCommand(String... words)
 	{
 		if (words[0].charAt(0) == '@') // Targeted
 		{
@@ -96,7 +96,7 @@ public abstract class Account implements CommandRunner
 				
 		}
 		
-		return false;
+		return null;
 	}
 	
 	// Inputs that are not a command

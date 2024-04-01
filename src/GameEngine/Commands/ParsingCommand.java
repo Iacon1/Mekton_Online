@@ -16,7 +16,7 @@ public class ParsingCommand
 {
 	public static interface CommandFunction
 	{
-		public void execute(Object caller, Map<String, String> parameters, Map<String, Boolean> flags) throws InvalidParameterException;
+		public String execute(Object caller, Map<String, String> parameters, Map<String, Boolean> flags) throws InvalidParameterException;
 	}
 	
 	public static class Parameter
@@ -174,12 +174,13 @@ public class ParsingCommand
 	 *
 	 *  @param caller The object calling this command.
 	 *  @param words The command, parameters, and flags that were called - In no particular order.
+	 *  @return The command's return value.
 	 */
-	public void execute(Object caller, String[] words) throws Exception
+	public String execute(Object caller, String[] words) throws Exception
 	{	
 		Map<String, String> parameters = parseParameters(words);
 		Map<String, Boolean> flags = parseFlags(words);
 		
-		commandFunction.execute(caller, parameters, flags);
+		return commandFunction.execute(caller, parameters, flags);
 	}
 }
